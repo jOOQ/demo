@@ -1,0 +1,156 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.jooq.trial</groupId>
+    <artifactId>jooq-demo</artifactId>
+    <version>3.17.0-SNAPSHOT</version>
+    <name>jOOQ Demo</name>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.jooq.org/inc/LICENSE.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jooq.version>3.17.0-SNAPSHOT</jooq.version>
+        <postgres.version>42.3.4</postgres.version>
+        <log4j.version>2.17.1</log4j.version>
+        <junit.version>4.13.2</junit.version>
+    </properties>
+
+    <dependencies>
+
+        <!-- Database access -->
+        <dependency>
+            <groupId>org.jooq.trial</groupId>
+            <artifactId>jooq</artifactId>
+            <version>${jooq.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgres.version}</version>
+        </dependency>
+
+        <!-- Logging -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j18-impl</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+
+        <!-- Some optional transitive dependencies -->
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>23.0.0</version>
+        </dependency>
+
+        <!-- Testing -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <type>jar</type>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+
+        <!-- The resources element will replace available properties in all matching
+             resources. We use this to provide H2 connection configuration to various
+             configuration elements -->
+        <resources>
+            <resource>
+                <filtering>true</filtering>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                    <include>**/*.properties</include>
+                </includes>
+            </resource>
+        </resources>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.10.1</version>
+                <configuration>
+                    <release>17</release>
+                    <source>17</source>
+                    <target>17</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>properties-maven-plugin</artifactId>
+                <version>1.0.0</version>
+                <executions>
+                    <execution>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>read-project-properties</goal>
+                        </goals>
+                        <configuration>
+                            <files>
+                                <file>src/main/resources/config.properties</file>
+                            </files>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.jooq.trial</groupId>
+                <artifactId>jooq-codegen-maven</artifactId>
+                <version>${jooq.version}</version>
+
+                <executions>
+                    <execution>
+                        <id>generate-h2</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <jdbc>
+                                <driver>${db.cockroachdb.driver}</driver>
+                                <url>${db.cockroachdb.url}</url>
+                                <user>${db.cockroachdb.username}</user>
+                                <password>${db.cockroachdb.password}</password>
+                            </jdbc>
+                            <generator>
+                                <database>
+                                    <name>org.jooq.meta.cockroachdb.CockroachDBDatabase</name>
+                                    <inputSchema>public</inputSchema>
+                                </database>
+                                <generate>
+                                    <pojos>true</pojos>
+                                    <pojosAsJavaRecordClasses>true</pojosAsJavaRecordClasses>
+                                    <daos>true</daos>
+                                </generate>
+                                <target>
+                                    <packageName>org.jooq.demo.db</packageName>
+
+                                    <!-- We're version controlling the source code for better documentation on github, etc.
+                                         This isn't necessary, though, see also:
+                                         https://www.jooq.org/doc/latest/manual/code-generation/codegen-version-control/ -->
+                                    <directory>src/main/java</directory>
+                                </target>
+                            </generator>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
