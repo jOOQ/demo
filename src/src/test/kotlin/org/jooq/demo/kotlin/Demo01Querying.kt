@@ -163,6 +163,18 @@ class Demo01Querying : AbstractDemo() {
     }
 
     @Test
+    fun typeSafetyUnqualifiedColumnReferences() {
+        title("Some kotlin specific fun with with()")
+        with(ACTOR) {
+            val result = ctx
+                .select(FIRST_NAME, LAST_NAME)
+                .from(ACTOR)
+                .where(FIRST_NAME.like("A%"))
+                .fetch()
+        }
+    }
+
+    @Test
     fun implicitJoins() {
         title("No need to spell out trivial to-one joins")
         ctx.select(

@@ -3,7 +3,7 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.jooq.trial</groupId>
+    <groupId>${jooq.edition}</groupId>
     <artifactId>jooq-demo</artifactId>
     <version>3.17.0-SNAPSHOT</version>
     <name>jOOQ Demo</name>
@@ -18,6 +18,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jooq.edition>org.jooq.trial</jooq.edition>
         <jooq.version>3.17.0-SNAPSHOT</jooq.version>
         <postgres.version>42.3.4</postgres.version>
         <log4j.version>2.17.1</log4j.version>
@@ -29,7 +30,7 @@
 
         <!-- Database access -->
         <dependency>
-            <groupId>org.jooq.trial</groupId>
+            <groupId>${jooq.edition}</groupId>
             <artifactId>jooq</artifactId>
             <version>${jooq.version}</version>
         </dependency>
@@ -63,6 +64,11 @@
         </dependency>
 
         <!-- Kotlin -->
+        <dependency>
+            <groupId>${jooq.edition}</groupId>
+            <artifactId>jooq-kotlin</artifactId>
+            <version>${jooq.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib-jdk8</artifactId>
@@ -214,7 +220,7 @@
             </plugin>
 
             <plugin>
-                <groupId>org.jooq.trial</groupId>
+                <groupId>${jooq.edition}</groupId>
                 <artifactId>jooq-codegen-maven</artifactId>
                 <version>${jooq.version}</version>
 
