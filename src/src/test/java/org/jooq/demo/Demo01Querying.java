@@ -7,6 +7,7 @@ import org.jooq.demo.db.tables.records.ActorRecord;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.jooq.Records.mapping;
 import static org.jooq.demo.db.Tables.*;
@@ -59,6 +60,30 @@ public class Demo01Querying extends AbstractDemo {
            .forEach(r -> println("Film %s: %s".formatted(r.value1(), r.value2())));
 
         // Try removing type inference to see what r really is
+    }
+
+    @Test
+    public void consumeLargeResults() {
+        title("Imperative consumption of large results using Cursor, keeping an open ResultSet behind the scenes");
+        try (Cursor<Record2<String, String>> c = ctx
+            .select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
+            .from(ACTOR)
+            .where(ACTOR.ACTOR_ID.lt(5L))
+            .fetchLazy()
+        ) {
+            for (Record2<String, String> r : c)
+                println("Actor: %s %s".formatted(r.value1(), r.value2()));
+        }
+
+        title("Functional consumption of large results using Stream, keeping an open ResultSet behind the scenes");
+        try (Stream<Record2<String, String>> s = ctx
+            .select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
+            .from(ACTOR)
+            .where(ACTOR.ACTOR_ID.lt(5L))
+            .fetchStream()
+        ) {
+            s.forEach(r -> println("Actor: %s %s".formatted(r.value1(), r.value2())));
+        }
     }
 
     @Test
