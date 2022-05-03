@@ -1,32 +1,18 @@
 package org.jooq.demo;
 
 import org.jooq.*;
-
-import static org.jooq.Records.mapping;
-import static org.jooq.SQLDialect.*;
-import static org.jooq.demo.db.Tables.*;
-import static org.jooq.impl.DSL.*;
-
-import org.jooq.conf.Settings;
 import org.jooq.demo.db.tables.Actor;
 import org.jooq.demo.db.tables.FilmActor;
 import org.jooq.demo.db.tables.records.ActorRecord;
-import org.jooq.impl.DSL;
-import org.jooq.impl.DefaultConfiguration;
-import org.junit.*;
+import org.junit.Test;
 
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.List;
-import java.util.Properties;
-import java.util.stream.Stream;
 
-public class Demo {
+import static org.jooq.Records.mapping;
+import static org.jooq.demo.db.Tables.*;
+import static org.jooq.impl.DSL.*;
 
-    Connection connection;
-    DSLContext ctx;
+public class Demo01Querying extends AbstractDemo {
 
     // Intro - queries
     // -----------------------------------------------------------------------------------------------------------------
@@ -206,7 +192,7 @@ public class Demo {
                .limit(5)
                .fetch(mapping(Customer::new));
 
-        r.forEach(Demo::println);
+        r.forEach(Demo01Querying::println);
     }
 
     @Test
@@ -226,7 +212,7 @@ public class Demo {
                .limit(5)
                .fetch(Record1::value1);
 
-        r.forEach(Demo::println);
+        r.forEach(Demo01Querying::println);
     }
 
     @Test
@@ -298,94 +284,5 @@ public class Demo {
         }
 
         // Try modifying the records and see what needs to be done to get the query to compile again
-    }
-
-    @Test
-    public void updatableRecords() {
-        ActorRecord actor =
-            ctx.selectFrom(ACTOR)
-               .where(ACTOR.ACTOR_ID.eq(200L))
-               .fetchSingle();
-
-        String lastName = actor.getLastName();
-        try {
-            actor.setLastName("Smith");
-            actor.store();
-        }
-        finally {
-            actor.setLastName(lastName);
-            actor.store();
-        }
-    }
-
-    @Test
-    public void dml() {
-        try {
-            ctx.insertInto(ACTOR)
-               .columns(ACTOR.ACTOR_ID, ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
-               .values(201L, "Jon", "Doe")
-               .values(202L, "Jane", "Smith")
-               .execute();
-
-            ctx.update(ACTOR)
-               .set(ACTOR.LAST_NAME, "X")
-               .where(ACTOR.ACTOR_ID.gt(200L))
-               .execute();
-        }
-        finally {
-            ctx.delete(ACTOR)
-               .where(ACTOR.ACTOR_ID.gt(200L))
-               .execute();
-        }
-    }
-
-    // Utilities
-    // -----------------------------------------------------------------------------------------------------------------
-
-    @Before
-    public void setup() throws IOException, SQLException {
-        Properties properties = new Properties();
-        properties.load(Demo.class.getResourceAsStream("/config.properties"));
-        connection = DriverManager.getConnection(
-            properties.getProperty("db.cockroachdb.url"),
-            properties.getProperty("db.cockroachdb.username"),
-            properties.getProperty("db.cockroachdb.password")
-        );
-
-        ctx = using(new DefaultConfiguration()
-            .set(connection)
-            .set(SQLDialect.COCKROACHDB)
-            .set(new Settings()
-//                .withRenderFormatted(true)
-            )
-
-            // Activate this to get the output from different dialects
-//            .set(ExecuteListener.onExecuteStart(e -> Stream
-//                .of(MYSQL, ORACLE, POSTGRES, SQLSERVER)
-//                .map(d -> using(d, new Settings().withRenderFormatted(true)))
-//                .forEach(c -> {
-//                    title(c.dialect());
-//                    println(c.renderInlined(e.query()));
-//                })))
-        );
-
-        // Initialise classes
-        ctx.selectOne().toString();
-    }
-
-    @After
-    public void teardown() throws SQLException {
-        connection.close();
-    }
-
-    public static void title(Object title) {
-        println("");
-        println(title);
-        println("-".repeat(("" + title).length()));
-    }
-
-    public static <T> T println(T t) {
-        System.out.println(t);
-        return t;
     }
 }
