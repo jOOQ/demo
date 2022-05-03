@@ -1,5 +1,6 @@
 package org.jooq.demo;
 
+import org.jetbrains.annotations.NotNull;
 import org.jooq.*;
 import org.jooq.impl.DSL;
 import org.junit.Test;
@@ -46,5 +47,22 @@ public class Demo02DynamicSQL extends AbstractDemo {
            .orderBy(ACTOR.FIRST_NAME)
            .limit(5)
            .fetch();
+    }
+
+    @Test
+    public void generateQueryParts() {
+        println(reduceCondition(List.of()));
+        println(reduceCondition(List.of(1)));
+        println(reduceCondition(List.of(1, 2, 3)));
+    }
+
+    @NotNull
+    private Condition reduceCondition(List<Integer> ids) {
+        title("List: " + ids);
+        return ids
+            .stream()
+            .map(Long::valueOf)
+            .map(ACTOR.ACTOR_ID::eq)
+            .reduce(noCondition(), Condition::or);
     }
 }
