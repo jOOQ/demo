@@ -1,5 +1,6 @@
 package org.jooq.demo.java;
 
+import org.jooq.demo.AbstractDemo;
 import org.jooq.demo.java.db.tables.records.ActorRecord;
 import org.junit.After;
 import org.junit.Test;

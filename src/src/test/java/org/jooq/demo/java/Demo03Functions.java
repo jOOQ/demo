@@ -2,6 +2,7 @@ package org.jooq.demo.java;
 
 import org.jooq.Field;
 import org.jooq.WindowDefinition;
+import org.jooq.demo.AbstractDemo;
 import org.jooq.impl.DSL;
 import org.junit.Test;
 

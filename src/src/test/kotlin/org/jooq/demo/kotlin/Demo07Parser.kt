@@ -1,14 +1,11 @@
 package org.jooq.demo.kotlin
 
-import org.jooq.AggregateFunction
 import org.jooq.Field
-import org.jooq.ParseContext
 import org.jooq.ParseListener
-import org.jooq.demo.java.AbstractDemo
+import org.jooq.demo.AbstractDemo
 import org.jooq.impl.DSL
 import org.jooq.impl.ParserException
 import org.junit.Test
-import java.sql.SQLException
 
 class Demo07Parser : AbstractDemo() {
 

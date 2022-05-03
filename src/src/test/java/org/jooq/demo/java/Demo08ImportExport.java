@@ -1,8 +1,8 @@
 package org.jooq.demo.java;
 
 import org.jooq.*;
+import org.jooq.demo.AbstractDemo;
 import org.jooq.demo.java.db.tables.records.ActorRecord;
-import org.jooq.demo.java.db.Tables;
 import org.junit.After;
 import org.junit.Test;
 
@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
 
-import static org.jooq.Records.mapping;
 import static org.jooq.demo.java.db.Tables.ACTOR;
 import static org.jooq.demo.java.db.Tables.PAYMENT;
 import static org.jooq.impl.DSL.*;

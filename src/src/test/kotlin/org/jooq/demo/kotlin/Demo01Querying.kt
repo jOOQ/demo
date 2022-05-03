@@ -1,7 +1,7 @@
 package org.jooq.demo.kotlin
 
 import org.jooq.*
-import org.jooq.demo.java.AbstractDemo
+import org.jooq.demo.AbstractDemo
 import org.jooq.demo.kotlin.db.tables.references.*
 import org.jooq.impl.DSL
 import org.jooq.impl.DSL.*

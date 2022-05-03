@@ -1,6 +1,7 @@
 package org.jooq.demo.java;
 
 import org.jooq.*;
+import org.jooq.demo.AbstractDemo;
 import org.jooq.demo.java.db.tables.Actor;
 import org.jooq.demo.java.db.tables.FilmActor;
 import org.jooq.demo.java.db.tables.records.ActorRecord;

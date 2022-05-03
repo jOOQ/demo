@@ -1,4 +1,4 @@
-package org.jooq.demo.java;
+package org.jooq.demo;
 
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
@@ -30,7 +30,7 @@ public abstract class AbstractDemo {
     @Before
     public void setup() throws IOException, SQLException {
         Properties properties = new Properties();
-        properties.load(Demo01Querying.class.getResourceAsStream("/config.properties"));
+        properties.load(AbstractDemo.class.getResourceAsStream("/config.properties"));
         connection = DriverManager.getConnection(
             properties.getProperty("db.cockroachdb.url"),
             properties.getProperty("db.cockroachdb.username"),

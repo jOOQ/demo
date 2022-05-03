@@ -1,7 +1,7 @@
 package org.jooq.demo.kotlin
 
 import org.jooq.Configuration
-import org.jooq.demo.java.AbstractDemo
+import org.jooq.demo.AbstractDemo
 import org.jooq.demo.kotlin.db.tables.references.*
 import org.junit.After
 import org.junit.Test

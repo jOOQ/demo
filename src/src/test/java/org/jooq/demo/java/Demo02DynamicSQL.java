@@ -2,6 +2,7 @@ package org.jooq.demo.java;
 
 import org.jetbrains.annotations.NotNull;
 import org.jooq.*;
+import org.jooq.demo.AbstractDemo;
 import org.jooq.demo.java.db.Tables;
 import org.jooq.impl.DSL;
 import org.junit.Test;

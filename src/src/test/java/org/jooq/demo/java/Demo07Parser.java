@@ -3,6 +3,7 @@ package org.jooq.demo.java;
 import org.jooq.Field;
 import org.jooq.ParseListener;
 import org.jooq.Select;
+import org.jooq.demo.AbstractDemo;
 import org.jooq.impl.DSL;
 import org.jooq.impl.ParserException;
 import org.junit.Test;
