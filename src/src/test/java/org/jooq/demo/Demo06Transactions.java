@@ -1,6 +1,5 @@
 package org.jooq.demo;
 
-import org.jooq.demo.db.tables.records.ActorRecord;
 import org.junit.After;
 import org.junit.Test;
 
@@ -8,7 +7,7 @@ import java.sql.SQLException;
 
 import static org.jooq.demo.db.Tables.ACTOR;
 
-public class Demo04Transactions extends AbstractDemo {
+public class Demo06Transactions extends AbstractDemo {
 
     @Test
     public void transactionCommit() {

@@ -1,20 +1,15 @@
 package org.jooq.demo;
 
-import org.jooq.*;
-import org.jooq.demo.db.tables.Actor;
-import org.jooq.demo.db.tables.FilmActor;
 import org.jooq.demo.db.tables.records.ActorRecord;
 import org.junit.After;
 import org.junit.Test;
 
 import java.sql.SQLException;
-import java.util.List;
 
 import static org.jooq.Records.mapping;
 import static org.jooq.demo.db.Tables.*;
-import static org.jooq.impl.DSL.*;
 
-public class Demo02DML extends AbstractDemo {
+public class Demo04DML extends AbstractDemo {
 
     @Test
     public void updatableRecords() {

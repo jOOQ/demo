@@ -8,7 +8,7 @@ import java.sql.SQLException;
 
 import static org.jooq.demo.db.Tables.ACTOR;
 
-public class Demo03Batch extends AbstractDemo {
+public class Demo05Batch extends AbstractDemo {
 
     @Test
     public void batchUpdatableRecords() {
