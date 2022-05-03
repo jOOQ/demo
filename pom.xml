@@ -22,6 +22,7 @@
         <postgres.version>42.3.4</postgres.version>
         <log4j.version>2.17.1</log4j.version>
         <junit.version>4.13.2</junit.version>
+        <kotlin.version>1.6.21</kotlin.version>
     </properties>
 
     <dependencies>
@@ -60,6 +61,24 @@
             <type>jar</type>
             <scope>test</scope>
         </dependency>
+
+        <!-- Kotlin -->
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib-jdk8</artifactId>
+            <version>${kotlin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-test</artifactId>
+            <version>${kotlin.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib-jdk8</artifactId>
+            <version>${kotlin.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -79,10 +98,95 @@
         </resources>
 
         <plugins>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>add-sources</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>src/main/kotlin</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>add-test-sources</id>
+                        <phase>generate-test-sources</phase>
+                        <goals>
+                            <goal>add-test-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>src/test/kotlin</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-maven-plugin</artifactId>
+                <version>${kotlin.version}</version>
+                <executions>
+                    <execution>
+                        <id>compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirs>
+                                <source>src/main/java</source>
+                                <source>src/main/kotlin</source>
+                            </sourceDirs>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>test-compile</id>
+                        <phase>test-compile</phase>
+                        <goals>
+                            <goal>test-compile</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirs>
+                                <source>src/src/test/java</source>
+                                <source>src/src/test/kotlin</source>
+                            </sourceDirs>
+                        </configuration>
+                    </execution>
+                </executions>
+                <configuration>
+                    <jvmTarget>1.8</jvmTarget>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.10.1</version>
+                <executions>
+                    <execution>
+                        <id>compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>testCompile</id>
+                        <phase>test-compile</phase>
+                        <goals>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
                 <configuration>
                     <release>17</release>
                     <source>17</source>
@@ -114,37 +218,66 @@
                 <artifactId>jooq-codegen-maven</artifactId>
                 <version>${jooq.version}</version>
 
+                <configuration>
+                    <jdbc>
+                        <driver>${db.cockroachdb.driver}</driver>
+                        <url>${db.cockroachdb.url}</url>
+                        <user>${db.cockroachdb.username}</user>
+                        <password>${db.cockroachdb.password}</password>
+                    </jdbc>
+                    <generator>
+                        <database>
+                            <name>org.jooq.meta.cockroachdb.CockroachDBDatabase</name>
+                            <inputSchema>public</inputSchema>
+                        </database>
+                        <generate>
+                            <pojos>true</pojos>
+                            <pojosAsJavaRecordClasses>true</pojosAsJavaRecordClasses>
+                            <daos>true</daos>
+                        </generate>
+                    </generator>
+                </configuration>
+
                 <executions>
                     <execution>
-                        <id>generate-h2</id>
+                        <id>generate-demo-java</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <jdbc>
-                                <driver>${db.cockroachdb.driver}</driver>
-                                <url>${db.cockroachdb.url}</url>
-                                <user>${db.cockroachdb.username}</user>
-                                <password>${db.cockroachdb.password}</password>
-                            </jdbc>
                             <generator>
-                                <database>
-                                    <name>org.jooq.meta.cockroachdb.CockroachDBDatabase</name>
-                                    <inputSchema>public</inputSchema>
-                                </database>
                                 <generate>
-                                    <pojos>true</pojos>
                                     <pojosAsJavaRecordClasses>true</pojosAsJavaRecordClasses>
-                                    <daos>true</daos>
                                 </generate>
                                 <target>
-                                    <packageName>org.jooq.demo.db</packageName>
+                                    <packageName>org.jooq.demo.java.db</packageName>
 
                                     <!-- We're version controlling the source code for better documentation on github, etc.
                                          This isn't necessary, though, see also:
                                          https://www.jooq.org/doc/latest/manual/code-generation/codegen-version-control/ -->
                                     <directory>src/main/java</directory>
+                                </target>
+                            </generator>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>generate-demo-kotlin</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <generator>
+                                <name>org.jooq.codegen.KotlinGenerator</name>
+                                <target>
+                                    <packageName>org.jooq.demo.kotlin.db</packageName>
+
+                                    <!-- We're version controlling the source code for better documentation on github, etc.
+                                         This isn't necessary, though, see also:
+                                         https://www.jooq.org/doc/latest/manual/code-generation/codegen-version-control/ -->
+                                    <directory>src/main/kotlin</directory>
                                 </target>
                             </generator>
                         </configuration>
