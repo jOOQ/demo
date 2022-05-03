@@ -15,7 +15,7 @@ import static org.jooq.demo.java.db.Tables.PAYMENT;
 import static org.jooq.impl.DSL.*;
 import static org.jooq.impl.SQLDataType.DATE;
 
-public class Demo08ImportExport extends AbstractDemo {
+public class Demo08ImportExportAndMore extends AbstractDemo {
 
     @Test
     public void importExportCSV() throws IOException {

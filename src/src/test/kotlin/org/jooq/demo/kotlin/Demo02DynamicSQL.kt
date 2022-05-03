@@ -2,7 +2,7 @@ package org.jooq.demo.kotlin
 
 import org.jooq.Condition
 import org.jooq.demo.AbstractDemo
-import org.jooq.demo.kotlin.db.tables.references.ACTOR
+import org.jooq.demo.kotlin.db.tables.references.*
 import org.jooq.impl.DSL
 import org.jooq.impl.DSL.noCondition
 import org.junit.Test
