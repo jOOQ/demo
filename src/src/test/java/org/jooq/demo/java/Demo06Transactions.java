@@ -1,7 +1,10 @@
 package org.jooq.demo.java;
 
+import org.jooq.Configuration;
+import org.jooq.DSLContext;
 import org.jooq.demo.AbstractDemo;
 import org.jooq.demo.java.db.Tables;
+import org.jooq.impl.DSL;
 import org.junit.After;
 import org.junit.Test;
 
@@ -97,6 +100,45 @@ public class Demo06Transactions extends AbstractDemo {
             title("At the end of the transaction, we may have a result depending on whether we committed the savepoint or not");
             ctx.fetch(ACTOR, ACTOR.ACTOR_ID.gt(200L));
         }
+    }
+
+    @Test
+    public void programmaticTransactions() {
+        title("You can always roll your own. jOOQ doesn't hide JDBC from you");
+
+        ctx.connection(connection -> {
+            connection.setAutoCommit(false);
+
+            try {
+
+                title("Derive a new configuration from your existing one, with an explicit JDBC connection");
+                DSLContext c = ctx.configuration().derive(connection).dsl();
+                c.insertInto(ACTOR)
+                   .columns(ACTOR.ACTOR_ID, ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
+                   .values(201L, "Jon", "Doe")
+                   .execute();
+
+                title("Explicit commit");
+                connection.commit();
+
+                c.insertInto(ACTOR)
+                 .columns(ACTOR.ACTOR_ID, ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
+                 .values(202L, "Jane", "Smith")
+                 .execute();
+
+                title("Within the transaction, we should have both records");
+                ctx.fetch(ACTOR, ACTOR.ACTOR_ID.gt(200L));
+
+                title("Explicit rollback");
+                connection.rollback();
+            }
+            finally {
+                connection.setAutoCommit(true);
+            }
+        });
+
+        title("At the end of the transaction, we may have a result depending on whether we committed or not");
+        ctx.fetch(ACTOR, ACTOR.ACTOR_ID.gt(200L));
     }
 
     @After

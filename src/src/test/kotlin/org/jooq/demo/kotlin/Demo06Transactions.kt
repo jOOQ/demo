@@ -2,9 +2,11 @@ package org.jooq.demo.kotlin
 
 import org.jooq.Configuration
 import org.jooq.demo.AbstractDemo
-import org.jooq.demo.kotlin.db.tables.references.*
+import org.jooq.demo.java.db.Tables
+import org.jooq.demo.kotlin.db.tables.references.ACTOR
 import org.junit.After
 import org.junit.Test
+import java.sql.Connection
 
 class Demo06Transactions : AbstractDemo() {
 
@@ -113,6 +115,44 @@ class Demo06Transactions : AbstractDemo() {
             title("At the end of the transaction, we may have a result depending on whether we committed the savepoint or not")
             ctx.fetch(ACTOR, ACTOR.ACTOR_ID.gt(200L))
         }
+    }
+
+    @Test
+    fun programmaticTransactions() {
+        title("You can always roll your own. jOOQ doesn't hide JDBC from you")
+        ctx.connection { connection ->
+            connection.autoCommit = false
+
+            try {
+                title("Derive a new configuration from your existing one, with an explicit JDBC connection")
+                val c = ctx.configuration().derive(connection).dsl()
+
+                c.insertInto(ACTOR)
+                    .columns(ACTOR.ACTOR_ID, ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
+                    .values(201L, "Jon", "Doe")
+                    .execute()
+
+                title("Explicit commit")
+                connection.commit()
+
+                c.insertInto(ACTOR)
+                    .columns(ACTOR.ACTOR_ID, ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
+                    .values(202L, "Jane", "Smith")
+                    .execute()
+
+                title("Within the transaction, we should have both records")
+                ctx.fetch(ACTOR, ACTOR.ACTOR_ID.gt(200L))
+
+                title("Explicit rollback")
+                connection.rollback()
+            }
+            finally {
+                connection.autoCommit = true
+            }
+        }
+
+        title("At the end of the transaction, we may have a result depending on whether we committed or not")
+        ctx.fetch(ACTOR, ACTOR.ACTOR_ID.gt(200L))
     }
 
     @After
