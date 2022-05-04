@@ -1,10 +1,7 @@
 package org.jooq.demo.java;
 
-import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.jooq.demo.AbstractDemo;
-import org.jooq.demo.java.db.Tables;
-import org.jooq.impl.DSL;
 import org.junit.After;
 import org.junit.Test;
 

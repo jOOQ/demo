@@ -13,57 +13,9 @@ import java.math.BigDecimal
  */
 @Suppress("UNCHECKED_CAST")
 data class SalesByStore(
-    val store: String? = null,
-    val manager: String? = null,
-    val totalSales: BigDecimal? = null
+    var store: String? = null,
+    var manager: String? = null,
+    var totalSales: BigDecimal? = null
 ): Serializable {
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other)
-            return true
-        if (other === null)
-            return false
-        if (this::class != other::class)
-            return false
-        val o: SalesByStore = other as SalesByStore
-        if (this.store === null) {
-            if (o.store !== null)
-                return false
-        }
-        else if (this.store != o.store)
-            return false
-        if (this.manager === null) {
-            if (o.manager !== null)
-                return false
-        }
-        else if (this.manager != o.manager)
-            return false
-        if (this.totalSales === null) {
-            if (o.totalSales !== null)
-                return false
-        }
-        else if (this.totalSales != o.totalSales)
-            return false
-        return true
-    }
-
-    override fun hashCode(): Int {
-        val prime = 31
-        var result = 1
-        result = prime * result + (if (this.store === null) 0 else this.store.hashCode())
-        result = prime * result + (if (this.manager === null) 0 else this.manager.hashCode())
-        result = prime * result + (if (this.totalSales === null) 0 else this.totalSales.hashCode())
-        return result
-    }
-
-    override fun toString(): String {
-        val sb = StringBuilder("SalesByStore (")
-
-        sb.append(store)
-        sb.append(", ").append(manager)
-        sb.append(", ").append(totalSales)
-
-        sb.append(")")
-        return sb.toString()
-    }
 }

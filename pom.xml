@@ -238,7 +238,8 @@
                         </database>
                         <generate>
                             <pojos>true</pojos>
-                            <pojosAsJavaRecordClasses>true</pojosAsJavaRecordClasses>
+                            <pojosToString>false</pojosToString>
+                            <pojosEqualsAndHashCode>false</pojosEqualsAndHashCode>
                             <daos>true</daos>
                         </generate>
                     </generator>

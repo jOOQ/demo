@@ -13,66 +13,10 @@ import java.time.LocalDateTime
  */
 @Suppress("UNCHECKED_CAST")
 data class Inventory(
-    val inventoryId: Long? = null,
-    val filmId: Long? = null,
-    val storeId: Long? = null,
-    val lastUpdate: LocalDateTime? = null
+    var inventoryId: Long? = null,
+    var filmId: Long? = null,
+    var storeId: Long? = null,
+    var lastUpdate: LocalDateTime? = null
 ): Serializable {
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other)
-            return true
-        if (other === null)
-            return false
-        if (this::class != other::class)
-            return false
-        val o: Inventory = other as Inventory
-        if (this.inventoryId === null) {
-            if (o.inventoryId !== null)
-                return false
-        }
-        else if (this.inventoryId != o.inventoryId)
-            return false
-        if (this.filmId === null) {
-            if (o.filmId !== null)
-                return false
-        }
-        else if (this.filmId != o.filmId)
-            return false
-        if (this.storeId === null) {
-            if (o.storeId !== null)
-                return false
-        }
-        else if (this.storeId != o.storeId)
-            return false
-        if (this.lastUpdate === null) {
-            if (o.lastUpdate !== null)
-                return false
-        }
-        else if (this.lastUpdate != o.lastUpdate)
-            return false
-        return true
-    }
-
-    override fun hashCode(): Int {
-        val prime = 31
-        var result = 1
-        result = prime * result + (if (this.inventoryId === null) 0 else this.inventoryId.hashCode())
-        result = prime * result + (if (this.filmId === null) 0 else this.filmId.hashCode())
-        result = prime * result + (if (this.storeId === null) 0 else this.storeId.hashCode())
-        result = prime * result + (if (this.lastUpdate === null) 0 else this.lastUpdate.hashCode())
-        return result
-    }
-
-    override fun toString(): String {
-        val sb = StringBuilder("Inventory (")
-
-        sb.append(inventoryId)
-        sb.append(", ").append(filmId)
-        sb.append(", ").append(storeId)
-        sb.append(", ").append(lastUpdate)
-
-        sb.append(")")
-        return sb.toString()
-    }
 }

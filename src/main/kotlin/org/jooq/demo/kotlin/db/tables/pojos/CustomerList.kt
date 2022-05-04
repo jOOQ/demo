@@ -12,111 +12,15 @@ import java.io.Serializable
  */
 @Suppress("UNCHECKED_CAST")
 data class CustomerList(
-    val id: Long? = null,
-    val name: String? = null,
-    val address: String? = null,
-    val zipCode: String? = null,
-    val phone: String? = null,
-    val city: String? = null,
-    val country: String? = null,
-    val notes: String? = null,
-    val sid: Long? = null
+    var id: Long? = null,
+    var name: String? = null,
+    var address: String? = null,
+    var zipCode: String? = null,
+    var phone: String? = null,
+    var city: String? = null,
+    var country: String? = null,
+    var notes: String? = null,
+    var sid: Long? = null
 ): Serializable {
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other)
-            return true
-        if (other === null)
-            return false
-        if (this::class != other::class)
-            return false
-        val o: CustomerList = other as CustomerList
-        if (this.id === null) {
-            if (o.id !== null)
-                return false
-        }
-        else if (this.id != o.id)
-            return false
-        if (this.name === null) {
-            if (o.name !== null)
-                return false
-        }
-        else if (this.name != o.name)
-            return false
-        if (this.address === null) {
-            if (o.address !== null)
-                return false
-        }
-        else if (this.address != o.address)
-            return false
-        if (this.zipCode === null) {
-            if (o.zipCode !== null)
-                return false
-        }
-        else if (this.zipCode != o.zipCode)
-            return false
-        if (this.phone === null) {
-            if (o.phone !== null)
-                return false
-        }
-        else if (this.phone != o.phone)
-            return false
-        if (this.city === null) {
-            if (o.city !== null)
-                return false
-        }
-        else if (this.city != o.city)
-            return false
-        if (this.country === null) {
-            if (o.country !== null)
-                return false
-        }
-        else if (this.country != o.country)
-            return false
-        if (this.notes === null) {
-            if (o.notes !== null)
-                return false
-        }
-        else if (this.notes != o.notes)
-            return false
-        if (this.sid === null) {
-            if (o.sid !== null)
-                return false
-        }
-        else if (this.sid != o.sid)
-            return false
-        return true
-    }
-
-    override fun hashCode(): Int {
-        val prime = 31
-        var result = 1
-        result = prime * result + (if (this.id === null) 0 else this.id.hashCode())
-        result = prime * result + (if (this.name === null) 0 else this.name.hashCode())
-        result = prime * result + (if (this.address === null) 0 else this.address.hashCode())
-        result = prime * result + (if (this.zipCode === null) 0 else this.zipCode.hashCode())
-        result = prime * result + (if (this.phone === null) 0 else this.phone.hashCode())
-        result = prime * result + (if (this.city === null) 0 else this.city.hashCode())
-        result = prime * result + (if (this.country === null) 0 else this.country.hashCode())
-        result = prime * result + (if (this.notes === null) 0 else this.notes.hashCode())
-        result = prime * result + (if (this.sid === null) 0 else this.sid.hashCode())
-        return result
-    }
-
-    override fun toString(): String {
-        val sb = StringBuilder("CustomerList (")
-
-        sb.append(id)
-        sb.append(", ").append(name)
-        sb.append(", ").append(address)
-        sb.append(", ").append(zipCode)
-        sb.append(", ").append(phone)
-        sb.append(", ").append(city)
-        sb.append(", ").append(country)
-        sb.append(", ").append(notes)
-        sb.append(", ").append(sid)
-
-        sb.append(")")
-        return sb.toString()
-    }
 }
