@@ -62,16 +62,16 @@ public class Demo08ImportExportAndMore extends AbstractDemo {
            .loadJSON(
                """
                [
-                 { "id": 201, "firstName": "Doe", "lastName": "John" },
-                 { "id": 202, "firstName": "Smith", "lastName": "Jane" },
-                 { "id": 203, "firstName": "Colson", "lastName": "Wilda" },
-                 { "id": 204, "firstName": "Abel", "lastName": "Izzy" },
-                 { "id": 205, "firstName": "Langdon", "lastName": "Cayson" },
-                 { "id": 206, "firstName": "Brooke", "lastName": "Deon" },
-                 { "id": 207, "firstName": "Wolf", "lastName": "Gabriella" },
-                 { "id": 208, "firstName": "Edie", "lastName": "Drew" },
-                 { "id": 209, "firstName": "Rupert", "lastName": "Maeghan" },
-                 { "id": 210, "firstName": "Coleman", "lastName": "Skyler" }
+                 { "id": 201, "lastName": "Doe", "firstName": "John" },
+                 { "id": 202, "lastName": "Smith", "firstName": "Jane" },
+                 { "id": 203, "lastName": "Colson", "firstName": "Wilda" },
+                 { "id": 204, "lastName": "Abel", "firstName": "Izzy" },
+                 { "id": 205, "lastName": "Langdon", "firstName": "Cayson" },
+                 { "id": 206, "lastName": "Brooke", "firstName": "Deon" },
+                 { "id": 207, "lastName": "Wolf", "firstName": "Gabriella" },
+                 { "id": 208, "lastName": "Edie", "firstName": "Drew" },
+                 { "id": 209, "lastName": "Rupert", "firstName": "Maeghan" },
+                 { "id": 210, "lastName": "Coleman", "firstName": "Skyler" }
                ]
                """)
            .fields(ACTOR.ACTOR_ID, ACTOR.LAST_NAME, ACTOR.FIRST_NAME)
