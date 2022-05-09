@@ -9,6 +9,8 @@ import org.jooq.demo.kotlin.db.tables.references.*
 import org.jooq.impl.DSL.*
 import org.jooq.impl.SQLDataType
 import org.jooq.impl.SQLDataType.LOCALDATE
+import org.jooq.kotlin.intoMap
+import org.jooq.kotlin.mapping
 import org.junit.Test
 import java.math.BigDecimal
 import java.time.LocalDate
@@ -295,12 +297,12 @@ class Demo01Querying : AbstractDemo() {
                         ).mapping(::Name))
                     .from(FILM_ACTOR)
                     .where(FILM_ACTOR.FILM_ID.eq(FILM.FILM_ID))
-                ).convertFrom { r -> r.map(mapping(::Actor)) },
+                ).mapping(::Actor),
                 multiset(
                     select(FILM_CATEGORY.category().NAME)
                     .from(FILM_CATEGORY)
                     .where(FILM_CATEGORY.FILM_ID.eq(FILM.FILM_ID))
-                ).convertFrom { r -> r.map(mapping(::Category)) }
+                ).mapping(::Category)
             )
             .from(FILM)
             .orderBy(FILM.TITLE)
@@ -327,7 +329,7 @@ class Demo01Querying : AbstractDemo() {
                         .from(PAYMENT)
                         .groupBy(PAYMENT.PAYMENT_DATE.cast(LOCALDATE))
                         .orderBy(PAYMENT.PAYMENT_DATE.cast(LOCALDATE))
-                ).convertFrom { r -> r.collect(intoMap()) }
+                ).intoMap()
             )
             .from(FILM)
             .orderBy(FILM.TITLE)
