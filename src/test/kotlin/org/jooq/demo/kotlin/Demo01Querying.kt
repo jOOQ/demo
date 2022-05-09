@@ -1,11 +1,18 @@
 package org.jooq.demo.kotlin
 
 import org.jooq.*
+import org.jooq.Records.intoMap
+import org.jooq.Records.mapping
 import org.jooq.demo.AbstractDemo
+import org.jooq.demo.java.db.Tables
 import org.jooq.demo.kotlin.db.tables.references.*
-import org.jooq.impl.DSL
 import org.jooq.impl.DSL.*
+import org.jooq.impl.SQLDataType
+import org.jooq.impl.SQLDataType.LOCALDATE
 import org.junit.Test
+import java.math.BigDecimal
+import java.time.LocalDate
+import java.util.function.BiConsumer
 
 class Demo01Querying : AbstractDemo() {
 
@@ -215,7 +222,7 @@ class Demo01Querying : AbstractDemo() {
             .from(CUSTOMER)
             .orderBy(1, 2)
             .limit(5)
-            .fetch(Records.mapping(::Customer))
+            .fetch(mapping(::Customer))
         r.forEach { t: Customer? -> println(t) }
     }
 
@@ -288,17 +295,17 @@ class Demo01Querying : AbstractDemo() {
                         ).mapping(::Name))
                     .from(FILM_ACTOR)
                     .where(FILM_ACTOR.FILM_ID.eq(FILM.FILM_ID))
-                ).convertFrom { r -> r.map(Records.mapping(::Actor)) },
+                ).convertFrom { r -> r.map(mapping(::Actor)) },
                 multiset(
                     select(FILM_CATEGORY.category().NAME)
                     .from(FILM_CATEGORY)
                     .where(FILM_CATEGORY.FILM_ID.eq(FILM.FILM_ID))
-                ).convertFrom { r -> r.map(Records.mapping(::Category)) }
+                ).convertFrom { r -> r.map(mapping(::Category)) }
             )
             .from(FILM)
             .orderBy(FILM.TITLE)
             .limit(5)
-            .fetch(Records.mapping(::Film))
+            .fetch(mapping(::Film))
 
         for (film in result) {
             println("Film ${film.title} with categories ${film.categories} and actors ${film.actors}")
@@ -306,4 +313,31 @@ class Demo01Querying : AbstractDemo() {
 
         // Try modifying the records and see what needs to be done to get the query to compile again
     }
+
+    @Test
+    fun nestingToManyRelationshipsAsMaps() {
+        title("Arbitrary nested data structures are possible")
+        data class Film(val title: String?, val revenue: Map<LocalDate, BigDecimal>)
+
+        val result: List<Film> = ctx
+            .select(
+                FILM.TITLE,
+                multiset(
+                    select(PAYMENT.PAYMENT_DATE.cast(LOCALDATE), sum(PAYMENT.AMOUNT))
+                        .from(PAYMENT)
+                        .groupBy(PAYMENT.PAYMENT_DATE.cast(LOCALDATE))
+                        .orderBy(PAYMENT.PAYMENT_DATE.cast(LOCALDATE))
+                ).convertFrom { r -> r.collect(intoMap()) }
+            )
+            .from(FILM)
+            .orderBy(FILM.TITLE)
+            .fetch(mapping(::Film))
+
+        for (film in result) {
+            println("")
+            println("Film ${film.title} with revenue: ")
+            film.revenue.forEach { (d, r) -> println("  $d: $r") }
+        }
+    }
+
 }

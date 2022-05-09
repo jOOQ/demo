@@ -7,14 +7,21 @@ import org.jooq.demo.java.db.tables.FilmActor;
 import org.jooq.demo.java.db.tables.records.ActorRecord;
 import org.jooq.demo.java.db.Tables;
 import org.jooq.impl.DSL;
+import org.jooq.impl.SQLDataType;
 import org.junit.Test;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
+import static org.jooq.Records.intoMap;
 import static org.jooq.Records.mapping;
 import static org.jooq.demo.java.db.Tables.*;
 import static org.jooq.impl.DSL.*;
+import static org.jooq.impl.SQLDataType.DATE;
+import static org.jooq.impl.SQLDataType.LOCALDATE;
 
 public class Demo01Querying extends AbstractDemo {
 
@@ -309,5 +316,32 @@ public class Demo01Querying extends AbstractDemo {
         }
 
         // Try modifying the records and see what needs to be done to get the query to compile again
+    }
+
+    @Test
+    public void nestingToManyRelationshipsAsMaps() {
+        title("Arbitrary nested data structures are possible");
+
+        record Film(String title, Map<LocalDate, BigDecimal> revenue) {}
+        List<Film> result =
+            ctx.select(
+                FILM.TITLE,
+                multiset(
+                    select(PAYMENT.PAYMENT_DATE.cast(LOCALDATE), sum(PAYMENT.AMOUNT))
+                    .from(PAYMENT)
+                    .groupBy(PAYMENT.PAYMENT_DATE.cast(LOCALDATE))
+                    .orderBy(PAYMENT.PAYMENT_DATE.cast(LOCALDATE))
+                ).convertFrom(r -> r.collect(intoMap()))
+            )
+            .from(FILM)
+            .orderBy(FILM.TITLE)
+            .fetch(mapping(Film::new));
+
+        for (Film film : result) {
+            println("");
+            println("Film %s with revenue: ".formatted(film.title));
+
+            film.revenue.forEach((d, r) -> println("  %s: %s".formatted(d, r)));
+        }
     }
 }
