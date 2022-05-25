@@ -102,7 +102,6 @@ public class Demo01Querying extends AbstractDemo {
             .fetchSingle();
 
         println("Resulting actor: %s %s".formatted(actor.getFirstName(), actor.getLastName()));
-
         // More on these UpdatableRecords later
     }
 
@@ -188,7 +187,10 @@ public class Demo01Querying extends AbstractDemo {
     @Test
     public void implicitJoins() {
         title("No need to spell out trivial to-one joins");
-        ctx.select(CUSTOMER.FIRST_NAME, CUSTOMER.LAST_NAME, CUSTOMER.address().city().country().COUNTRY_)
+        ctx.select(
+                CUSTOMER.FIRST_NAME,
+                CUSTOMER.LAST_NAME,
+                CUSTOMER.address().city().country().COUNTRY_)
             .from(CUSTOMER)
             .orderBy(1, 2)
             .limit(5)
@@ -218,7 +220,10 @@ public class Demo01Querying extends AbstractDemo {
 
         title("Nesting is particularly useful when using ad-hoc converters");
         List<Customer> r =
-            ctx.select(CUSTOMER.FIRST_NAME, CUSTOMER.LAST_NAME, CUSTOMER.address().city().country().COUNTRY_.convertFrom(Country::new))
+            ctx.select(
+                    CUSTOMER.FIRST_NAME,
+                    CUSTOMER.LAST_NAME,
+                    CUSTOMER.address().city().country().COUNTRY_.convertFrom(Country::new))
                .from(CUSTOMER)
                .orderBy(1, 2)
                .limit(5)
@@ -250,7 +255,7 @@ public class Demo01Querying extends AbstractDemo {
     @Test
     public void nestingToManyRelationships() {
         title("The envy of all other ORMs: MULTISET!");
-        var r =
+        Result<Record3<String, Result<Record2<String, String>>, Result<Record1<String>>>> r =
         ctx.select(
                 FILM.TITLE,
                 multiset(

@@ -14,6 +14,7 @@ import org.jooq.kotlin.mapping
 import org.junit.Test
 import java.math.BigDecimal
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.util.function.BiConsumer
 
 class Demo01Querying : AbstractDemo() {
@@ -29,7 +30,7 @@ class Demo01Querying : AbstractDemo() {
     @Test
     fun typeSafetySimpleQuery() {
         title("A simple type safe query")
-        val r = ctx.select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
+        val r = ctx.select(ACTOR.FIRST_NAME, ACTOR.LAST_UPDATE)
             .from(ACTOR)
             .where(ACTOR.LAST_NAME.like("A%"))
             .orderBy(ACTOR.FIRST_NAME.asc())
@@ -102,7 +103,7 @@ class Demo01Querying : AbstractDemo() {
         val result = ctx.select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
             .from(ACTOR)
             .where(ACTOR.FIRST_NAME.like("A%"))
-            .union(
+            .unionAll(
                 select(CUSTOMER.FIRST_NAME, CUSTOMER.LAST_NAME)
                 .from(CUSTOMER)
                 .where(CUSTOMER.FIRST_NAME.like("A%"))
@@ -134,6 +135,7 @@ class Demo01Querying : AbstractDemo() {
     @Test
     fun standardisationLimit() {
         title("LIMIT .. OFFSET works in (almost) all dialects")
+
         val r1 = ctx.select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
             .from(ACTOR)
             .where(ACTOR.FIRST_NAME.like("A%"))
@@ -220,7 +222,8 @@ class Demo01Querying : AbstractDemo() {
             .select(
                 CUSTOMER.FIRST_NAME,
                 CUSTOMER.LAST_NAME,
-                CUSTOMER.address.city.country.COUNTRY_.convertFrom(::Country))
+                CUSTOMER.address.city.country.COUNTRY_.convertFrom(::Country)
+            )
             .from(CUSTOMER)
             .orderBy(1, 2)
             .limit(5)
@@ -249,13 +252,17 @@ class Demo01Querying : AbstractDemo() {
     @Test
     fun nestingToManyRelationships() {
         title("The envy of all other ORMs: MULTISET!")
-        val r = ctx
+        val r: Result<Record3<
+                String?,
+                Result<Record2<String?, LocalDateTime?>>,
+                Result<Record1<String?>>
+                >> = ctx
             .select(
                 FILM.TITLE,
                 multiset(
                     select(
                         FILM_ACTOR.actor.FIRST_NAME,
-                        FILM_ACTOR.actor.LAST_NAME
+                        FILM_ACTOR.actor.LAST_UPDATE
                     )
                     .from(FILM_ACTOR)
                     .where(FILM_ACTOR.FILM_ID.eq(FILM.FILM_ID))

@@ -1,6 +1,7 @@
 package org.jooq.demo;
 
 import org.jooq.DSLContext;
+import org.jooq.ExecuteListener;
 import org.jooq.SQLDialect;
 import org.jooq.conf.Settings;
 import org.jooq.impl.DefaultConfiguration;
@@ -12,7 +13,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
+import java.util.stream.Stream;
 
+import static org.jooq.SQLDialect.*;
 import static org.jooq.demo.java.db.Tables.ACTOR;
 import static org.jooq.impl.DSL.using;
 
@@ -41,17 +44,17 @@ public abstract class AbstractDemo {
                 .set(connection)
                 .set(SQLDialect.COCKROACHDB)
                 .set(new Settings()
-//                .withRenderFormatted(true)
+                .withRenderFormatted(true)
                 )
 
             // Activate this to get the output from different dialects
-//            .set(ExecuteListener.onExecuteStart(e -> Stream
-//                .of(MYSQL, ORACLE, POSTGRES, SQLSERVER)
-//                .map(d -> using(d, new Settings().withRenderFormatted(true)))
-//                .forEach(c -> {
-//                    title(c.dialect());
-//                    println(c.renderInlined(e.query()));
-//                })))
+            .set(ExecuteListener.onExecuteStart(e -> Stream
+                .of(MYSQL, ORACLE, POSTGRES, SQLSERVER)
+                .map(d -> using(d, new Settings().withRenderFormatted(true)))
+                .forEach(c -> {
+                    title(c.dialect());
+                    println(c.renderInlined(e.query()));
+                })))
         );
 
         // Initialise classes
