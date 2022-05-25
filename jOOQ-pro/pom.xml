@@ -4,9 +4,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>${jooq.edition}</groupId>
-    <artifactId>jooq-demo</artifactId>
+    <artifactId>jooq-demo-trial</artifactId>
     <version>3.17.0-SNAPSHOT</version>
-    <name>jOOQ Demo</name>
+    <name>jOOQ Demo (Trial Edition)</name>
 
     <licenses>
         <license>
@@ -20,10 +20,16 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jooq.edition>org.jooq.trial</jooq.edition>
         <jooq.version>3.17.0-SNAPSHOT</jooq.version>
+        <flyway.version>8.5.11</flyway.version>
         <postgres.version>42.3.4</postgres.version>
         <log4j.version>2.17.1</log4j.version>
         <junit.version>4.13.2</junit.version>
         <kotlin.version>1.6.21</kotlin.version>
+        <testcontainers.version>1.16.3</testcontainers.version>
+        <jetbrains.annotations.version>23.0.0</jetbrains.annotations.version>
+
+        <db.username>postgres</db.username>
+        <db.password>postgres</db.password>
     </properties>
 
     <dependencies>
@@ -39,6 +45,11 @@
             <artifactId>postgresql</artifactId>
             <version>${postgres.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>${flyway.version}</version>
+        </dependency>
 
         <!-- Logging -->
         <dependency>
@@ -51,7 +62,7 @@
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>23.0.0</version>
+            <version>${jetbrains.annotations.version}</version>
         </dependency>
 
         <!-- Testing -->
@@ -61,6 +72,11 @@
             <version>${junit.version}</version>
             <type>jar</type>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${testcontainers.version}</version>
         </dependency>
 
         <!-- Kotlin -->
@@ -88,23 +104,7 @@
     </dependencies>
 
     <build>
-
-        <!-- The resources element will replace available properties in all matching
-             resources. We use this to provide H2 connection configuration to various
-             configuration elements -->
-        <resources>
-            <resource>
-                <filtering>true</filtering>
-                <directory>src/main/resources</directory>
-                <includes>
-                    <include>**/*.xml</include>
-                    <include>**/*.properties</include>
-                </includes>
-            </resource>
-        </resources>
-
         <plugins>
-
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
@@ -200,20 +200,59 @@
                 </configuration>
             </plugin>
 
+            <!-- Much better if there was a testcontainers lifecycle management plugin!
+                 Upvote here if you like the idea: https://github.com/testcontainers/testcontainers-java/issues/4397 -->
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>properties-maven-plugin</artifactId>
-                <version>1.0.0</version>
+                <groupId>org.codehaus.gmaven</groupId>
+                <artifactId>groovy-maven-plugin</artifactId>
+                <version>2.1.1</version>
                 <executions>
                     <execution>
-                        <phase>initialize</phase>
+                        <phase>generate-sources</phase>
                         <goals>
-                            <goal>read-project-properties</goal>
+                            <goal>execute</goal>
                         </goals>
                         <configuration>
-                            <files>
-                                <file>src/main/resources/config.properties</file>
-                            </files>
+                            <source>
+                                db = new org.testcontainers.containers.PostgreSQLContainer("postgres:latest")
+                                        .withUsername("${db.username}")
+                                        .withDatabaseName("postgres")
+                                        .withPassword("${db.password}")
+
+                                db.start()
+                                project.properties.setProperty('db.url', db.getJdbcUrl())
+                            </source>
+                        </configuration>
+                    </execution>
+                </executions>
+
+                <dependencies>
+                    <dependency>
+                        <groupId>org.testcontainers</groupId>
+                        <artifactId>postgresql</artifactId>
+                        <version>${testcontainers.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>${flyway.version}</version>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>migrate</goal>
+                        </goals>
+                        <configuration>
+                            <!-- This URL is exported by testcontainers above -->
+                            <url>${db.url}</url>
+                            <user>${db.username}</user>
+                            <password>${db.password}</password>
+                            <locations>
+                                <location>filesystem:../sakila/postgres</location>
+                            </locations>
                         </configuration>
                     </execution>
                 </executions>
@@ -226,15 +265,16 @@
 
                 <configuration>
                     <jdbc>
-                        <driver>${db.cockroachdb.driver}</driver>
-                        <url>${db.cockroachdb.url}</url>
-                        <user>${db.cockroachdb.username}</user>
-                        <password>${db.cockroachdb.password}</password>
+                        <driver>org.postgresql.Driver</driver>
+                        <!-- This URL is exported by testcontainers above -->
+                        <url>${db.url}</url>
+                        <user>${db.username}</user>
+                        <password>${db.password}</password>
                     </jdbc>
                     <generator>
                         <database>
-                            <name>org.jooq.meta.cockroachdb.CockroachDBDatabase</name>
                             <inputSchema>public</inputSchema>
+                            <excludes>flyway_.*</excludes>
                         </database>
                         <generate>
                             <pojos>true</pojos>
