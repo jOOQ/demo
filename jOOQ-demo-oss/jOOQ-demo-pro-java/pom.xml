@@ -1,0 +1,82 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.jooq</groupId>
+        <artifactId>jooq-demo-oss</artifactId>
+        <version>0.9.0</version>
+    </parent>
+
+    <artifactId>jooq-demo-oss-java</artifactId>
+    <name>jOOQ Demo Java (Open Source Edition)</name>
+
+    <dependencies>
+
+        <!-- Demo utilities -->
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq-demo-oss-utils</artifactId>
+        </dependency>
+
+        <!-- Testing -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <type>jar</type>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+
+            <!-- Much better if there was a testcontainers lifecycle management plugin!
+                 Upvote here if you like the idea: https://github.com/testcontainers/testcontainers-java/issues/4397 -->
+            <plugin>
+                <groupId>org.codehaus.gmaven</groupId>
+                <artifactId>groovy-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.jooq</groupId>
+                <artifactId>jooq-codegen-maven</artifactId>
+
+                <executions>
+                    <execution>
+                        <id>generate-demo-java</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <generator>
+                                <generate>
+                                    <pojosAsJavaRecordClasses>true</pojosAsJavaRecordClasses>
+                                </generate>
+                                <target>
+                                    <packageName>org.jooq.demo.java.db</packageName>
+
+                                    <!-- We're version controlling the source code for better documentation on github, etc.
+                                         This isn't necessary, though, see also:
+                                         https://www.jooq.org/doc/latest/manual/code-generation/codegen-version-control/ -->
+                                    <directory>src/main/java</directory>
+                                </target>
+                            </generator>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
