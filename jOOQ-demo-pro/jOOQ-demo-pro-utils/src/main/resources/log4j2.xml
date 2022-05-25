@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{ABSOLUTE} %5p %m%n"/>
+            <!-- Log more info:
+            <PatternLayout pattern="%d{ABSOLUTE} %5p [%-50c{4}] - %m%n"/>
+            -->
+        </Console>
+    </Appenders>
+
+    <Loggers>
+        <Logger name="org.flywaydb" level="info">
+            <AppenderRef ref="Console"/>
+        </Logger>
+
+        <Logger name="org.testcontainers" level="info">
+            <AppenderRef ref="Console"/>
+        </Logger>
+
+        <Logger name="com.github.dockerjava" level="info">
+            <AppenderRef ref="Console"/>
+        </Logger>
+
+        <Root level="debug">
+            <AppenderRef ref="Console"/>
+        </Root>
+    </Loggers>
+</Configuration>

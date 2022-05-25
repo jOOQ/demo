@@ -1,0 +1,226 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.jooq.trial</groupId>
+    <artifactId>jooq-demo-pro</artifactId>
+    <version>0.9.0</version>
+    <name>jOOQ Demo (Trial Edition)</name>
+    <packaging>pom</packaging>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.jooq.org/inc/LICENSE.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jooq.version>3.17.0-SNAPSHOT</jooq.version>
+        <jooq.demo.version>0.9.0</jooq.demo.version>
+        <flyway.version>8.5.11</flyway.version>
+        <postgres.version>42.3.4</postgres.version>
+        <log4j.version>2.17.1</log4j.version>
+        <junit.version>4.13.2</junit.version>
+        <kotlin.version>1.6.21</kotlin.version>
+        <testcontainers.version>1.16.3</testcontainers.version>
+        <jetbrains.annotations.version>23.0.0</jetbrains.annotations.version>
+
+        <db.username>postgres</db.username>
+        <db.password>postgres</db.password>
+    </properties>
+
+    <modules>
+        <module>jOOQ-demo-pro-utils</module>
+        <module>jOOQ-demo-pro-java</module>
+        <module>jOOQ-demo-pro-kotlin</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+
+            <!-- Demo utilities -->
+            <dependency>
+                <groupId>org.jooq.trial</groupId>
+                <artifactId>jooq-demo-pro-utils</artifactId>
+                <version>${jooq.demo.version}</version>
+            </dependency>
+
+            <!-- Database access -->
+            <dependency>
+                <groupId>org.jooq.trial</groupId>
+                <artifactId>jooq</artifactId>
+                <version>${jooq.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>${postgres.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-core</artifactId>
+                <version>${flyway.version}</version>
+            </dependency>
+
+            <!-- Logging -->
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-slf4j18-impl</artifactId>
+                <version>${log4j.version}</version>
+            </dependency>
+
+            <!-- Some optional transitive dependencies -->
+            <dependency>
+                <groupId>org.jetbrains</groupId>
+                <artifactId>annotations</artifactId>
+                <version>${jetbrains.annotations.version}</version>
+            </dependency>
+
+            <!-- Testing -->
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+                <type>jar</type>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.testcontainers</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>${testcontainers.version}</version>
+            </dependency>
+
+            <!-- Kotlin -->
+            <dependency>
+                <groupId>org.jooq.trial</groupId>
+                <artifactId>jooq-kotlin</artifactId>
+                <version>${jooq.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-stdlib-jdk8</artifactId>
+                <version>${kotlin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-test</artifactId>
+                <version>${kotlin.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-stdlib-jdk8</artifactId>
+                <version>${kotlin.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.10.1</version>
+                    <configuration>
+                        <release>17</release>
+                        <source>17</source>
+                        <target>17</target>
+                    </configuration>
+                </plugin>
+
+                <!-- Much better if there was a testcontainers lifecycle management plugin!
+                     Upvote here if you like the idea: https://github.com/testcontainers/testcontainers-java/issues/4397 -->
+                <plugin>
+                    <groupId>org.codehaus.gmaven</groupId>
+                    <artifactId>groovy-maven-plugin</artifactId>
+                    <version>2.1.1</version>
+                    <executions>
+                        <execution>
+                            <phase>generate-sources</phase>
+                            <goals>
+                                <goal>execute</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+
+                    <configuration>
+                        <source>
+                            db = new org.testcontainers.containers.PostgreSQLContainer("postgres:latest")
+                                    .withUsername("${db.username}")
+                                    .withDatabaseName("postgres")
+                                    .withPassword("${db.password}")
+
+                            db.start()
+                            project.properties.setProperty('db.url', db.getJdbcUrl())
+                        </source>
+                    </configuration>
+
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.testcontainers</groupId>
+                            <artifactId>postgresql</artifactId>
+                            <version>${testcontainers.version}</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.flywaydb</groupId>
+                    <artifactId>flyway-maven-plugin</artifactId>
+                    <version>${flyway.version}</version>
+                    <executions>
+                        <execution>
+                            <phase>generate-sources</phase>
+                            <goals>
+                                <goal>migrate</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+
+                    <configuration>
+                        <!-- This URL is exported by testcontainers above -->
+                        <url>${db.url}</url>
+                        <user>${db.username}</user>
+                        <password>${db.password}</password>
+                        <locations>
+                            <location>filesystem:../../sakila/postgres</location>
+                        </locations>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.jooq.trial</groupId>
+                    <artifactId>jooq-codegen-maven</artifactId>
+                    <version>${jooq.version}</version>
+
+                    <configuration>
+                        <jdbc>
+                            <driver>org.postgresql.Driver</driver>
+                            <!-- This URL is exported by testcontainers above -->
+                            <url>${db.url}</url>
+                            <user>${db.username}</user>
+                            <password>${db.password}</password>
+                        </jdbc>
+                        <generator>
+                            <database>
+                                <inputSchema>public</inputSchema>
+                                <excludes>flyway_.*</excludes>
+                            </database>
+                            <generate>
+                                <pojos>true</pojos>
+                                <pojosToString>false</pojosToString>
+                                <pojosEqualsAndHashCode>false</pojosEqualsAndHashCode>
+                                <daos>true</daos>
+                            </generate>
+                        </generator>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>
