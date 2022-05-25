@@ -1,14 +1,11 @@
 package org.jooq.demo.kotlin
 
-import org.jooq.ExecuteContext
 import org.jooq.ExecuteListener
-import org.jooq.VisitContext
 import org.jooq.VisitListener
 import org.jooq.demo.AbstractDemo
-import org.jooq.demo.java.db.Tables
+import org.jooq.demo.kotlin.db.tables.references.ACTOR
 import org.jooq.impl.DSL
 import org.junit.Test
-import org.jooq.demo.kotlin.db.tables.references.ACTOR
 
 class Demo10SPIs : AbstractDemo() {
 

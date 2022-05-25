@@ -49,6 +49,9 @@ public class Demo11QueryObjectModel extends AbstractDemo {
     public void traversal() {
         title("The query object model (QOM) can be traversed easily");
 
+        // QOM traversal is a commercial only feature.
+        /* [pro] */
+
         var select = ctx
             .select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
             .from(ACTOR)
@@ -70,11 +73,16 @@ public class Demo11QueryObjectModel extends AbstractDemo {
                 parts.forEach(part -> println("  " + part));
             }
         );
+
+        /* [/pro] */
     }
 
     @Test
     public void replacement() {
         title("The query object model (QOM) can be transformed easily");
+
+        // QOM replacement is a commercial only feature.
+        /* [pro] */
 
         var select1 = ctx
             .select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
@@ -98,7 +106,11 @@ public class Demo11QueryObjectModel extends AbstractDemo {
                 select(max(ACTOR.ACTOR_ID)).from(ACTOR))
             );
         println(select2.$replace(appendSecurityCheck()));
+
+        /* [/pro] */
     }
+
+    /* [pro] */
 
     private Function<QueryPart, QueryPart> appendSecurityCheck() {
         return p -> {
@@ -118,4 +130,6 @@ public class Demo11QueryObjectModel extends AbstractDemo {
             return p;
         };
     }
+
+    /* [/pro] */
 }

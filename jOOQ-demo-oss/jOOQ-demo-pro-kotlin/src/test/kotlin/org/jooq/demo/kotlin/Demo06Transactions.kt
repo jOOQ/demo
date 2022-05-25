@@ -155,7 +155,7 @@ class Demo06Transactions : AbstractDemo() {
 
     @After
     override fun teardown() {
-        cleanup()
+        cleanup(ACTOR, ACTOR.ACTOR_ID)
         super.teardown()
     }
 }

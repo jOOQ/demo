@@ -2,9 +2,7 @@ package org.jooq.demo;
 
 import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.Location;
-import org.jooq.DSLContext;
-import org.jooq.ExecuteListener;
-import org.jooq.SQLDialect;
+import org.jooq.*;
 import org.jooq.conf.Settings;
 import org.jooq.impl.DSL;
 import org.jooq.impl.DefaultConfiguration;
@@ -24,7 +22,6 @@ import java.util.Properties;
 import java.util.stream.Stream;
 
 import static org.jooq.SQLDialect.*;
-import static org.jooq.demo.java.db.Tables.ACTOR;
 import static org.jooq.impl.DSL.using;
 
 /**
@@ -35,7 +32,8 @@ public abstract class AbstractDemo {
     protected static JooqLogger          log = JooqLogger.getLogger(AbstractDemo.class);
     protected static PostgreSQLContainer db;
     protected static Connection          connection;
-    protected static DSLContext          ctx;
+    protected static DSLContext    ctx;
+    protected static Configuration configuration;
 
     // Utilities
     // -----------------------------------------------------------------------------------------------------------------
@@ -56,7 +54,7 @@ public abstract class AbstractDemo {
             db.getUsername(),
             db.getPassword()
         );
-        ctx = using(new DefaultConfiguration()
+        ctx = using(configuration = new DefaultConfiguration()
             .set(connection)
             .set(POSTGRES)
             .set(new Settings()
@@ -79,7 +77,7 @@ public abstract class AbstractDemo {
 
         log.info("Flyway migration");
         Flyway.configure()
-              .locations("filesystem:../sakila/postgres")
+              .locations("filesystem:../../sakila/postgres")
               .dataSource(db.getJdbcUrl(), db.getUsername(), db.getPassword())
               .load()
               .migrate();
@@ -98,9 +96,9 @@ public abstract class AbstractDemo {
     public void teardown() throws SQLException {
     }
 
-    public void cleanup() {
-        ctx.delete(ACTOR)
-           .where(ACTOR.ACTOR_ID.gt(200L))
+    public void cleanup(Table<?> actor, Field<Long> actorId) {
+        ctx.delete(actor)
+           .where(actorId.gt(200L))
            .execute();
     }
 

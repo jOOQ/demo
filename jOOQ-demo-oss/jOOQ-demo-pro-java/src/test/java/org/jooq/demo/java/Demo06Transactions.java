@@ -140,7 +140,7 @@ public class Demo06Transactions extends AbstractDemo {
 
     @After
     public void teardown() throws SQLException {
-        cleanup();
+        cleanup(ACTOR, ACTOR.ACTOR_ID);
         super.teardown();
     }
 }

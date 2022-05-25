@@ -72,7 +72,7 @@ public class Demo05Batch extends AbstractDemo {
 
     @After
     public void teardown() throws SQLException {
-        cleanup();
+        cleanup(ACTOR, ACTOR.ACTOR_ID);
         super.teardown();
     }
 }

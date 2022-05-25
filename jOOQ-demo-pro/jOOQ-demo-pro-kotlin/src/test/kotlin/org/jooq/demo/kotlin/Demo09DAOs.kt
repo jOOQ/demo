@@ -34,7 +34,7 @@ class Demo09DAOs : AbstractDemo() {
 
     @After
     override fun teardown() {
-        cleanup()
+        cleanup(ACTOR, ACTOR.ACTOR_ID)
         super.teardown()
     }
 }

@@ -49,73 +49,87 @@ public class Demo11QueryObjectModel extends AbstractDemo {
     public void traversal() {
         title("The query object model (QOM) can be traversed easily");
 
-        var select = ctx
-            .select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
-            .from(ACTOR)
-            .where(ACTOR.ACTOR_ID.lt(4L));
+        // QOM traversal is a commercial only feature.
 
-        println("All column expressions: " + select.$traverse(Traversers.findingAll(p -> p instanceof Field)));
-        println("All bind values: " + select.$traverse(Traversers.findingAll(p -> p instanceof Param)));
 
-        title("Any JDK Collector can be turned into a Traverser, too, e.g. collecting to a list");
-        select.$traverse(Traversers.collecting(toList())).forEach(System.out::println);
 
-        title("Or grouping query parts by type");
-        select.$traverse(Traversers.collecting(groupingBy(p -> p.getClass(), toList()))).forEach(
-            (type, parts) -> {
-                println("");
-                println("Type: " + type);
-                println("Parts:");
 
-                parts.forEach(part -> println("  " + part));
-            }
-        );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
     @Test
     public void replacement() {
         title("The query object model (QOM) can be transformed easily");
 
-        var select1 = ctx
-            .select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
-            .from(ACTOR)
-            .where(ACTOR.ACTOR_ID.lt(4L));
+        // QOM replacement is a commercial only feature.
 
-        title("Replacing bind values");
-        println(select1.$replace(p -> p instanceof Param ? val(5) : p));
 
-        title("Inverting the < predicate");
-        println(select1.$replace(p -> p instanceof QOM.Lt<?> lt ? lt.$converse() : p));
 
-        title("Appending a predicate");
-        println(select1.$replace(appendSecurityCheck()));
 
-        title("Appending a predicate even to subqueries");
-        var select2 = ctx
-            .select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
-            .from(ACTOR)
-            .where(ACTOR.ACTOR_ID.lt(
-                select(max(ACTOR.ACTOR_ID)).from(ACTOR))
-            );
-        println(select2.$replace(appendSecurityCheck()));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
-    private Function<QueryPart, QueryPart> appendSecurityCheck() {
-        return p -> {
-            Condition c = condition("security_check()");
 
-            // Beware of performance and infinite recursions, though!
-            if (p instanceof Select<?> s)
 
-                // Append the predicate if there is no predicate
-                if (s.$where() == null)
-                    return s.$where(c);
 
-                // If there's already a predicate, check if the predicate contains the predicate already (don't recurse into subqueries)
-                else if (!s.$where().$traverse(Traversers.recursing(q -> !(q instanceof Select), Traversers.containing(c))))
-                    return s.$where(and(s.$where(), c));
 
-            return p;
-        };
-    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

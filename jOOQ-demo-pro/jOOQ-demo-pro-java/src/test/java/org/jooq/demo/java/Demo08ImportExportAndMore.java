@@ -171,7 +171,7 @@ public class Demo08ImportExportAndMore extends AbstractDemo {
 
     @After
     public void teardown() throws SQLException {
-        cleanup();
+        cleanup(ACTOR, ACTOR.ACTOR_ID);
         super.teardown();
     }
 }

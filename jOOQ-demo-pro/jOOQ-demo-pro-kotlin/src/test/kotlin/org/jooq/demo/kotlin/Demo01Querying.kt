@@ -1,13 +1,10 @@
 package org.jooq.demo.kotlin
 
 import org.jooq.*
-import org.jooq.Records.intoMap
 import org.jooq.Records.mapping
 import org.jooq.demo.AbstractDemo
-import org.jooq.demo.java.db.Tables
 import org.jooq.demo.kotlin.db.tables.references.*
 import org.jooq.impl.DSL.*
-import org.jooq.impl.SQLDataType
 import org.jooq.impl.SQLDataType.LOCALDATE
 import org.jooq.kotlin.intoMap
 import org.jooq.kotlin.mapping
@@ -15,7 +12,6 @@ import org.junit.Test
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.util.function.BiConsumer
 
 class Demo01Querying : AbstractDemo() {
 

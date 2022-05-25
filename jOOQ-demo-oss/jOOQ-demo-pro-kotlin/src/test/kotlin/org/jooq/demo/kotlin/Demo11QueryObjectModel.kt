@@ -2,14 +2,10 @@ package org.jooq.demo.kotlin
 
 import org.jooq.*
 import org.jooq.demo.AbstractDemo
-import org.jooq.demo.java.db.Tables
-import org.jooq.demo.kotlin.db.tables.references.ACTOR
+import org.jooq.demo.kotlin.db.tables.references.*
 import org.jooq.impl.DSL.*
 import org.jooq.impl.QOM
 import org.junit.Test
-import java.util.function.BiConsumer
-import java.util.function.Consumer
-import java.util.stream.Collectors
 import java.util.stream.Collectors.groupingBy
 import java.util.stream.Collectors.toList
 
@@ -43,9 +39,9 @@ class Demo11QueryObjectModel : AbstractDemo() {
     fun traversal() {
         title("The query object model (QOM) can be traversed easily")
         val select = ctx
-            .select(Tables.ACTOR.FIRST_NAME, Tables.ACTOR.LAST_NAME)
-            .from(Tables.ACTOR)
-            .where(Tables.ACTOR.ACTOR_ID.lt(4L))
+            .select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
+            .from(ACTOR)
+            .where(ACTOR.ACTOR_ID.lt(4L))
 
         println("All column expressions: " + select.`$traverse`(Traversers.findingAll { p -> p is Field<*> }))
         println("All bind values: " + select.`$traverse`(Traversers.findingAll { p -> p is Param<*> }))

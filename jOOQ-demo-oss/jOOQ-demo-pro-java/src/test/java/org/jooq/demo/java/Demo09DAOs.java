@@ -38,7 +38,7 @@ public class Demo09DAOs extends AbstractDemo {
 
     @After
     public void teardown() throws SQLException {
-        cleanup();
+        cleanup(ACTOR, ACTOR.ACTOR_ID);
         super.teardown();
     }
 }
