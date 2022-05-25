@@ -2,12 +2,16 @@ package org.jooq.demo.kotlin
 
 import org.jooq.demo.AbstractDemo
 import org.jooq.demo.kotlin.db.routines.references.inventoryInStock
-import org.jooq.demo.kotlin.db.tables.references.FILM
+import org.jooq.demo.kotlin.db.tables.references.*
 import org.jooq.demo.kotlin.db.tables.references.FILM_IN_STOCK
 import org.jooq.demo.kotlin.db.tables.references.INVENTORY
 import org.jooq.demo.kotlin.db.tables.references.STORE
-import org.jooq.impl.DSL.lateral
+import org.jooq.impl.DSL
+import org.jooq.impl.DSL.*
+import org.jooq.impl.SQLDataType
+import org.junit.After
 import org.junit.Test
+import java.sql.SQLException
 
 class Demo12StoredProcedures : AbstractDemo() {
 
@@ -41,4 +45,35 @@ class Demo12StoredProcedures : AbstractDemo() {
             .limit(10)
             .fetch()
     }
+
+
+    @Test
+    fun proceduralLanguage() {
+        title("The procedural language API allows for creating procedures or anonymous blocks")
+
+        // This is a commercial only feature. Check out the commercial demo for details
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
+
+    @After
+    @Throws(SQLException::class)
+    override fun teardown() {
+        cleanup(ACTOR, ACTOR.ACTOR_ID)
+        super.teardown()
+    }
+
 }

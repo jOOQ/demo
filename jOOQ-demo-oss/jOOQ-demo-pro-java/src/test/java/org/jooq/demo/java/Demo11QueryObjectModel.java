@@ -49,7 +49,7 @@ public class Demo11QueryObjectModel extends AbstractDemo {
     public void traversal() {
         title("The query object model (QOM) can be traversed easily");
 
-        // QOM traversal is a commercial only feature.
+        // This is a commercial only feature. Check out the commercial demo for details
 
 
 
@@ -81,7 +81,7 @@ public class Demo11QueryObjectModel extends AbstractDemo {
     public void replacement() {
         title("The query object model (QOM) can be transformed easily");
 
-        // QOM replacement is a commercial only feature.
+        // This is a commercial only feature. Check out the commercial demo for details
 
 
 
