@@ -5,11 +5,11 @@
 
     <parent>
         <groupId>org.jooq</groupId>
-        <artifactId>jooq-demo-oss</artifactId>
+        <artifactId>jooq-demo</artifactId>
         <version>0.9.0</version>
     </parent>
 
-    <artifactId>jooq-demo-oss-kotlin</artifactId>
+    <artifactId>jooq-demo-kotlin</artifactId>
     <name>jOOQ Demo Kotlin (Open Source Edition)</name>
 
     <dependencies>
@@ -17,7 +17,7 @@
         <!-- Demo utilities -->
         <dependency>
             <groupId>org.jooq</groupId>
-            <artifactId>jooq-demo-oss-utils</artifactId>
+            <artifactId>jooq-demo-utils</artifactId>
         </dependency>
 
         <!-- Testing -->

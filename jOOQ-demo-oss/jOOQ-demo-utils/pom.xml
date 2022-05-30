@@ -4,19 +4,19 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.jooq.trial</groupId>
-        <artifactId>jooq-demo-pro</artifactId>
+        <groupId>org.jooq</groupId>
+        <artifactId>jooq-demo</artifactId>
         <version>0.9.0</version>
     </parent>
 
-    <artifactId>jooq-demo-pro-utils</artifactId>
-    <name>jOOQ Demo Utils (Trial Edition)</name>
+    <artifactId>jooq-demo-utils</artifactId>
+    <name>jOOQ Demo Utils (Open Source Edition)</name>
 
     <dependencies>
 
         <!-- Database access -->
         <dependency>
-            <groupId>org.jooq.trial</groupId>
+            <groupId>org.jooq</groupId>
             <artifactId>jooq</artifactId>
         </dependency>
         <dependency>

@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.jooq.trial</groupId>
-    <artifactId>jooq-demo-pro</artifactId>
+    <artifactId>jooq-demo</artifactId>
     <version>0.9.0</version>
     <name>jOOQ Demo (Trial Edition)</name>
     <packaging>pom</packaging>
@@ -34,9 +34,9 @@
     </properties>
 
     <modules>
-        <module>jOOQ-demo-pro-utils</module>
-        <module>jOOQ-demo-pro-java</module>
-        <module>jOOQ-demo-pro-kotlin</module>
+        <module>jOOQ-demo-utils</module>
+        <module>jOOQ-demo-java</module>
+        <module>jOOQ-demo-kotlin</module>
     </modules>
 
     <dependencyManagement>
@@ -45,7 +45,7 @@
             <!-- Demo utilities -->
             <dependency>
                 <groupId>org.jooq.trial</groupId>
-                <artifactId>jooq-demo-pro-utils</artifactId>
+                <artifactId>jooq-demo-utils</artifactId>
                 <version>${jooq.demo.version}</version>
             </dependency>
 
