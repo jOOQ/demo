@@ -1,13 +1,13 @@
 package org.jooq.demo.skala
 
-import org.jooq.Records.{intoMap, mapping}
+import org.jooq.Records.intoMap
 import org.jooq.demo.AbstractDemo
 import org.jooq.demo.AbstractDemo._
 import org.jooq.demo.skala.db.Tables._
 import org.jooq.impl.DSL._
 import org.jooq.impl.SQLDataType.LOCALDATE
 import org.jooq.scalaextensions.Conversions._
-import org.jooq.{JSONFormat, Record1, Record2, Record3, Result, XMLFormat}
+import org.jooq.{Field, JSONFormat, Record1, Record2, Record3, Result, XMLFormat}
 import org.junit.Test
 
 import java.math.BigDecimal
@@ -190,7 +190,7 @@ class Demo01Querying extends AbstractDemo {
     case class Customer(firstName: String, lastName: String, country: Country)
 
     title("Nesting is particularly useful when using ad-hoc converters")
-    val r: Result[Record3[String, String, Country]] = ctx
+    val r = ctx
       .select(
         CUSTOMER.FIRST_NAME,
         CUSTOMER.LAST_NAME,
@@ -198,9 +198,9 @@ class Demo01Querying extends AbstractDemo {
       .from(CUSTOMER)
       .orderBy(1, 2)
       .limit(5)
-      .fetch
+      .fetch(Customer)
 
-    r.map(_ => Customer(_, _, _)).forEach(println(_))
+    r.forEach(println(_))
   }
 
   @Test
@@ -266,15 +266,15 @@ class Demo01Querying extends AbstractDemo {
         multiset(
           select(row(FILM_ACTOR.actor.FIRST_NAME, FILM_ACTOR.actor.LAST_NAME).mapping(Name(_, _)))
             .from(FILM_ACTOR)
-            .where(FILM_ACTOR.FILM_ID.eq(FILM.FILM_ID))).convertFrom(r => r.map(mapping[Name, Record1[Name], Actor](Actor(_)))),
+            .where(FILM_ACTOR.FILM_ID.eq(FILM.FILM_ID))).mapping(Actor),
         multiset(
           select(FILM_CATEGORY.category.NAME)
             .from(FILM_CATEGORY)
-            .where(FILM_CATEGORY.FILM_ID.eq(FILM.FILM_ID))).convertFrom(r => r.map(mapping[String, Record1[String], Category](Category(_)))))
+            .where(FILM_CATEGORY.FILM_ID.eq(FILM.FILM_ID))).mapping(Category))
       .from(FILM)
       .orderBy(FILM.TITLE)
       .limit(5)
-      .fetch(mapping[String, util.List[Actor], util.List[Category], Record3[String, util.List[Actor], util.List[Category]], Film](Film(_, _, _)))
+      .fetch(Film)
 
     result.forEach { film =>
       println("Film %s with categories %s and actors %s ".formatted(film.title, film.categories, film.actors))
@@ -287,24 +287,19 @@ class Demo01Querying extends AbstractDemo {
     title("Arbitrary nested data structures are possible")
     case class Film(title: String, revenue: util.Map[LocalDate, BigDecimal])
 
-    // TODO: The amount of type witnesses required in the Scala version of this method are unwieldy
-    //       I currently do not know if this is a limitation of the Scala / Java interop or me misunderstanding which
-    //       implicit conversions should be used here... Please feel free to suggest improvements!
-    val result: Result[Record2[String, util.Map[LocalDate, BigDecimal]]] = ctx
+    val result = ctx
       .select(
         FILM.TITLE,
         multiset(
           select(PAYMENT.PAYMENT_DATE.cast(LOCALDATE), sum(PAYMENT.AMOUNT))
             .from(PAYMENT)
             .groupBy(PAYMENT.PAYMENT_DATE.cast(LOCALDATE))
-            .orderBy(PAYMENT.PAYMENT_DATE.cast(LOCALDATE))).convertFrom(r => r.collect(intoMap[LocalDate, BigDecimal, Record2[LocalDate, BigDecimal]]())))
+            .orderBy(PAYMENT.PAYMENT_DATE.cast(LOCALDATE))).intoMap())
       .from(FILM)
       .orderBy(FILM.TITLE)
-      .fetch
+      .fetch(Film)
 
-    result
-      .map(mapping[String, util.Map[LocalDate, BigDecimal], Record2[String, util.Map[LocalDate, BigDecimal]], Film](Film(_, _)))
-      .forEach { film: Film =>
+    result.forEach { film: Film =>
       println("")
       println("Film %s with revenue: ".formatted(film.title))
       film.revenue.forEach((d: LocalDate, r: BigDecimal) => println("  %s: %s".formatted(d, r)))
