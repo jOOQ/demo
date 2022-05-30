@@ -1,10 +1,11 @@
 package org.jooq.demo;
 
 import org.flywaydb.core.Flyway;
-import org.flywaydb.core.api.Location;
-import org.jooq.*;
+import org.jooq.Configuration;
+import org.jooq.DSLContext;
+import org.jooq.Field;
+import org.jooq.Table;
 import org.jooq.conf.Settings;
-import org.jooq.impl.DSL;
 import org.jooq.impl.DefaultConfiguration;
 import org.jooq.tools.JooqLogger;
 import org.junit.After;
@@ -13,15 +14,11 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.testcontainers.containers.PostgreSQLContainer;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Properties;
-import java.util.stream.Stream;
 
-import static org.jooq.SQLDialect.*;
+import static org.jooq.SQLDialect.POSTGRES;
 import static org.jooq.impl.DSL.using;
 
 /**
@@ -32,8 +29,8 @@ public abstract class AbstractDemo {
     protected static JooqLogger          log = JooqLogger.getLogger(AbstractDemo.class);
     protected static PostgreSQLContainer db;
     protected static Connection          connection;
-    protected static DSLContext    ctx;
-    protected static Configuration configuration;
+    protected static DSLContext          ctx;
+    protected static Configuration       configuration;
 
     // Utilities
     // -----------------------------------------------------------------------------------------------------------------
