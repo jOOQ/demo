@@ -1,31 +1,20 @@
-package org.jooq.demo.java
+package org.jooq.demo.skala
 
-import org.jooq.{Cursor, JSONFormat, Record1, Record2, Record3, Result, XMLFormat, _}
+import org.jooq.Records.{intoMap, mapping}
 import org.jooq.demo.AbstractDemo
-import org.jooq.demo.skala.db.tables.Actor
-import org.jooq.demo.skala.db.tables.FilmActor
-import org.jooq.demo.skala.db.tables.records.ActorRecord
-import org.jooq.demo.skala.db.Tables
-import org.jooq.impl.DSL
-import org.jooq.impl.SQLDataType
-import org.junit.Test
-
-import scala.jdk.CollectionConverters._
-import java.math.BigDecimal
-import java.time.LocalDate
-import java.util
-import java.util.stream.Stream
-import org.jooq.Records.intoMap
-import org.jooq.Records.mapping
 import org.jooq.demo.AbstractDemo._
 import org.jooq.demo.skala.db.Tables._
 import org.jooq.impl.DSL._
-import org.jooq.impl.SQLDataType.DATE
 import org.jooq.impl.SQLDataType.LOCALDATE
-
-import java.util.{List, Map}
-import scala.util.{Try, Using}
 import org.jooq.scalaextensions.Conversions._
+import org.jooq.{JSONFormat, Record1, Record2, Record3, Result, XMLFormat}
+import org.junit.Test
+
+import java.math.BigDecimal
+import java.time.LocalDate
+import java.util
+import scala.collection.convert.ImplicitConversions._
+import scala.util.Using
 
 
 class Demo01Querying extends AbstractDemo {
@@ -53,6 +42,12 @@ class Demo01Querying extends AbstractDemo {
 
   @Test
   def consumeRecordsForEach(): Unit = {
+    title("ResultQuery<R> extends Iterable<R>, which means that we can iterate queries!")
+    for (r <- ctx.select(FILM.FILM_ID, FILM.TITLE)
+      .from(FILM)
+      .limit(5))
+      println("Film %s: %s".formatted(r.value1, r.value2))
+
     title("This also means we can call Iterable::forEach on it")
     ctx.select(FILM.FILM_ID, FILM.TITLE)
       .from(FILM)
@@ -68,9 +63,8 @@ class Demo01Querying extends AbstractDemo {
         .from(ACTOR)
         .where(ACTOR.ACTOR_ID < 5L)
         .fetchLazy) { c =>
-      c.forEach { r =>
+      for (r <- c)
         println("Actor: %s %s".formatted(r.value1, r.value2))
-      }
     }
 
     title("Functional consumption of large results using Stream, keeping an open ResultSet behind the scenes")
@@ -206,7 +200,7 @@ class Demo01Querying extends AbstractDemo {
       .limit(5)
       .fetch
 
-    r.map(r => Customer(_, _, _)).forEach(println(_))
+    r.map(_ => Customer(_, _, _)).forEach(println(_))
   }
 
   @Test
@@ -223,7 +217,7 @@ class Demo01Querying extends AbstractDemo {
       .from(CUSTOMER)
       .orderBy(CUSTOMER.FIRST_NAME, CUSTOMER.LAST_NAME)
       .limit(5)
-      .fetch(r => r.value1)
+      .fetch(_.value1)
     r.forEach(println(_))
   }
 
