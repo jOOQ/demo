@@ -1,6 +1,5 @@
 package org.jooq.demo.java;
 
-import org.jetbrains.annotations.NotNull;
 import org.jooq.*;
 import org.jooq.conf.ParseWithMetaLookups;
 import org.jooq.demo.AbstractDemo;
