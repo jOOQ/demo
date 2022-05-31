@@ -70,6 +70,11 @@ public abstract class AbstractDemo {
         );
 
         ctx = using(configuration = new DefaultConfiguration()
+            
+            // You can configure jOOQ with a JDBC and/or an R2DBC Connection and/or DataSource/ConnectionFactory
+            // If both are provided, then blocking calls will be run on the JDBC Connection or DataSource, whereas
+            // non-blocking calls are run on the R2DBC Connection or ConnectionFactory. Blocking calls are annotated
+            // as @org.jetbrains.annotations.Blocking
             .set(jdbc)
             .set(r2dbc)
             .set(POSTGRES)
