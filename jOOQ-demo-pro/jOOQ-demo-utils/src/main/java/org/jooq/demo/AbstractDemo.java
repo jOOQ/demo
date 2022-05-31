@@ -1,5 +1,8 @@
 package org.jooq.demo;
 
+import io.r2dbc.spi.ConnectionFactories;
+import io.r2dbc.spi.ConnectionFactory;
+import io.r2dbc.spi.ConnectionFactoryOptions;
 import org.flywaydb.core.Flyway;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
@@ -8,12 +11,14 @@ import org.jooq.Table;
 import org.jooq.conf.Settings;
 import org.jooq.impl.DefaultConfiguration;
 import org.jooq.tools.JooqLogger;
+import org.jooq.tools.jdbc.SingleConnectionDataSource;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.testcontainers.containers.PostgreSQLContainer;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -28,7 +33,8 @@ public abstract class AbstractDemo {
 
     protected static JooqLogger          log = JooqLogger.getLogger(AbstractDemo.class);
     protected static PostgreSQLContainer db;
-    protected static Connection          connection;
+    protected static DataSource          jdbc;
+    protected static ConnectionFactory   r2dbc;
     protected static DSLContext          ctx;
     protected static Configuration       configuration;
 
@@ -46,13 +52,26 @@ public abstract class AbstractDemo {
         db.start();
 
         log.info("Connecting");
-        connection = DriverManager.getConnection(
+
+        // Replace with a connection pool if appropriate
+        jdbc = new SingleConnectionDataSource(DriverManager.getConnection(
             db.getJdbcUrl(),
             db.getUsername(),
             db.getPassword()
+        ));
+
+        // Replace with an r2dbc-pool based connection pool, if appropriate
+        r2dbc = ConnectionFactories.get(ConnectionFactoryOptions
+            .parse(db.getJdbcUrl().replace("jdbc:", "r2dbc:"))
+            .mutate()
+            .option(ConnectionFactoryOptions.USER, db.getUsername())
+            .option(ConnectionFactoryOptions.PASSWORD, db.getPassword())
+            .build()
         );
+
         ctx = using(configuration = new DefaultConfiguration()
-            .set(connection)
+            .set(jdbc)
+            .set(r2dbc)
             .set(POSTGRES)
             .set(new Settings()
                 .withRenderFormatted(true)

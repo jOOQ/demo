@@ -1,0 +1,88 @@
+package org.jooq.demo.skala
+
+import org.jooq.{Configuration, Records, Variable}
+import org.jooq.demo.AbstractDemo
+import org.jooq.demo.AbstractDemo._
+import org.jooq.demo.skala.db.Routines
+import org.jooq.impl.SQLDataType
+import org.junit.After
+import org.junit.Test
+
+import java.sql.SQLException
+import java.util
+import org.jooq.Records.mapping
+import org.jooq.demo.skala.db.Routines.inventoryInStock
+import org.jooq.demo.skala.db.Tables._
+import org.jooq.impl.DSL._
+import org.jooq.impl.SQLDataType.BIGINT
+import org.jooq.impl.SQLDataType.INTEGER
+import reactor.core.publisher.Flux
+
+import java.util.List
+
+
+class Demo13Reactive extends AbstractDemo {
+
+  @Test
+  def reactiveQuerying(): Unit = {
+    case class Actor(firstName: String, lastName: String)
+
+    Flux
+      .from(ctx
+        .select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
+        .from(ACTOR)
+        .orderBy(ACTOR.ACTOR_ID)
+        .limit(5))
+      .map(r => Actor(r.value1(), r.value2()))
+      .collectList
+      .block
+      .forEach(println(_))
+  }
+
+  @Test
+  def reactiveTransactions(): Unit = {
+    Flux.from(ctx
+
+      // Just like synchronous, JDBC based transactions, reactive transactions commit by default, and rollback
+      // on error. Nested transactions using SAVEPOINT are supported by default. See this blog for details:
+      // https://blog.jooq.org/nested-transactions-in-jooq/
+      .transactionPublisher(c => Flux
+        .from(c.dsl
+          .insertInto(ACTOR)
+          .columns(ACTOR.ACTOR_ID, ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
+          .values(201L, "A", "A"))
+
+        // Within the transactional scope, the above record is visible, and we can log it
+        .thenMany(c.dsl
+          .selectFrom(ACTOR)
+          .where(ACTOR.ACTOR_ID.eq(201L)))
+        .log
+
+        // This should produces a constraint violation exception, rolling back the transaction
+        .thenMany(c.dsl
+          .insertInto(ACTOR)
+          .columns(ACTOR.ACTOR_ID, ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
+          .values(201L, "A", "A"))))
+
+      // Outside of the scope, we have committed or rollbacked the transaction, so on error, we can see the
+      // Rollback reason:
+      .collectList
+      .doOnError { _.printStackTrace() }
+      .onErrorReturn(List.of())
+
+      // This record is visible only if the transaction has been committed:
+      .thenMany(ctx
+        .select(ACTOR.ACTOR_ID)
+        .from(ACTOR)
+        .where(ACTOR.ACTOR_ID.eq(201L)))
+      .collectList
+      .block
+      .forEach(println(_))
+  }
+
+  @After
+  override def teardown(): Unit = {
+    cleanup(ACTOR, ACTOR.ACTOR_ID)
+    super.teardown()
+  }
+}

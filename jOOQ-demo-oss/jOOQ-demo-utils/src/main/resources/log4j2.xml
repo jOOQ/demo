@@ -14,7 +14,23 @@
             <AppenderRef ref="Console"/>
         </Logger>
 
+        <Logger name="org.flywaydb.core.internal.sqlscript" level="warn">
+            <AppenderRef ref="Console"/>
+        </Logger>
+
         <Logger name="org.testcontainers" level="info">
+            <AppenderRef ref="Console"/>
+        </Logger>
+
+        <Logger name="io.r2dbc" level="info">
+            <AppenderRef ref="Console"/>
+        </Logger>
+
+        <Logger name="io.netty" level="info">
+            <AppenderRef ref="Console"/>
+        </Logger>
+
+        <Logger name="reactor" level="info">
             <AppenderRef ref="Console"/>
         </Logger>
 
