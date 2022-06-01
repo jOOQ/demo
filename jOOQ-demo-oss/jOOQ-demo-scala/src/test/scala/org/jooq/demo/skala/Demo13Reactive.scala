@@ -54,7 +54,7 @@ class Demo13Reactive extends AbstractDemo {
       // Rollback reason:
       .collectList
       .doOnError { _.printStackTrace() }
-      .onErrorReturn(List.of())
+      .onErrorReturn(java.util.List.of())
 
       // This record is visible only if the transaction has been committed:
       .thenMany(ctx
