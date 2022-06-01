@@ -5,7 +5,7 @@
 
     <groupId>org.jooq</groupId>
     <artifactId>jooq-demo</artifactId>
-    <version>0.9.0</version>
+    <version>3.17.0-SNAPSHOT</version>
     <name>jOOQ Demo (Open Source Edition)</name>
     <packaging>pom</packaging>
 
@@ -20,7 +20,6 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jooq.version>3.17.0-SNAPSHOT</jooq.version>
-        <jooq.demo.version>0.9.0</jooq.demo.version>
         <flyway.version>8.5.11</flyway.version>
         <postgres.version>42.3.4</postgres.version>
         <log4j.version>2.17.1</log4j.version>
@@ -48,7 +47,7 @@
             <dependency>
                 <groupId>org.jooq</groupId>
                 <artifactId>jooq-demo-utils</artifactId>
-                <version>${jooq.demo.version}</version>
+                <version>${jooq.version}</version>
             </dependency>
 
             <!-- Database access -->
