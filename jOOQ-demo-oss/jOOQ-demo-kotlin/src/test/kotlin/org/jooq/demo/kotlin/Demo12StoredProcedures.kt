@@ -53,20 +53,20 @@ class Demo12StoredProcedures : AbstractDemo() {
 
         // This is a commercial only feature. Check out the commercial demo for details
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//        val i = `var`("i", SQLDataType.BIGINT)
+//        ctx.begin(
+//            for_(i).`in`(201L, 210L).loop(
+//                insertInto(ACTOR)
+//                    .columns(ACTOR.ACTOR_ID, ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
+//                    .values(i, concat(inline("F"), i), concat(inline("L"), i))
+//            )
+//        )
+//            .execute()
+//
+//        ctx.selectFrom(ACTOR)
+//            .where(ACTOR.ACTOR_ID.gt(200L))
+//            .fetch()
+//
     }
 
     @After

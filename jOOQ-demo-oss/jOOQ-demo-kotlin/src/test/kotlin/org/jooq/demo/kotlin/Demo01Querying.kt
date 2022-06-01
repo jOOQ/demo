@@ -352,17 +352,17 @@ class Demo01Querying : AbstractDemo() {
 
         // This is a commercial only feature
 
-
-
-
-
-
-
-
-
-
-
-
+//        title("one-to-many and many-to-many relationships can be projected more easily, this way")
+//        println(ctx
+//            .select(
+//                FILM.TITLE,
+//                FILM.actorMultiset { a -> select(a.FIRST_NAME, a.LAST_NAME).from(a) },
+//                FILM.categoryMultiset { c -> select(c.NAME).from(c) })
+//            .from(FILM)
+//            .limit(5)
+//            .fetch()
+//        )
+//
     }
 
     @Test
@@ -370,18 +370,18 @@ class Demo01Querying : AbstractDemo() {
 
         // This is a commercial only feature
 
-
-
-
-
-
-
-
-
-
-
-
-
+//        title("to-one relationships can be projected more easily, this way")
+//        println(ctx
+//            .select(
+//                CUSTOMER.FIRST_NAME,
+//                CUSTOMER.LAST_NAME,
+//                CUSTOMER.addressRow { a -> select(a.POSTAL_CODE, a.CITY_ID).from(a) },
+//                CUSTOMER.storeRow { s -> select(s.STORE_ID, s.staff.FIRST_NAME, s.staff.LAST_NAME).from(s) })
+//            .from(CUSTOMER)
+//            .limit(5)
+//            .fetch()
+//        )
+//
     }
 
     @Test
@@ -389,28 +389,28 @@ class Demo01Querying : AbstractDemo() {
         
         // This is a commercial only feature
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//        title("For each customer, show if they have rentals and/or payments")
+//        println(ctx
+//            .select(
+//                CUSTOMER.CUSTOMER_ID,
+//                CUSTOMER.FIRST_NAME,
+//                CUSTOMER.LAST_NAME,
+//                CUSTOMER.rentalExists().`as`("has rentals"),
+//                CUSTOMER.paymentExists().`as`("has payments"),
+//                CUSTOMER.paymentExists { p -> p.where(p.AMOUNT.gt(BigDecimal("0.9"))) }.`as`("has payments > 0.9"))
+//            .from(CUSTOMER)
+//            .fetch()
+//        )
+//        title("Find only customers who have payments")
+//        println(ctx
+//            .select(
+//                CUSTOMER.CUSTOMER_ID,
+//                CUSTOMER.FIRST_NAME,
+//                CUSTOMER.LAST_NAME)
+//            .from(CUSTOMER)
+//            .where(CUSTOMER.paymentExists { p -> p.where(p.AMOUNT.gt(BigDecimal("0.9"))) })
+//            .fetch()
+//        )
+//
     }
 }
