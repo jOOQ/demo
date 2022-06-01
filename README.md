@@ -2,7 +2,7 @@
 
 A jOOQ demo working with the [Sakila database](https://www.jooq.org/sakila) running in a [testcontainers](https://www.testcontainers.org) database instance (in docker).
 
-It currently requires using a `3.17.0-SNAPSHOT` build, which is available from:
+It depends on the latest released version of jOOQ. A branch is available that works with a `SNAPSHOT` build of the dev version, which is available from:
 
 - https://www.jooq.org/download/versions (prebuilt, if you're licensed)
 - https://github.com/jOOQ/jOOQ (build yourself)
