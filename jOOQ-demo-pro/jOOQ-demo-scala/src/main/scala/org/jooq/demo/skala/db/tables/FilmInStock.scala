@@ -8,7 +8,6 @@ import java.lang.Class
 import java.lang.Integer
 import java.lang.Long
 import java.lang.String
-import java.util.function.Function
 
 import org.jooq.Field
 import org.jooq.ForeignKey
@@ -16,7 +15,6 @@ import org.jooq.Name
 import org.jooq.Record
 import org.jooq.Row1
 import org.jooq.Schema
-import org.jooq.SelectField
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
@@ -91,7 +89,6 @@ extends TableImpl[FilmInStockRecord](
   override def getSchema: Schema = if (aliased()) null else Public.PUBLIC
   override def as(alias: String): FilmInStock = new FilmInStock(DSL.name(alias), null, null, this, parameters)
   override def as(alias: Name): FilmInStock = new FilmInStock(alias, null, null, this, parameters)
-  override def as(alias: Table[_]): FilmInStock = new FilmInStock(alias.getQualifiedName(), null, null, this, parameters)
 
   /**
    * Rename this table
@@ -102,11 +99,6 @@ extends TableImpl[FilmInStockRecord](
    * Rename this table
    */
   override def rename(name: Name): FilmInStock = new FilmInStock(name, null, null, null, parameters)
-
-  /**
-   * Rename this table
-   */
-  override def rename(name: Table[_]): FilmInStock = new FilmInStock(name.getQualifiedName(), null, null, null, parameters)
 
   // -------------------------------------------------------------------------
   // Row1 type methods
@@ -134,14 +126,4 @@ extends TableImpl[FilmInStockRecord](
     pFilmId,
     pStoreId
   ))).map(r => if (aliased()) r.as(getUnqualifiedName) else r).get
-
-  /**
-   * Convenience mapping calling {@link #convertFrom(Function)}.
-   */
-  def mapping[U](from: (Integer) => U): SelectField[U] = convertFrom(r => from.apply(r.value1()))
-
-  /**
-   * Convenience mapping calling {@link #convertFrom(Class, Function)}.
-   */
-  def mapping[U](toType: Class[U], from: (Integer) => U): SelectField[U] = convertFrom(toType,r => from.apply(r.value1()))
 }

@@ -197,21 +197,22 @@ public class Demo01Querying extends AbstractDemo {
             .fetch();
     }
 
-    @Test
-    public void nestedRecords() {
-        title("Need all columns of those active records?");
-
-        var r =
-        ctx.select(CUSTOMER, CUSTOMER.address().city().country())
-           .from(CUSTOMER)
-           .orderBy(1, 2)
-           .limit(1)
-           .fetchSingle();
-
-        println("Customer %s %s from %s".formatted(r.value1().getFirstName(), r.value1().getLastName(), r.value2().getCountry()));
-
-        // Though beware. While this is convenient, it's also likely inefficient as you're projecting too many columns
-    }
+    // Available in jOOQ 3.17 only
+//    @Test
+//    public void nestedRecords() {
+//        title("Need all columns of those active records?");
+//
+//        var r =
+//        ctx.select(CUSTOMER, CUSTOMER.address().city().country())
+//           .from(CUSTOMER)
+//           .orderBy(1, 2)
+//           .limit(1)
+//           .fetchSingle();
+//
+//        println("Customer %s %s from %s".formatted(r.value1().getFirstName(), r.value1().getLastName(), r.value2().getCountry()));
+//
+//        // Though beware. While this is convenient, it's also likely inefficient as you're projecting too many columns
+//    }
 
     @Test
     public void nestedRowValuesWithAdHocConverters() {

@@ -5,28 +5,20 @@ package org.jooq.demo.java.db.tables;
 
 
 import java.time.LocalDateTime;
-import java.util.function.Function;
 
-import org.jooq.Condition;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Function3;
 import org.jooq.Identity;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Records;
-import org.jooq.Result;
 import org.jooq.Row3;
 import org.jooq.Schema;
-import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
-import org.jooq.TableLike;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.demo.java.db.Keys;
 import org.jooq.demo.java.db.Public;
-import org.jooq.demo.java.db.tables.records.CityRecord;
 import org.jooq.demo.java.db.tables.records.CountryRecord;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
@@ -117,38 +109,6 @@ public class Country extends TableImpl<CountryRecord> {
         return Keys.COUNTRY_PKEY;
     }
 
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.city</code> one-to-many child table.
-     */
-    public Condition cityExists() {
-        return cityExists(Function.identity());
-    }
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.city</code> one-to-many child table.
-     */
-    public <O extends Record> Condition cityExists(Function<? super City, ? extends TableLike<O>> subquery) {
-        return oneToManyExists(Keys.CITY__CITY_COUNTRY_ID_FKEY, t -> subquery.apply((City) t));
-    }
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.city</code> one-to-many child table.
-     */
-    public Field<Result<CityRecord>> cityMultiset() {
-        return cityMultiset(Function.identity());
-    }
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.city</code> one-to-many child table.
-     */
-    public <O extends Record> Field<Result<O>> cityMultiset(Function<? super City, ? extends TableLike<O>> subquery) {
-        return oneToManyMultiset(Keys.CITY__CITY_COUNTRY_ID_FKEY, t -> subquery.apply((City) t));
-    }
-
     @Override
     public Country as(String alias) {
         return new Country(DSL.name(alias), this);
@@ -157,11 +117,6 @@ public class Country extends TableImpl<CountryRecord> {
     @Override
     public Country as(Name alias) {
         return new Country(alias, this);
-    }
-
-    @Override
-    public Country as(Table<?> alias) {
-        return new Country(alias.getQualifiedName(), this);
     }
 
     /**
@@ -180,14 +135,6 @@ public class Country extends TableImpl<CountryRecord> {
         return new Country(name, null);
     }
 
-    /**
-     * Rename this table
-     */
-    @Override
-    public Country rename(Table<?> name) {
-        return new Country(name.getQualifiedName(), null);
-    }
-
     // -------------------------------------------------------------------------
     // Row3 type methods
     // -------------------------------------------------------------------------
@@ -195,19 +142,5 @@ public class Country extends TableImpl<CountryRecord> {
     @Override
     public Row3<Long, String, LocalDateTime> fieldsRow() {
         return (Row3) super.fieldsRow();
-    }
-
-    /**
-     * Convenience mapping calling {@link #convertFrom(Function)}.
-     */
-    public <U> SelectField<U> mapping(Function3<? super Long, ? super String, ? super LocalDateTime, ? extends U> from) {
-        return convertFrom(Records.mapping(from));
-    }
-
-    /**
-     * Convenience mapping calling {@link #convertFrom(Class, Function)}.
-     */
-    public <U> SelectField<U> mapping(Class<U> toType, Function3<? super Long, ? super String, ? super LocalDateTime, ? extends U> from) {
-        return convertFrom(toType, Records.mapping(from));
     }
 }

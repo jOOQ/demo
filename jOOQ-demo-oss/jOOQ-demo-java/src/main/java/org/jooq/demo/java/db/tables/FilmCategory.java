@@ -7,27 +7,20 @@ package org.jooq.demo.java.db.tables;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Function3;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Records;
 import org.jooq.Row3;
 import org.jooq.Schema;
-import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
-import org.jooq.TableLike;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.demo.java.db.Keys;
 import org.jooq.demo.java.db.Public;
-import org.jooq.demo.java.db.tables.records.CategoryRecord;
 import org.jooq.demo.java.db.tables.records.FilmCategoryRecord;
-import org.jooq.demo.java.db.tables.records.FilmRecord;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
@@ -140,38 +133,6 @@ public class FilmCategory extends TableImpl<FilmCategoryRecord> {
         return _category;
     }
 
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.film_category</code> to-one parent table.
-     */
-    public Field<FilmRecord> filmRow() {
-        return filmRow(Function.identity());
-    }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.film_category</code> to-one parent table.
-     */
-    public <O extends Record> Field<O> filmRow(Function<? super Film, ? extends TableLike<O>> subquery) {
-        return toOneRow(Keys.FILM_CATEGORY__FILM_CATEGORY_FILM_ID_FKEY, t -> subquery.apply((Film) t));
-    }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.film_category</code> to-one parent table.
-     */
-    public Field<CategoryRecord> categoryRow() {
-        return categoryRow(Function.identity());
-    }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.film_category</code> to-one parent table.
-     */
-    public <O extends Record> Field<O> categoryRow(Function<? super Category, ? extends TableLike<O>> subquery) {
-        return toOneRow(Keys.FILM_CATEGORY__FILM_CATEGORY_CATEGORY_ID_FKEY, t -> subquery.apply((Category) t));
-    }
-
     @Override
     public FilmCategory as(String alias) {
         return new FilmCategory(DSL.name(alias), this);
@@ -180,11 +141,6 @@ public class FilmCategory extends TableImpl<FilmCategoryRecord> {
     @Override
     public FilmCategory as(Name alias) {
         return new FilmCategory(alias, this);
-    }
-
-    @Override
-    public FilmCategory as(Table<?> alias) {
-        return new FilmCategory(alias.getQualifiedName(), this);
     }
 
     /**
@@ -203,14 +159,6 @@ public class FilmCategory extends TableImpl<FilmCategoryRecord> {
         return new FilmCategory(name, null);
     }
 
-    /**
-     * Rename this table
-     */
-    @Override
-    public FilmCategory rename(Table<?> name) {
-        return new FilmCategory(name.getQualifiedName(), null);
-    }
-
     // -------------------------------------------------------------------------
     // Row3 type methods
     // -------------------------------------------------------------------------
@@ -218,19 +166,5 @@ public class FilmCategory extends TableImpl<FilmCategoryRecord> {
     @Override
     public Row3<Long, Long, LocalDateTime> fieldsRow() {
         return (Row3) super.fieldsRow();
-    }
-
-    /**
-     * Convenience mapping calling {@link #convertFrom(Function)}.
-     */
-    public <U> SelectField<U> mapping(Function3<? super Long, ? super Long, ? super LocalDateTime, ? extends U> from) {
-        return convertFrom(Records.mapping(from));
-    }
-
-    /**
-     * Convenience mapping calling {@link #convertFrom(Class, Function)}.
-     */
-    public <U> SelectField<U> mapping(Class<U> toType, Function3<? super Long, ? super Long, ? super LocalDateTime, ? extends U> from) {
-        return convertFrom(toType, Records.mapping(from));
     }
 }

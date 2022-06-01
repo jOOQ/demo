@@ -6,7 +6,6 @@ package org.jooq.demo.kotlin.db.tables
 
 import java.math.BigDecimal
 import java.time.LocalDateTime
-import java.util.function.Function
 
 import kotlin.collections.List
 
@@ -17,13 +16,10 @@ import org.jooq.Identity
 import org.jooq.Index
 import org.jooq.Name
 import org.jooq.Record
-import org.jooq.Records
 import org.jooq.Row6
 import org.jooq.Schema
-import org.jooq.SelectField
 import org.jooq.Table
 import org.jooq.TableField
-import org.jooq.TableLike
 import org.jooq.TableOptions
 import org.jooq.demo.kotlin.db.Public
 import org.jooq.demo.kotlin.db.indexes.IDX_FK_PAYMENT_P2007_05_CUSTOMER_ID
@@ -31,10 +27,7 @@ import org.jooq.demo.kotlin.db.indexes.IDX_FK_PAYMENT_P2007_05_STAFF_ID
 import org.jooq.demo.kotlin.db.keys.PAYMENT_P2007_05__PAYMENT_P2007_05_CUSTOMER_ID_FKEY
 import org.jooq.demo.kotlin.db.keys.PAYMENT_P2007_05__PAYMENT_P2007_05_RENTAL_ID_FKEY
 import org.jooq.demo.kotlin.db.keys.PAYMENT_P2007_05__PAYMENT_P2007_05_STAFF_ID_FKEY
-import org.jooq.demo.kotlin.db.tables.records.CustomerRecord
 import org.jooq.demo.kotlin.db.tables.records.PaymentP2007_05Record
-import org.jooq.demo.kotlin.db.tables.records.RentalRecord
-import org.jooq.demo.kotlin.db.tables.records.StaffRecord
 import org.jooq.impl.DSL
 import org.jooq.impl.Internal
 import org.jooq.impl.SQLDataType
@@ -142,9 +135,6 @@ open class PaymentP2007_05(
         return _customer;
     }
 
-    val customer: Customer
-        get(): Customer = customer()
-
     /**
      * Get the implicit join path to the <code>public.staff</code> table.
      */
@@ -155,9 +145,6 @@ open class PaymentP2007_05(
         return _staff;
     }
 
-    val staff: Staff
-        get(): Staff = staff()
-
     /**
      * Get the implicit join path to the <code>public.rental</code> table.
      */
@@ -167,51 +154,11 @@ open class PaymentP2007_05(
 
         return _rental;
     }
-
-    val rental: Rental
-        get(): Rental = rental()
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.payment_p2007_05</code> to-one parent table.
-     */
-    fun customerRow(): Field<CustomerRecord> = customerRow { it }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.payment_p2007_05</code> to-one parent table.
-     */
-    fun <O : Record> customerRow(subquery: (Customer) -> TableLike<O>): Field<O> = toOneRow(PAYMENT_P2007_05__PAYMENT_P2007_05_CUSTOMER_ID_FKEY, { subquery(it as Customer) })
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.payment_p2007_05</code> to-one parent table.
-     */
-    fun staffRow(): Field<StaffRecord> = staffRow { it }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.payment_p2007_05</code> to-one parent table.
-     */
-    fun <O : Record> staffRow(subquery: (Staff) -> TableLike<O>): Field<O> = toOneRow(PAYMENT_P2007_05__PAYMENT_P2007_05_STAFF_ID_FKEY, { subquery(it as Staff) })
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.payment_p2007_05</code> to-one parent table.
-     */
-    fun rentalRow(): Field<RentalRecord> = rentalRow { it }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.payment_p2007_05</code> to-one parent table.
-     */
-    fun <O : Record> rentalRow(subquery: (Rental) -> TableLike<O>): Field<O> = toOneRow(PAYMENT_P2007_05__PAYMENT_P2007_05_RENTAL_ID_FKEY, { subquery(it as Rental) })
     override fun getChecks(): List<Check<PaymentP2007_05Record>> = listOf(
         Internal.createCheck(this, DSL.name("payment_p2007_05_payment_date_check"), "(((payment_date >= '2007-05-01 00:00:00'::timestamp without time zone) AND (payment_date < '2007-06-01 00:00:00'::timestamp without time zone)))", true)
     )
     override fun `as`(alias: String): PaymentP2007_05 = PaymentP2007_05(DSL.name(alias), this)
     override fun `as`(alias: Name): PaymentP2007_05 = PaymentP2007_05(alias, this)
-    override fun `as`(alias: Table<*>): PaymentP2007_05 = PaymentP2007_05(alias.getQualifiedName(), this)
 
     /**
      * Rename this table
@@ -223,23 +170,8 @@ open class PaymentP2007_05(
      */
     override fun rename(name: Name): PaymentP2007_05 = PaymentP2007_05(name, null)
 
-    /**
-     * Rename this table
-     */
-    override fun rename(name: Table<*>): PaymentP2007_05 = PaymentP2007_05(name.getQualifiedName(), null)
-
     // -------------------------------------------------------------------------
     // Row6 type methods
     // -------------------------------------------------------------------------
     override fun fieldsRow(): Row6<Long?, Long?, Long?, Long?, BigDecimal?, LocalDateTime?> = super.fieldsRow() as Row6<Long?, Long?, Long?, Long?, BigDecimal?, LocalDateTime?>
-
-    /**
-     * Convenience mapping calling {@link #convertFrom(Function)}.
-     */
-    fun <U> mapping(from: (Long?, Long?, Long?, Long?, BigDecimal?, LocalDateTime?) -> U): SelectField<U> = convertFrom(Records.mapping(from))
-
-    /**
-     * Convenience mapping calling {@link #convertFrom(Class, Function)}.
-     */
-    fun <U> mapping(toType: Class<U>, from: (Long?, Long?, Long?, Long?, BigDecimal?, LocalDateTime?) -> U): SelectField<U> = convertFrom(toType, Records.mapping(from))
 }

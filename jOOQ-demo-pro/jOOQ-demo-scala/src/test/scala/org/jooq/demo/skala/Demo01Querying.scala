@@ -171,18 +171,19 @@ class Demo01Querying extends AbstractDemo {
       .fetch
   }
 
-  @Test
-  def nestedRecords(): Unit = {
-    title("Need all columns of those active records?")
-    val r = ctx
-      .select(CUSTOMER, CUSTOMER.address.city.country)
-      .from(CUSTOMER)
-      .orderBy(1, 2)
-      .limit(1)
-      .fetchSingle
-    println("Customer %s %s from %s".formatted(r.value1.getFirstName, r.value1.getLastName, r.value2.getCountry))
-    // Though beware. While this is convenient, it's also likely inefficient as you're projecting too many columns
-  }
+  // Available in jOOQ 3.17 only
+//  @Test
+//  def nestedRecords(): Unit = {
+//    title("Need all columns of those active records?")
+//    val r = ctx
+//      .select(CUSTOMER, CUSTOMER.address.city.country)
+//      .from(CUSTOMER)
+//      .orderBy(1, 2)
+//      .limit(1)
+//      .fetchSingle
+//    println("Customer %s %s from %s".formatted(r.value1.getFirstName, r.value1.getLastName, r.value2.getCountry))
+//    // Though beware. While this is convenient, it's also likely inefficient as you're projecting too many columns
+//  }
 
   @Test
   def nestedRowValuesWithAdHocConverters(): Unit = {
@@ -257,28 +258,26 @@ class Demo01Querying extends AbstractDemo {
     case class Category(name: String)
     case class Film(title: String, actors: util.List[Actor], categories: util.List[Category])
 
-    // TODO: The amount of type witnesses required in the Scala version of this method are unwieldy
-    //       I currently do not know if this is a limitation of the Scala / Java interop or me misunderstanding which
-    //       implicit conversions should be used here... Please feel free to suggest improvements!
-    val result: util.List[Film] = ctx
-      .select(
-        FILM.TITLE,
-        multiset(
-          select(row(FILM_ACTOR.actor.FIRST_NAME, FILM_ACTOR.actor.LAST_NAME).mapping(Name(_, _)))
-            .from(FILM_ACTOR)
-            .where(FILM_ACTOR.FILM_ID.eq(FILM.FILM_ID))).mapping(Actor),
-        multiset(
-          select(FILM_CATEGORY.category.NAME)
-            .from(FILM_CATEGORY)
-            .where(FILM_CATEGORY.FILM_ID.eq(FILM.FILM_ID))).mapping(Category))
-      .from(FILM)
-      .orderBy(FILM.TITLE)
-      .limit(5)
-      .fetch(Film)
-
-    result.forEach { film =>
-      println("Film %s with categories %s and actors %s ".formatted(film.title, film.categories, film.actors))
-    }
+    // Some implicit classes used in this example are available in jOOQ 3.17, only
+//    val result: util.List[Film] = ctx
+//      .select(
+//        FILM.TITLE,
+//        multiset(
+//          select(row(FILM_ACTOR.actor.FIRST_NAME, FILM_ACTOR.actor.LAST_NAME).mapping(Name(_, _)))
+//            .from(FILM_ACTOR)
+//            .where(FILM_ACTOR.FILM_ID.eq(FILM.FILM_ID))).mapping(Actor),
+//        multiset(
+//          select(FILM_CATEGORY.category.NAME)
+//            .from(FILM_CATEGORY)
+//            .where(FILM_CATEGORY.FILM_ID.eq(FILM.FILM_ID))).mapping(Category))
+//      .from(FILM)
+//      .orderBy(FILM.TITLE)
+//      .limit(5)
+//      .fetch(Film)
+//
+//    result.forEach { film =>
+//      println("Film %s with categories %s and actors %s ".formatted(film.title, film.categories, film.actors))
+//    }
     // Try modifying the records and see what needs to be done to get the query to compile again
   }
 
@@ -287,22 +286,23 @@ class Demo01Querying extends AbstractDemo {
     title("Arbitrary nested data structures are possible")
     case class Film(title: String, revenue: util.Map[LocalDate, BigDecimal])
 
-    val result = ctx
-      .select(
-        FILM.TITLE,
-        multiset(
-          select(PAYMENT.PAYMENT_DATE.cast(LOCALDATE), sum(PAYMENT.AMOUNT))
-            .from(PAYMENT)
-            .groupBy(PAYMENT.PAYMENT_DATE.cast(LOCALDATE))
-            .orderBy(PAYMENT.PAYMENT_DATE.cast(LOCALDATE))).intoMap())
-      .from(FILM)
-      .orderBy(FILM.TITLE)
-      .fetch(Film)
-
-    result.forEach { film: Film =>
-      println("")
-      println("Film %s with revenue: ".formatted(film.title))
-      film.revenue.forEach((d: LocalDate, r: BigDecimal) => println("  %s: %s".formatted(d, r)))
-    }
+    // Some implicit classes used in this example are available in jOOQ 3.17, only
+//    val result = ctx
+//      .select(
+//        FILM.TITLE,
+//        multiset(
+//          select(PAYMENT.PAYMENT_DATE.cast(LOCALDATE), sum(PAYMENT.AMOUNT))
+//            .from(PAYMENT)
+//            .groupBy(PAYMENT.PAYMENT_DATE.cast(LOCALDATE))
+//            .orderBy(PAYMENT.PAYMENT_DATE.cast(LOCALDATE))).intoMap())
+//      .from(FILM)
+//      .orderBy(FILM.TITLE)
+//      .fetch(Film)
+//
+//    result.forEach { film: Film =>
+//      println("")
+//      println("Film %s with revenue: ".formatted(film.title))
+//      film.revenue.forEach((d: LocalDate, r: BigDecimal) => println("  %s: %s".formatted(d, r)))
+//    }
   }
 }

@@ -5,31 +5,21 @@ package org.jooq.demo.kotlin.db.tables
 
 
 import java.time.LocalDateTime
-import java.util.function.Function
 
-import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
 import org.jooq.Identity
 import org.jooq.Name
 import org.jooq.Record
-import org.jooq.Records
-import org.jooq.Result
 import org.jooq.Row3
 import org.jooq.Schema
-import org.jooq.SelectField
 import org.jooq.Table
 import org.jooq.TableField
-import org.jooq.TableLike
 import org.jooq.TableOptions
 import org.jooq.UniqueKey
 import org.jooq.demo.kotlin.db.Public
 import org.jooq.demo.kotlin.db.keys.CATEGORY_PKEY
-import org.jooq.demo.kotlin.db.keys.FILM_CATEGORY__FILM_CATEGORY_CATEGORY_ID_FKEY
-import org.jooq.demo.kotlin.db.keys.FILM_CATEGORY__FILM_CATEGORY_FILM_ID_FKEY
 import org.jooq.demo.kotlin.db.tables.records.CategoryRecord
-import org.jooq.demo.kotlin.db.tables.records.FilmCategoryRecord
-import org.jooq.demo.kotlin.db.tables.records.FilmRecord
 import org.jooq.impl.DSL
 import org.jooq.impl.Internal
 import org.jooq.impl.SQLDataType
@@ -106,59 +96,8 @@ open class Category(
     override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
     override fun getIdentity(): Identity<CategoryRecord, Long?> = super.getIdentity() as Identity<CategoryRecord, Long?>
     override fun getPrimaryKey(): UniqueKey<CategoryRecord> = CATEGORY_PKEY
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.film_category</code> one-to-many child table.
-     */
-    fun filmCategoryExists(): Condition = filmCategoryExists { it }
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.film_category</code> one-to-many child table.
-     */
-    fun <O: Record>filmCategoryExists(subquery: (FilmCategory) -> TableLike<O>): Condition = oneToManyExists(FILM_CATEGORY__FILM_CATEGORY_CATEGORY_ID_FKEY, { subquery(it as FilmCategory) })
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.film</code> many-to-many child table.
-     */
-    fun filmExists(): Condition = filmExists { it }
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.film</code> many-to-many child table.
-     */
-    fun <O: Record>filmExists(subquery: (Film) -> TableLike<O>): Condition = manyToManyExists(FILM_CATEGORY__FILM_CATEGORY_CATEGORY_ID_FKEY, FILM_CATEGORY__FILM_CATEGORY_FILM_ID_FKEY, { subquery(it as Film) })
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.film_category</code> one-to-many child
-     * table.
-     */
-    fun filmCategoryMultiset(): Field<Result<FilmCategoryRecord>> = filmCategoryMultiset { it }
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.film_category</code> one-to-many child
-     * table.
-     */
-    fun <O: Record>filmCategoryMultiset(subquery: (FilmCategory) -> TableLike<O>): Field<Result<O>> = oneToManyMultiset(FILM_CATEGORY__FILM_CATEGORY_CATEGORY_ID_FKEY, { subquery(it as FilmCategory) })
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.film</code> many-to-many child table.
-     */
-    fun filmMultiset(): Field<Result<FilmRecord>> = filmMultiset { it }
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.film</code> many-to-many child table.
-     */
-    fun <O: Record>filmMultiset(subquery: (Film) -> TableLike<O>): Field<Result<O>> = manyToManyMultiset(FILM_CATEGORY__FILM_CATEGORY_CATEGORY_ID_FKEY, FILM_CATEGORY__FILM_CATEGORY_FILM_ID_FKEY, { subquery(it as Film) })
     override fun `as`(alias: String): Category = Category(DSL.name(alias), this)
     override fun `as`(alias: Name): Category = Category(alias, this)
-    override fun `as`(alias: Table<*>): Category = Category(alias.getQualifiedName(), this)
 
     /**
      * Rename this table
@@ -170,23 +109,8 @@ open class Category(
      */
     override fun rename(name: Name): Category = Category(name, null)
 
-    /**
-     * Rename this table
-     */
-    override fun rename(name: Table<*>): Category = Category(name.getQualifiedName(), null)
-
     // -------------------------------------------------------------------------
     // Row3 type methods
     // -------------------------------------------------------------------------
     override fun fieldsRow(): Row3<Long?, String?, LocalDateTime?> = super.fieldsRow() as Row3<Long?, String?, LocalDateTime?>
-
-    /**
-     * Convenience mapping calling {@link #convertFrom(Function)}.
-     */
-    fun <U> mapping(from: (Long?, String?, LocalDateTime?) -> U): SelectField<U> = convertFrom(Records.mapping(from))
-
-    /**
-     * Convenience mapping calling {@link #convertFrom(Class, Function)}.
-     */
-    fun <U> mapping(toType: Class<U>, from: (Long?, String?, LocalDateTime?) -> U): SelectField<U> = convertFrom(toType, Records.mapping(from))
 }

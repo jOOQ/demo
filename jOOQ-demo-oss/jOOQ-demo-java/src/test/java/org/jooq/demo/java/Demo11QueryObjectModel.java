@@ -35,14 +35,15 @@ public class Demo11QueryObjectModel extends AbstractDemo {
         println("FROM  : " + select.$from());
         println("WHERE : " + select.$where());
 
-        title("You can also alter a property of a query, to create a new query (QOM operations are immutable):");
-        println(
-            select.$select(Stream.concat(Stream.of(ACTOR.ACTOR_ID), select.$select().stream()).toList())
-                .$orderBy(List.of(ACTOR.ACTOR_ID.asc()))
-        );
-
-        title("The old query is untouched:");
-        println(select);
+        /* Available in jOOQ 3.17 only */
+//        title("You can also alter a property of a query, to create a new query (QOM operations are immutable):");
+//        println(
+//            select.$select(Stream.concat(Stream.of(ACTOR.ACTOR_ID), select.$select().stream()).toList())
+//                .$orderBy(List.of(ACTOR.ACTOR_ID.asc()))
+//        );
+//
+//        title("The old query is untouched:");
+//        println(select);
     }
 
     @Test
@@ -108,7 +109,9 @@ public class Demo11QueryObjectModel extends AbstractDemo {
 
 
 
+
     }
+
 
 
 

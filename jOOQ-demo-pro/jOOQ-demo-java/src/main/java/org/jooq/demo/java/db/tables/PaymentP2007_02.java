@@ -8,31 +8,23 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
 
 import org.jooq.Check;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Function6;
 import org.jooq.Identity;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Records;
 import org.jooq.Row6;
 import org.jooq.Schema;
-import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
-import org.jooq.TableLike;
 import org.jooq.TableOptions;
 import org.jooq.demo.java.db.Indexes;
 import org.jooq.demo.java.db.Keys;
 import org.jooq.demo.java.db.Public;
-import org.jooq.demo.java.db.tables.records.CustomerRecord;
 import org.jooq.demo.java.db.tables.records.PaymentP2007_02Record;
-import org.jooq.demo.java.db.tables.records.RentalRecord;
-import org.jooq.demo.java.db.tables.records.StaffRecord;
 import org.jooq.impl.DSL;
 import org.jooq.impl.Internal;
 import org.jooq.impl.SQLDataType;
@@ -177,54 +169,6 @@ public class PaymentP2007_02 extends TableImpl<PaymentP2007_02Record> {
         return _rental;
     }
 
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.payment_p2007_02</code> to-one parent table.
-     */
-    public Field<CustomerRecord> customerRow() {
-        return customerRow(Function.identity());
-    }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.payment_p2007_02</code> to-one parent table.
-     */
-    public <O extends Record> Field<O> customerRow(Function<? super Customer, ? extends TableLike<O>> subquery) {
-        return toOneRow(Keys.PAYMENT_P2007_02__PAYMENT_P2007_02_CUSTOMER_ID_FKEY, t -> subquery.apply((Customer) t));
-    }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.payment_p2007_02</code> to-one parent table.
-     */
-    public Field<StaffRecord> staffRow() {
-        return staffRow(Function.identity());
-    }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.payment_p2007_02</code> to-one parent table.
-     */
-    public <O extends Record> Field<O> staffRow(Function<? super Staff, ? extends TableLike<O>> subquery) {
-        return toOneRow(Keys.PAYMENT_P2007_02__PAYMENT_P2007_02_STAFF_ID_FKEY, t -> subquery.apply((Staff) t));
-    }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.payment_p2007_02</code> to-one parent table.
-     */
-    public Field<RentalRecord> rentalRow() {
-        return rentalRow(Function.identity());
-    }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.payment_p2007_02</code> to-one parent table.
-     */
-    public <O extends Record> Field<O> rentalRow(Function<? super Rental, ? extends TableLike<O>> subquery) {
-        return toOneRow(Keys.PAYMENT_P2007_02__PAYMENT_P2007_02_RENTAL_ID_FKEY, t -> subquery.apply((Rental) t));
-    }
-
     @Override
     public List<Check<PaymentP2007_02Record>> getChecks() {
         return Arrays.asList(
@@ -240,11 +184,6 @@ public class PaymentP2007_02 extends TableImpl<PaymentP2007_02Record> {
     @Override
     public PaymentP2007_02 as(Name alias) {
         return new PaymentP2007_02(alias, this);
-    }
-
-    @Override
-    public PaymentP2007_02 as(Table<?> alias) {
-        return new PaymentP2007_02(alias.getQualifiedName(), this);
     }
 
     /**
@@ -263,14 +202,6 @@ public class PaymentP2007_02 extends TableImpl<PaymentP2007_02Record> {
         return new PaymentP2007_02(name, null);
     }
 
-    /**
-     * Rename this table
-     */
-    @Override
-    public PaymentP2007_02 rename(Table<?> name) {
-        return new PaymentP2007_02(name.getQualifiedName(), null);
-    }
-
     // -------------------------------------------------------------------------
     // Row6 type methods
     // -------------------------------------------------------------------------
@@ -278,19 +209,5 @@ public class PaymentP2007_02 extends TableImpl<PaymentP2007_02Record> {
     @Override
     public Row6<Long, Long, Long, Long, BigDecimal, LocalDateTime> fieldsRow() {
         return (Row6) super.fieldsRow();
-    }
-
-    /**
-     * Convenience mapping calling {@link #convertFrom(Function)}.
-     */
-    public <U> SelectField<U> mapping(Function6<? super Long, ? super Long, ? super Long, ? super Long, ? super BigDecimal, ? super LocalDateTime, ? extends U> from) {
-        return convertFrom(Records.mapping(from));
-    }
-
-    /**
-     * Convenience mapping calling {@link #convertFrom(Class, Function)}.
-     */
-    public <U> SelectField<U> mapping(Class<U> toType, Function6<? super Long, ? super Long, ? super Long, ? super Long, ? super BigDecimal, ? super LocalDateTime, ? extends U> from) {
-        return convertFrom(toType, Records.mapping(from));
     }
 }

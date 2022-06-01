@@ -7,32 +7,23 @@ package org.jooq.demo.java.db.tables;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
 
-import org.jooq.Condition;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Function4;
 import org.jooq.Identity;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Records;
-import org.jooq.Result;
 import org.jooq.Row4;
 import org.jooq.Schema;
-import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
-import org.jooq.TableLike;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.demo.java.db.Indexes;
 import org.jooq.demo.java.db.Keys;
 import org.jooq.demo.java.db.Public;
-import org.jooq.demo.java.db.tables.records.AddressRecord;
 import org.jooq.demo.java.db.tables.records.CityRecord;
-import org.jooq.demo.java.db.tables.records.CountryRecord;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
@@ -149,54 +140,6 @@ public class City extends TableImpl<CityRecord> {
         return _country;
     }
 
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.address</code> one-to-many child table.
-     */
-    public Condition addressExists() {
-        return addressExists(Function.identity());
-    }
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.address</code> one-to-many child table.
-     */
-    public <O extends Record> Condition addressExists(Function<? super Address, ? extends TableLike<O>> subquery) {
-        return oneToManyExists(Keys.ADDRESS__ADDRESS_CITY_ID_FKEY, t -> subquery.apply((Address) t));
-    }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.city</code> to-one parent table.
-     */
-    public Field<CountryRecord> countryRow() {
-        return countryRow(Function.identity());
-    }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.city</code> to-one parent table.
-     */
-    public <O extends Record> Field<O> countryRow(Function<? super Country, ? extends TableLike<O>> subquery) {
-        return toOneRow(Keys.CITY__CITY_COUNTRY_ID_FKEY, t -> subquery.apply((Country) t));
-    }
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.address</code> one-to-many child table.
-     */
-    public Field<Result<AddressRecord>> addressMultiset() {
-        return addressMultiset(Function.identity());
-    }
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.address</code> one-to-many child table.
-     */
-    public <O extends Record> Field<Result<O>> addressMultiset(Function<? super Address, ? extends TableLike<O>> subquery) {
-        return oneToManyMultiset(Keys.ADDRESS__ADDRESS_CITY_ID_FKEY, t -> subquery.apply((Address) t));
-    }
-
     @Override
     public City as(String alias) {
         return new City(DSL.name(alias), this);
@@ -205,11 +148,6 @@ public class City extends TableImpl<CityRecord> {
     @Override
     public City as(Name alias) {
         return new City(alias, this);
-    }
-
-    @Override
-    public City as(Table<?> alias) {
-        return new City(alias.getQualifiedName(), this);
     }
 
     /**
@@ -228,14 +166,6 @@ public class City extends TableImpl<CityRecord> {
         return new City(name, null);
     }
 
-    /**
-     * Rename this table
-     */
-    @Override
-    public City rename(Table<?> name) {
-        return new City(name.getQualifiedName(), null);
-    }
-
     // -------------------------------------------------------------------------
     // Row4 type methods
     // -------------------------------------------------------------------------
@@ -243,19 +173,5 @@ public class City extends TableImpl<CityRecord> {
     @Override
     public Row4<Long, String, Long, LocalDateTime> fieldsRow() {
         return (Row4) super.fieldsRow();
-    }
-
-    /**
-     * Convenience mapping calling {@link #convertFrom(Function)}.
-     */
-    public <U> SelectField<U> mapping(Function4<? super Long, ? super String, ? super Long, ? super LocalDateTime, ? extends U> from) {
-        return convertFrom(Records.mapping(from));
-    }
-
-    /**
-     * Convenience mapping calling {@link #convertFrom(Class, Function)}.
-     */
-    public <U> SelectField<U> mapping(Class<U> toType, Function4<? super Long, ? super String, ? super Long, ? super LocalDateTime, ? extends U> from) {
-        return convertFrom(toType, Records.mapping(from));
     }
 }

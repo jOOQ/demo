@@ -15,35 +15,24 @@ import java.math.BigDecimal
 import java.time.LocalDateTime
 import java.util.Arrays
 import java.util.List
-import java.util.function.Function
 
-import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
 import org.jooq.Identity
 import org.jooq.Index
 import org.jooq.Name
 import org.jooq.Record
-import org.jooq.Result
 import org.jooq.Row14
 import org.jooq.Schema
-import org.jooq.SelectField
 import org.jooq.Table
 import org.jooq.TableField
-import org.jooq.TableLike
 import org.jooq.TableOptions
 import org.jooq.UniqueKey
 import org.jooq.demo.skala.db.Indexes
 import org.jooq.demo.skala.db.Keys
 import org.jooq.demo.skala.db.Public
 import org.jooq.demo.skala.db.enums.MpaaRating
-import org.jooq.demo.skala.db.tables.records.ActorRecord
-import org.jooq.demo.skala.db.tables.records.CategoryRecord
-import org.jooq.demo.skala.db.tables.records.FilmActorRecord
-import org.jooq.demo.skala.db.tables.records.FilmCategoryRecord
 import org.jooq.demo.skala.db.tables.records.FilmRecord
-import org.jooq.demo.skala.db.tables.records.InventoryRecord
-import org.jooq.demo.skala.db.tables.records.LanguageRecord
 import org.jooq.impl.DSL
 import org.jooq.impl.Internal
 import org.jooq.impl.SQLDataType
@@ -201,153 +190,8 @@ extends TableImpl[FilmRecord](
    * the <code>film_original_language_id_fkey</code> key.
    */
   lazy val filmOriginalLanguageIdFkey: Language = { new Language(this, Keys.FILM__FILM_ORIGINAL_LANGUAGE_ID_FKEY) }
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.film_actor</code> one-to-many child table.
-   */
-  def filmActorExists(): Condition = filmActorExists(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.film_actor</code> one-to-many child table.
-   */
-  def filmActorExists[O <: Record](subquery: (FilmActor) => TableLike[O]): Condition = oneToManyExists(Keys.FILM_ACTOR__FILM_ACTOR_FILM_ID_FKEY, (t: Table[FilmActorRecord]) => subquery(t.asInstanceOf[FilmActor]))
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.film_category</code> one-to-many child table.
-   */
-  def filmCategoryExists(): Condition = filmCategoryExists(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.film_category</code> one-to-many child table.
-   */
-  def filmCategoryExists[O <: Record](subquery: (FilmCategory) => TableLike[O]): Condition = oneToManyExists(Keys.FILM_CATEGORY__FILM_CATEGORY_FILM_ID_FKEY, (t: Table[FilmCategoryRecord]) => subquery(t.asInstanceOf[FilmCategory]))
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.inventory</code> one-to-many child table.
-   */
-  def inventoryExists(): Condition = inventoryExists(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.inventory</code> one-to-many child table.
-   */
-  def inventoryExists[O <: Record](subquery: (Inventory) => TableLike[O]): Condition = oneToManyExists(Keys.INVENTORY__INVENTORY_FILM_ID_FKEY, (t: Table[InventoryRecord]) => subquery(t.asInstanceOf[Inventory]))
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.actor</code> many-to-many child table.
-   */
-  def actorExists(): Condition = actorExists(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.actor</code> many-to-many child table.
-   */
-  def actorExists[O <: Record](subquery: (Actor) => TableLike[O]): Condition = manyToManyExists(Keys.FILM_ACTOR__FILM_ACTOR_FILM_ID_FKEY, Keys.FILM_ACTOR__FILM_ACTOR_ACTOR_ID_FKEY, (t: Table[ActorRecord]) => subquery(t.asInstanceOf[Actor]))
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.category</code> many-to-many child table.
-   */
-  def categoryExists(): Condition = categoryExists(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.category</code> many-to-many child table.
-   */
-  def categoryExists[O <: Record](subquery: (Category) => TableLike[O]): Condition = manyToManyExists(Keys.FILM_CATEGORY__FILM_CATEGORY_FILM_ID_FKEY, Keys.FILM_CATEGORY__FILM_CATEGORY_CATEGORY_ID_FKEY, (t: Table[CategoryRecord]) => subquery(t.asInstanceOf[Category]))
-
-  /**
-   * A convenience constructor for correlated <code>ROW</code>s expressions to
-   * the <code>public.film</code> to-one parent table.
-   */
-  def filmLanguageIdFkeyRow(): Field[LanguageRecord] = filmLanguageIdFkeyRow(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>ROW</code>s expressions to
-   * the <code>public.film</code> to-one parent table.
-   */
-  def filmLanguageIdFkeyRow[O <: Record](subquery: (Language) => TableLike[O]): Field[O] = toOneRow(Keys.FILM__FILM_LANGUAGE_ID_FKEY, (t: Table[LanguageRecord]) => subquery(t.asInstanceOf[Language]))
-
-  /**
-   * A convenience constructor for correlated <code>ROW</code>s expressions to
-   * the <code>public.film</code> to-one parent table.
-   */
-  def filmOriginalLanguageIdFkeyRow(): Field[LanguageRecord] = filmOriginalLanguageIdFkeyRow(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>ROW</code>s expressions to
-   * the <code>public.film</code> to-one parent table.
-   */
-  def filmOriginalLanguageIdFkeyRow[O <: Record](subquery: (Language) => TableLike[O]): Field[O] = toOneRow(Keys.FILM__FILM_ORIGINAL_LANGUAGE_ID_FKEY, (t: Table[LanguageRecord]) => subquery(t.asInstanceOf[Language]))
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.film_actor</code> one-to-many child table.
-   */
-  def filmActorMultiset(): Field[Result[FilmActorRecord]] = filmActorMultiset(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.film_actor</code> one-to-many child table.
-   */
-  def filmActorMultiset[O <: Record](subquery: (FilmActor) => TableLike[O]): Field[Result[O]] = oneToManyMultiset(Keys.FILM_ACTOR__FILM_ACTOR_FILM_ID_FKEY, (t: Table[FilmActorRecord]) => subquery(t.asInstanceOf[FilmActor]))
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.film_category</code> one-to-many child table.
-   */
-  def filmCategoryMultiset(): Field[Result[FilmCategoryRecord]] = filmCategoryMultiset(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.film_category</code> one-to-many child table.
-   */
-  def filmCategoryMultiset[O <: Record](subquery: (FilmCategory) => TableLike[O]): Field[Result[O]] = oneToManyMultiset(Keys.FILM_CATEGORY__FILM_CATEGORY_FILM_ID_FKEY, (t: Table[FilmCategoryRecord]) => subquery(t.asInstanceOf[FilmCategory]))
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.inventory</code> one-to-many child table.
-   */
-  def inventoryMultiset(): Field[Result[InventoryRecord]] = inventoryMultiset(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.inventory</code> one-to-many child table.
-   */
-  def inventoryMultiset[O <: Record](subquery: (Inventory) => TableLike[O]): Field[Result[O]] = oneToManyMultiset(Keys.INVENTORY__INVENTORY_FILM_ID_FKEY, (t: Table[InventoryRecord]) => subquery(t.asInstanceOf[Inventory]))
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.actor</code> many-to-many child table.
-   */
-  def actorMultiset(): Field[Result[ActorRecord]] = actorMultiset(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.actor</code> many-to-many child table.
-   */
-  def actorMultiset[O <: Record](subquery: (Actor) => TableLike[O]): Field[Result[O]] = manyToManyMultiset(Keys.FILM_ACTOR__FILM_ACTOR_FILM_ID_FKEY, Keys.FILM_ACTOR__FILM_ACTOR_ACTOR_ID_FKEY, (t: Table[ActorRecord]) => subquery(t.asInstanceOf[Actor]))
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.category</code> many-to-many child table.
-   */
-  def categoryMultiset(): Field[Result[CategoryRecord]] = categoryMultiset(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.category</code> many-to-many child table.
-   */
-  def categoryMultiset[O <: Record](subquery: (Category) => TableLike[O]): Field[Result[O]] = manyToManyMultiset(Keys.FILM_CATEGORY__FILM_CATEGORY_FILM_ID_FKEY, Keys.FILM_CATEGORY__FILM_CATEGORY_CATEGORY_ID_FKEY, (t: Table[CategoryRecord]) => subquery(t.asInstanceOf[Category]))
   override def as(alias: String): Film = new Film(DSL.name(alias), this)
   override def as(alias: Name): Film = new Film(alias, this)
-  override def as(alias: Table[_]): Film = new Film(alias.getQualifiedName(), this)
 
   /**
    * Rename this table
@@ -359,23 +203,8 @@ extends TableImpl[FilmRecord](
    */
   override def rename(name: Name): Film = new Film(name, null)
 
-  /**
-   * Rename this table
-   */
-  override def rename(name: Table[_]): Film = new Film(name.getQualifiedName(), null)
-
   // -------------------------------------------------------------------------
   // Row14 type methods
   // -------------------------------------------------------------------------
   override def fieldsRow: Row14[Long, String, String, Integer, Long, Long, Short, BigDecimal, Short, BigDecimal, MpaaRating, LocalDateTime, Array[String], Object] = super.fieldsRow.asInstanceOf[ Row14[Long, String, String, Integer, Long, Long, Short, BigDecimal, Short, BigDecimal, MpaaRating, LocalDateTime, Array[String], Object] ]
-
-  /**
-   * Convenience mapping calling {@link #convertFrom(Function)}.
-   */
-  def mapping[U](from: (Long, String, String, Integer, Long, Long, Short, BigDecimal, Short, BigDecimal, MpaaRating, LocalDateTime, Array[String], Object) => U): SelectField[U] = convertFrom(r => from.apply(r.value1(), r.value2(), r.value3(), r.value4(), r.value5(), r.value6(), r.value7(), r.value8(), r.value9(), r.value10(), r.value11(), r.value12(), r.value13(), r.value14()))
-
-  /**
-   * Convenience mapping calling {@link #convertFrom(Class, Function)}.
-   */
-  def mapping[U](toType: Class[U], from: (Long, String, String, Integer, Long, Long, Short, BigDecimal, Short, BigDecimal, MpaaRating, LocalDateTime, Array[String], Object) => U): SelectField[U] = convertFrom(toType,r => from.apply(r.value1(), r.value2(), r.value3(), r.value4(), r.value5(), r.value6(), r.value7(), r.value8(), r.value9(), r.value10(), r.value11(), r.value12(), r.value13(), r.value14()))
 }

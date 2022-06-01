@@ -8,31 +8,23 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Function6;
 import org.jooq.Identity;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Records;
 import org.jooq.Row6;
 import org.jooq.Schema;
-import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
-import org.jooq.TableLike;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.demo.java.db.Indexes;
 import org.jooq.demo.java.db.Keys;
 import org.jooq.demo.java.db.Public;
-import org.jooq.demo.java.db.tables.records.CustomerRecord;
 import org.jooq.demo.java.db.tables.records.PaymentRecord;
-import org.jooq.demo.java.db.tables.records.RentalRecord;
-import org.jooq.demo.java.db.tables.records.StaffRecord;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
@@ -181,54 +173,6 @@ public class Payment extends TableImpl<PaymentRecord> {
         return _rental;
     }
 
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.payment</code> to-one parent table.
-     */
-    public Field<CustomerRecord> customerRow() {
-        return customerRow(Function.identity());
-    }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.payment</code> to-one parent table.
-     */
-    public <O extends Record> Field<O> customerRow(Function<? super Customer, ? extends TableLike<O>> subquery) {
-        return toOneRow(Keys.PAYMENT__PAYMENT_CUSTOMER_ID_FKEY, t -> subquery.apply((Customer) t));
-    }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.payment</code> to-one parent table.
-     */
-    public Field<StaffRecord> staffRow() {
-        return staffRow(Function.identity());
-    }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.payment</code> to-one parent table.
-     */
-    public <O extends Record> Field<O> staffRow(Function<? super Staff, ? extends TableLike<O>> subquery) {
-        return toOneRow(Keys.PAYMENT__PAYMENT_STAFF_ID_FKEY, t -> subquery.apply((Staff) t));
-    }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.payment</code> to-one parent table.
-     */
-    public Field<RentalRecord> rentalRow() {
-        return rentalRow(Function.identity());
-    }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.payment</code> to-one parent table.
-     */
-    public <O extends Record> Field<O> rentalRow(Function<? super Rental, ? extends TableLike<O>> subquery) {
-        return toOneRow(Keys.PAYMENT__PAYMENT_RENTAL_ID_FKEY, t -> subquery.apply((Rental) t));
-    }
-
     @Override
     public Payment as(String alias) {
         return new Payment(DSL.name(alias), this);
@@ -237,11 +181,6 @@ public class Payment extends TableImpl<PaymentRecord> {
     @Override
     public Payment as(Name alias) {
         return new Payment(alias, this);
-    }
-
-    @Override
-    public Payment as(Table<?> alias) {
-        return new Payment(alias.getQualifiedName(), this);
     }
 
     /**
@@ -260,14 +199,6 @@ public class Payment extends TableImpl<PaymentRecord> {
         return new Payment(name, null);
     }
 
-    /**
-     * Rename this table
-     */
-    @Override
-    public Payment rename(Table<?> name) {
-        return new Payment(name.getQualifiedName(), null);
-    }
-
     // -------------------------------------------------------------------------
     // Row6 type methods
     // -------------------------------------------------------------------------
@@ -275,19 +206,5 @@ public class Payment extends TableImpl<PaymentRecord> {
     @Override
     public Row6<Long, Long, Long, Long, BigDecimal, LocalDateTime> fieldsRow() {
         return (Row6) super.fieldsRow();
-    }
-
-    /**
-     * Convenience mapping calling {@link #convertFrom(Function)}.
-     */
-    public <U> SelectField<U> mapping(Function6<? super Long, ? super Long, ? super Long, ? super Long, ? super BigDecimal, ? super LocalDateTime, ? extends U> from) {
-        return convertFrom(Records.mapping(from));
-    }
-
-    /**
-     * Convenience mapping calling {@link #convertFrom(Class, Function)}.
-     */
-    public <U> SelectField<U> mapping(Class<U> toType, Function6<? super Long, ? super Long, ? super Long, ? super Long, ? super BigDecimal, ? super LocalDateTime, ? extends U> from) {
-        return convertFrom(toType, Records.mapping(from));
     }
 }

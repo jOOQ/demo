@@ -17,35 +17,35 @@ import org.jooq.impl.TableRecordImpl
 @Suppress("UNCHECKED_CAST")
 open class StaffListRecord() : TableRecordImpl<StaffListRecord>(StaffList.STAFF_LIST), Record8<Long?, String?, String?, String?, String?, String?, String?, Long?> {
 
-    open var id: Long?
+    var id: Long?
         set(value): Unit = set(0, value)
         get(): Long? = get(0) as Long?
 
-    open var name: String?
+    var name: String?
         set(value): Unit = set(1, value)
         get(): String? = get(1) as String?
 
-    open var address: String?
+    var address: String?
         set(value): Unit = set(2, value)
         get(): String? = get(2) as String?
 
-    open var zipCode: String?
+    var zipCode: String?
         set(value): Unit = set(3, value)
         get(): String? = get(3) as String?
 
-    open var phone: String?
+    var phone: String?
         set(value): Unit = set(4, value)
         get(): String? = get(4) as String?
 
-    open var city: String?
+    var city: String?
         set(value): Unit = set(5, value)
         get(): String? = get(5) as String?
 
-    open var country: String?
+    var country: String?
         set(value): Unit = set(6, value)
         get(): String? = get(6) as String?
 
-    open var sid: Long?
+    var sid: Long?
         set(value): Unit = set(7, value)
         get(): Long? = get(7) as Long?
 

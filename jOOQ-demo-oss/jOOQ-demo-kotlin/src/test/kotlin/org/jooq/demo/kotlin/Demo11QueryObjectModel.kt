@@ -24,14 +24,15 @@ class Demo11QueryObjectModel : AbstractDemo() {
         println("FROM  : " + select.`$from`())
         println("WHERE : " + select.`$where`())
 
-        title("You can also alter a property of a query, to create a new query (QOM operations are immutable):")
-        println(
-            select.`$select`(listOf(ACTOR.ACTOR_ID) + select.`$select`())
-                .`$orderBy`(listOf(ACTOR.ACTOR_ID.asc()))
-        )
-
-        title("The old query is untouched:")
-        println(select)
+        // Available in jOOQ 3.17 only
+//        title("You can also alter a property of a query, to create a new query (QOM operations are immutable):")
+//        println(
+//            select.`$select`(listOf(ACTOR.ACTOR_ID) + select.`$select`())
+//                .`$orderBy`(listOf(ACTOR.ACTOR_ID.asc()))
+//        )
+//
+//        title("The old query is untouched:")
+//        println(select)
     }
 
 
@@ -69,42 +70,20 @@ class Demo11QueryObjectModel : AbstractDemo() {
         title("Replacing bind values")
         println(select1.`$replace` { p -> if (p is Param<*>) value(5) else p })
 
-        title("Inverting the < predicate")
-        println(select1.`$replace`{ p -> if (p is QOM.Lt<*>) p.`$converse`() else p })
-
-        title("Appending a predicate");
-        println(select1.`$replace`(appendSecurityCheck()))
-
-        title("Appending a predicate even to subqueries")
-        var select2 = ctx
-            .select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
-            .from(ACTOR)
-            .where(ACTOR.ACTOR_ID.lt(
-                select(max(ACTOR.ACTOR_ID)).from(ACTOR))
-            )
-        println(select2.`$replace`(appendSecurityCheck()))
+        // Available in jOOQ 3.17 only
+//        title("Inverting the < predicate")
+//        println(select1.`$replace`{ p -> if (p is QOM.Lt<*>) p.`$converse`() else p })
+//
+//        title("Appending a predicate");
+//        println(select1.`$replace`(appendSecurityCheck()))
+//
+//        title("Appending a predicate even to subqueries")
+//        var select2 = ctx
+//            .select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
+//            .from(ACTOR)
+//            .where(ACTOR.ACTOR_ID.lt(
+//                select(max(ACTOR.ACTOR_ID)).from(ACTOR))
+//            )
+//        println(select2.`$replace`(appendSecurityCheck()))
     }
-
-    private fun appendSecurityCheck(): (p: QueryPart) -> QueryPart {
-        return { p ->
-            val c = condition("security_check()")
-
-            // Beware of performance and infinite recursions, though!
-            if (p is Select<*>)
-
-                // Append the predicate if there is no predicate
-                if (p.`$where`() == null)
-                    p.`$where`(c)
-
-                // If there's already a predicate, check if the predicate contains the predicate already (don't recurse into subqueries)
-                else if (!p.`$where`()!!.`$traverse`(Traversers.recursing({ q -> !(q is Select<*>)}, Traversers.containing(c)) ))
-                    p.`$where`(and(p.`$where`(), c))
-
-                else
-                    p
-            else
-                p
-        }
-    }
-
 }

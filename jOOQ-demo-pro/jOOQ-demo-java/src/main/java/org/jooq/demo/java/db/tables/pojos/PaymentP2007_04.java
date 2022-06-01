@@ -14,11 +14,11 @@ import java.time.LocalDateTime;
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public record PaymentP2007_04(
-    Long paymentId,
-    Long customerId,
-    Long staffId,
-    Long rentalId,
-    BigDecimal amount,
+    Long          paymentId,
+    Long          customerId,
+    Long          staffId,
+    Long          rentalId,
+    BigDecimal    amount,
     LocalDateTime paymentDate
 ) implements Serializable {
 

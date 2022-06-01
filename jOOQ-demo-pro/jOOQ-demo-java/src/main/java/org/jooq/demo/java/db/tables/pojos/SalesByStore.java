@@ -13,8 +13,8 @@ import java.math.BigDecimal;
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public record SalesByStore(
-    String store,
-    String manager,
+    String     store,
+    String     manager,
     BigDecimal totalSales
 ) implements Serializable {
 

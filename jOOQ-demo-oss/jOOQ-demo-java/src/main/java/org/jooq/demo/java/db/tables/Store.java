@@ -7,33 +7,22 @@ package org.jooq.demo.java.db.tables;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
 
-import org.jooq.Condition;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Function4;
 import org.jooq.Identity;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Records;
-import org.jooq.Result;
 import org.jooq.Row4;
 import org.jooq.Schema;
-import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
-import org.jooq.TableLike;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.demo.java.db.Indexes;
 import org.jooq.demo.java.db.Keys;
 import org.jooq.demo.java.db.Public;
-import org.jooq.demo.java.db.tables.records.AddressRecord;
-import org.jooq.demo.java.db.tables.records.CustomerRecord;
-import org.jooq.demo.java.db.tables.records.InventoryRecord;
-import org.jooq.demo.java.db.tables.records.StaffRecord;
 import org.jooq.demo.java.db.tables.records.StoreRecord;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
@@ -162,134 +151,6 @@ public class Store extends TableImpl<StoreRecord> {
         return _address;
     }
 
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.customer</code> one-to-many child table.
-     */
-    public Condition customerExists() {
-        return customerExists(Function.identity());
-    }
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.customer</code> one-to-many child table.
-     */
-    public <O extends Record> Condition customerExists(Function<? super Customer, ? extends TableLike<O>> subquery) {
-        return oneToManyExists(Keys.CUSTOMER__CUSTOMER_STORE_ID_FKEY, t -> subquery.apply((Customer) t));
-    }
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.inventory</code> one-to-many child table.
-     */
-    public Condition inventoryExists() {
-        return inventoryExists(Function.identity());
-    }
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.inventory</code> one-to-many child table.
-     */
-    public <O extends Record> Condition inventoryExists(Function<? super Inventory, ? extends TableLike<O>> subquery) {
-        return oneToManyExists(Keys.INVENTORY__INVENTORY_STORE_ID_FKEY, t -> subquery.apply((Inventory) t));
-    }
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.staff</code> one-to-many child table.
-     */
-    public Condition staffExists() {
-        return staffExists(Function.identity());
-    }
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.staff</code> one-to-many child table.
-     */
-    public <O extends Record> Condition staffExists(Function<? super Staff, ? extends TableLike<O>> subquery) {
-        return oneToManyExists(Keys.STAFF__STAFF_STORE_ID_FKEY, t -> subquery.apply((Staff) t));
-    }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.store</code> to-one parent table.
-     */
-    public Field<StaffRecord> staffRow() {
-        return staffRow(Function.identity());
-    }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.store</code> to-one parent table.
-     */
-    public <O extends Record> Field<O> staffRow(Function<? super Staff, ? extends TableLike<O>> subquery) {
-        return toOneRow(Keys.STORE__STORE_MANAGER_STAFF_ID_FKEY, t -> subquery.apply((Staff) t));
-    }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.store</code> to-one parent table.
-     */
-    public Field<AddressRecord> addressRow() {
-        return addressRow(Function.identity());
-    }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.store</code> to-one parent table.
-     */
-    public <O extends Record> Field<O> addressRow(Function<? super Address, ? extends TableLike<O>> subquery) {
-        return toOneRow(Keys.STORE__STORE_ADDRESS_ID_FKEY, t -> subquery.apply((Address) t));
-    }
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.customer</code> one-to-many child table.
-     */
-    public Field<Result<CustomerRecord>> customerMultiset() {
-        return customerMultiset(Function.identity());
-    }
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.customer</code> one-to-many child table.
-     */
-    public <O extends Record> Field<Result<O>> customerMultiset(Function<? super Customer, ? extends TableLike<O>> subquery) {
-        return oneToManyMultiset(Keys.CUSTOMER__CUSTOMER_STORE_ID_FKEY, t -> subquery.apply((Customer) t));
-    }
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.inventory</code> one-to-many child table.
-     */
-    public Field<Result<InventoryRecord>> inventoryMultiset() {
-        return inventoryMultiset(Function.identity());
-    }
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.inventory</code> one-to-many child table.
-     */
-    public <O extends Record> Field<Result<O>> inventoryMultiset(Function<? super Inventory, ? extends TableLike<O>> subquery) {
-        return oneToManyMultiset(Keys.INVENTORY__INVENTORY_STORE_ID_FKEY, t -> subquery.apply((Inventory) t));
-    }
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.staff</code> one-to-many child table.
-     */
-    public Field<Result<StaffRecord>> staffMultiset() {
-        return staffMultiset(Function.identity());
-    }
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.staff</code> one-to-many child table.
-     */
-    public <O extends Record> Field<Result<O>> staffMultiset(Function<? super Staff, ? extends TableLike<O>> subquery) {
-        return oneToManyMultiset(Keys.STAFF__STAFF_STORE_ID_FKEY, t -> subquery.apply((Staff) t));
-    }
-
     @Override
     public Store as(String alias) {
         return new Store(DSL.name(alias), this);
@@ -298,11 +159,6 @@ public class Store extends TableImpl<StoreRecord> {
     @Override
     public Store as(Name alias) {
         return new Store(alias, this);
-    }
-
-    @Override
-    public Store as(Table<?> alias) {
-        return new Store(alias.getQualifiedName(), this);
     }
 
     /**
@@ -321,14 +177,6 @@ public class Store extends TableImpl<StoreRecord> {
         return new Store(name, null);
     }
 
-    /**
-     * Rename this table
-     */
-    @Override
-    public Store rename(Table<?> name) {
-        return new Store(name.getQualifiedName(), null);
-    }
-
     // -------------------------------------------------------------------------
     // Row4 type methods
     // -------------------------------------------------------------------------
@@ -336,19 +184,5 @@ public class Store extends TableImpl<StoreRecord> {
     @Override
     public Row4<Long, Long, Long, LocalDateTime> fieldsRow() {
         return (Row4) super.fieldsRow();
-    }
-
-    /**
-     * Convenience mapping calling {@link #convertFrom(Function)}.
-     */
-    public <U> SelectField<U> mapping(Function4<? super Long, ? super Long, ? super Long, ? super LocalDateTime, ? extends U> from) {
-        return convertFrom(Records.mapping(from));
-    }
-
-    /**
-     * Convenience mapping calling {@link #convertFrom(Class, Function)}.
-     */
-    public <U> SelectField<U> mapping(Class<U> toType, Function4<? super Long, ? super Long, ? super Long, ? super LocalDateTime, ? extends U> from) {
-        return convertFrom(toType, Records.mapping(from));
     }
 }

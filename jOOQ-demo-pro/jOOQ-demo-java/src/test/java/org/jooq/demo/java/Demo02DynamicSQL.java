@@ -29,7 +29,7 @@ public class Demo02DynamicSQL extends AbstractDemo {
         Table<?> from = ACTOR;
         Condition where = ACTOR.ACTOR_ID.in(1L, 2L, 3L);
         List<OrderField<?>> orderBy = List.of(ACTOR.FIRST_NAME);
-        Field<Integer> limit = val(5);
+        Param<Integer> limit = val(5);
 
         ctx.select(select)
            .from(from)

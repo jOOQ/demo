@@ -7,7 +7,6 @@ package org.jooq.demo.skala.db.tables
 import java.lang.Class
 import java.lang.Long
 import java.lang.String
-import java.util.function.Function
 
 import org.jooq.Field
 import org.jooq.ForeignKey
@@ -15,7 +14,6 @@ import org.jooq.Name
 import org.jooq.Record
 import org.jooq.Row9
 import org.jooq.Schema
-import org.jooq.SelectField
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
@@ -55,24 +53,7 @@ extends TableImpl[CustomerListRecord](
   aliased,
   parameters,
   DSL.comment(""),
-  TableOptions.view("""
-  create view "customer_list" as  SELECT cu.customer_id AS id,
-   (((cu.first_name)::text || ' '::text) || (cu.last_name)::text) AS name,
-   a.address,
-   a.postal_code AS "zip code",
-   a.phone,
-   city.city,
-   country.country,
-       CASE
-           WHEN cu.activebool THEN 'active'::text
-           ELSE ''::text
-       END AS notes,
-   cu.store_id AS sid
-  FROM (((customer cu
-    JOIN address a ON ((cu.address_id = a.address_id)))
-    JOIN city ON ((a.city_id = city.city_id)))
-    JOIN country ON ((city.country_id = country.country_id)));
-  """)
+  TableOptions.view("create view \"customer_list\" as  SELECT cu.customer_id AS id,\n    (((cu.first_name)::text || ' '::text) || (cu.last_name)::text) AS name,\n    a.address,\n    a.postal_code AS \"zip code\",\n    a.phone,\n    city.city,\n    country.country,\n        CASE\n            WHEN cu.activebool THEN 'active'::text\n            ELSE ''::text\n        END AS notes,\n    cu.store_id AS sid\n   FROM (((customer cu\n     JOIN address a ON ((cu.address_id = a.address_id)))\n     JOIN city ON ((a.city_id = city.city_id)))\n     JOIN country ON ((city.country_id = country.country_id)));")
 ) {
 
   /**
@@ -147,7 +128,6 @@ extends TableImpl[CustomerListRecord](
   override def getSchema: Schema = if (aliased()) null else Public.PUBLIC
   override def as(alias: String): CustomerList = new CustomerList(DSL.name(alias), this)
   override def as(alias: Name): CustomerList = new CustomerList(alias, this)
-  override def as(alias: Table[_]): CustomerList = new CustomerList(alias.getQualifiedName(), this)
 
   /**
    * Rename this table
@@ -159,23 +139,8 @@ extends TableImpl[CustomerListRecord](
    */
   override def rename(name: Name): CustomerList = new CustomerList(name, null)
 
-  /**
-   * Rename this table
-   */
-  override def rename(name: Table[_]): CustomerList = new CustomerList(name.getQualifiedName(), null)
-
   // -------------------------------------------------------------------------
   // Row9 type methods
   // -------------------------------------------------------------------------
   override def fieldsRow: Row9[Long, String, String, String, String, String, String, String, Long] = super.fieldsRow.asInstanceOf[ Row9[Long, String, String, String, String, String, String, String, Long] ]
-
-  /**
-   * Convenience mapping calling {@link #convertFrom(Function)}.
-   */
-  def mapping[U](from: (Long, String, String, String, String, String, String, String, Long) => U): SelectField[U] = convertFrom(r => from.apply(r.value1(), r.value2(), r.value3(), r.value4(), r.value5(), r.value6(), r.value7(), r.value8(), r.value9()))
-
-  /**
-   * Convenience mapping calling {@link #convertFrom(Class, Function)}.
-   */
-  def mapping[U](toType: Class[U], from: (Long, String, String, String, String, String, String, String, Long) => U): SelectField[U] = convertFrom(toType,r => from.apply(r.value1(), r.value2(), r.value3(), r.value4(), r.value5(), r.value6(), r.value7(), r.value8(), r.value9()))
 }

@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.jooq</groupId>
         <artifactId>jooq-demo</artifactId>
-        <version>0.9.0</version>
+        <version>3.16.6</version>
     </parent>
 
     <artifactId>jooq-demo-kotlin</artifactId>
@@ -33,10 +33,12 @@
             <groupId>org.jooq</groupId>
             <artifactId>jooq-kotlin</artifactId>
         </dependency>
+        <!-- Available in jOOQ 3.17 only
         <dependency>
             <groupId>org.jooq</groupId>
             <artifactId>jooq-kotlin-coroutines</artifactId>
         </dependency>
+        -->
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib-jdk8</artifactId>

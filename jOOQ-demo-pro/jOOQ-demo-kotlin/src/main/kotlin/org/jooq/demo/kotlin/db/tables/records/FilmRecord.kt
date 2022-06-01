@@ -22,59 +22,59 @@ import org.jooq.impl.UpdatableRecordImpl
 @Suppress("UNCHECKED_CAST")
 open class FilmRecord() : UpdatableRecordImpl<FilmRecord>(Film.FILM), Record14<Long?, String?, String?, Int?, Long?, Long?, Short?, BigDecimal?, Short?, BigDecimal?, MpaaRating?, LocalDateTime?, Array<String?>?, Any?> {
 
-    open var filmId: Long?
+    var filmId: Long?
         set(value): Unit = set(0, value)
         get(): Long? = get(0) as Long?
 
-    open var title: String?
+    var title: String?
         set(value): Unit = set(1, value)
         get(): String? = get(1) as String?
 
-    open var description: String?
+    var description: String?
         set(value): Unit = set(2, value)
         get(): String? = get(2) as String?
 
-    open var releaseYear: Int?
+    var releaseYear: Int?
         set(value): Unit = set(3, value)
         get(): Int? = get(3) as Int?
 
-    open var languageId: Long?
+    var languageId: Long?
         set(value): Unit = set(4, value)
         get(): Long? = get(4) as Long?
 
-    open var originalLanguageId: Long?
+    var originalLanguageId: Long?
         set(value): Unit = set(5, value)
         get(): Long? = get(5) as Long?
 
-    open var rentalDuration: Short?
+    var rentalDuration: Short?
         set(value): Unit = set(6, value)
         get(): Short? = get(6) as Short?
 
-    open var rentalRate: BigDecimal?
+    var rentalRate: BigDecimal?
         set(value): Unit = set(7, value)
         get(): BigDecimal? = get(7) as BigDecimal?
 
-    open var length: Short?
+    var length: Short?
         set(value): Unit = set(8, value)
         get(): Short? = get(8) as Short?
 
-    open var replacementCost: BigDecimal?
+    var replacementCost: BigDecimal?
         set(value): Unit = set(9, value)
         get(): BigDecimal? = get(9) as BigDecimal?
 
-    open var rating: MpaaRating?
+    var rating: MpaaRating?
         set(value): Unit = set(10, value)
         get(): MpaaRating? = get(10) as MpaaRating?
 
-    open var lastUpdate: LocalDateTime?
+    var lastUpdate: LocalDateTime?
         set(value): Unit = set(11, value)
         get(): LocalDateTime? = get(11) as LocalDateTime?
 
-    open var specialFeatures: Array<String?>?
+    var specialFeatures: Array<String?>?
         set(value): Unit = set(12, value)
         get(): Array<String?>? = get(12) as Array<String?>?
 
-    open var fulltext: Any?
+    var fulltext: Any?
         set(value): Unit = set(13, value)
         get(): Any? = get(13) as Any?
 

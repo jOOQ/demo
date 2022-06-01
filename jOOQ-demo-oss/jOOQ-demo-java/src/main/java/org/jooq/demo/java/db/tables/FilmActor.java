@@ -7,29 +7,22 @@ package org.jooq.demo.java.db.tables;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Function3;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Records;
 import org.jooq.Row3;
 import org.jooq.Schema;
-import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
-import org.jooq.TableLike;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.demo.java.db.Indexes;
 import org.jooq.demo.java.db.Keys;
 import org.jooq.demo.java.db.Public;
-import org.jooq.demo.java.db.tables.records.ActorRecord;
 import org.jooq.demo.java.db.tables.records.FilmActorRecord;
-import org.jooq.demo.java.db.tables.records.FilmRecord;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
@@ -147,38 +140,6 @@ public class FilmActor extends TableImpl<FilmActorRecord> {
         return _film;
     }
 
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.film_actor</code> to-one parent table.
-     */
-    public Field<ActorRecord> actorRow() {
-        return actorRow(Function.identity());
-    }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.film_actor</code> to-one parent table.
-     */
-    public <O extends Record> Field<O> actorRow(Function<? super Actor, ? extends TableLike<O>> subquery) {
-        return toOneRow(Keys.FILM_ACTOR__FILM_ACTOR_ACTOR_ID_FKEY, t -> subquery.apply((Actor) t));
-    }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.film_actor</code> to-one parent table.
-     */
-    public Field<FilmRecord> filmRow() {
-        return filmRow(Function.identity());
-    }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.film_actor</code> to-one parent table.
-     */
-    public <O extends Record> Field<O> filmRow(Function<? super Film, ? extends TableLike<O>> subquery) {
-        return toOneRow(Keys.FILM_ACTOR__FILM_ACTOR_FILM_ID_FKEY, t -> subquery.apply((Film) t));
-    }
-
     @Override
     public FilmActor as(String alias) {
         return new FilmActor(DSL.name(alias), this);
@@ -187,11 +148,6 @@ public class FilmActor extends TableImpl<FilmActorRecord> {
     @Override
     public FilmActor as(Name alias) {
         return new FilmActor(alias, this);
-    }
-
-    @Override
-    public FilmActor as(Table<?> alias) {
-        return new FilmActor(alias.getQualifiedName(), this);
     }
 
     /**
@@ -210,14 +166,6 @@ public class FilmActor extends TableImpl<FilmActorRecord> {
         return new FilmActor(name, null);
     }
 
-    /**
-     * Rename this table
-     */
-    @Override
-    public FilmActor rename(Table<?> name) {
-        return new FilmActor(name.getQualifiedName(), null);
-    }
-
     // -------------------------------------------------------------------------
     // Row3 type methods
     // -------------------------------------------------------------------------
@@ -225,19 +173,5 @@ public class FilmActor extends TableImpl<FilmActorRecord> {
     @Override
     public Row3<Long, Long, LocalDateTime> fieldsRow() {
         return (Row3) super.fieldsRow();
-    }
-
-    /**
-     * Convenience mapping calling {@link #convertFrom(Function)}.
-     */
-    public <U> SelectField<U> mapping(Function3<? super Long, ? super Long, ? super LocalDateTime, ? extends U> from) {
-        return convertFrom(Records.mapping(from));
-    }
-
-    /**
-     * Convenience mapping calling {@link #convertFrom(Class, Function)}.
-     */
-    public <U> SelectField<U> mapping(Class<U> toType, Function3<? super Long, ? super Long, ? super LocalDateTime, ? extends U> from) {
-        return convertFrom(toType, Records.mapping(from));
     }
 }

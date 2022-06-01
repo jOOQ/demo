@@ -16,20 +16,20 @@ import org.jooq.demo.java.db.enums.MpaaRating;
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public record Film(
-    Long filmId,
-    String title,
-    String description,
-    Integer releaseYear,
-    Long languageId,
-    Long originalLanguageId,
-    Short rentalDuration,
-    BigDecimal rentalRate,
-    Short length,
-    BigDecimal replacementCost,
-    MpaaRating rating,
+    Long          filmId,
+    String        title,
+    String        description,
+    Integer       releaseYear,
+    Long          languageId,
+    Long          originalLanguageId,
+    Short         rentalDuration,
+    BigDecimal    rentalRate,
+    Short         length,
+    BigDecimal    replacementCost,
+    MpaaRating    rating,
     LocalDateTime lastUpdate,
-    String[] specialFeatures,
-    Object fulltext
+    String[]      specialFeatures,
+    Object        fulltext
 ) implements Serializable {
 
     private static final long serialVersionUID = 1L;

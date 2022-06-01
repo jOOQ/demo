@@ -7,7 +7,6 @@ package org.jooq.demo.skala.db.tables
 import java.lang.Class
 import java.lang.String
 import java.math.BigDecimal
-import java.util.function.Function
 
 import org.jooq.Field
 import org.jooq.ForeignKey
@@ -15,7 +14,6 @@ import org.jooq.Name
 import org.jooq.Record
 import org.jooq.Row3
 import org.jooq.Schema
-import org.jooq.SelectField
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
@@ -55,21 +53,7 @@ extends TableImpl[SalesByStoreRecord](
   aliased,
   parameters,
   DSL.comment(""),
-  TableOptions.view("""
-  create view "sales_by_store" as  SELECT (((c.city)::text || ','::text) || (cy.country)::text) AS store,
-    (((m.first_name)::text || ' '::text) || (m.last_name)::text) AS manager,
-    sum(p.amount) AS total_sales
-   FROM (((((((payment p
-     JOIN rental r ON ((p.rental_id = r.rental_id)))
-     JOIN inventory i ON ((r.inventory_id = i.inventory_id)))
-     JOIN store s ON ((i.store_id = s.store_id)))
-     JOIN address a ON ((s.address_id = a.address_id)))
-     JOIN city c ON ((a.city_id = c.city_id)))
-     JOIN country cy ON ((c.country_id = cy.country_id)))
-     JOIN staff m ON ((s.manager_staff_id = m.staff_id)))
-  GROUP BY cy.country, c.city, s.store_id, m.first_name, m.last_name
-  ORDER BY cy.country, c.city;
-  """)
+  TableOptions.view("create view \"sales_by_store\" as  SELECT (((c.city)::text || ','::text) || (cy.country)::text) AS store,\n    (((m.first_name)::text || ' '::text) || (m.last_name)::text) AS manager,\n    sum(p.amount) AS total_sales\n   FROM (((((((payment p\n     JOIN rental r ON ((p.rental_id = r.rental_id)))\n     JOIN inventory i ON ((r.inventory_id = i.inventory_id)))\n     JOIN store s ON ((i.store_id = s.store_id)))\n     JOIN address a ON ((s.address_id = a.address_id)))\n     JOIN city c ON ((a.city_id = c.city_id)))\n     JOIN country cy ON ((c.country_id = cy.country_id)))\n     JOIN staff m ON ((s.manager_staff_id = m.staff_id)))\n  GROUP BY cy.country, c.city, s.store_id, m.first_name, m.last_name\n  ORDER BY cy.country, c.city;")
 ) {
 
   /**
@@ -114,7 +98,6 @@ extends TableImpl[SalesByStoreRecord](
   override def getSchema: Schema = if (aliased()) null else Public.PUBLIC
   override def as(alias: String): SalesByStore = new SalesByStore(DSL.name(alias), this)
   override def as(alias: Name): SalesByStore = new SalesByStore(alias, this)
-  override def as(alias: Table[_]): SalesByStore = new SalesByStore(alias.getQualifiedName(), this)
 
   /**
    * Rename this table
@@ -126,23 +109,8 @@ extends TableImpl[SalesByStoreRecord](
    */
   override def rename(name: Name): SalesByStore = new SalesByStore(name, null)
 
-  /**
-   * Rename this table
-   */
-  override def rename(name: Table[_]): SalesByStore = new SalesByStore(name.getQualifiedName(), null)
-
   // -------------------------------------------------------------------------
   // Row3 type methods
   // -------------------------------------------------------------------------
   override def fieldsRow: Row3[String, String, BigDecimal] = super.fieldsRow.asInstanceOf[ Row3[String, String, BigDecimal] ]
-
-  /**
-   * Convenience mapping calling {@link #convertFrom(Function)}.
-   */
-  def mapping[U](from: (String, String, BigDecimal) => U): SelectField[U] = convertFrom(r => from.apply(r.value1(), r.value2(), r.value3()))
-
-  /**
-   * Convenience mapping calling {@link #convertFrom(Class, Function)}.
-   */
-  def mapping[U](toType: Class[U], from: (String, String, BigDecimal) => U): SelectField[U] = convertFrom(toType,r => from.apply(r.value1(), r.value2(), r.value3()))
 }

@@ -7,33 +7,23 @@ package org.jooq.demo.java.db.tables;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
 
-import org.jooq.Condition;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Function4;
 import org.jooq.Identity;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Records;
-import org.jooq.Result;
 import org.jooq.Row4;
 import org.jooq.Schema;
-import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
-import org.jooq.TableLike;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.demo.java.db.Indexes;
 import org.jooq.demo.java.db.Keys;
 import org.jooq.demo.java.db.Public;
-import org.jooq.demo.java.db.tables.records.FilmRecord;
 import org.jooq.demo.java.db.tables.records.InventoryRecord;
-import org.jooq.demo.java.db.tables.records.RentalRecord;
-import org.jooq.demo.java.db.tables.records.StoreRecord;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
@@ -161,70 +151,6 @@ public class Inventory extends TableImpl<InventoryRecord> {
         return _store;
     }
 
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.rental</code> one-to-many child table.
-     */
-    public Condition rentalExists() {
-        return rentalExists(Function.identity());
-    }
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.rental</code> one-to-many child table.
-     */
-    public <O extends Record> Condition rentalExists(Function<? super Rental, ? extends TableLike<O>> subquery) {
-        return oneToManyExists(Keys.RENTAL__RENTAL_INVENTORY_ID_FKEY, t -> subquery.apply((Rental) t));
-    }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.inventory</code> to-one parent table.
-     */
-    public Field<FilmRecord> filmRow() {
-        return filmRow(Function.identity());
-    }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.inventory</code> to-one parent table.
-     */
-    public <O extends Record> Field<O> filmRow(Function<? super Film, ? extends TableLike<O>> subquery) {
-        return toOneRow(Keys.INVENTORY__INVENTORY_FILM_ID_FKEY, t -> subquery.apply((Film) t));
-    }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.inventory</code> to-one parent table.
-     */
-    public Field<StoreRecord> storeRow() {
-        return storeRow(Function.identity());
-    }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.inventory</code> to-one parent table.
-     */
-    public <O extends Record> Field<O> storeRow(Function<? super Store, ? extends TableLike<O>> subquery) {
-        return toOneRow(Keys.INVENTORY__INVENTORY_STORE_ID_FKEY, t -> subquery.apply((Store) t));
-    }
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.rental</code> one-to-many child table.
-     */
-    public Field<Result<RentalRecord>> rentalMultiset() {
-        return rentalMultiset(Function.identity());
-    }
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.rental</code> one-to-many child table.
-     */
-    public <O extends Record> Field<Result<O>> rentalMultiset(Function<? super Rental, ? extends TableLike<O>> subquery) {
-        return oneToManyMultiset(Keys.RENTAL__RENTAL_INVENTORY_ID_FKEY, t -> subquery.apply((Rental) t));
-    }
-
     @Override
     public Inventory as(String alias) {
         return new Inventory(DSL.name(alias), this);
@@ -233,11 +159,6 @@ public class Inventory extends TableImpl<InventoryRecord> {
     @Override
     public Inventory as(Name alias) {
         return new Inventory(alias, this);
-    }
-
-    @Override
-    public Inventory as(Table<?> alias) {
-        return new Inventory(alias.getQualifiedName(), this);
     }
 
     /**
@@ -256,14 +177,6 @@ public class Inventory extends TableImpl<InventoryRecord> {
         return new Inventory(name, null);
     }
 
-    /**
-     * Rename this table
-     */
-    @Override
-    public Inventory rename(Table<?> name) {
-        return new Inventory(name.getQualifiedName(), null);
-    }
-
     // -------------------------------------------------------------------------
     // Row4 type methods
     // -------------------------------------------------------------------------
@@ -271,19 +184,5 @@ public class Inventory extends TableImpl<InventoryRecord> {
     @Override
     public Row4<Long, Long, Long, LocalDateTime> fieldsRow() {
         return (Row4) super.fieldsRow();
-    }
-
-    /**
-     * Convenience mapping calling {@link #convertFrom(Function)}.
-     */
-    public <U> SelectField<U> mapping(Function4<? super Long, ? super Long, ? super Long, ? super LocalDateTime, ? extends U> from) {
-        return convertFrom(Records.mapping(from));
-    }
-
-    /**
-     * Convenience mapping calling {@link #convertFrom(Class, Function)}.
-     */
-    public <U> SelectField<U> mapping(Class<U> toType, Function4<? super Long, ? super Long, ? super Long, ? super LocalDateTime, ? extends U> from) {
-        return convertFrom(toType, Records.mapping(from));
     }
 }

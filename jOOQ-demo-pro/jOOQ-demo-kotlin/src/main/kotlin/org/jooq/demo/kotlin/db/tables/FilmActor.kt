@@ -5,7 +5,6 @@ package org.jooq.demo.kotlin.db.tables
 
 
 import java.time.LocalDateTime
-import java.util.function.Function
 
 import kotlin.collections.List
 
@@ -14,13 +13,10 @@ import org.jooq.ForeignKey
 import org.jooq.Index
 import org.jooq.Name
 import org.jooq.Record
-import org.jooq.Records
 import org.jooq.Row3
 import org.jooq.Schema
-import org.jooq.SelectField
 import org.jooq.Table
 import org.jooq.TableField
-import org.jooq.TableLike
 import org.jooq.TableOptions
 import org.jooq.UniqueKey
 import org.jooq.demo.kotlin.db.Public
@@ -28,9 +24,7 @@ import org.jooq.demo.kotlin.db.indexes.IDX_FK_FILM_ID
 import org.jooq.demo.kotlin.db.keys.FILM_ACTOR_PKEY
 import org.jooq.demo.kotlin.db.keys.FILM_ACTOR__FILM_ACTOR_ACTOR_ID_FKEY
 import org.jooq.demo.kotlin.db.keys.FILM_ACTOR__FILM_ACTOR_FILM_ID_FKEY
-import org.jooq.demo.kotlin.db.tables.records.ActorRecord
 import org.jooq.demo.kotlin.db.tables.records.FilmActorRecord
-import org.jooq.demo.kotlin.db.tables.records.FilmRecord
 import org.jooq.impl.DSL
 import org.jooq.impl.Internal
 import org.jooq.impl.SQLDataType
@@ -122,9 +116,6 @@ open class FilmActor(
         return _actor;
     }
 
-    val actor: Actor
-        get(): Actor = actor()
-
     /**
      * Get the implicit join path to the <code>public.film</code> table.
      */
@@ -134,36 +125,8 @@ open class FilmActor(
 
         return _film;
     }
-
-    val film: Film
-        get(): Film = film()
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.film_actor</code> to-one parent table.
-     */
-    fun actorRow(): Field<ActorRecord> = actorRow { it }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.film_actor</code> to-one parent table.
-     */
-    fun <O : Record> actorRow(subquery: (Actor) -> TableLike<O>): Field<O> = toOneRow(FILM_ACTOR__FILM_ACTOR_ACTOR_ID_FKEY, { subquery(it as Actor) })
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.film_actor</code> to-one parent table.
-     */
-    fun filmRow(): Field<FilmRecord> = filmRow { it }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.film_actor</code> to-one parent table.
-     */
-    fun <O : Record> filmRow(subquery: (Film) -> TableLike<O>): Field<O> = toOneRow(FILM_ACTOR__FILM_ACTOR_FILM_ID_FKEY, { subquery(it as Film) })
     override fun `as`(alias: String): FilmActor = FilmActor(DSL.name(alias), this)
     override fun `as`(alias: Name): FilmActor = FilmActor(alias, this)
-    override fun `as`(alias: Table<*>): FilmActor = FilmActor(alias.getQualifiedName(), this)
 
     /**
      * Rename this table
@@ -175,23 +138,8 @@ open class FilmActor(
      */
     override fun rename(name: Name): FilmActor = FilmActor(name, null)
 
-    /**
-     * Rename this table
-     */
-    override fun rename(name: Table<*>): FilmActor = FilmActor(name.getQualifiedName(), null)
-
     // -------------------------------------------------------------------------
     // Row3 type methods
     // -------------------------------------------------------------------------
     override fun fieldsRow(): Row3<Long?, Long?, LocalDateTime?> = super.fieldsRow() as Row3<Long?, Long?, LocalDateTime?>
-
-    /**
-     * Convenience mapping calling {@link #convertFrom(Function)}.
-     */
-    fun <U> mapping(from: (Long?, Long?, LocalDateTime?) -> U): SelectField<U> = convertFrom(Records.mapping(from))
-
-    /**
-     * Convenience mapping calling {@link #convertFrom(Class, Function)}.
-     */
-    fun <U> mapping(toType: Class<U>, from: (Long?, Long?, LocalDateTime?) -> U): SelectField<U> = convertFrom(toType, Records.mapping(from))
 }

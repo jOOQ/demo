@@ -10,30 +10,23 @@ import java.lang.String
 import java.time.LocalDateTime
 import java.util.Arrays
 import java.util.List
-import java.util.function.Function
 
-import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
 import org.jooq.Identity
 import org.jooq.Index
 import org.jooq.Name
 import org.jooq.Record
-import org.jooq.Result
 import org.jooq.Row4
 import org.jooq.Schema
-import org.jooq.SelectField
 import org.jooq.Table
 import org.jooq.TableField
-import org.jooq.TableLike
 import org.jooq.TableOptions
 import org.jooq.UniqueKey
 import org.jooq.demo.skala.db.Indexes
 import org.jooq.demo.skala.db.Keys
 import org.jooq.demo.skala.db.Public
 import org.jooq.demo.skala.db.tables.records.ActorRecord
-import org.jooq.demo.skala.db.tables.records.FilmActorRecord
-import org.jooq.demo.skala.db.tables.records.FilmRecord
 import org.jooq.impl.DSL
 import org.jooq.impl.Internal
 import org.jooq.impl.SQLDataType
@@ -122,57 +115,8 @@ extends TableImpl[ActorRecord](
   override def getIdentity: Identity[ActorRecord, Long] = super.getIdentity.asInstanceOf[ Identity[ActorRecord, Long] ]
 
   override def getPrimaryKey: UniqueKey[ActorRecord] = Keys.ACTOR_PKEY
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.film_actor</code> one-to-many child table.
-   */
-  def filmActorExists(): Condition = filmActorExists(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.film_actor</code> one-to-many child table.
-   */
-  def filmActorExists[O <: Record](subquery: (FilmActor) => TableLike[O]): Condition = oneToManyExists(Keys.FILM_ACTOR__FILM_ACTOR_ACTOR_ID_FKEY, (t: Table[FilmActorRecord]) => subquery(t.asInstanceOf[FilmActor]))
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.film</code> many-to-many child table.
-   */
-  def filmExists(): Condition = filmExists(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.film</code> many-to-many child table.
-   */
-  def filmExists[O <: Record](subquery: (Film) => TableLike[O]): Condition = manyToManyExists(Keys.FILM_ACTOR__FILM_ACTOR_ACTOR_ID_FKEY, Keys.FILM_ACTOR__FILM_ACTOR_FILM_ID_FKEY, (t: Table[FilmRecord]) => subquery(t.asInstanceOf[Film]))
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.film_actor</code> one-to-many child table.
-   */
-  def filmActorMultiset(): Field[Result[FilmActorRecord]] = filmActorMultiset(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.film_actor</code> one-to-many child table.
-   */
-  def filmActorMultiset[O <: Record](subquery: (FilmActor) => TableLike[O]): Field[Result[O]] = oneToManyMultiset(Keys.FILM_ACTOR__FILM_ACTOR_ACTOR_ID_FKEY, (t: Table[FilmActorRecord]) => subquery(t.asInstanceOf[FilmActor]))
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.film</code> many-to-many child table.
-   */
-  def filmMultiset(): Field[Result[FilmRecord]] = filmMultiset(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.film</code> many-to-many child table.
-   */
-  def filmMultiset[O <: Record](subquery: (Film) => TableLike[O]): Field[Result[O]] = manyToManyMultiset(Keys.FILM_ACTOR__FILM_ACTOR_ACTOR_ID_FKEY, Keys.FILM_ACTOR__FILM_ACTOR_FILM_ID_FKEY, (t: Table[FilmRecord]) => subquery(t.asInstanceOf[Film]))
   override def as(alias: String): Actor = new Actor(DSL.name(alias), this)
   override def as(alias: Name): Actor = new Actor(alias, this)
-  override def as(alias: Table[_]): Actor = new Actor(alias.getQualifiedName(), this)
 
   /**
    * Rename this table
@@ -184,23 +128,8 @@ extends TableImpl[ActorRecord](
    */
   override def rename(name: Name): Actor = new Actor(name, null)
 
-  /**
-   * Rename this table
-   */
-  override def rename(name: Table[_]): Actor = new Actor(name.getQualifiedName(), null)
-
   // -------------------------------------------------------------------------
   // Row4 type methods
   // -------------------------------------------------------------------------
   override def fieldsRow: Row4[Long, String, String, LocalDateTime] = super.fieldsRow.asInstanceOf[ Row4[Long, String, String, LocalDateTime] ]
-
-  /**
-   * Convenience mapping calling {@link #convertFrom(Function)}.
-   */
-  def mapping[U](from: (Long, String, String, LocalDateTime) => U): SelectField[U] = convertFrom(r => from.apply(r.value1(), r.value2(), r.value3(), r.value4()))
-
-  /**
-   * Convenience mapping calling {@link #convertFrom(Class, Function)}.
-   */
-  def mapping[U](toType: Class[U], from: (Long, String, String, LocalDateTime) => U): SelectField[U] = convertFrom(toType,r => from.apply(r.value1(), r.value2(), r.value3(), r.value4()))
 }

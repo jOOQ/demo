@@ -30,13 +30,14 @@ class Demo11QueryObjectModel extends AbstractDemo {
     println("FROM  : " + select.$from)
     println("WHERE : " + select.$where)
 
-    title("You can also alter a property of a query, to create a new query (QOM operations are immutable):")
-    println(select
-      .$select(List(ACTOR.ACTOR_ID) ++ select.$select)
-      .$orderBy(List(ACTOR.ACTOR_ID.asc)))
-
-    title("The old query is untouched:")
-    println(select)
+    // Available in jOOQ 3.17 only
+//    title("You can also alter a property of a query, to create a new query (QOM operations are immutable):")
+//    println(select
+//      .$select(List(ACTOR.ACTOR_ID) ++ select.$select)
+//      .$orderBy(List(ACTOR.ACTOR_ID.asc)))
+//
+//    title("The old query is untouched:")
+//    println(select)
   }
 
   @Test
@@ -89,44 +90,45 @@ class Demo11QueryObjectModel extends AbstractDemo {
         p
     ))
 
-    title("Inverting the < predicate")
-    println(select1.$replace((p: QueryPart) => p match {
-      case lt: QOM.Lt[_] => lt.$converse
-      case _ => p
-    }))
-
-    title("Appending a predicate")
-    println(select1.$replace(appendSecurityCheck))
-
-    title("Appending a predicate even to subqueries")
-    val select2 = ctx.select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
-      .from(ACTOR)
-      .where(ACTOR.ACTOR_ID.lt(
-        select(max(ACTOR.ACTOR_ID))
-          .from(ACTOR)
-      ))
-    println(select2.$replace(appendSecurityCheck))
+    // Available in jOOQ 3.17 only
+//    title("Inverting the < predicate")
+//    println(select1.$replace((p: QueryPart) => p match {
+//      case lt: QOM.Lt[_] => lt.$converse
+//      case _ => p
+//    }))
+//
+//    title("Appending a predicate")
+//    println(select1.$replace(appendSecurityCheck))
+//
+//    title("Appending a predicate even to subqueries")
+//    val select2 = ctx.select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
+//      .from(ACTOR)
+//      .where(ACTOR.ACTOR_ID.lt(
+//        select(max(ACTOR.ACTOR_ID))
+//          .from(ACTOR)
+//      ))
+//    println(select2.$replace(appendSecurityCheck))
     /* [/pro] */
   }
 
-  /* [pro] */
-  private def appendSecurityCheck: Function[QueryPart, QueryPart] = p => {
-    val c = condition("security_check()")
-
-    // Beware of performance and infinite recursions, though!
-    p match {
-      case s: Select[_] =>
-        // Append the predicate if there is no predicate
-        if (s.$where == null)
-          s.$where(c)
-
-        // If there's already a predicate, check if the predicate contains the predicate already (don't recurse into subqueries)
-        else if (!s.$where.$traverse(Traversers.recursing(!_.isInstanceOf[Select[_]], Traversers.containing(c))))
-          s.$where(and(s.$where, c))
-        else
-          p
-      case _ => p
-    }
-  }
-  /* [/pro] */
+//  /* [pro] */
+//  private def appendSecurityCheck: Function[QueryPart, QueryPart] = p => {
+//    val c = condition("security_check()")
+//
+//    // Beware of performance and infinite recursions, though!
+//    p match {
+//      case s: Select[_] =>
+//        // Append the predicate if there is no predicate
+//        if (s.$where == null)
+//          s.$where(c)
+//
+//        // If there's already a predicate, check if the predicate contains the predicate already (don't recurse into subqueries)
+//        else if (!s.$where.$traverse(Traversers.recursing(!_.isInstanceOf[Select[_]], Traversers.containing(c))))
+//          s.$where(and(s.$where, c))
+//        else
+//          p
+//      case _ => p
+//    }
+//  }
+//  /* [/pro] */
 }

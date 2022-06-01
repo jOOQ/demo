@@ -195,18 +195,19 @@ class Demo01Querying : AbstractDemo() {
             .fetch()
     }
 
-    @Test
-    fun nestedRecords() {
-        title("Need all columns of those active records?")
-        val (customer, country) = ctx.select(CUSTOMER, CUSTOMER.address.city.country)
-            .from(CUSTOMER)
-            .orderBy(1, 2)
-            .limit(1)
-            .fetchSingle()
-        println("Customer ${customer.firstName} ${customer.lastName} from ${country.formatJSON()}")
-
-        // Though beware. While this is convenient, it's also likely inefficient as you're projecting too many columns
-    }
+    // Available in jOOQ 3.17 only
+//    @Test
+//    fun nestedRecords() {
+//        title("Need all columns of those active records?")
+//        val (customer, country) = ctx.select(CUSTOMER, CUSTOMER.address.city.country)
+//            .from(CUSTOMER)
+//            .orderBy(1, 2)
+//            .limit(1)
+//            .fetchSingle()
+//        println("Customer ${customer.firstName} ${customer.lastName} from ${country.formatJSON()}")
+//
+//        // Though beware. While this is convenient, it's also likely inefficient as you're projecting too many columns
+//    }
 
     @Test
     fun nestedRowValuesWithAdHocConverters() {

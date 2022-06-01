@@ -11,7 +11,6 @@ import java.math.BigDecimal
 import java.time.LocalDateTime
 import java.util.Arrays
 import java.util.List
-import java.util.function.Function
 
 import org.jooq.Check
 import org.jooq.Field
@@ -22,18 +21,13 @@ import org.jooq.Name
 import org.jooq.Record
 import org.jooq.Row6
 import org.jooq.Schema
-import org.jooq.SelectField
 import org.jooq.Table
 import org.jooq.TableField
-import org.jooq.TableLike
 import org.jooq.TableOptions
 import org.jooq.demo.skala.db.Indexes
 import org.jooq.demo.skala.db.Keys
 import org.jooq.demo.skala.db.Public
-import org.jooq.demo.skala.db.tables.records.CustomerRecord
 import org.jooq.demo.skala.db.tables.records.PaymentP2007_01Record
-import org.jooq.demo.skala.db.tables.records.RentalRecord
-import org.jooq.demo.skala.db.tables.records.StaffRecord
 import org.jooq.impl.DSL
 import org.jooq.impl.Internal
 import org.jooq.impl.SQLDataType
@@ -147,48 +141,11 @@ extends TableImpl[PaymentP2007_01Record](
    * Get the implicit join path to the <code>public.rental</code> table.
    */
   lazy val rental: Rental = { new Rental(this, Keys.PAYMENT_P2007_01__PAYMENT_P2007_01_RENTAL_ID_FKEY) }
-
-  /**
-   * A convenience constructor for correlated <code>ROW</code>s expressions to
-   * the <code>public.payment_p2007_01</code> to-one parent table.
-   */
-  def customerRow(): Field[CustomerRecord] = customerRow(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>ROW</code>s expressions to
-   * the <code>public.payment_p2007_01</code> to-one parent table.
-   */
-  def customerRow[O <: Record](subquery: (Customer) => TableLike[O]): Field[O] = toOneRow(Keys.PAYMENT_P2007_01__PAYMENT_P2007_01_CUSTOMER_ID_FKEY, (t: Table[CustomerRecord]) => subquery(t.asInstanceOf[Customer]))
-
-  /**
-   * A convenience constructor for correlated <code>ROW</code>s expressions to
-   * the <code>public.payment_p2007_01</code> to-one parent table.
-   */
-  def staffRow(): Field[StaffRecord] = staffRow(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>ROW</code>s expressions to
-   * the <code>public.payment_p2007_01</code> to-one parent table.
-   */
-  def staffRow[O <: Record](subquery: (Staff) => TableLike[O]): Field[O] = toOneRow(Keys.PAYMENT_P2007_01__PAYMENT_P2007_01_STAFF_ID_FKEY, (t: Table[StaffRecord]) => subquery(t.asInstanceOf[Staff]))
-
-  /**
-   * A convenience constructor for correlated <code>ROW</code>s expressions to
-   * the <code>public.payment_p2007_01</code> to-one parent table.
-   */
-  def rentalRow(): Field[RentalRecord] = rentalRow(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>ROW</code>s expressions to
-   * the <code>public.payment_p2007_01</code> to-one parent table.
-   */
-  def rentalRow[O <: Record](subquery: (Rental) => TableLike[O]): Field[O] = toOneRow(Keys.PAYMENT_P2007_01__PAYMENT_P2007_01_RENTAL_ID_FKEY, (t: Table[RentalRecord]) => subquery(t.asInstanceOf[Rental]))
   override def getChecks: List[ Check[PaymentP2007_01Record] ] = Arrays.asList[ Check[PaymentP2007_01Record] ](
     Internal.createCheck(this, DSL.name("payment_p2007_01_payment_date_check"), "(((payment_date >= '2007-01-01 00:00:00'::timestamp without time zone) AND (payment_date < '2007-02-01 00:00:00'::timestamp without time zone)))", true)
   )
   override def as(alias: String): PaymentP2007_01 = new PaymentP2007_01(DSL.name(alias), this)
   override def as(alias: Name): PaymentP2007_01 = new PaymentP2007_01(alias, this)
-  override def as(alias: Table[_]): PaymentP2007_01 = new PaymentP2007_01(alias.getQualifiedName(), this)
 
   /**
    * Rename this table
@@ -200,23 +157,8 @@ extends TableImpl[PaymentP2007_01Record](
    */
   override def rename(name: Name): PaymentP2007_01 = new PaymentP2007_01(name, null)
 
-  /**
-   * Rename this table
-   */
-  override def rename(name: Table[_]): PaymentP2007_01 = new PaymentP2007_01(name.getQualifiedName(), null)
-
   // -------------------------------------------------------------------------
   // Row6 type methods
   // -------------------------------------------------------------------------
   override def fieldsRow: Row6[Long, Long, Long, Long, BigDecimal, LocalDateTime] = super.fieldsRow.asInstanceOf[ Row6[Long, Long, Long, Long, BigDecimal, LocalDateTime] ]
-
-  /**
-   * Convenience mapping calling {@link #convertFrom(Function)}.
-   */
-  def mapping[U](from: (Long, Long, Long, Long, BigDecimal, LocalDateTime) => U): SelectField[U] = convertFrom(r => from.apply(r.value1(), r.value2(), r.value3(), r.value4(), r.value5(), r.value6()))
-
-  /**
-   * Convenience mapping calling {@link #convertFrom(Class, Function)}.
-   */
-  def mapping[U](toType: Class[U], from: (Long, Long, Long, Long, BigDecimal, LocalDateTime) => U): SelectField[U] = convertFrom(toType,r => from.apply(r.value1(), r.value2(), r.value3(), r.value4(), r.value5(), r.value6()))
 }

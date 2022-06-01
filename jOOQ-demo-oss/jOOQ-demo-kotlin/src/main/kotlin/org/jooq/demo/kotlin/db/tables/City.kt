@@ -5,35 +5,26 @@ package org.jooq.demo.kotlin.db.tables
 
 
 import java.time.LocalDateTime
-import java.util.function.Function
 
 import kotlin.collections.List
 
-import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
 import org.jooq.Identity
 import org.jooq.Index
 import org.jooq.Name
 import org.jooq.Record
-import org.jooq.Records
-import org.jooq.Result
 import org.jooq.Row4
 import org.jooq.Schema
-import org.jooq.SelectField
 import org.jooq.Table
 import org.jooq.TableField
-import org.jooq.TableLike
 import org.jooq.TableOptions
 import org.jooq.UniqueKey
 import org.jooq.demo.kotlin.db.Public
 import org.jooq.demo.kotlin.db.indexes.IDX_FK_COUNTRY_ID
-import org.jooq.demo.kotlin.db.keys.ADDRESS__ADDRESS_CITY_ID_FKEY
 import org.jooq.demo.kotlin.db.keys.CITY_PKEY
 import org.jooq.demo.kotlin.db.keys.CITY__CITY_COUNTRY_ID_FKEY
-import org.jooq.demo.kotlin.db.tables.records.AddressRecord
 import org.jooq.demo.kotlin.db.tables.records.CityRecord
-import org.jooq.demo.kotlin.db.tables.records.CountryRecord
 import org.jooq.impl.DSL
 import org.jooq.impl.Internal
 import org.jooq.impl.SQLDataType
@@ -129,48 +120,8 @@ open class City(
 
         return _country;
     }
-
-    val country: Country
-        get(): Country = country()
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.address</code> one-to-many child table.
-     */
-    fun addressExists(): Condition = addressExists { it }
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.address</code> one-to-many child table.
-     */
-    fun <O: Record>addressExists(subquery: (Address) -> TableLike<O>): Condition = oneToManyExists(ADDRESS__ADDRESS_CITY_ID_FKEY, { subquery(it as Address) })
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.city</code> to-one parent table.
-     */
-    fun countryRow(): Field<CountryRecord> = countryRow { it }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.city</code> to-one parent table.
-     */
-    fun <O : Record> countryRow(subquery: (Country) -> TableLike<O>): Field<O> = toOneRow(CITY__CITY_COUNTRY_ID_FKEY, { subquery(it as Country) })
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.address</code> one-to-many child table.
-     */
-    fun addressMultiset(): Field<Result<AddressRecord>> = addressMultiset { it }
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.address</code> one-to-many child table.
-     */
-    fun <O: Record>addressMultiset(subquery: (Address) -> TableLike<O>): Field<Result<O>> = oneToManyMultiset(ADDRESS__ADDRESS_CITY_ID_FKEY, { subquery(it as Address) })
     override fun `as`(alias: String): City = City(DSL.name(alias), this)
     override fun `as`(alias: Name): City = City(alias, this)
-    override fun `as`(alias: Table<*>): City = City(alias.getQualifiedName(), this)
 
     /**
      * Rename this table
@@ -182,23 +133,8 @@ open class City(
      */
     override fun rename(name: Name): City = City(name, null)
 
-    /**
-     * Rename this table
-     */
-    override fun rename(name: Table<*>): City = City(name.getQualifiedName(), null)
-
     // -------------------------------------------------------------------------
     // Row4 type methods
     // -------------------------------------------------------------------------
     override fun fieldsRow(): Row4<Long?, String?, Long?, LocalDateTime?> = super.fieldsRow() as Row4<Long?, String?, Long?, LocalDateTime?>
-
-    /**
-     * Convenience mapping calling {@link #convertFrom(Function)}.
-     */
-    fun <U> mapping(from: (Long?, String?, Long?, LocalDateTime?) -> U): SelectField<U> = convertFrom(Records.mapping(from))
-
-    /**
-     * Convenience mapping calling {@link #convertFrom(Class, Function)}.
-     */
-    fun <U> mapping(toType: Class<U>, from: (Long?, String?, Long?, LocalDateTime?) -> U): SelectField<U> = convertFrom(toType, Records.mapping(from))
 }

@@ -20,35 +20,35 @@ import org.jooq.impl.TableRecordImpl
 @Suppress("UNCHECKED_CAST")
 open class NicerButSlowerFilmListRecord() : TableRecordImpl<NicerButSlowerFilmListRecord>(NicerButSlowerFilmList.NICER_BUT_SLOWER_FILM_LIST), Record8<Long?, String?, String?, String?, BigDecimal?, Short?, MpaaRating?, String?> {
 
-    open var fid: Long?
+    var fid: Long?
         set(value): Unit = set(0, value)
         get(): Long? = get(0) as Long?
 
-    open var title: String?
+    var title: String?
         set(value): Unit = set(1, value)
         get(): String? = get(1) as String?
 
-    open var description: String?
+    var description: String?
         set(value): Unit = set(2, value)
         get(): String? = get(2) as String?
 
-    open var category: String?
+    var category: String?
         set(value): Unit = set(3, value)
         get(): String? = get(3) as String?
 
-    open var price: BigDecimal?
+    var price: BigDecimal?
         set(value): Unit = set(4, value)
         get(): BigDecimal? = get(4) as BigDecimal?
 
-    open var length: Short?
+    var length: Short?
         set(value): Unit = set(5, value)
         get(): Short? = get(5) as Short?
 
-    open var rating: MpaaRating?
+    var rating: MpaaRating?
         set(value): Unit = set(6, value)
         get(): MpaaRating? = get(6) as MpaaRating?
 
-    open var actors: String?
+    var actors: String?
         set(value): Unit = set(7, value)
         get(): String? = get(7) as String?
 

@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public record Category(
-    Long categoryId,
-    String name,
+    Long          categoryId,
+    String        name,
     LocalDateTime lastUpdate
 ) implements Serializable {
 

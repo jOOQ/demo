@@ -5,16 +5,13 @@ package org.jooq.demo.kotlin.db.tables
 
 
 import java.math.BigDecimal
-import java.util.function.Function
 
 import org.jooq.Field
 import org.jooq.ForeignKey
 import org.jooq.Name
 import org.jooq.Record
-import org.jooq.Records
 import org.jooq.Row2
 import org.jooq.Schema
-import org.jooq.SelectField
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
@@ -44,18 +41,7 @@ open class SalesByFilmCategory(
     aliased,
     parameters,
     DSL.comment(""),
-    TableOptions.view("""
-    create view "sales_by_film_category" as  SELECT c.name AS category,
-      sum(p.amount) AS total_sales
-     FROM (((((payment p
-       JOIN rental r ON ((p.rental_id = r.rental_id)))
-       JOIN inventory i ON ((r.inventory_id = i.inventory_id)))
-       JOIN film f ON ((i.film_id = f.film_id)))
-       JOIN film_category fc ON ((f.film_id = fc.film_id)))
-       JOIN category c ON ((fc.category_id = c.category_id)))
-    GROUP BY c.name
-    ORDER BY (sum(p.amount)) DESC;
-    """)
+    TableOptions.view("create view \"sales_by_film_category\" as  SELECT c.name AS category,\n    sum(p.amount) AS total_sales\n   FROM (((((payment p\n     JOIN rental r ON ((p.rental_id = r.rental_id)))\n     JOIN inventory i ON ((r.inventory_id = i.inventory_id)))\n     JOIN film f ON ((i.film_id = f.film_id)))\n     JOIN film_category fc ON ((f.film_id = fc.film_id)))\n     JOIN category c ON ((fc.category_id = c.category_id)))\n  GROUP BY c.name\n  ORDER BY (sum(p.amount)) DESC;")
 ) {
     companion object {
 
@@ -104,7 +90,6 @@ open class SalesByFilmCategory(
     override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
     override fun `as`(alias: String): SalesByFilmCategory = SalesByFilmCategory(DSL.name(alias), this)
     override fun `as`(alias: Name): SalesByFilmCategory = SalesByFilmCategory(alias, this)
-    override fun `as`(alias: Table<*>): SalesByFilmCategory = SalesByFilmCategory(alias.getQualifiedName(), this)
 
     /**
      * Rename this table
@@ -116,23 +101,8 @@ open class SalesByFilmCategory(
      */
     override fun rename(name: Name): SalesByFilmCategory = SalesByFilmCategory(name, null)
 
-    /**
-     * Rename this table
-     */
-    override fun rename(name: Table<*>): SalesByFilmCategory = SalesByFilmCategory(name.getQualifiedName(), null)
-
     // -------------------------------------------------------------------------
     // Row2 type methods
     // -------------------------------------------------------------------------
     override fun fieldsRow(): Row2<String?, BigDecimal?> = super.fieldsRow() as Row2<String?, BigDecimal?>
-
-    /**
-     * Convenience mapping calling {@link #convertFrom(Function)}.
-     */
-    fun <U> mapping(from: (String?, BigDecimal?) -> U): SelectField<U> = convertFrom(Records.mapping(from))
-
-    /**
-     * Convenience mapping calling {@link #convertFrom(Class, Function)}.
-     */
-    fun <U> mapping(toType: Class<U>, from: (String?, BigDecimal?) -> U): SelectField<U> = convertFrom(toType, Records.mapping(from))
 }

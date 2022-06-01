@@ -5,30 +5,21 @@ package org.jooq.demo.java.db.tables;
 
 
 import java.time.LocalDateTime;
-import java.util.function.Function;
 
-import org.jooq.Condition;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Function3;
 import org.jooq.Identity;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Records;
-import org.jooq.Result;
 import org.jooq.Row3;
 import org.jooq.Schema;
-import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
-import org.jooq.TableLike;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.demo.java.db.Keys;
 import org.jooq.demo.java.db.Public;
 import org.jooq.demo.java.db.tables.records.CategoryRecord;
-import org.jooq.demo.java.db.tables.records.FilmCategoryRecord;
-import org.jooq.demo.java.db.tables.records.FilmRecord;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
@@ -118,72 +109,6 @@ public class Category extends TableImpl<CategoryRecord> {
         return Keys.CATEGORY_PKEY;
     }
 
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.film_category</code> one-to-many child table.
-     */
-    public Condition filmCategoryExists() {
-        return filmCategoryExists(Function.identity());
-    }
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.film_category</code> one-to-many child table.
-     */
-    public <O extends Record> Condition filmCategoryExists(Function<? super FilmCategory, ? extends TableLike<O>> subquery) {
-        return oneToManyExists(Keys.FILM_CATEGORY__FILM_CATEGORY_CATEGORY_ID_FKEY, t -> subquery.apply((FilmCategory) t));
-    }
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.film</code> many-to-many child table.
-     */
-    public Condition filmExists() {
-        return filmExists(Function.identity());
-    }
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.film</code> many-to-many child table.
-     */
-    public <O extends Record> Condition filmExists(Function<? super Film, ? extends TableLike<O>> subquery) {
-        return manyToManyExists(Keys.FILM_CATEGORY__FILM_CATEGORY_CATEGORY_ID_FKEY, Keys.FILM_CATEGORY__FILM_CATEGORY_FILM_ID_FKEY, t -> subquery.apply((Film) t));
-    }
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.film_category</code> one-to-many child
-     * table.
-     */
-    public Field<Result<FilmCategoryRecord>> filmCategoryMultiset() {
-        return filmCategoryMultiset(Function.identity());
-    }
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.film_category</code> one-to-many child
-     * table.
-     */
-    public <O extends Record> Field<Result<O>> filmCategoryMultiset(Function<? super FilmCategory, ? extends TableLike<O>> subquery) {
-        return oneToManyMultiset(Keys.FILM_CATEGORY__FILM_CATEGORY_CATEGORY_ID_FKEY, t -> subquery.apply((FilmCategory) t));
-    }
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.film</code> many-to-many child table.
-     */
-    public Field<Result<FilmRecord>> filmMultiset() {
-        return filmMultiset(Function.identity());
-    }
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.film</code> many-to-many child table.
-     */
-    public <O extends Record> Field<Result<O>> filmMultiset(Function<? super Film, ? extends TableLike<O>> subquery) {
-        return manyToManyMultiset(Keys.FILM_CATEGORY__FILM_CATEGORY_CATEGORY_ID_FKEY, Keys.FILM_CATEGORY__FILM_CATEGORY_FILM_ID_FKEY, t -> subquery.apply((Film) t));
-    }
-
     @Override
     public Category as(String alias) {
         return new Category(DSL.name(alias), this);
@@ -192,11 +117,6 @@ public class Category extends TableImpl<CategoryRecord> {
     @Override
     public Category as(Name alias) {
         return new Category(alias, this);
-    }
-
-    @Override
-    public Category as(Table<?> alias) {
-        return new Category(alias.getQualifiedName(), this);
     }
 
     /**
@@ -215,14 +135,6 @@ public class Category extends TableImpl<CategoryRecord> {
         return new Category(name, null);
     }
 
-    /**
-     * Rename this table
-     */
-    @Override
-    public Category rename(Table<?> name) {
-        return new Category(name.getQualifiedName(), null);
-    }
-
     // -------------------------------------------------------------------------
     // Row3 type methods
     // -------------------------------------------------------------------------
@@ -230,19 +142,5 @@ public class Category extends TableImpl<CategoryRecord> {
     @Override
     public Row3<Long, String, LocalDateTime> fieldsRow() {
         return (Row3) super.fieldsRow();
-    }
-
-    /**
-     * Convenience mapping calling {@link #convertFrom(Function)}.
-     */
-    public <U> SelectField<U> mapping(Function3<? super Long, ? super String, ? super LocalDateTime, ? extends U> from) {
-        return convertFrom(Records.mapping(from));
-    }
-
-    /**
-     * Convenience mapping calling {@link #convertFrom(Class, Function)}.
-     */
-    public <U> SelectField<U> mapping(Class<U> toType, Function3<? super Long, ? super String, ? super LocalDateTime, ? extends U> from) {
-        return convertFrom(toType, Records.mapping(from));
     }
 }

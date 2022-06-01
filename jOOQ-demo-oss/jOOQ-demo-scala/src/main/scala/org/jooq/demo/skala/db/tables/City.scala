@@ -10,30 +10,23 @@ import java.lang.String
 import java.time.LocalDateTime
 import java.util.Arrays
 import java.util.List
-import java.util.function.Function
 
-import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
 import org.jooq.Identity
 import org.jooq.Index
 import org.jooq.Name
 import org.jooq.Record
-import org.jooq.Result
 import org.jooq.Row4
 import org.jooq.Schema
-import org.jooq.SelectField
 import org.jooq.Table
 import org.jooq.TableField
-import org.jooq.TableLike
 import org.jooq.TableOptions
 import org.jooq.UniqueKey
 import org.jooq.demo.skala.db.Indexes
 import org.jooq.demo.skala.db.Keys
 import org.jooq.demo.skala.db.Public
-import org.jooq.demo.skala.db.tables.records.AddressRecord
 import org.jooq.demo.skala.db.tables.records.CityRecord
-import org.jooq.demo.skala.db.tables.records.CountryRecord
 import org.jooq.impl.DSL
 import org.jooq.impl.Internal
 import org.jooq.impl.SQLDataType
@@ -129,45 +122,8 @@ extends TableImpl[CityRecord](
    * Get the implicit join path to the <code>public.country</code> table.
    */
   lazy val country: Country = { new Country(this, Keys.CITY__CITY_COUNTRY_ID_FKEY) }
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.address</code> one-to-many child table.
-   */
-  def addressExists(): Condition = addressExists(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.address</code> one-to-many child table.
-   */
-  def addressExists[O <: Record](subquery: (Address) => TableLike[O]): Condition = oneToManyExists(Keys.ADDRESS__ADDRESS_CITY_ID_FKEY, (t: Table[AddressRecord]) => subquery(t.asInstanceOf[Address]))
-
-  /**
-   * A convenience constructor for correlated <code>ROW</code>s expressions to
-   * the <code>public.city</code> to-one parent table.
-   */
-  def countryRow(): Field[CountryRecord] = countryRow(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>ROW</code>s expressions to
-   * the <code>public.city</code> to-one parent table.
-   */
-  def countryRow[O <: Record](subquery: (Country) => TableLike[O]): Field[O] = toOneRow(Keys.CITY__CITY_COUNTRY_ID_FKEY, (t: Table[CountryRecord]) => subquery(t.asInstanceOf[Country]))
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.address</code> one-to-many child table.
-   */
-  def addressMultiset(): Field[Result[AddressRecord]] = addressMultiset(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.address</code> one-to-many child table.
-   */
-  def addressMultiset[O <: Record](subquery: (Address) => TableLike[O]): Field[Result[O]] = oneToManyMultiset(Keys.ADDRESS__ADDRESS_CITY_ID_FKEY, (t: Table[AddressRecord]) => subquery(t.asInstanceOf[Address]))
   override def as(alias: String): City = new City(DSL.name(alias), this)
   override def as(alias: Name): City = new City(alias, this)
-  override def as(alias: Table[_]): City = new City(alias.getQualifiedName(), this)
 
   /**
    * Rename this table
@@ -179,23 +135,8 @@ extends TableImpl[CityRecord](
    */
   override def rename(name: Name): City = new City(name, null)
 
-  /**
-   * Rename this table
-   */
-  override def rename(name: Table[_]): City = new City(name.getQualifiedName(), null)
-
   // -------------------------------------------------------------------------
   // Row4 type methods
   // -------------------------------------------------------------------------
   override def fieldsRow: Row4[Long, String, Long, LocalDateTime] = super.fieldsRow.asInstanceOf[ Row4[Long, String, Long, LocalDateTime] ]
-
-  /**
-   * Convenience mapping calling {@link #convertFrom(Function)}.
-   */
-  def mapping[U](from: (Long, String, Long, LocalDateTime) => U): SelectField[U] = convertFrom(r => from.apply(r.value1(), r.value2(), r.value3(), r.value4()))
-
-  /**
-   * Convenience mapping calling {@link #convertFrom(Class, Function)}.
-   */
-  def mapping[U](toType: Class[U], from: (Long, String, Long, LocalDateTime) => U): SelectField[U] = convertFrom(toType,r => from.apply(r.value1(), r.value2(), r.value3(), r.value4()))
 }
