@@ -1,6 +1,5 @@
 package org.jooq.demo.java;
 
-import org.jooq.Variable;
 import org.jooq.demo.AbstractDemo;
 import org.jooq.demo.java.db.Routines;
 import org.junit.After;
@@ -12,7 +11,6 @@ import static org.jooq.demo.java.db.Routines.inventoryInStock;
 import static org.jooq.demo.java.db.Tables.*;
 import static org.jooq.impl.DSL.*;
 import static org.jooq.impl.SQLDataType.BIGINT;
-import static org.jooq.impl.SQLDataType.INTEGER;
 
 public class Demo12StoredProcedures extends AbstractDemo {
 
