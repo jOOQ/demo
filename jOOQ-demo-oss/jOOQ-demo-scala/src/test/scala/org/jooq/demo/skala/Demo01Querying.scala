@@ -4,6 +4,7 @@ import org.jooq.Records.intoMap
 import org.jooq.demo.AbstractDemo
 import org.jooq.demo.AbstractDemo._
 import org.jooq.demo.skala.db.Tables._
+import org.jooq.demo.skala.db.tables.Actor
 import org.jooq.impl.DSL._
 import org.jooq.impl.SQLDataType.LOCALDATE
 import org.jooq.scalaextensions.Conversions._
@@ -304,5 +305,73 @@ class Demo01Querying extends AbstractDemo {
       println("Film %s with revenue: ".formatted(film.title))
       film.revenue.forEach((d: LocalDate, r: BigDecimal) => println("  %s: %s".formatted(d, r)))
     }
+  }
+
+  @Test
+  def multisetConvenience(): Unit = {
+
+    // This is a commercial only feature
+
+
+
+
+
+
+
+
+
+
+
+
+  }
+
+  @Test
+  def rowConvenience(): Unit = {
+
+    // This is a commercial only feature
+
+
+
+
+
+
+
+
+
+
+
+
+
+  }
+
+  @Test
+  def existsConvenience(): Unit = {
+
+    // This is a commercial only feature
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   }
 }

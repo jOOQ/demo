@@ -349,4 +349,70 @@ public class Demo01Querying extends AbstractDemo {
             film.revenue.forEach((d, r) -> println("  %s: %s".formatted(d, r)));
         }
     }
+
+    @Test
+    public void multisetConvenience() {
+
+        // This is a commercial only feature
+
+
+
+
+
+
+
+
+
+
+
+
+    }
+
+    @Test
+    public void rowConvenience() {
+
+        // This is a commercial only feature
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
+
+    @Test
+    public void existsConvenience() {
+        // This is a commercial only feature
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
 }

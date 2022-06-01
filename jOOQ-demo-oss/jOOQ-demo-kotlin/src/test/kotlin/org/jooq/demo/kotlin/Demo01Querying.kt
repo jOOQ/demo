@@ -12,6 +12,7 @@ import org.junit.Test
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.util.function.Function
 
 class Demo01Querying : AbstractDemo() {
 
@@ -345,4 +346,71 @@ class Demo01Querying : AbstractDemo() {
         }
     }
 
+
+    @Test
+    fun multisetConvenience() {
+
+        // This is a commercial only feature
+
+
+
+
+
+
+
+
+
+
+
+
+    }
+
+    @Test
+    fun rowConvenience() {
+
+        // This is a commercial only feature
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
+
+    @Test
+    fun existsConvenience() {
+        
+        // This is a commercial only feature
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
 }
