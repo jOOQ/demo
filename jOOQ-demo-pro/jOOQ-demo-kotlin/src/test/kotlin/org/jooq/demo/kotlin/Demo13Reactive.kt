@@ -9,6 +9,7 @@ import org.jooq.Records.mapping
 import org.jooq.demo.AbstractDemo
 import org.jooq.demo.kotlin.db.tables.records.ActorRecord
 import org.jooq.demo.kotlin.db.tables.references.ACTOR
+import org.jooq.kotlin.coroutines.transactionCoroutineResult
 import org.junit.After
 import org.junit.Test
 import reactor.core.publisher.Flux
@@ -100,27 +101,15 @@ class Demo13Reactive : AbstractDemo() {
     }
 
     suspend fun insertActorTransaction(): ActorRecord {
-        return ctx.transactionPublisher { c ->
-
-            // Turn the suspension result into a Mono, which implements the reactive
-            // streams Publisher<T> SPI, which jOOQ expects as a result from a
-            // TransactionalPublishable
-            mono {
-                insertActor(c)
-            }
-        }
-
-        // Turn the Publisher<T> that is returned from transactionPublisher() back
-        // into a suspension result
-        .awaitFirst();
+        return ctx.transactionCoroutineResult(::insertActor)
     }
 
-    suspend fun insertActor(c: Configuration): ActorRecord = ctx.transactionPublisher { c -> c.dsl()
+    suspend fun insertActor(c: Configuration): ActorRecord = c.dsl()
         .insertInto(ACTOR)
         .columns(ACTOR.ACTOR_ID, ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
         .values(201L, "A", "A")
         .returning()
-    }.awaitFirst()
+        .awaitFirst()
 
     @After
     override fun teardown() {
