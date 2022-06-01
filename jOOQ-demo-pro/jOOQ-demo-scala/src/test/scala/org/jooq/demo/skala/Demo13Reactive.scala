@@ -1,24 +1,10 @@
 package org.jooq.demo.skala
 
-import org.jooq.{Configuration, Records, Variable}
 import org.jooq.demo.AbstractDemo
 import org.jooq.demo.AbstractDemo._
-import org.jooq.demo.skala.db.Routines
-import org.jooq.impl.SQLDataType
-import org.junit.After
-import org.junit.Test
-
-import java.sql.SQLException
-import java.util
-import org.jooq.Records.mapping
-import org.jooq.demo.skala.db.Routines.inventoryInStock
 import org.jooq.demo.skala.db.Tables._
-import org.jooq.impl.DSL._
-import org.jooq.impl.SQLDataType.BIGINT
-import org.jooq.impl.SQLDataType.INTEGER
+import org.junit.{After, Test}
 import reactor.core.publisher.Flux
-
-import java.util.List
 
 
 class Demo13Reactive extends AbstractDemo {
