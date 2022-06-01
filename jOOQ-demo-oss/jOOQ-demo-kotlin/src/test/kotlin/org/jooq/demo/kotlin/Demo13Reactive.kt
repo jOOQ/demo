@@ -1,11 +1,15 @@
 package org.jooq.demo.kotlin
 
+import kotlinx.coroutines.reactive.awaitFirst
 import kotlinx.coroutines.reactive.awaitFirstOrNull
+import kotlinx.coroutines.reactor.mono
 import kotlinx.coroutines.runBlocking
+import org.jooq.Configuration
 import org.jooq.Records.mapping
 import org.jooq.demo.AbstractDemo
 import org.jooq.demo.kotlin.db.tables.records.ActorRecord
 import org.jooq.demo.kotlin.db.tables.references.ACTOR
+import org.jooq.kotlin.coroutines.transactionCoroutineResult
 import org.junit.After
 import org.junit.Test
 import reactor.core.publisher.Flux
@@ -81,8 +85,31 @@ class Demo13Reactive : AbstractDemo() {
         return ctx
             .selectFrom(ACTOR)
             .where(ACTOR.ACTOR_ID.eq(id))
+
+            // Turn any reactive streams Publisher<T> into a suspension result using the
+            // kotlinx-coroutines-reactive extensions
             .awaitFirstOrNull()
     }
+
+    @Test
+    fun coroutinesWithTransactions() {
+        val actor: ActorRecord = runBlocking {
+            insertActorTransaction()
+        }
+
+        println(actor)
+    }
+
+    suspend fun insertActorTransaction(): ActorRecord {
+        return ctx.transactionCoroutineResult(::insertActor)
+    }
+
+    suspend fun insertActor(c: Configuration): ActorRecord = c.dsl()
+        .insertInto(ACTOR)
+        .columns(ACTOR.ACTOR_ID, ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
+        .values(201L, "A", "A")
+        .returning()
+        .awaitFirst()
 
     @After
     override fun teardown() {
