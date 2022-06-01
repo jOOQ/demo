@@ -2,14 +2,13 @@ package org.jooq.demo.kotlin
 
 import kotlinx.coroutines.reactive.awaitFirst
 import kotlinx.coroutines.reactive.awaitFirstOrNull
-import kotlinx.coroutines.reactor.mono
 import kotlinx.coroutines.runBlocking
 import org.jooq.Configuration
 import org.jooq.Records.mapping
 import org.jooq.demo.AbstractDemo
 import org.jooq.demo.kotlin.db.tables.records.ActorRecord
 import org.jooq.demo.kotlin.db.tables.references.ACTOR
-import org.jooq.kotlin.coroutines.transactionCoroutineResult
+import org.jooq.kotlin.coroutines.transactionCoroutine
 import org.junit.After
 import org.junit.Test
 import reactor.core.publisher.Flux
@@ -101,7 +100,7 @@ class Demo13Reactive : AbstractDemo() {
     }
 
     suspend fun insertActorTransaction(): ActorRecord {
-        return ctx.transactionCoroutineResult(::insertActor)
+        return ctx.transactionCoroutine(::insertActor)
     }
 
     suspend fun insertActor(c: Configuration): ActorRecord = c.dsl()
