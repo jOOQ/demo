@@ -77,6 +77,8 @@ public class Demo07Parser extends AbstractDemo {
 
     @Test
     public void parseListener() {
+        // Feature available in the commercial editions only
+        /* [pro] */
         title("The jOOQ parser might not support all of your vendor specific syntax. In some cases, you can simply extend it");
 
         try {
@@ -98,5 +100,6 @@ public class Demo07Parser extends AbstractDemo {
         }));
 
         ctx.parser().parseSelect("select approx_avg(length) from film").fetch();
+        /* [/pro] */
     }
 }

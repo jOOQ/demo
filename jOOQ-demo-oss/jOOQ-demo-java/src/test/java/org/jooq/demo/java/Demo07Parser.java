@@ -77,26 +77,29 @@ public class Demo07Parser extends AbstractDemo {
 
     @Test
     public void parseListener() {
-        title("The jOOQ parser might not support all of your vendor specific syntax. In some cases, you can simply extend it");
+        // Feature available in the commercial editions only
 
-        try {
-            ctx.parser().parseSelect("select approx_avg(length) from film").fetch();
-        }
-        catch (ParserException e) {
-            e.printStackTrace();
-        }
 
-        title("Handle a few additional functions per dialect");
-        ctx.configuration().set(ParseListener.onParseField(c1 -> {
-            if (c1.parseFunctionNameIf("APPROX_SUM"))
-                return c1.parseParenthesised(c2 -> DSL.sum((Field) c2.parseField()));
-            else if (c1.parseFunctionNameIf("APPROX_AVG"))
-                return c1.parseParenthesised(c2 -> DSL.avg((Field) c2.parseField()));
-            // TODO: The rest
 
-            return null;
-        }));
 
-        ctx.parser().parseSelect("select approx_avg(length) from film").fetch();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }
