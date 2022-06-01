@@ -77,6 +77,8 @@ class Demo07Parser extends AbstractDemo {
 
   @Test
   def parseListener(): Unit = {
+    // Feature available in the commercial editions only
+    /* [pro] */
     title("The jOOQ parser might not support all of your vendor specific syntax. In some cases, you can simply extend it")
     try ctx.parser.parseSelect("select approx_avg(length) from film").fetch
     catch {
@@ -95,5 +97,6 @@ class Demo07Parser extends AbstractDemo {
         null
     ))
     ctx.parser.parseSelect("select approx_avg(length) from film").fetch
+    /* [/pro] */
   }
 }
