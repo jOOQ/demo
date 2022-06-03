@@ -350,7 +350,7 @@ class Demo01Querying : AbstractDemo() {
     @Test
     fun multisetConvenience() {
 
-        // This is a commercial only feature
+        // This is an EXPERIMENTAL commercial only feature
 
 //        title("one-to-many and many-to-many relationships can be projected more easily, this way")
 //        println(ctx
@@ -368,7 +368,7 @@ class Demo01Querying : AbstractDemo() {
     @Test
     fun rowConvenience() {
 
-        // This is a commercial only feature
+        // This is an EXPERIMENTAL commercial only feature
 
 //        title("to-one relationships can be projected more easily, this way")
 //        println(ctx
@@ -386,8 +386,8 @@ class Demo01Querying : AbstractDemo() {
 
     @Test
     fun existsConvenience() {
-        
-        // This is a commercial only feature
+
+        // This is an EXPERIMENTAL commercial only feature
 
 //        title("For each customer, show if they have rentals and/or payments")
 //        println(ctx

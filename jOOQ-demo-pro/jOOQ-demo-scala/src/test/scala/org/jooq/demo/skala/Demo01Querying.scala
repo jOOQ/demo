@@ -310,7 +310,7 @@ class Demo01Querying extends AbstractDemo {
   @Test
   def multisetConvenience(): Unit = {
 
-    // This is a commercial only feature
+    // This is an EXPERIMENTAL commercial only feature
     /* [pro] */
     title("one-to-many and many-to-many relationships can be projected more easily, this way")
     println(ctx
@@ -328,7 +328,7 @@ class Demo01Querying extends AbstractDemo {
   @Test
   def rowConvenience(): Unit = {
 
-    // This is a commercial only feature
+    // This is an EXPERIMENTAL commercial only feature
     /* [pro] */
     title("to-one relationships can be projected more easily, this way")
     println(ctx
@@ -347,7 +347,7 @@ class Demo01Querying extends AbstractDemo {
   @Test
   def existsConvenience(): Unit = {
 
-    // This is a commercial only feature
+    // This is an EXPERIMENTAL commercial only feature
     /* [pro] */
     title("For each customer, show if they have rentals and/or payments")
     println(ctx
