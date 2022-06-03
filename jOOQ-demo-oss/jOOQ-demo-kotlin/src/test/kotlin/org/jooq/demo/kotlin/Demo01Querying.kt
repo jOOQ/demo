@@ -12,7 +12,6 @@ import org.junit.Test
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.util.function.Function
 
 class Demo01Querying : AbstractDemo() {
 
@@ -356,8 +355,8 @@ class Demo01Querying : AbstractDemo() {
 //        println(ctx
 //            .select(
 //                FILM.TITLE,
-//                FILM.actorMultiset { a -> select(a.FIRST_NAME, a.LAST_NAME).from(a) },
-//                FILM.categoryMultiset { c -> select(c.NAME).from(c) })
+//                FILM.actorMultiset { select(it.FIRST_NAME, it.LAST_NAME).from(it) },
+//                FILM.categoryMultiset { select(it.NAME).from(it) })
 //            .from(FILM)
 //            .limit(5)
 //            .fetch()
@@ -375,8 +374,8 @@ class Demo01Querying : AbstractDemo() {
 //            .select(
 //                CUSTOMER.FIRST_NAME,
 //                CUSTOMER.LAST_NAME,
-//                CUSTOMER.addressRow { a -> select(a.POSTAL_CODE, a.CITY_ID).from(a) },
-//                CUSTOMER.storeRow { s -> select(s.STORE_ID, s.staff.FIRST_NAME, s.staff.LAST_NAME).from(s) })
+//                CUSTOMER.addressRow { select(it.POSTAL_CODE, it.CITY_ID).from(it) },
+//                CUSTOMER.storeRow { select(it.STORE_ID, it.staff.FIRST_NAME, it.staff.LAST_NAME).from(it) })
 //            .from(CUSTOMER)
 //            .limit(5)
 //            .fetch()
