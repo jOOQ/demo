@@ -177,24 +177,47 @@
                     <version>2.1.1</version>
                     <executions>
                         <execution>
+
+                            <!-- Start testcontainers before code generation -->
+                            <id>testcontainers-start</id>
                             <phase>generate-sources</phase>
                             <goals>
                                 <goal>execute</goal>
                             </goals>
+                            <configuration>
+                                <source>
+                                    db = new org.testcontainers.containers.PostgreSQLContainer("postgres:latest")
+                                            .withUsername("${db.username}")
+                                            .withDatabaseName("postgres")
+                                            .withPassword("${db.password}")
+
+                                    db.start()
+                                    project.properties.setProperty('db.url', db.getJdbcUrl())
+                                    project.properties.setProperty('testcontainers.containerId', db.getContainerId());
+                                    project.properties.setProperty('testcontainers.imageName', db.getDockerImageName());
+                                </source>
+                            </configuration>
+                        </execution>
+                        <execution>
+
+                            <!-- Stop testcontainers after tests have completed -->
+                            <id>testcontainers-stop</id>
+                            <phase>post-integration-test</phase>
+                            <goals>
+                                <goal>execute</goal>
+                            </goals>
+                            <configuration>
+                                <source>
+                                    containerId = "${testcontainers.containerId}"
+                                    imageName = "${testcontainers.imageName}"
+                                    println("Stopping testcontainer $containerId - $imageName")
+                                    org.testcontainers.utility.ResourceReaper
+                                            .instance()
+                                            .stopAndRemoveContainer(containerId, imageName);
+                                </source>
+                            </configuration>
                         </execution>
                     </executions>
-
-                    <configuration>
-                        <source>
-                            db = new org.testcontainers.containers.PostgreSQLContainer("postgres:latest")
-                                    .withUsername("${db.username}")
-                                    .withDatabaseName("postgres")
-                                    .withPassword("${db.password}")
-
-                            db.start()
-                            project.properties.setProperty('db.url', db.getJdbcUrl())
-                        </source>
-                    </configuration>
 
                     <dependencies>
                         <dependency>
