@@ -9,7 +9,6 @@ import java.util.function.Function
 
 import kotlin.collections.List
 
-import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
 import org.jooq.Identity
@@ -17,23 +16,17 @@ import org.jooq.Index
 import org.jooq.Name
 import org.jooq.Record
 import org.jooq.Records
-import org.jooq.Result
 import org.jooq.Row4
 import org.jooq.Schema
 import org.jooq.SelectField
 import org.jooq.Table
 import org.jooq.TableField
-import org.jooq.TableLike
 import org.jooq.TableOptions
 import org.jooq.UniqueKey
 import org.jooq.demo.kotlin.db.Public
 import org.jooq.demo.kotlin.db.indexes.IDX_ACTOR_LAST_NAME
 import org.jooq.demo.kotlin.db.keys.ACTOR_PKEY
-import org.jooq.demo.kotlin.db.keys.FILM_ACTOR__FILM_ACTOR_ACTOR_ID_FKEY
-import org.jooq.demo.kotlin.db.keys.FILM_ACTOR__FILM_ACTOR_FILM_ID_FKEY
 import org.jooq.demo.kotlin.db.tables.records.ActorRecord
-import org.jooq.demo.kotlin.db.tables.records.FilmActorRecord
-import org.jooq.demo.kotlin.db.tables.records.FilmRecord
 import org.jooq.impl.DSL
 import org.jooq.impl.Internal
 import org.jooq.impl.SQLDataType
@@ -116,56 +109,6 @@ open class Actor(
     override fun getIndexes(): List<Index> = listOf(IDX_ACTOR_LAST_NAME)
     override fun getIdentity(): Identity<ActorRecord, Long?> = super.getIdentity() as Identity<ActorRecord, Long?>
     override fun getPrimaryKey(): UniqueKey<ActorRecord> = ACTOR_PKEY
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.film_actor</code> one-to-many child table.
-     */
-    fun filmActorExists(): Condition = filmActorExists { it }
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.film_actor</code> one-to-many child table.
-     */
-    fun <O: Record>filmActorExists(subquery: (FilmActor) -> TableLike<O>): Condition = oneToManyExists(FILM_ACTOR__FILM_ACTOR_ACTOR_ID_FKEY, { subquery(it as FilmActor) })
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.film</code> many-to-many child table.
-     */
-    fun filmExists(): Condition = filmExists { it }
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.film</code> many-to-many child table.
-     */
-    fun <O: Record>filmExists(subquery: (Film) -> TableLike<O>): Condition = manyToManyExists(FILM_ACTOR__FILM_ACTOR_ACTOR_ID_FKEY, FILM_ACTOR__FILM_ACTOR_FILM_ID_FKEY, { subquery(it as Film) })
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.film_actor</code> one-to-many child
-     * table.
-     */
-    fun filmActorMultiset(): Field<Result<FilmActorRecord>> = filmActorMultiset { it }
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.film_actor</code> one-to-many child
-     * table.
-     */
-    fun <O: Record>filmActorMultiset(subquery: (FilmActor) -> TableLike<O>): Field<Result<O>> = oneToManyMultiset(FILM_ACTOR__FILM_ACTOR_ACTOR_ID_FKEY, { subquery(it as FilmActor) })
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.film</code> many-to-many child table.
-     */
-    fun filmMultiset(): Field<Result<FilmRecord>> = filmMultiset { it }
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.film</code> many-to-many child table.
-     */
-    fun <O: Record>filmMultiset(subquery: (Film) -> TableLike<O>): Field<Result<O>> = manyToManyMultiset(FILM_ACTOR__FILM_ACTOR_ACTOR_ID_FKEY, FILM_ACTOR__FILM_ACTOR_FILM_ID_FKEY, { subquery(it as Film) })
     override fun `as`(alias: String): Actor = Actor(DSL.name(alias), this)
     override fun `as`(alias: Name): Actor = Actor(alias, this)
     override fun `as`(alias: Table<*>): Actor = Actor(alias.getQualifiedName(), this)

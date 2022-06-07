@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
-import org.jooq.Condition;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Function4;
@@ -18,22 +17,17 @@ import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Records;
-import org.jooq.Result;
 import org.jooq.Row4;
 import org.jooq.Schema;
 import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
-import org.jooq.TableLike;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.demo.java.db.Indexes;
 import org.jooq.demo.java.db.Keys;
 import org.jooq.demo.java.db.Public;
-import org.jooq.demo.java.db.tables.records.FilmRecord;
 import org.jooq.demo.java.db.tables.records.InventoryRecord;
-import org.jooq.demo.java.db.tables.records.RentalRecord;
-import org.jooq.demo.java.db.tables.records.StoreRecord;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
@@ -159,70 +153,6 @@ public class Inventory extends TableImpl<InventoryRecord> {
             _store = new Store(this, Keys.INVENTORY__INVENTORY_STORE_ID_FKEY);
 
         return _store;
-    }
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.rental</code> one-to-many child table.
-     */
-    public Condition rentalExists() {
-        return rentalExists(Function.identity());
-    }
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.rental</code> one-to-many child table.
-     */
-    public <O extends Record> Condition rentalExists(Function<? super Rental, ? extends TableLike<O>> subquery) {
-        return oneToManyExists(Keys.RENTAL__RENTAL_INVENTORY_ID_FKEY, t -> subquery.apply((Rental) t));
-    }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.inventory</code> to-one parent table.
-     */
-    public Field<FilmRecord> filmRow() {
-        return filmRow(Function.identity());
-    }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.inventory</code> to-one parent table.
-     */
-    public <O extends Record> Field<O> filmRow(Function<? super Film, ? extends TableLike<O>> subquery) {
-        return toOneRow(Keys.INVENTORY__INVENTORY_FILM_ID_FKEY, t -> subquery.apply((Film) t));
-    }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.inventory</code> to-one parent table.
-     */
-    public Field<StoreRecord> storeRow() {
-        return storeRow(Function.identity());
-    }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.inventory</code> to-one parent table.
-     */
-    public <O extends Record> Field<O> storeRow(Function<? super Store, ? extends TableLike<O>> subquery) {
-        return toOneRow(Keys.INVENTORY__INVENTORY_STORE_ID_FKEY, t -> subquery.apply((Store) t));
-    }
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.rental</code> one-to-many child table.
-     */
-    public Field<Result<RentalRecord>> rentalMultiset() {
-        return rentalMultiset(Function.identity());
-    }
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.rental</code> one-to-many child table.
-     */
-    public <O extends Record> Field<Result<O>> rentalMultiset(Function<? super Rental, ? extends TableLike<O>> subquery) {
-        return oneToManyMultiset(Keys.RENTAL__RENTAL_INVENTORY_ID_FKEY, t -> subquery.apply((Rental) t));
     }
 
     @Override

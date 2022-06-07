@@ -10,7 +10,6 @@ import java.util.function.Function
 
 import kotlin.collections.List
 
-import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
 import org.jooq.Identity
@@ -18,13 +17,11 @@ import org.jooq.Index
 import org.jooq.Name
 import org.jooq.Record
 import org.jooq.Records
-import org.jooq.Result
 import org.jooq.Row10
 import org.jooq.Schema
 import org.jooq.SelectField
 import org.jooq.Table
 import org.jooq.TableField
-import org.jooq.TableLike
 import org.jooq.TableOptions
 import org.jooq.UniqueKey
 import org.jooq.demo.kotlin.db.Public
@@ -34,25 +31,7 @@ import org.jooq.demo.kotlin.db.indexes.IDX_LAST_NAME
 import org.jooq.demo.kotlin.db.keys.CUSTOMER_PKEY
 import org.jooq.demo.kotlin.db.keys.CUSTOMER__CUSTOMER_ADDRESS_ID_FKEY
 import org.jooq.demo.kotlin.db.keys.CUSTOMER__CUSTOMER_STORE_ID_FKEY
-import org.jooq.demo.kotlin.db.keys.PAYMENT_P2007_01__PAYMENT_P2007_01_CUSTOMER_ID_FKEY
-import org.jooq.demo.kotlin.db.keys.PAYMENT_P2007_02__PAYMENT_P2007_02_CUSTOMER_ID_FKEY
-import org.jooq.demo.kotlin.db.keys.PAYMENT_P2007_03__PAYMENT_P2007_03_CUSTOMER_ID_FKEY
-import org.jooq.demo.kotlin.db.keys.PAYMENT_P2007_04__PAYMENT_P2007_04_CUSTOMER_ID_FKEY
-import org.jooq.demo.kotlin.db.keys.PAYMENT_P2007_05__PAYMENT_P2007_05_CUSTOMER_ID_FKEY
-import org.jooq.demo.kotlin.db.keys.PAYMENT_P2007_06__PAYMENT_P2007_06_CUSTOMER_ID_FKEY
-import org.jooq.demo.kotlin.db.keys.PAYMENT__PAYMENT_CUSTOMER_ID_FKEY
-import org.jooq.demo.kotlin.db.keys.RENTAL__RENTAL_CUSTOMER_ID_FKEY
-import org.jooq.demo.kotlin.db.tables.records.AddressRecord
 import org.jooq.demo.kotlin.db.tables.records.CustomerRecord
-import org.jooq.demo.kotlin.db.tables.records.PaymentP2007_01Record
-import org.jooq.demo.kotlin.db.tables.records.PaymentP2007_02Record
-import org.jooq.demo.kotlin.db.tables.records.PaymentP2007_03Record
-import org.jooq.demo.kotlin.db.tables.records.PaymentP2007_04Record
-import org.jooq.demo.kotlin.db.tables.records.PaymentP2007_05Record
-import org.jooq.demo.kotlin.db.tables.records.PaymentP2007_06Record
-import org.jooq.demo.kotlin.db.tables.records.PaymentRecord
-import org.jooq.demo.kotlin.db.tables.records.RentalRecord
-import org.jooq.demo.kotlin.db.tables.records.StoreRecord
 import org.jooq.impl.DSL
 import org.jooq.impl.Internal
 import org.jooq.impl.SQLDataType
@@ -195,234 +174,6 @@ open class Customer(
 
     val address: Address
         get(): Address = address()
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.payment</code> one-to-many child table.
-     */
-    fun paymentExists(): Condition = paymentExists { it }
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.payment</code> one-to-many child table.
-     */
-    fun <O: Record>paymentExists(subquery: (Payment) -> TableLike<O>): Condition = oneToManyExists(PAYMENT__PAYMENT_CUSTOMER_ID_FKEY, { subquery(it as Payment) })
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.payment_p2007_01</code> one-to-many child table.
-     */
-    fun paymentP2007_01Exists(): Condition = paymentP2007_01Exists { it }
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.payment_p2007_01</code> one-to-many child table.
-     */
-    fun <O: Record>paymentP2007_01Exists(subquery: (PaymentP2007_01) -> TableLike<O>): Condition = oneToManyExists(PAYMENT_P2007_01__PAYMENT_P2007_01_CUSTOMER_ID_FKEY, { subquery(it as PaymentP2007_01) })
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.payment_p2007_02</code> one-to-many child table.
-     */
-    fun paymentP2007_02Exists(): Condition = paymentP2007_02Exists { it }
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.payment_p2007_02</code> one-to-many child table.
-     */
-    fun <O: Record>paymentP2007_02Exists(subquery: (PaymentP2007_02) -> TableLike<O>): Condition = oneToManyExists(PAYMENT_P2007_02__PAYMENT_P2007_02_CUSTOMER_ID_FKEY, { subquery(it as PaymentP2007_02) })
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.payment_p2007_03</code> one-to-many child table.
-     */
-    fun paymentP2007_03Exists(): Condition = paymentP2007_03Exists { it }
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.payment_p2007_03</code> one-to-many child table.
-     */
-    fun <O: Record>paymentP2007_03Exists(subquery: (PaymentP2007_03) -> TableLike<O>): Condition = oneToManyExists(PAYMENT_P2007_03__PAYMENT_P2007_03_CUSTOMER_ID_FKEY, { subquery(it as PaymentP2007_03) })
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.payment_p2007_04</code> one-to-many child table.
-     */
-    fun paymentP2007_04Exists(): Condition = paymentP2007_04Exists { it }
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.payment_p2007_04</code> one-to-many child table.
-     */
-    fun <O: Record>paymentP2007_04Exists(subquery: (PaymentP2007_04) -> TableLike<O>): Condition = oneToManyExists(PAYMENT_P2007_04__PAYMENT_P2007_04_CUSTOMER_ID_FKEY, { subquery(it as PaymentP2007_04) })
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.payment_p2007_05</code> one-to-many child table.
-     */
-    fun paymentP2007_05Exists(): Condition = paymentP2007_05Exists { it }
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.payment_p2007_05</code> one-to-many child table.
-     */
-    fun <O: Record>paymentP2007_05Exists(subquery: (PaymentP2007_05) -> TableLike<O>): Condition = oneToManyExists(PAYMENT_P2007_05__PAYMENT_P2007_05_CUSTOMER_ID_FKEY, { subquery(it as PaymentP2007_05) })
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.payment_p2007_06</code> one-to-many child table.
-     */
-    fun paymentP2007_06Exists(): Condition = paymentP2007_06Exists { it }
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.payment_p2007_06</code> one-to-many child table.
-     */
-    fun <O: Record>paymentP2007_06Exists(subquery: (PaymentP2007_06) -> TableLike<O>): Condition = oneToManyExists(PAYMENT_P2007_06__PAYMENT_P2007_06_CUSTOMER_ID_FKEY, { subquery(it as PaymentP2007_06) })
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.rental</code> one-to-many child table.
-     */
-    fun rentalExists(): Condition = rentalExists { it }
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.rental</code> one-to-many child table.
-     */
-    fun <O: Record>rentalExists(subquery: (Rental) -> TableLike<O>): Condition = oneToManyExists(RENTAL__RENTAL_CUSTOMER_ID_FKEY, { subquery(it as Rental) })
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.customer</code> to-one parent table.
-     */
-    fun storeRow(): Field<StoreRecord> = storeRow { it }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.customer</code> to-one parent table.
-     */
-    fun <O : Record> storeRow(subquery: (Store) -> TableLike<O>): Field<O> = toOneRow(CUSTOMER__CUSTOMER_STORE_ID_FKEY, { subquery(it as Store) })
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.customer</code> to-one parent table.
-     */
-    fun addressRow(): Field<AddressRecord> = addressRow { it }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.customer</code> to-one parent table.
-     */
-    fun <O : Record> addressRow(subquery: (Address) -> TableLike<O>): Field<O> = toOneRow(CUSTOMER__CUSTOMER_ADDRESS_ID_FKEY, { subquery(it as Address) })
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.payment</code> one-to-many child table.
-     */
-    fun paymentMultiset(): Field<Result<PaymentRecord>> = paymentMultiset { it }
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.payment</code> one-to-many child table.
-     */
-    fun <O: Record>paymentMultiset(subquery: (Payment) -> TableLike<O>): Field<Result<O>> = oneToManyMultiset(PAYMENT__PAYMENT_CUSTOMER_ID_FKEY, { subquery(it as Payment) })
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.payment_p2007_01</code> one-to-many child
-     * table.
-     */
-    fun paymentP2007_01Multiset(): Field<Result<PaymentP2007_01Record>> = paymentP2007_01Multiset { it }
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.payment_p2007_01</code> one-to-many child
-     * table.
-     */
-    fun <O: Record>paymentP2007_01Multiset(subquery: (PaymentP2007_01) -> TableLike<O>): Field<Result<O>> = oneToManyMultiset(PAYMENT_P2007_01__PAYMENT_P2007_01_CUSTOMER_ID_FKEY, { subquery(it as PaymentP2007_01) })
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.payment_p2007_02</code> one-to-many child
-     * table.
-     */
-    fun paymentP2007_02Multiset(): Field<Result<PaymentP2007_02Record>> = paymentP2007_02Multiset { it }
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.payment_p2007_02</code> one-to-many child
-     * table.
-     */
-    fun <O: Record>paymentP2007_02Multiset(subquery: (PaymentP2007_02) -> TableLike<O>): Field<Result<O>> = oneToManyMultiset(PAYMENT_P2007_02__PAYMENT_P2007_02_CUSTOMER_ID_FKEY, { subquery(it as PaymentP2007_02) })
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.payment_p2007_03</code> one-to-many child
-     * table.
-     */
-    fun paymentP2007_03Multiset(): Field<Result<PaymentP2007_03Record>> = paymentP2007_03Multiset { it }
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.payment_p2007_03</code> one-to-many child
-     * table.
-     */
-    fun <O: Record>paymentP2007_03Multiset(subquery: (PaymentP2007_03) -> TableLike<O>): Field<Result<O>> = oneToManyMultiset(PAYMENT_P2007_03__PAYMENT_P2007_03_CUSTOMER_ID_FKEY, { subquery(it as PaymentP2007_03) })
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.payment_p2007_04</code> one-to-many child
-     * table.
-     */
-    fun paymentP2007_04Multiset(): Field<Result<PaymentP2007_04Record>> = paymentP2007_04Multiset { it }
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.payment_p2007_04</code> one-to-many child
-     * table.
-     */
-    fun <O: Record>paymentP2007_04Multiset(subquery: (PaymentP2007_04) -> TableLike<O>): Field<Result<O>> = oneToManyMultiset(PAYMENT_P2007_04__PAYMENT_P2007_04_CUSTOMER_ID_FKEY, { subquery(it as PaymentP2007_04) })
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.payment_p2007_05</code> one-to-many child
-     * table.
-     */
-    fun paymentP2007_05Multiset(): Field<Result<PaymentP2007_05Record>> = paymentP2007_05Multiset { it }
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.payment_p2007_05</code> one-to-many child
-     * table.
-     */
-    fun <O: Record>paymentP2007_05Multiset(subquery: (PaymentP2007_05) -> TableLike<O>): Field<Result<O>> = oneToManyMultiset(PAYMENT_P2007_05__PAYMENT_P2007_05_CUSTOMER_ID_FKEY, { subquery(it as PaymentP2007_05) })
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.payment_p2007_06</code> one-to-many child
-     * table.
-     */
-    fun paymentP2007_06Multiset(): Field<Result<PaymentP2007_06Record>> = paymentP2007_06Multiset { it }
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.payment_p2007_06</code> one-to-many child
-     * table.
-     */
-    fun <O: Record>paymentP2007_06Multiset(subquery: (PaymentP2007_06) -> TableLike<O>): Field<Result<O>> = oneToManyMultiset(PAYMENT_P2007_06__PAYMENT_P2007_06_CUSTOMER_ID_FKEY, { subquery(it as PaymentP2007_06) })
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.rental</code> one-to-many child table.
-     */
-    fun rentalMultiset(): Field<Result<RentalRecord>> = rentalMultiset { it }
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.rental</code> one-to-many child table.
-     */
-    fun <O: Record>rentalMultiset(subquery: (Rental) -> TableLike<O>): Field<Result<O>> = oneToManyMultiset(RENTAL__RENTAL_CUSTOMER_ID_FKEY, { subquery(it as Rental) })
     override fun `as`(alias: String): Customer = Customer(DSL.name(alias), this)
     override fun `as`(alias: Name): Customer = Customer(alias, this)
     override fun `as`(alias: Table<*>): Customer = Customer(alias.getQualifiedName(), this)

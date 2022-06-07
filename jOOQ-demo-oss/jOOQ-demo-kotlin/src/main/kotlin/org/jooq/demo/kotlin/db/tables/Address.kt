@@ -9,7 +9,6 @@ import java.util.function.Function
 
 import kotlin.collections.List
 
-import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
 import org.jooq.Identity
@@ -17,27 +16,18 @@ import org.jooq.Index
 import org.jooq.Name
 import org.jooq.Record
 import org.jooq.Records
-import org.jooq.Result
 import org.jooq.Row8
 import org.jooq.Schema
 import org.jooq.SelectField
 import org.jooq.Table
 import org.jooq.TableField
-import org.jooq.TableLike
 import org.jooq.TableOptions
 import org.jooq.UniqueKey
 import org.jooq.demo.kotlin.db.Public
 import org.jooq.demo.kotlin.db.indexes.IDX_FK_CITY_ID
 import org.jooq.demo.kotlin.db.keys.ADDRESS_PKEY
 import org.jooq.demo.kotlin.db.keys.ADDRESS__ADDRESS_CITY_ID_FKEY
-import org.jooq.demo.kotlin.db.keys.CUSTOMER__CUSTOMER_ADDRESS_ID_FKEY
-import org.jooq.demo.kotlin.db.keys.STAFF__STAFF_ADDRESS_ID_FKEY
-import org.jooq.demo.kotlin.db.keys.STORE__STORE_ADDRESS_ID_FKEY
 import org.jooq.demo.kotlin.db.tables.records.AddressRecord
-import org.jooq.demo.kotlin.db.tables.records.CityRecord
-import org.jooq.demo.kotlin.db.tables.records.CustomerRecord
-import org.jooq.demo.kotlin.db.tables.records.StaffRecord
-import org.jooq.demo.kotlin.db.tables.records.StoreRecord
 import org.jooq.impl.DSL
 import org.jooq.impl.Internal
 import org.jooq.impl.SQLDataType
@@ -156,90 +146,6 @@ open class Address(
 
     val city: City
         get(): City = city()
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.customer</code> one-to-many child table.
-     */
-    fun customerExists(): Condition = customerExists { it }
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.customer</code> one-to-many child table.
-     */
-    fun <O: Record>customerExists(subquery: (Customer) -> TableLike<O>): Condition = oneToManyExists(CUSTOMER__CUSTOMER_ADDRESS_ID_FKEY, { subquery(it as Customer) })
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.staff</code> one-to-many child table.
-     */
-    fun staffExists(): Condition = staffExists { it }
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.staff</code> one-to-many child table.
-     */
-    fun <O: Record>staffExists(subquery: (Staff) -> TableLike<O>): Condition = oneToManyExists(STAFF__STAFF_ADDRESS_ID_FKEY, { subquery(it as Staff) })
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.store</code> one-to-many child table.
-     */
-    fun storeExists(): Condition = storeExists { it }
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.store</code> one-to-many child table.
-     */
-    fun <O: Record>storeExists(subquery: (Store) -> TableLike<O>): Condition = oneToManyExists(STORE__STORE_ADDRESS_ID_FKEY, { subquery(it as Store) })
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.address</code> to-one parent table.
-     */
-    fun cityRow(): Field<CityRecord> = cityRow { it }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.address</code> to-one parent table.
-     */
-    fun <O : Record> cityRow(subquery: (City) -> TableLike<O>): Field<O> = toOneRow(ADDRESS__ADDRESS_CITY_ID_FKEY, { subquery(it as City) })
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.customer</code> one-to-many child table.
-     */
-    fun customerMultiset(): Field<Result<CustomerRecord>> = customerMultiset { it }
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.customer</code> one-to-many child table.
-     */
-    fun <O: Record>customerMultiset(subquery: (Customer) -> TableLike<O>): Field<Result<O>> = oneToManyMultiset(CUSTOMER__CUSTOMER_ADDRESS_ID_FKEY, { subquery(it as Customer) })
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.staff</code> one-to-many child table.
-     */
-    fun staffMultiset(): Field<Result<StaffRecord>> = staffMultiset { it }
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.staff</code> one-to-many child table.
-     */
-    fun <O: Record>staffMultiset(subquery: (Staff) -> TableLike<O>): Field<Result<O>> = oneToManyMultiset(STAFF__STAFF_ADDRESS_ID_FKEY, { subquery(it as Staff) })
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.store</code> one-to-many child table.
-     */
-    fun storeMultiset(): Field<Result<StoreRecord>> = storeMultiset { it }
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.store</code> one-to-many child table.
-     */
-    fun <O: Record>storeMultiset(subquery: (Store) -> TableLike<O>): Field<Result<O>> = oneToManyMultiset(STORE__STORE_ADDRESS_ID_FKEY, { subquery(it as Store) })
     override fun `as`(alias: String): Address = Address(DSL.name(alias), this)
     override fun `as`(alias: Name): Address = Address(alias, this)
     override fun `as`(alias: Table<*>): Address = Address(alias.getQualifiedName(), this)

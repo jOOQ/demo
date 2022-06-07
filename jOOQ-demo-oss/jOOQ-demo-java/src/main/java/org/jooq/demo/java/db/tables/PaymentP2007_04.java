@@ -24,15 +24,11 @@ import org.jooq.Schema;
 import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
-import org.jooq.TableLike;
 import org.jooq.TableOptions;
 import org.jooq.demo.java.db.Indexes;
 import org.jooq.demo.java.db.Keys;
 import org.jooq.demo.java.db.Public;
-import org.jooq.demo.java.db.tables.records.CustomerRecord;
 import org.jooq.demo.java.db.tables.records.PaymentP2007_04Record;
-import org.jooq.demo.java.db.tables.records.RentalRecord;
-import org.jooq.demo.java.db.tables.records.StaffRecord;
 import org.jooq.impl.DSL;
 import org.jooq.impl.Internal;
 import org.jooq.impl.SQLDataType;
@@ -175,54 +171,6 @@ public class PaymentP2007_04 extends TableImpl<PaymentP2007_04Record> {
             _rental = new Rental(this, Keys.PAYMENT_P2007_04__PAYMENT_P2007_04_RENTAL_ID_FKEY);
 
         return _rental;
-    }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.payment_p2007_04</code> to-one parent table.
-     */
-    public Field<CustomerRecord> customerRow() {
-        return customerRow(Function.identity());
-    }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.payment_p2007_04</code> to-one parent table.
-     */
-    public <O extends Record> Field<O> customerRow(Function<? super Customer, ? extends TableLike<O>> subquery) {
-        return toOneRow(Keys.PAYMENT_P2007_04__PAYMENT_P2007_04_CUSTOMER_ID_FKEY, t -> subquery.apply((Customer) t));
-    }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.payment_p2007_04</code> to-one parent table.
-     */
-    public Field<StaffRecord> staffRow() {
-        return staffRow(Function.identity());
-    }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.payment_p2007_04</code> to-one parent table.
-     */
-    public <O extends Record> Field<O> staffRow(Function<? super Staff, ? extends TableLike<O>> subquery) {
-        return toOneRow(Keys.PAYMENT_P2007_04__PAYMENT_P2007_04_STAFF_ID_FKEY, t -> subquery.apply((Staff) t));
-    }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.payment_p2007_04</code> to-one parent table.
-     */
-    public Field<RentalRecord> rentalRow() {
-        return rentalRow(Function.identity());
-    }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.payment_p2007_04</code> to-one parent table.
-     */
-    public <O extends Record> Field<O> rentalRow(Function<? super Rental, ? extends TableLike<O>> subquery) {
-        return toOneRow(Keys.PAYMENT_P2007_04__PAYMENT_P2007_04_RENTAL_ID_FKEY, t -> subquery.apply((Rental) t));
     }
 
     @Override

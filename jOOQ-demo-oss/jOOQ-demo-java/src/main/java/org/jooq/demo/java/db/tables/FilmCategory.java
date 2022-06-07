@@ -20,14 +20,11 @@ import org.jooq.Schema;
 import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
-import org.jooq.TableLike;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.demo.java.db.Keys;
 import org.jooq.demo.java.db.Public;
-import org.jooq.demo.java.db.tables.records.CategoryRecord;
 import org.jooq.demo.java.db.tables.records.FilmCategoryRecord;
-import org.jooq.demo.java.db.tables.records.FilmRecord;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
@@ -138,38 +135,6 @@ public class FilmCategory extends TableImpl<FilmCategoryRecord> {
             _category = new Category(this, Keys.FILM_CATEGORY__FILM_CATEGORY_CATEGORY_ID_FKEY);
 
         return _category;
-    }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.film_category</code> to-one parent table.
-     */
-    public Field<FilmRecord> filmRow() {
-        return filmRow(Function.identity());
-    }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.film_category</code> to-one parent table.
-     */
-    public <O extends Record> Field<O> filmRow(Function<? super Film, ? extends TableLike<O>> subquery) {
-        return toOneRow(Keys.FILM_CATEGORY__FILM_CATEGORY_FILM_ID_FKEY, t -> subquery.apply((Film) t));
-    }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.film_category</code> to-one parent table.
-     */
-    public Field<CategoryRecord> categoryRow() {
-        return categoryRow(Function.identity());
-    }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.film_category</code> to-one parent table.
-     */
-    public <O extends Record> Field<O> categoryRow(Function<? super Category, ? extends TableLike<O>> subquery) {
-        return toOneRow(Keys.FILM_CATEGORY__FILM_CATEGORY_CATEGORY_ID_FKEY, t -> subquery.apply((Category) t));
     }
 
     @Override

@@ -10,24 +10,20 @@ import java.lang.String
 import java.time.LocalDateTime
 import java.util.function.Function
 
-import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
 import org.jooq.Identity
 import org.jooq.Name
 import org.jooq.Record
-import org.jooq.Result
 import org.jooq.Row3
 import org.jooq.Schema
 import org.jooq.SelectField
 import org.jooq.Table
 import org.jooq.TableField
-import org.jooq.TableLike
 import org.jooq.TableOptions
 import org.jooq.UniqueKey
 import org.jooq.demo.skala.db.Keys
 import org.jooq.demo.skala.db.Public
-import org.jooq.demo.skala.db.tables.records.CityRecord
 import org.jooq.demo.skala.db.tables.records.CountryRecord
 import org.jooq.impl.DSL
 import org.jooq.impl.Internal
@@ -110,30 +106,6 @@ extends TableImpl[CountryRecord](
   override def getIdentity: Identity[CountryRecord, Long] = super.getIdentity.asInstanceOf[ Identity[CountryRecord, Long] ]
 
   override def getPrimaryKey: UniqueKey[CountryRecord] = Keys.COUNTRY_PKEY
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.city</code> one-to-many child table.
-   */
-  def cityExists(): Condition = cityExists(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.city</code> one-to-many child table.
-   */
-  def cityExists[O <: Record](subquery: (City) => TableLike[O]): Condition = oneToManyExists(Keys.CITY__CITY_COUNTRY_ID_FKEY, (t: Table[CityRecord]) => subquery(t.asInstanceOf[City]))
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.city</code> one-to-many child table.
-   */
-  def cityMultiset(): Field[Result[CityRecord]] = cityMultiset(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.city</code> one-to-many child table.
-   */
-  def cityMultiset[O <: Record](subquery: (City) => TableLike[O]): Field[Result[O]] = oneToManyMultiset(Keys.CITY__CITY_COUNTRY_ID_FKEY, (t: Table[CityRecord]) => subquery(t.asInstanceOf[City]))
   override def as(alias: String): Country = new Country(DSL.name(alias), this)
   override def as(alias: Name): Country = new Country(alias, this)
   override def as(alias: Table[_]): Country = new Country(alias.getQualifiedName(), this)

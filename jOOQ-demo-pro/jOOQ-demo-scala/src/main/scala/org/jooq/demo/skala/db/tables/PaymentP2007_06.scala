@@ -25,15 +25,11 @@ import org.jooq.Schema
 import org.jooq.SelectField
 import org.jooq.Table
 import org.jooq.TableField
-import org.jooq.TableLike
 import org.jooq.TableOptions
 import org.jooq.demo.skala.db.Indexes
 import org.jooq.demo.skala.db.Keys
 import org.jooq.demo.skala.db.Public
-import org.jooq.demo.skala.db.tables.records.CustomerRecord
 import org.jooq.demo.skala.db.tables.records.PaymentP2007_06Record
-import org.jooq.demo.skala.db.tables.records.RentalRecord
-import org.jooq.demo.skala.db.tables.records.StaffRecord
 import org.jooq.impl.DSL
 import org.jooq.impl.Internal
 import org.jooq.impl.SQLDataType
@@ -147,42 +143,6 @@ extends TableImpl[PaymentP2007_06Record](
    * Get the implicit join path to the <code>public.rental</code> table.
    */
   lazy val rental: Rental = { new Rental(this, Keys.PAYMENT_P2007_06__PAYMENT_P2007_06_RENTAL_ID_FKEY) }
-
-  /**
-   * A convenience constructor for correlated <code>ROW</code>s expressions to
-   * the <code>public.payment_p2007_06</code> to-one parent table.
-   */
-  def customerRow(): Field[CustomerRecord] = customerRow(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>ROW</code>s expressions to
-   * the <code>public.payment_p2007_06</code> to-one parent table.
-   */
-  def customerRow[O <: Record](subquery: (Customer) => TableLike[O]): Field[O] = toOneRow(Keys.PAYMENT_P2007_06__PAYMENT_P2007_06_CUSTOMER_ID_FKEY, (t: Table[CustomerRecord]) => subquery(t.asInstanceOf[Customer]))
-
-  /**
-   * A convenience constructor for correlated <code>ROW</code>s expressions to
-   * the <code>public.payment_p2007_06</code> to-one parent table.
-   */
-  def staffRow(): Field[StaffRecord] = staffRow(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>ROW</code>s expressions to
-   * the <code>public.payment_p2007_06</code> to-one parent table.
-   */
-  def staffRow[O <: Record](subquery: (Staff) => TableLike[O]): Field[O] = toOneRow(Keys.PAYMENT_P2007_06__PAYMENT_P2007_06_STAFF_ID_FKEY, (t: Table[StaffRecord]) => subquery(t.asInstanceOf[Staff]))
-
-  /**
-   * A convenience constructor for correlated <code>ROW</code>s expressions to
-   * the <code>public.payment_p2007_06</code> to-one parent table.
-   */
-  def rentalRow(): Field[RentalRecord] = rentalRow(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>ROW</code>s expressions to
-   * the <code>public.payment_p2007_06</code> to-one parent table.
-   */
-  def rentalRow[O <: Record](subquery: (Rental) => TableLike[O]): Field[O] = toOneRow(Keys.PAYMENT_P2007_06__PAYMENT_P2007_06_RENTAL_ID_FKEY, (t: Table[RentalRecord]) => subquery(t.asInstanceOf[Rental]))
   override def getChecks: List[ Check[PaymentP2007_06Record] ] = Arrays.asList[ Check[PaymentP2007_06Record] ](
     Internal.createCheck(this, DSL.name("payment_p2007_06_payment_date_check"), "(((payment_date >= '2007-06-01 00:00:00'::timestamp without time zone) AND (payment_date < '2007-07-01 00:00:00'::timestamp without time zone)))", true)
   )

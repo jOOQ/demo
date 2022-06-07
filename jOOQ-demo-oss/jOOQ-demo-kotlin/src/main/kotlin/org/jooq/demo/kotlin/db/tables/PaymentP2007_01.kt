@@ -23,7 +23,6 @@ import org.jooq.Schema
 import org.jooq.SelectField
 import org.jooq.Table
 import org.jooq.TableField
-import org.jooq.TableLike
 import org.jooq.TableOptions
 import org.jooq.demo.kotlin.db.Public
 import org.jooq.demo.kotlin.db.indexes.IDX_FK_PAYMENT_P2007_01_CUSTOMER_ID
@@ -31,10 +30,7 @@ import org.jooq.demo.kotlin.db.indexes.IDX_FK_PAYMENT_P2007_01_STAFF_ID
 import org.jooq.demo.kotlin.db.keys.PAYMENT_P2007_01__PAYMENT_P2007_01_CUSTOMER_ID_FKEY
 import org.jooq.demo.kotlin.db.keys.PAYMENT_P2007_01__PAYMENT_P2007_01_RENTAL_ID_FKEY
 import org.jooq.demo.kotlin.db.keys.PAYMENT_P2007_01__PAYMENT_P2007_01_STAFF_ID_FKEY
-import org.jooq.demo.kotlin.db.tables.records.CustomerRecord
 import org.jooq.demo.kotlin.db.tables.records.PaymentP2007_01Record
-import org.jooq.demo.kotlin.db.tables.records.RentalRecord
-import org.jooq.demo.kotlin.db.tables.records.StaffRecord
 import org.jooq.impl.DSL
 import org.jooq.impl.Internal
 import org.jooq.impl.SQLDataType
@@ -170,42 +166,6 @@ open class PaymentP2007_01(
 
     val rental: Rental
         get(): Rental = rental()
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.payment_p2007_01</code> to-one parent table.
-     */
-    fun customerRow(): Field<CustomerRecord> = customerRow { it }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.payment_p2007_01</code> to-one parent table.
-     */
-    fun <O : Record> customerRow(subquery: (Customer) -> TableLike<O>): Field<O> = toOneRow(PAYMENT_P2007_01__PAYMENT_P2007_01_CUSTOMER_ID_FKEY, { subquery(it as Customer) })
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.payment_p2007_01</code> to-one parent table.
-     */
-    fun staffRow(): Field<StaffRecord> = staffRow { it }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.payment_p2007_01</code> to-one parent table.
-     */
-    fun <O : Record> staffRow(subquery: (Staff) -> TableLike<O>): Field<O> = toOneRow(PAYMENT_P2007_01__PAYMENT_P2007_01_STAFF_ID_FKEY, { subquery(it as Staff) })
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.payment_p2007_01</code> to-one parent table.
-     */
-    fun rentalRow(): Field<RentalRecord> = rentalRow { it }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.payment_p2007_01</code> to-one parent table.
-     */
-    fun <O : Record> rentalRow(subquery: (Rental) -> TableLike<O>): Field<O> = toOneRow(PAYMENT_P2007_01__PAYMENT_P2007_01_RENTAL_ID_FKEY, { subquery(it as Rental) })
     override fun getChecks(): List<Check<PaymentP2007_01Record>> = listOf(
         Internal.createCheck(this, DSL.name("payment_p2007_01_payment_date_check"), "(((payment_date >= '2007-01-01 00:00:00'::timestamp without time zone) AND (payment_date < '2007-02-01 00:00:00'::timestamp without time zone)))", true)
     )

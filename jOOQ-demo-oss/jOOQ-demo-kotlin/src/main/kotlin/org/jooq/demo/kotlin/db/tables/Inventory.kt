@@ -9,7 +9,6 @@ import java.util.function.Function
 
 import kotlin.collections.List
 
-import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
 import org.jooq.Identity
@@ -17,13 +16,11 @@ import org.jooq.Index
 import org.jooq.Name
 import org.jooq.Record
 import org.jooq.Records
-import org.jooq.Result
 import org.jooq.Row4
 import org.jooq.Schema
 import org.jooq.SelectField
 import org.jooq.Table
 import org.jooq.TableField
-import org.jooq.TableLike
 import org.jooq.TableOptions
 import org.jooq.UniqueKey
 import org.jooq.demo.kotlin.db.Public
@@ -31,11 +28,7 @@ import org.jooq.demo.kotlin.db.indexes.IDX_STORE_ID_FILM_ID
 import org.jooq.demo.kotlin.db.keys.INVENTORY_PKEY
 import org.jooq.demo.kotlin.db.keys.INVENTORY__INVENTORY_FILM_ID_FKEY
 import org.jooq.demo.kotlin.db.keys.INVENTORY__INVENTORY_STORE_ID_FKEY
-import org.jooq.demo.kotlin.db.keys.RENTAL__RENTAL_INVENTORY_ID_FKEY
-import org.jooq.demo.kotlin.db.tables.records.FilmRecord
 import org.jooq.demo.kotlin.db.tables.records.InventoryRecord
-import org.jooq.demo.kotlin.db.tables.records.RentalRecord
-import org.jooq.demo.kotlin.db.tables.records.StoreRecord
 import org.jooq.impl.DSL
 import org.jooq.impl.Internal
 import org.jooq.impl.SQLDataType
@@ -148,54 +141,6 @@ open class Inventory(
 
     val store: Store
         get(): Store = store()
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.rental</code> one-to-many child table.
-     */
-    fun rentalExists(): Condition = rentalExists { it }
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.rental</code> one-to-many child table.
-     */
-    fun <O: Record>rentalExists(subquery: (Rental) -> TableLike<O>): Condition = oneToManyExists(RENTAL__RENTAL_INVENTORY_ID_FKEY, { subquery(it as Rental) })
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.inventory</code> to-one parent table.
-     */
-    fun filmRow(): Field<FilmRecord> = filmRow { it }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.inventory</code> to-one parent table.
-     */
-    fun <O : Record> filmRow(subquery: (Film) -> TableLike<O>): Field<O> = toOneRow(INVENTORY__INVENTORY_FILM_ID_FKEY, { subquery(it as Film) })
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.inventory</code> to-one parent table.
-     */
-    fun storeRow(): Field<StoreRecord> = storeRow { it }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.inventory</code> to-one parent table.
-     */
-    fun <O : Record> storeRow(subquery: (Store) -> TableLike<O>): Field<O> = toOneRow(INVENTORY__INVENTORY_STORE_ID_FKEY, { subquery(it as Store) })
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.rental</code> one-to-many child table.
-     */
-    fun rentalMultiset(): Field<Result<RentalRecord>> = rentalMultiset { it }
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.rental</code> one-to-many child table.
-     */
-    fun <O: Record>rentalMultiset(subquery: (Rental) -> TableLike<O>): Field<Result<O>> = oneToManyMultiset(RENTAL__RENTAL_INVENTORY_ID_FKEY, { subquery(it as Rental) })
     override fun `as`(alias: String): Inventory = Inventory(DSL.name(alias), this)
     override fun `as`(alias: Name): Inventory = Inventory(alias, this)
     override fun `as`(alias: Table<*>): Inventory = Inventory(alias.getQualifiedName(), this)

@@ -21,15 +21,12 @@ import org.jooq.Schema;
 import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
-import org.jooq.TableLike;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.demo.java.db.Indexes;
 import org.jooq.demo.java.db.Keys;
 import org.jooq.demo.java.db.Public;
-import org.jooq.demo.java.db.tables.records.ActorRecord;
 import org.jooq.demo.java.db.tables.records.FilmActorRecord;
-import org.jooq.demo.java.db.tables.records.FilmRecord;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
@@ -145,38 +142,6 @@ public class FilmActor extends TableImpl<FilmActorRecord> {
             _film = new Film(this, Keys.FILM_ACTOR__FILM_ACTOR_FILM_ID_FKEY);
 
         return _film;
-    }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.film_actor</code> to-one parent table.
-     */
-    public Field<ActorRecord> actorRow() {
-        return actorRow(Function.identity());
-    }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.film_actor</code> to-one parent table.
-     */
-    public <O extends Record> Field<O> actorRow(Function<? super Actor, ? extends TableLike<O>> subquery) {
-        return toOneRow(Keys.FILM_ACTOR__FILM_ACTOR_ACTOR_ID_FKEY, t -> subquery.apply((Actor) t));
-    }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.film_actor</code> to-one parent table.
-     */
-    public Field<FilmRecord> filmRow() {
-        return filmRow(Function.identity());
-    }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.film_actor</code> to-one parent table.
-     */
-    public <O extends Record> Field<O> filmRow(Function<? super Film, ? extends TableLike<O>> subquery) {
-        return toOneRow(Keys.FILM_ACTOR__FILM_ACTOR_FILM_ID_FKEY, t -> subquery.apply((Film) t));
     }
 
     @Override

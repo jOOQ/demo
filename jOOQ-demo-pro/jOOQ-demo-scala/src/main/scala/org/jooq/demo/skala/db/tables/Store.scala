@@ -12,29 +12,22 @@ import java.util.Arrays
 import java.util.List
 import java.util.function.Function
 
-import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
 import org.jooq.Identity
 import org.jooq.Index
 import org.jooq.Name
 import org.jooq.Record
-import org.jooq.Result
 import org.jooq.Row4
 import org.jooq.Schema
 import org.jooq.SelectField
 import org.jooq.Table
 import org.jooq.TableField
-import org.jooq.TableLike
 import org.jooq.TableOptions
 import org.jooq.UniqueKey
 import org.jooq.demo.skala.db.Indexes
 import org.jooq.demo.skala.db.Keys
 import org.jooq.demo.skala.db.Public
-import org.jooq.demo.skala.db.tables.records.AddressRecord
-import org.jooq.demo.skala.db.tables.records.CustomerRecord
-import org.jooq.demo.skala.db.tables.records.InventoryRecord
-import org.jooq.demo.skala.db.tables.records.StaffRecord
 import org.jooq.demo.skala.db.tables.records.StoreRecord
 import org.jooq.impl.DSL
 import org.jooq.impl.Internal
@@ -136,102 +129,6 @@ extends TableImpl[StoreRecord](
    * Get the implicit join path to the <code>public.address</code> table.
    */
   lazy val address: Address = { new Address(this, Keys.STORE__STORE_ADDRESS_ID_FKEY) }
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.customer</code> one-to-many child table.
-   */
-  def customerExists(): Condition = customerExists(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.customer</code> one-to-many child table.
-   */
-  def customerExists[O <: Record](subquery: (Customer) => TableLike[O]): Condition = oneToManyExists(Keys.CUSTOMER__CUSTOMER_STORE_ID_FKEY, (t: Table[CustomerRecord]) => subquery(t.asInstanceOf[Customer]))
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.inventory</code> one-to-many child table.
-   */
-  def inventoryExists(): Condition = inventoryExists(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.inventory</code> one-to-many child table.
-   */
-  def inventoryExists[O <: Record](subquery: (Inventory) => TableLike[O]): Condition = oneToManyExists(Keys.INVENTORY__INVENTORY_STORE_ID_FKEY, (t: Table[InventoryRecord]) => subquery(t.asInstanceOf[Inventory]))
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.staff</code> one-to-many child table.
-   */
-  def staffExists(): Condition = staffExists(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.staff</code> one-to-many child table.
-   */
-  def staffExists[O <: Record](subquery: (Staff) => TableLike[O]): Condition = oneToManyExists(Keys.STAFF__STAFF_STORE_ID_FKEY, (t: Table[StaffRecord]) => subquery(t.asInstanceOf[Staff]))
-
-  /**
-   * A convenience constructor for correlated <code>ROW</code>s expressions to
-   * the <code>public.store</code> to-one parent table.
-   */
-  def staffRow(): Field[StaffRecord] = staffRow(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>ROW</code>s expressions to
-   * the <code>public.store</code> to-one parent table.
-   */
-  def staffRow[O <: Record](subquery: (Staff) => TableLike[O]): Field[O] = toOneRow(Keys.STORE__STORE_MANAGER_STAFF_ID_FKEY, (t: Table[StaffRecord]) => subquery(t.asInstanceOf[Staff]))
-
-  /**
-   * A convenience constructor for correlated <code>ROW</code>s expressions to
-   * the <code>public.store</code> to-one parent table.
-   */
-  def addressRow(): Field[AddressRecord] = addressRow(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>ROW</code>s expressions to
-   * the <code>public.store</code> to-one parent table.
-   */
-  def addressRow[O <: Record](subquery: (Address) => TableLike[O]): Field[O] = toOneRow(Keys.STORE__STORE_ADDRESS_ID_FKEY, (t: Table[AddressRecord]) => subquery(t.asInstanceOf[Address]))
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.customer</code> one-to-many child table.
-   */
-  def customerMultiset(): Field[Result[CustomerRecord]] = customerMultiset(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.customer</code> one-to-many child table.
-   */
-  def customerMultiset[O <: Record](subquery: (Customer) => TableLike[O]): Field[Result[O]] = oneToManyMultiset(Keys.CUSTOMER__CUSTOMER_STORE_ID_FKEY, (t: Table[CustomerRecord]) => subquery(t.asInstanceOf[Customer]))
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.inventory</code> one-to-many child table.
-   */
-  def inventoryMultiset(): Field[Result[InventoryRecord]] = inventoryMultiset(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.inventory</code> one-to-many child table.
-   */
-  def inventoryMultiset[O <: Record](subquery: (Inventory) => TableLike[O]): Field[Result[O]] = oneToManyMultiset(Keys.INVENTORY__INVENTORY_STORE_ID_FKEY, (t: Table[InventoryRecord]) => subquery(t.asInstanceOf[Inventory]))
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.staff</code> one-to-many child table.
-   */
-  def staffMultiset(): Field[Result[StaffRecord]] = staffMultiset(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.staff</code> one-to-many child table.
-   */
-  def staffMultiset[O <: Record](subquery: (Staff) => TableLike[O]): Field[Result[O]] = oneToManyMultiset(Keys.STAFF__STAFF_STORE_ID_FKEY, (t: Table[StaffRecord]) => subquery(t.asInstanceOf[Staff]))
   override def as(alias: String): Store = new Store(DSL.name(alias), this)
   override def as(alias: Name): Store = new Store(alias, this)
   override def as(alias: Table[_]): Store = new Store(alias.getQualifiedName(), this)

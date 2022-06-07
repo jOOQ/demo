@@ -19,16 +19,13 @@ import org.jooq.Schema
 import org.jooq.SelectField
 import org.jooq.Table
 import org.jooq.TableField
-import org.jooq.TableLike
 import org.jooq.TableOptions
 import org.jooq.UniqueKey
 import org.jooq.demo.kotlin.db.Public
 import org.jooq.demo.kotlin.db.keys.FILM_CATEGORY_PKEY
 import org.jooq.demo.kotlin.db.keys.FILM_CATEGORY__FILM_CATEGORY_CATEGORY_ID_FKEY
 import org.jooq.demo.kotlin.db.keys.FILM_CATEGORY__FILM_CATEGORY_FILM_ID_FKEY
-import org.jooq.demo.kotlin.db.tables.records.CategoryRecord
 import org.jooq.demo.kotlin.db.tables.records.FilmCategoryRecord
-import org.jooq.demo.kotlin.db.tables.records.FilmRecord
 import org.jooq.impl.DSL
 import org.jooq.impl.Internal
 import org.jooq.impl.SQLDataType
@@ -134,30 +131,6 @@ open class FilmCategory(
 
     val category: Category
         get(): Category = category()
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.film_category</code> to-one parent table.
-     */
-    fun filmRow(): Field<FilmRecord> = filmRow { it }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.film_category</code> to-one parent table.
-     */
-    fun <O : Record> filmRow(subquery: (Film) -> TableLike<O>): Field<O> = toOneRow(FILM_CATEGORY__FILM_CATEGORY_FILM_ID_FKEY, { subquery(it as Film) })
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.film_category</code> to-one parent table.
-     */
-    fun categoryRow(): Field<CategoryRecord> = categoryRow { it }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.film_category</code> to-one parent table.
-     */
-    fun <O : Record> categoryRow(subquery: (Category) -> TableLike<O>): Field<O> = toOneRow(FILM_CATEGORY__FILM_CATEGORY_CATEGORY_ID_FKEY, { subquery(it as Category) })
     override fun `as`(alias: String): FilmCategory = FilmCategory(DSL.name(alias), this)
     override fun `as`(alias: Name): FilmCategory = FilmCategory(alias, this)
     override fun `as`(alias: Table<*>): FilmCategory = FilmCategory(alias.getQualifiedName(), this)

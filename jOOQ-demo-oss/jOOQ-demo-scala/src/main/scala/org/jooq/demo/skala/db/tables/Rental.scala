@@ -12,36 +12,23 @@ import java.util.Arrays
 import java.util.List
 import java.util.function.Function
 
-import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
 import org.jooq.Identity
 import org.jooq.Index
 import org.jooq.Name
 import org.jooq.Record
-import org.jooq.Result
 import org.jooq.Row7
 import org.jooq.Schema
 import org.jooq.SelectField
 import org.jooq.Table
 import org.jooq.TableField
-import org.jooq.TableLike
 import org.jooq.TableOptions
 import org.jooq.UniqueKey
 import org.jooq.demo.skala.db.Indexes
 import org.jooq.demo.skala.db.Keys
 import org.jooq.demo.skala.db.Public
-import org.jooq.demo.skala.db.tables.records.CustomerRecord
-import org.jooq.demo.skala.db.tables.records.InventoryRecord
-import org.jooq.demo.skala.db.tables.records.PaymentP2007_01Record
-import org.jooq.demo.skala.db.tables.records.PaymentP2007_02Record
-import org.jooq.demo.skala.db.tables.records.PaymentP2007_03Record
-import org.jooq.demo.skala.db.tables.records.PaymentP2007_04Record
-import org.jooq.demo.skala.db.tables.records.PaymentP2007_05Record
-import org.jooq.demo.skala.db.tables.records.PaymentP2007_06Record
-import org.jooq.demo.skala.db.tables.records.PaymentRecord
 import org.jooq.demo.skala.db.tables.records.RentalRecord
-import org.jooq.demo.skala.db.tables.records.StaffRecord
 import org.jooq.impl.DSL
 import org.jooq.impl.Internal
 import org.jooq.impl.SQLDataType
@@ -162,210 +149,6 @@ extends TableImpl[RentalRecord](
    * Get the implicit join path to the <code>public.staff</code> table.
    */
   lazy val staff: Staff = { new Staff(this, Keys.RENTAL__RENTAL_STAFF_ID_FKEY) }
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.payment</code> one-to-many child table.
-   */
-  def paymentExists(): Condition = paymentExists(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.payment</code> one-to-many child table.
-   */
-  def paymentExists[O <: Record](subquery: (Payment) => TableLike[O]): Condition = oneToManyExists(Keys.PAYMENT__PAYMENT_RENTAL_ID_FKEY, (t: Table[PaymentRecord]) => subquery(t.asInstanceOf[Payment]))
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.payment_p2007_01</code> one-to-many child table.
-   */
-  def paymentP2007_01Exists(): Condition = paymentP2007_01Exists(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.payment_p2007_01</code> one-to-many child table.
-   */
-  def paymentP2007_01Exists[O <: Record](subquery: (PaymentP2007_01) => TableLike[O]): Condition = oneToManyExists(Keys.PAYMENT_P2007_01__PAYMENT_P2007_01_RENTAL_ID_FKEY, (t: Table[PaymentP2007_01Record]) => subquery(t.asInstanceOf[PaymentP2007_01]))
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.payment_p2007_02</code> one-to-many child table.
-   */
-  def paymentP2007_02Exists(): Condition = paymentP2007_02Exists(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.payment_p2007_02</code> one-to-many child table.
-   */
-  def paymentP2007_02Exists[O <: Record](subquery: (PaymentP2007_02) => TableLike[O]): Condition = oneToManyExists(Keys.PAYMENT_P2007_02__PAYMENT_P2007_02_RENTAL_ID_FKEY, (t: Table[PaymentP2007_02Record]) => subquery(t.asInstanceOf[PaymentP2007_02]))
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.payment_p2007_03</code> one-to-many child table.
-   */
-  def paymentP2007_03Exists(): Condition = paymentP2007_03Exists(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.payment_p2007_03</code> one-to-many child table.
-   */
-  def paymentP2007_03Exists[O <: Record](subquery: (PaymentP2007_03) => TableLike[O]): Condition = oneToManyExists(Keys.PAYMENT_P2007_03__PAYMENT_P2007_03_RENTAL_ID_FKEY, (t: Table[PaymentP2007_03Record]) => subquery(t.asInstanceOf[PaymentP2007_03]))
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.payment_p2007_04</code> one-to-many child table.
-   */
-  def paymentP2007_04Exists(): Condition = paymentP2007_04Exists(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.payment_p2007_04</code> one-to-many child table.
-   */
-  def paymentP2007_04Exists[O <: Record](subquery: (PaymentP2007_04) => TableLike[O]): Condition = oneToManyExists(Keys.PAYMENT_P2007_04__PAYMENT_P2007_04_RENTAL_ID_FKEY, (t: Table[PaymentP2007_04Record]) => subquery(t.asInstanceOf[PaymentP2007_04]))
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.payment_p2007_05</code> one-to-many child table.
-   */
-  def paymentP2007_05Exists(): Condition = paymentP2007_05Exists(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.payment_p2007_05</code> one-to-many child table.
-   */
-  def paymentP2007_05Exists[O <: Record](subquery: (PaymentP2007_05) => TableLike[O]): Condition = oneToManyExists(Keys.PAYMENT_P2007_05__PAYMENT_P2007_05_RENTAL_ID_FKEY, (t: Table[PaymentP2007_05Record]) => subquery(t.asInstanceOf[PaymentP2007_05]))
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.payment_p2007_06</code> one-to-many child table.
-   */
-  def paymentP2007_06Exists(): Condition = paymentP2007_06Exists(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.payment_p2007_06</code> one-to-many child table.
-   */
-  def paymentP2007_06Exists[O <: Record](subquery: (PaymentP2007_06) => TableLike[O]): Condition = oneToManyExists(Keys.PAYMENT_P2007_06__PAYMENT_P2007_06_RENTAL_ID_FKEY, (t: Table[PaymentP2007_06Record]) => subquery(t.asInstanceOf[PaymentP2007_06]))
-
-  /**
-   * A convenience constructor for correlated <code>ROW</code>s expressions to
-   * the <code>public.rental</code> to-one parent table.
-   */
-  def inventoryRow(): Field[InventoryRecord] = inventoryRow(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>ROW</code>s expressions to
-   * the <code>public.rental</code> to-one parent table.
-   */
-  def inventoryRow[O <: Record](subquery: (Inventory) => TableLike[O]): Field[O] = toOneRow(Keys.RENTAL__RENTAL_INVENTORY_ID_FKEY, (t: Table[InventoryRecord]) => subquery(t.asInstanceOf[Inventory]))
-
-  /**
-   * A convenience constructor for correlated <code>ROW</code>s expressions to
-   * the <code>public.rental</code> to-one parent table.
-   */
-  def customerRow(): Field[CustomerRecord] = customerRow(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>ROW</code>s expressions to
-   * the <code>public.rental</code> to-one parent table.
-   */
-  def customerRow[O <: Record](subquery: (Customer) => TableLike[O]): Field[O] = toOneRow(Keys.RENTAL__RENTAL_CUSTOMER_ID_FKEY, (t: Table[CustomerRecord]) => subquery(t.asInstanceOf[Customer]))
-
-  /**
-   * A convenience constructor for correlated <code>ROW</code>s expressions to
-   * the <code>public.rental</code> to-one parent table.
-   */
-  def staffRow(): Field[StaffRecord] = staffRow(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>ROW</code>s expressions to
-   * the <code>public.rental</code> to-one parent table.
-   */
-  def staffRow[O <: Record](subquery: (Staff) => TableLike[O]): Field[O] = toOneRow(Keys.RENTAL__RENTAL_STAFF_ID_FKEY, (t: Table[StaffRecord]) => subquery(t.asInstanceOf[Staff]))
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.payment</code> one-to-many child table.
-   */
-  def paymentMultiset(): Field[Result[PaymentRecord]] = paymentMultiset(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.payment</code> one-to-many child table.
-   */
-  def paymentMultiset[O <: Record](subquery: (Payment) => TableLike[O]): Field[Result[O]] = oneToManyMultiset(Keys.PAYMENT__PAYMENT_RENTAL_ID_FKEY, (t: Table[PaymentRecord]) => subquery(t.asInstanceOf[Payment]))
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.payment_p2007_01</code> one-to-many child table.
-   */
-  def paymentP2007_01Multiset(): Field[Result[PaymentP2007_01Record]] = paymentP2007_01Multiset(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.payment_p2007_01</code> one-to-many child table.
-   */
-  def paymentP2007_01Multiset[O <: Record](subquery: (PaymentP2007_01) => TableLike[O]): Field[Result[O]] = oneToManyMultiset(Keys.PAYMENT_P2007_01__PAYMENT_P2007_01_RENTAL_ID_FKEY, (t: Table[PaymentP2007_01Record]) => subquery(t.asInstanceOf[PaymentP2007_01]))
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.payment_p2007_02</code> one-to-many child table.
-   */
-  def paymentP2007_02Multiset(): Field[Result[PaymentP2007_02Record]] = paymentP2007_02Multiset(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.payment_p2007_02</code> one-to-many child table.
-   */
-  def paymentP2007_02Multiset[O <: Record](subquery: (PaymentP2007_02) => TableLike[O]): Field[Result[O]] = oneToManyMultiset(Keys.PAYMENT_P2007_02__PAYMENT_P2007_02_RENTAL_ID_FKEY, (t: Table[PaymentP2007_02Record]) => subquery(t.asInstanceOf[PaymentP2007_02]))
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.payment_p2007_03</code> one-to-many child table.
-   */
-  def paymentP2007_03Multiset(): Field[Result[PaymentP2007_03Record]] = paymentP2007_03Multiset(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.payment_p2007_03</code> one-to-many child table.
-   */
-  def paymentP2007_03Multiset[O <: Record](subquery: (PaymentP2007_03) => TableLike[O]): Field[Result[O]] = oneToManyMultiset(Keys.PAYMENT_P2007_03__PAYMENT_P2007_03_RENTAL_ID_FKEY, (t: Table[PaymentP2007_03Record]) => subquery(t.asInstanceOf[PaymentP2007_03]))
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.payment_p2007_04</code> one-to-many child table.
-   */
-  def paymentP2007_04Multiset(): Field[Result[PaymentP2007_04Record]] = paymentP2007_04Multiset(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.payment_p2007_04</code> one-to-many child table.
-   */
-  def paymentP2007_04Multiset[O <: Record](subquery: (PaymentP2007_04) => TableLike[O]): Field[Result[O]] = oneToManyMultiset(Keys.PAYMENT_P2007_04__PAYMENT_P2007_04_RENTAL_ID_FKEY, (t: Table[PaymentP2007_04Record]) => subquery(t.asInstanceOf[PaymentP2007_04]))
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.payment_p2007_05</code> one-to-many child table.
-   */
-  def paymentP2007_05Multiset(): Field[Result[PaymentP2007_05Record]] = paymentP2007_05Multiset(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.payment_p2007_05</code> one-to-many child table.
-   */
-  def paymentP2007_05Multiset[O <: Record](subquery: (PaymentP2007_05) => TableLike[O]): Field[Result[O]] = oneToManyMultiset(Keys.PAYMENT_P2007_05__PAYMENT_P2007_05_RENTAL_ID_FKEY, (t: Table[PaymentP2007_05Record]) => subquery(t.asInstanceOf[PaymentP2007_05]))
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.payment_p2007_06</code> one-to-many child table.
-   */
-  def paymentP2007_06Multiset(): Field[Result[PaymentP2007_06Record]] = paymentP2007_06Multiset(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.payment_p2007_06</code> one-to-many child table.
-   */
-  def paymentP2007_06Multiset[O <: Record](subquery: (PaymentP2007_06) => TableLike[O]): Field[Result[O]] = oneToManyMultiset(Keys.PAYMENT_P2007_06__PAYMENT_P2007_06_RENTAL_ID_FKEY, (t: Table[PaymentP2007_06Record]) => subquery(t.asInstanceOf[PaymentP2007_06]))
   override def as(alias: String): Rental = new Rental(DSL.name(alias), this)
   override def as(alias: Name): Rental = new Rental(alias, this)
   override def as(alias: Table[_]): Rental = new Rental(alias.getQualifiedName(), this)

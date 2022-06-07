@@ -10,26 +10,21 @@ import java.lang.String
 import java.time.LocalDateTime
 import java.util.function.Function
 
-import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
 import org.jooq.Identity
 import org.jooq.Name
 import org.jooq.Record
-import org.jooq.Result
 import org.jooq.Row3
 import org.jooq.Schema
 import org.jooq.SelectField
 import org.jooq.Table
 import org.jooq.TableField
-import org.jooq.TableLike
 import org.jooq.TableOptions
 import org.jooq.UniqueKey
 import org.jooq.demo.skala.db.Keys
 import org.jooq.demo.skala.db.Public
 import org.jooq.demo.skala.db.tables.records.CategoryRecord
-import org.jooq.demo.skala.db.tables.records.FilmCategoryRecord
-import org.jooq.demo.skala.db.tables.records.FilmRecord
 import org.jooq.impl.DSL
 import org.jooq.impl.Internal
 import org.jooq.impl.SQLDataType
@@ -111,54 +106,6 @@ extends TableImpl[CategoryRecord](
   override def getIdentity: Identity[CategoryRecord, Long] = super.getIdentity.asInstanceOf[ Identity[CategoryRecord, Long] ]
 
   override def getPrimaryKey: UniqueKey[CategoryRecord] = Keys.CATEGORY_PKEY
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.film_category</code> one-to-many child table.
-   */
-  def filmCategoryExists(): Condition = filmCategoryExists(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.film_category</code> one-to-many child table.
-   */
-  def filmCategoryExists[O <: Record](subquery: (FilmCategory) => TableLike[O]): Condition = oneToManyExists(Keys.FILM_CATEGORY__FILM_CATEGORY_CATEGORY_ID_FKEY, (t: Table[FilmCategoryRecord]) => subquery(t.asInstanceOf[FilmCategory]))
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.film</code> many-to-many child table.
-   */
-  def filmExists(): Condition = filmExists(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.film</code> many-to-many child table.
-   */
-  def filmExists[O <: Record](subquery: (Film) => TableLike[O]): Condition = manyToManyExists(Keys.FILM_CATEGORY__FILM_CATEGORY_CATEGORY_ID_FKEY, Keys.FILM_CATEGORY__FILM_CATEGORY_FILM_ID_FKEY, (t: Table[FilmRecord]) => subquery(t.asInstanceOf[Film]))
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.film_category</code> one-to-many child table.
-   */
-  def filmCategoryMultiset(): Field[Result[FilmCategoryRecord]] = filmCategoryMultiset(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.film_category</code> one-to-many child table.
-   */
-  def filmCategoryMultiset[O <: Record](subquery: (FilmCategory) => TableLike[O]): Field[Result[O]] = oneToManyMultiset(Keys.FILM_CATEGORY__FILM_CATEGORY_CATEGORY_ID_FKEY, (t: Table[FilmCategoryRecord]) => subquery(t.asInstanceOf[FilmCategory]))
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.film</code> many-to-many child table.
-   */
-  def filmMultiset(): Field[Result[FilmRecord]] = filmMultiset(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.film</code> many-to-many child table.
-   */
-  def filmMultiset[O <: Record](subquery: (Film) => TableLike[O]): Field[Result[O]] = manyToManyMultiset(Keys.FILM_CATEGORY__FILM_CATEGORY_CATEGORY_ID_FKEY, Keys.FILM_CATEGORY__FILM_CATEGORY_FILM_ID_FKEY, (t: Table[FilmRecord]) => subquery(t.asInstanceOf[Film]))
   override def as(alias: String): Category = new Category(DSL.name(alias), this)
   override def as(alias: Name): Category = new Category(alias, this)
   override def as(alias: Table[_]): Category = new Category(alias.getQualifiedName(), this)

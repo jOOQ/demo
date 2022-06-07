@@ -12,29 +12,23 @@ import java.util.Arrays
 import java.util.List
 import java.util.function.Function
 
-import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
 import org.jooq.Identity
 import org.jooq.Index
 import org.jooq.Name
 import org.jooq.Record
-import org.jooq.Result
 import org.jooq.Row4
 import org.jooq.Schema
 import org.jooq.SelectField
 import org.jooq.Table
 import org.jooq.TableField
-import org.jooq.TableLike
 import org.jooq.TableOptions
 import org.jooq.UniqueKey
 import org.jooq.demo.skala.db.Indexes
 import org.jooq.demo.skala.db.Keys
 import org.jooq.demo.skala.db.Public
-import org.jooq.demo.skala.db.tables.records.FilmRecord
 import org.jooq.demo.skala.db.tables.records.InventoryRecord
-import org.jooq.demo.skala.db.tables.records.RentalRecord
-import org.jooq.demo.skala.db.tables.records.StoreRecord
 import org.jooq.impl.DSL
 import org.jooq.impl.Internal
 import org.jooq.impl.SQLDataType
@@ -135,54 +129,6 @@ extends TableImpl[InventoryRecord](
    * Get the implicit join path to the <code>public.store</code> table.
    */
   lazy val store: Store = { new Store(this, Keys.INVENTORY__INVENTORY_STORE_ID_FKEY) }
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.rental</code> one-to-many child table.
-   */
-  def rentalExists(): Condition = rentalExists(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.rental</code> one-to-many child table.
-   */
-  def rentalExists[O <: Record](subquery: (Rental) => TableLike[O]): Condition = oneToManyExists(Keys.RENTAL__RENTAL_INVENTORY_ID_FKEY, (t: Table[RentalRecord]) => subquery(t.asInstanceOf[Rental]))
-
-  /**
-   * A convenience constructor for correlated <code>ROW</code>s expressions to
-   * the <code>public.inventory</code> to-one parent table.
-   */
-  def filmRow(): Field[FilmRecord] = filmRow(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>ROW</code>s expressions to
-   * the <code>public.inventory</code> to-one parent table.
-   */
-  def filmRow[O <: Record](subquery: (Film) => TableLike[O]): Field[O] = toOneRow(Keys.INVENTORY__INVENTORY_FILM_ID_FKEY, (t: Table[FilmRecord]) => subquery(t.asInstanceOf[Film]))
-
-  /**
-   * A convenience constructor for correlated <code>ROW</code>s expressions to
-   * the <code>public.inventory</code> to-one parent table.
-   */
-  def storeRow(): Field[StoreRecord] = storeRow(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>ROW</code>s expressions to
-   * the <code>public.inventory</code> to-one parent table.
-   */
-  def storeRow[O <: Record](subquery: (Store) => TableLike[O]): Field[O] = toOneRow(Keys.INVENTORY__INVENTORY_STORE_ID_FKEY, (t: Table[StoreRecord]) => subquery(t.asInstanceOf[Store]))
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.rental</code> one-to-many child table.
-   */
-  def rentalMultiset(): Field[Result[RentalRecord]] = rentalMultiset(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.rental</code> one-to-many child table.
-   */
-  def rentalMultiset[O <: Record](subquery: (Rental) => TableLike[O]): Field[Result[O]] = oneToManyMultiset(Keys.RENTAL__RENTAL_INVENTORY_ID_FKEY, (t: Table[RentalRecord]) => subquery(t.asInstanceOf[Rental]))
   override def as(alias: String): Inventory = new Inventory(DSL.name(alias), this)
   override def as(alias: Name): Inventory = new Inventory(alias, this)
   override def as(alias: Table[_]): Inventory = new Inventory(alias.getQualifiedName(), this)

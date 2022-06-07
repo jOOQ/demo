@@ -20,7 +20,6 @@ import org.jooq.Schema
 import org.jooq.SelectField
 import org.jooq.Table
 import org.jooq.TableField
-import org.jooq.TableLike
 import org.jooq.TableOptions
 import org.jooq.UniqueKey
 import org.jooq.demo.kotlin.db.Public
@@ -28,9 +27,7 @@ import org.jooq.demo.kotlin.db.indexes.IDX_FK_FILM_ID
 import org.jooq.demo.kotlin.db.keys.FILM_ACTOR_PKEY
 import org.jooq.demo.kotlin.db.keys.FILM_ACTOR__FILM_ACTOR_ACTOR_ID_FKEY
 import org.jooq.demo.kotlin.db.keys.FILM_ACTOR__FILM_ACTOR_FILM_ID_FKEY
-import org.jooq.demo.kotlin.db.tables.records.ActorRecord
 import org.jooq.demo.kotlin.db.tables.records.FilmActorRecord
-import org.jooq.demo.kotlin.db.tables.records.FilmRecord
 import org.jooq.impl.DSL
 import org.jooq.impl.Internal
 import org.jooq.impl.SQLDataType
@@ -137,30 +134,6 @@ open class FilmActor(
 
     val film: Film
         get(): Film = film()
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.film_actor</code> to-one parent table.
-     */
-    fun actorRow(): Field<ActorRecord> = actorRow { it }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.film_actor</code> to-one parent table.
-     */
-    fun <O : Record> actorRow(subquery: (Actor) -> TableLike<O>): Field<O> = toOneRow(FILM_ACTOR__FILM_ACTOR_ACTOR_ID_FKEY, { subquery(it as Actor) })
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.film_actor</code> to-one parent table.
-     */
-    fun filmRow(): Field<FilmRecord> = filmRow { it }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.film_actor</code> to-one parent table.
-     */
-    fun <O : Record> filmRow(subquery: (Film) -> TableLike<O>): Field<O> = toOneRow(FILM_ACTOR__FILM_ACTOR_FILM_ID_FKEY, { subquery(it as Film) })
     override fun `as`(alias: String): FilmActor = FilmActor(DSL.name(alias), this)
     override fun `as`(alias: Name): FilmActor = FilmActor(alias, this)
     override fun `as`(alias: Table<*>): FilmActor = FilmActor(alias.getQualifiedName(), this)

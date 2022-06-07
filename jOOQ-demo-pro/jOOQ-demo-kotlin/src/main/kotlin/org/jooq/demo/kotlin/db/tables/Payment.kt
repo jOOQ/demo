@@ -22,7 +22,6 @@ import org.jooq.Schema
 import org.jooq.SelectField
 import org.jooq.Table
 import org.jooq.TableField
-import org.jooq.TableLike
 import org.jooq.TableOptions
 import org.jooq.UniqueKey
 import org.jooq.demo.kotlin.db.Public
@@ -32,10 +31,7 @@ import org.jooq.demo.kotlin.db.keys.PAYMENT_PKEY
 import org.jooq.demo.kotlin.db.keys.PAYMENT__PAYMENT_CUSTOMER_ID_FKEY
 import org.jooq.demo.kotlin.db.keys.PAYMENT__PAYMENT_RENTAL_ID_FKEY
 import org.jooq.demo.kotlin.db.keys.PAYMENT__PAYMENT_STAFF_ID_FKEY
-import org.jooq.demo.kotlin.db.tables.records.CustomerRecord
 import org.jooq.demo.kotlin.db.tables.records.PaymentRecord
-import org.jooq.demo.kotlin.db.tables.records.RentalRecord
-import org.jooq.demo.kotlin.db.tables.records.StaffRecord
 import org.jooq.impl.DSL
 import org.jooq.impl.Internal
 import org.jooq.impl.SQLDataType
@@ -172,42 +168,6 @@ open class Payment(
 
     val rental: Rental
         get(): Rental = rental()
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.payment</code> to-one parent table.
-     */
-    fun customerRow(): Field<CustomerRecord> = customerRow { it }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.payment</code> to-one parent table.
-     */
-    fun <O : Record> customerRow(subquery: (Customer) -> TableLike<O>): Field<O> = toOneRow(PAYMENT__PAYMENT_CUSTOMER_ID_FKEY, { subquery(it as Customer) })
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.payment</code> to-one parent table.
-     */
-    fun staffRow(): Field<StaffRecord> = staffRow { it }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.payment</code> to-one parent table.
-     */
-    fun <O : Record> staffRow(subquery: (Staff) -> TableLike<O>): Field<O> = toOneRow(PAYMENT__PAYMENT_STAFF_ID_FKEY, { subquery(it as Staff) })
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.payment</code> to-one parent table.
-     */
-    fun rentalRow(): Field<RentalRecord> = rentalRow { it }
-
-    /**
-     * A convenience constructor for correlated <code>ROW</code>s expressions to
-     * the <code>public.payment</code> to-one parent table.
-     */
-    fun <O : Record> rentalRow(subquery: (Rental) -> TableLike<O>): Field<O> = toOneRow(PAYMENT__PAYMENT_RENTAL_ID_FKEY, { subquery(it as Rental) })
     override fun `as`(alias: String): Payment = Payment(DSL.name(alias), this)
     override fun `as`(alias: Name): Payment = Payment(alias, this)
     override fun `as`(alias: Table<*>): Payment = Payment(alias.getQualifiedName(), this)

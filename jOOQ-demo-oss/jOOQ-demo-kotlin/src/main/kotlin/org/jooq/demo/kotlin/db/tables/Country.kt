@@ -7,26 +7,21 @@ package org.jooq.demo.kotlin.db.tables
 import java.time.LocalDateTime
 import java.util.function.Function
 
-import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
 import org.jooq.Identity
 import org.jooq.Name
 import org.jooq.Record
 import org.jooq.Records
-import org.jooq.Result
 import org.jooq.Row3
 import org.jooq.Schema
 import org.jooq.SelectField
 import org.jooq.Table
 import org.jooq.TableField
-import org.jooq.TableLike
 import org.jooq.TableOptions
 import org.jooq.UniqueKey
 import org.jooq.demo.kotlin.db.Public
-import org.jooq.demo.kotlin.db.keys.CITY__CITY_COUNTRY_ID_FKEY
 import org.jooq.demo.kotlin.db.keys.COUNTRY_PKEY
-import org.jooq.demo.kotlin.db.tables.records.CityRecord
 import org.jooq.demo.kotlin.db.tables.records.CountryRecord
 import org.jooq.impl.DSL
 import org.jooq.impl.Internal
@@ -104,30 +99,6 @@ open class Country(
     override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
     override fun getIdentity(): Identity<CountryRecord, Long?> = super.getIdentity() as Identity<CountryRecord, Long?>
     override fun getPrimaryKey(): UniqueKey<CountryRecord> = COUNTRY_PKEY
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.city</code> one-to-many child table.
-     */
-    fun cityExists(): Condition = cityExists { it }
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.city</code> one-to-many child table.
-     */
-    fun <O: Record>cityExists(subquery: (City) -> TableLike<O>): Condition = oneToManyExists(CITY__CITY_COUNTRY_ID_FKEY, { subquery(it as City) })
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.city</code> one-to-many child table.
-     */
-    fun cityMultiset(): Field<Result<CityRecord>> = cityMultiset { it }
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.city</code> one-to-many child table.
-     */
-    fun <O: Record>cityMultiset(subquery: (City) -> TableLike<O>): Field<Result<O>> = oneToManyMultiset(CITY__CITY_COUNTRY_ID_FKEY, { subquery(it as City) })
     override fun `as`(alias: String): Country = Country(DSL.name(alias), this)
     override fun `as`(alias: Name): Country = Country(alias, this)
     override fun `as`(alias: Table<*>): Country = Country(alias.getQualifiedName(), this)

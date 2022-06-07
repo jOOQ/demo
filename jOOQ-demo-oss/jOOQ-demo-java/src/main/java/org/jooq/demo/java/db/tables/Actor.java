@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
-import org.jooq.Condition;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Function4;
@@ -18,21 +17,17 @@ import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Records;
-import org.jooq.Result;
 import org.jooq.Row4;
 import org.jooq.Schema;
 import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
-import org.jooq.TableLike;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.demo.java.db.Indexes;
 import org.jooq.demo.java.db.Keys;
 import org.jooq.demo.java.db.Public;
 import org.jooq.demo.java.db.tables.records.ActorRecord;
-import org.jooq.demo.java.db.tables.records.FilmActorRecord;
-import org.jooq.demo.java.db.tables.records.FilmRecord;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
@@ -130,72 +125,6 @@ public class Actor extends TableImpl<ActorRecord> {
     @Override
     public UniqueKey<ActorRecord> getPrimaryKey() {
         return Keys.ACTOR_PKEY;
-    }
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.film_actor</code> one-to-many child table.
-     */
-    public Condition filmActorExists() {
-        return filmActorExists(Function.identity());
-    }
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.film_actor</code> one-to-many child table.
-     */
-    public <O extends Record> Condition filmActorExists(Function<? super FilmActor, ? extends TableLike<O>> subquery) {
-        return oneToManyExists(Keys.FILM_ACTOR__FILM_ACTOR_ACTOR_ID_FKEY, t -> subquery.apply((FilmActor) t));
-    }
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.film</code> many-to-many child table.
-     */
-    public Condition filmExists() {
-        return filmExists(Function.identity());
-    }
-
-    /**
-     * A convenience constructor for correlated <code>EXISTS</code>s expressions
-     * to the <code>public.film</code> many-to-many child table.
-     */
-    public <O extends Record> Condition filmExists(Function<? super Film, ? extends TableLike<O>> subquery) {
-        return manyToManyExists(Keys.FILM_ACTOR__FILM_ACTOR_ACTOR_ID_FKEY, Keys.FILM_ACTOR__FILM_ACTOR_FILM_ID_FKEY, t -> subquery.apply((Film) t));
-    }
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.film_actor</code> one-to-many child
-     * table.
-     */
-    public Field<Result<FilmActorRecord>> filmActorMultiset() {
-        return filmActorMultiset(Function.identity());
-    }
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.film_actor</code> one-to-many child
-     * table.
-     */
-    public <O extends Record> Field<Result<O>> filmActorMultiset(Function<? super FilmActor, ? extends TableLike<O>> subquery) {
-        return oneToManyMultiset(Keys.FILM_ACTOR__FILM_ACTOR_ACTOR_ID_FKEY, t -> subquery.apply((FilmActor) t));
-    }
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.film</code> many-to-many child table.
-     */
-    public Field<Result<FilmRecord>> filmMultiset() {
-        return filmMultiset(Function.identity());
-    }
-
-    /**
-     * A convenience constructor for correlated <code>MULTISET</code>s
-     * expressions to the <code>public.film</code> many-to-many child table.
-     */
-    public <O extends Record> Field<Result<O>> filmMultiset(Function<? super Film, ? extends TableLike<O>> subquery) {
-        return manyToManyMultiset(Keys.FILM_ACTOR__FILM_ACTOR_ACTOR_ID_FKEY, Keys.FILM_ACTOR__FILM_ACTOR_FILM_ID_FKEY, t -> subquery.apply((Film) t));
     }
 
     @Override

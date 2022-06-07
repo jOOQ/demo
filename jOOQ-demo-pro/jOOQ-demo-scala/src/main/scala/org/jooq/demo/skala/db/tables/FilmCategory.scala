@@ -21,14 +21,11 @@ import org.jooq.Schema
 import org.jooq.SelectField
 import org.jooq.Table
 import org.jooq.TableField
-import org.jooq.TableLike
 import org.jooq.TableOptions
 import org.jooq.UniqueKey
 import org.jooq.demo.skala.db.Keys
 import org.jooq.demo.skala.db.Public
-import org.jooq.demo.skala.db.tables.records.CategoryRecord
 import org.jooq.demo.skala.db.tables.records.FilmCategoryRecord
-import org.jooq.demo.skala.db.tables.records.FilmRecord
 import org.jooq.impl.DSL
 import org.jooq.impl.Internal
 import org.jooq.impl.SQLDataType
@@ -120,30 +117,6 @@ extends TableImpl[FilmCategoryRecord](
    * Get the implicit join path to the <code>public.category</code> table.
    */
   lazy val category: Category = { new Category(this, Keys.FILM_CATEGORY__FILM_CATEGORY_CATEGORY_ID_FKEY) }
-
-  /**
-   * A convenience constructor for correlated <code>ROW</code>s expressions to
-   * the <code>public.film_category</code> to-one parent table.
-   */
-  def filmRow(): Field[FilmRecord] = filmRow(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>ROW</code>s expressions to
-   * the <code>public.film_category</code> to-one parent table.
-   */
-  def filmRow[O <: Record](subquery: (Film) => TableLike[O]): Field[O] = toOneRow(Keys.FILM_CATEGORY__FILM_CATEGORY_FILM_ID_FKEY, (t: Table[FilmRecord]) => subquery(t.asInstanceOf[Film]))
-
-  /**
-   * A convenience constructor for correlated <code>ROW</code>s expressions to
-   * the <code>public.film_category</code> to-one parent table.
-   */
-  def categoryRow(): Field[CategoryRecord] = categoryRow(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>ROW</code>s expressions to
-   * the <code>public.film_category</code> to-one parent table.
-   */
-  def categoryRow[O <: Record](subquery: (Category) => TableLike[O]): Field[O] = toOneRow(Keys.FILM_CATEGORY__FILM_CATEGORY_CATEGORY_ID_FKEY, (t: Table[CategoryRecord]) => subquery(t.asInstanceOf[Category]))
   override def as(alias: String): FilmCategory = new FilmCategory(DSL.name(alias), this)
   override def as(alias: Name): FilmCategory = new FilmCategory(alias, this)
   override def as(alias: Table[_]): FilmCategory = new FilmCategory(alias.getQualifiedName(), this)

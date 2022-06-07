@@ -12,30 +12,23 @@ import java.util.Arrays
 import java.util.List
 import java.util.function.Function
 
-import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
 import org.jooq.Identity
 import org.jooq.Index
 import org.jooq.Name
 import org.jooq.Record
-import org.jooq.Result
 import org.jooq.Row8
 import org.jooq.Schema
 import org.jooq.SelectField
 import org.jooq.Table
 import org.jooq.TableField
-import org.jooq.TableLike
 import org.jooq.TableOptions
 import org.jooq.UniqueKey
 import org.jooq.demo.skala.db.Indexes
 import org.jooq.demo.skala.db.Keys
 import org.jooq.demo.skala.db.Public
 import org.jooq.demo.skala.db.tables.records.AddressRecord
-import org.jooq.demo.skala.db.tables.records.CityRecord
-import org.jooq.demo.skala.db.tables.records.CustomerRecord
-import org.jooq.demo.skala.db.tables.records.StaffRecord
-import org.jooq.demo.skala.db.tables.records.StoreRecord
 import org.jooq.impl.DSL
 import org.jooq.impl.Internal
 import org.jooq.impl.SQLDataType
@@ -151,90 +144,6 @@ extends TableImpl[AddressRecord](
    * Get the implicit join path to the <code>public.city</code> table.
    */
   lazy val city: City = { new City(this, Keys.ADDRESS__ADDRESS_CITY_ID_FKEY) }
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.customer</code> one-to-many child table.
-   */
-  def customerExists(): Condition = customerExists(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.customer</code> one-to-many child table.
-   */
-  def customerExists[O <: Record](subquery: (Customer) => TableLike[O]): Condition = oneToManyExists(Keys.CUSTOMER__CUSTOMER_ADDRESS_ID_FKEY, (t: Table[CustomerRecord]) => subquery(t.asInstanceOf[Customer]))
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.staff</code> one-to-many child table.
-   */
-  def staffExists(): Condition = staffExists(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.staff</code> one-to-many child table.
-   */
-  def staffExists[O <: Record](subquery: (Staff) => TableLike[O]): Condition = oneToManyExists(Keys.STAFF__STAFF_ADDRESS_ID_FKEY, (t: Table[StaffRecord]) => subquery(t.asInstanceOf[Staff]))
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.store</code> one-to-many child table.
-   */
-  def storeExists(): Condition = storeExists(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>EXISTS</code>s expressions
-   * to the <code>public.store</code> one-to-many child table.
-   */
-  def storeExists[O <: Record](subquery: (Store) => TableLike[O]): Condition = oneToManyExists(Keys.STORE__STORE_ADDRESS_ID_FKEY, (t: Table[StoreRecord]) => subquery(t.asInstanceOf[Store]))
-
-  /**
-   * A convenience constructor for correlated <code>ROW</code>s expressions to
-   * the <code>public.address</code> to-one parent table.
-   */
-  def cityRow(): Field[CityRecord] = cityRow(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>ROW</code>s expressions to
-   * the <code>public.address</code> to-one parent table.
-   */
-  def cityRow[O <: Record](subquery: (City) => TableLike[O]): Field[O] = toOneRow(Keys.ADDRESS__ADDRESS_CITY_ID_FKEY, (t: Table[CityRecord]) => subquery(t.asInstanceOf[City]))
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.customer</code> one-to-many child table.
-   */
-  def customerMultiset(): Field[Result[CustomerRecord]] = customerMultiset(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.customer</code> one-to-many child table.
-   */
-  def customerMultiset[O <: Record](subquery: (Customer) => TableLike[O]): Field[Result[O]] = oneToManyMultiset(Keys.CUSTOMER__CUSTOMER_ADDRESS_ID_FKEY, (t: Table[CustomerRecord]) => subquery(t.asInstanceOf[Customer]))
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.staff</code> one-to-many child table.
-   */
-  def staffMultiset(): Field[Result[StaffRecord]] = staffMultiset(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.staff</code> one-to-many child table.
-   */
-  def staffMultiset[O <: Record](subquery: (Staff) => TableLike[O]): Field[Result[O]] = oneToManyMultiset(Keys.STAFF__STAFF_ADDRESS_ID_FKEY, (t: Table[StaffRecord]) => subquery(t.asInstanceOf[Staff]))
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.store</code> one-to-many child table.
-   */
-  def storeMultiset(): Field[Result[StoreRecord]] = storeMultiset(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>MULTISET</code>s expressions
-   * to the <code>public.store</code> one-to-many child table.
-   */
-  def storeMultiset[O <: Record](subquery: (Store) => TableLike[O]): Field[Result[O]] = oneToManyMultiset(Keys.STORE__STORE_ADDRESS_ID_FKEY, (t: Table[StoreRecord]) => subquery(t.asInstanceOf[Store]))
   override def as(alias: String): Address = new Address(DSL.name(alias), this)
   override def as(alias: Name): Address = new Address(alias, this)
   override def as(alias: Table[_]): Address = new Address(alias.getQualifiedName(), this)

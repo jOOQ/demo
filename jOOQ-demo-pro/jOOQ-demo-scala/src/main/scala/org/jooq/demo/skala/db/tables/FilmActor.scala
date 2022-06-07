@@ -22,15 +22,12 @@ import org.jooq.Schema
 import org.jooq.SelectField
 import org.jooq.Table
 import org.jooq.TableField
-import org.jooq.TableLike
 import org.jooq.TableOptions
 import org.jooq.UniqueKey
 import org.jooq.demo.skala.db.Indexes
 import org.jooq.demo.skala.db.Keys
 import org.jooq.demo.skala.db.Public
-import org.jooq.demo.skala.db.tables.records.ActorRecord
 import org.jooq.demo.skala.db.tables.records.FilmActorRecord
-import org.jooq.demo.skala.db.tables.records.FilmRecord
 import org.jooq.impl.DSL
 import org.jooq.impl.Internal
 import org.jooq.impl.SQLDataType
@@ -124,30 +121,6 @@ extends TableImpl[FilmActorRecord](
    * Get the implicit join path to the <code>public.film</code> table.
    */
   lazy val film: Film = { new Film(this, Keys.FILM_ACTOR__FILM_ACTOR_FILM_ID_FKEY) }
-
-  /**
-   * A convenience constructor for correlated <code>ROW</code>s expressions to
-   * the <code>public.film_actor</code> to-one parent table.
-   */
-  def actorRow(): Field[ActorRecord] = actorRow(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>ROW</code>s expressions to
-   * the <code>public.film_actor</code> to-one parent table.
-   */
-  def actorRow[O <: Record](subquery: (Actor) => TableLike[O]): Field[O] = toOneRow(Keys.FILM_ACTOR__FILM_ACTOR_ACTOR_ID_FKEY, (t: Table[ActorRecord]) => subquery(t.asInstanceOf[Actor]))
-
-  /**
-   * A convenience constructor for correlated <code>ROW</code>s expressions to
-   * the <code>public.film_actor</code> to-one parent table.
-   */
-  def filmRow(): Field[FilmRecord] = filmRow(t => t)
-
-  /**
-   * A convenience constructor for correlated <code>ROW</code>s expressions to
-   * the <code>public.film_actor</code> to-one parent table.
-   */
-  def filmRow[O <: Record](subquery: (Film) => TableLike[O]): Field[O] = toOneRow(Keys.FILM_ACTOR__FILM_ACTOR_FILM_ID_FKEY, (t: Table[FilmRecord]) => subquery(t.asInstanceOf[Film]))
   override def as(alias: String): FilmActor = new FilmActor(DSL.name(alias), this)
   override def as(alias: Name): FilmActor = new FilmActor(alias, this)
   override def as(alias: Table[_]): FilmActor = new FilmActor(alias.getQualifiedName(), this)

@@ -252,13 +252,6 @@
                                 <pojosToString>false</pojosToString>
                                 <pojosEqualsAndHashCode>false</pojosEqualsAndHashCode>
                                 <daos>true</daos>
-
-                                <!-- These features are experimental, and available in the commercial distribution only -->
-                                <existsConvenienceOneToMany>true</existsConvenienceOneToMany>
-                                <existsConvenienceManyToMany>true</existsConvenienceManyToMany>
-                                <rowConvenienceToOne>true</rowConvenienceToOne>
-                                <multisetConvenienceOneToMany>true</multisetConvenienceOneToMany>
-                                <multisetConvenienceManyToMany>true</multisetConvenienceManyToMany>
                             </generate>
                         </generator>
                     </configuration>
