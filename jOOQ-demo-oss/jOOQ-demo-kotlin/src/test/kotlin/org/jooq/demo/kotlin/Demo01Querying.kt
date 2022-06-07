@@ -329,9 +329,10 @@ class Demo01Querying : AbstractDemo() {
                 FILM.TITLE,
                 multiset(
                     select(PAYMENT.PAYMENT_DATE.cast(LOCALDATE), sum(PAYMENT.AMOUNT))
-                        .from(PAYMENT)
-                        .groupBy(PAYMENT.PAYMENT_DATE.cast(LOCALDATE))
-                        .orderBy(PAYMENT.PAYMENT_DATE.cast(LOCALDATE))
+                    .from(PAYMENT)
+                    .where(PAYMENT.rental.inventory.FILM_ID.eq(FILM.FILM_ID))
+                    .groupBy(PAYMENT.PAYMENT_DATE.cast(LOCALDATE))
+                    .orderBy(PAYMENT.PAYMENT_DATE.cast(LOCALDATE))
                 ).intoMap()
             )
             .from(FILM)

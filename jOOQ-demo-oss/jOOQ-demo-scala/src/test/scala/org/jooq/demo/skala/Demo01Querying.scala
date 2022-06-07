@@ -294,6 +294,7 @@ class Demo01Querying extends AbstractDemo {
         multiset(
           select(PAYMENT.PAYMENT_DATE.cast(LOCALDATE), sum(PAYMENT.AMOUNT))
             .from(PAYMENT)
+            .where(PAYMENT.rental.inventory.FILM_ID.eq(FILM.FILM_ID))
             .groupBy(PAYMENT.PAYMENT_DATE.cast(LOCALDATE))
             .orderBy(PAYMENT.PAYMENT_DATE.cast(LOCALDATE))).intoMap())
       .from(FILM)
