@@ -20,31 +20,31 @@ import org.jooq.impl.UpdatableRecordImpl
 @Suppress("UNCHECKED_CAST")
 open class RentalRecord() : UpdatableRecordImpl<RentalRecord>(Rental.RENTAL), Record7<Long?, LocalDateTime?, Long?, Long?, LocalDateTime?, Long?, LocalDateTime?> {
 
-    var rentalId: Long?
+    open var rentalId: Long?
         set(value): Unit = set(0, value)
         get(): Long? = get(0) as Long?
 
-    var rentalDate: LocalDateTime?
+    open var rentalDate: LocalDateTime?
         set(value): Unit = set(1, value)
         get(): LocalDateTime? = get(1) as LocalDateTime?
 
-    var inventoryId: Long?
+    open var inventoryId: Long?
         set(value): Unit = set(2, value)
         get(): Long? = get(2) as Long?
 
-    var customerId: Long?
+    open var customerId: Long?
         set(value): Unit = set(3, value)
         get(): Long? = get(3) as Long?
 
-    var returnDate: LocalDateTime?
+    open var returnDate: LocalDateTime?
         set(value): Unit = set(4, value)
         get(): LocalDateTime? = get(4) as LocalDateTime?
 
-    var staffId: Long?
+    open var staffId: Long?
         set(value): Unit = set(5, value)
         get(): Long? = get(5) as Long?
 
-    var lastUpdate: LocalDateTime?
+    open var lastUpdate: LocalDateTime?
         set(value): Unit = set(6, value)
         get(): LocalDateTime? = get(6) as LocalDateTime?
 

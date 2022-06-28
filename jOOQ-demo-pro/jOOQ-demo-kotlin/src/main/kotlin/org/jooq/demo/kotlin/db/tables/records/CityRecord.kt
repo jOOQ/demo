@@ -20,19 +20,19 @@ import org.jooq.impl.UpdatableRecordImpl
 @Suppress("UNCHECKED_CAST")
 open class CityRecord() : UpdatableRecordImpl<CityRecord>(City.CITY), Record4<Long?, String?, Long?, LocalDateTime?> {
 
-    var cityId: Long?
+    open var cityId: Long?
         set(value): Unit = set(0, value)
         get(): Long? = get(0) as Long?
 
-    var city: String?
+    open var city: String?
         set(value): Unit = set(1, value)
         get(): String? = get(1) as String?
 
-    var countryId: Long?
+    open var countryId: Long?
         set(value): Unit = set(2, value)
         get(): Long? = get(2) as Long?
 
-    var lastUpdate: LocalDateTime?
+    open var lastUpdate: LocalDateTime?
         set(value): Unit = set(3, value)
         get(): LocalDateTime? = get(3) as LocalDateTime?
 

@@ -5,13 +5,16 @@ package org.jooq.demo.kotlin.db.tables
 
 
 import java.math.BigDecimal
+import java.util.function.Function
 
 import org.jooq.Field
 import org.jooq.ForeignKey
 import org.jooq.Name
 import org.jooq.Record
+import org.jooq.Records
 import org.jooq.Row3
 import org.jooq.Schema
+import org.jooq.SelectField
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
@@ -41,7 +44,21 @@ open class SalesByStore(
     aliased,
     parameters,
     DSL.comment(""),
-    TableOptions.view("create view \"sales_by_store\" as  SELECT (((c.city)::text || ','::text) || (cy.country)::text) AS store,\n    (((m.first_name)::text || ' '::text) || (m.last_name)::text) AS manager,\n    sum(p.amount) AS total_sales\n   FROM (((((((payment p\n     JOIN rental r ON ((p.rental_id = r.rental_id)))\n     JOIN inventory i ON ((r.inventory_id = i.inventory_id)))\n     JOIN store s ON ((i.store_id = s.store_id)))\n     JOIN address a ON ((s.address_id = a.address_id)))\n     JOIN city c ON ((a.city_id = c.city_id)))\n     JOIN country cy ON ((c.country_id = cy.country_id)))\n     JOIN staff m ON ((s.manager_staff_id = m.staff_id)))\n  GROUP BY cy.country, c.city, s.store_id, m.first_name, m.last_name\n  ORDER BY cy.country, c.city;")
+    TableOptions.view("""
+    create view "sales_by_store" as  SELECT (((c.city)::text || ','::text) || (cy.country)::text) AS store,
+      (((m.first_name)::text || ' '::text) || (m.last_name)::text) AS manager,
+      sum(p.amount) AS total_sales
+     FROM (((((((payment p
+       JOIN rental r ON ((p.rental_id = r.rental_id)))
+       JOIN inventory i ON ((r.inventory_id = i.inventory_id)))
+       JOIN store s ON ((i.store_id = s.store_id)))
+       JOIN address a ON ((s.address_id = a.address_id)))
+       JOIN city c ON ((a.city_id = c.city_id)))
+       JOIN country cy ON ((c.country_id = cy.country_id)))
+       JOIN staff m ON ((s.manager_staff_id = m.staff_id)))
+    GROUP BY cy.country, c.city, s.store_id, m.first_name, m.last_name
+    ORDER BY cy.country, c.city;
+    """)
 ) {
     companion object {
 
@@ -93,6 +110,7 @@ open class SalesByStore(
     override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
     override fun `as`(alias: String): SalesByStore = SalesByStore(DSL.name(alias), this)
     override fun `as`(alias: Name): SalesByStore = SalesByStore(alias, this)
+    override fun `as`(alias: Table<*>): SalesByStore = SalesByStore(alias.getQualifiedName(), this)
 
     /**
      * Rename this table
@@ -104,8 +122,23 @@ open class SalesByStore(
      */
     override fun rename(name: Name): SalesByStore = SalesByStore(name, null)
 
+    /**
+     * Rename this table
+     */
+    override fun rename(name: Table<*>): SalesByStore = SalesByStore(name.getQualifiedName(), null)
+
     // -------------------------------------------------------------------------
     // Row3 type methods
     // -------------------------------------------------------------------------
     override fun fieldsRow(): Row3<String?, String?, BigDecimal?> = super.fieldsRow() as Row3<String?, String?, BigDecimal?>
+
+    /**
+     * Convenience mapping calling {@link #convertFrom(Function)}.
+     */
+    fun <U> mapping(from: (String?, String?, BigDecimal?) -> U): SelectField<U> = convertFrom(Records.mapping(from))
+
+    /**
+     * Convenience mapping calling {@link #convertFrom(Class, Function)}.
+     */
+    fun <U> mapping(toType: Class<U>, from: (String?, String?, BigDecimal?) -> U): SelectField<U> = convertFrom(toType, Records.mapping(from))
 }

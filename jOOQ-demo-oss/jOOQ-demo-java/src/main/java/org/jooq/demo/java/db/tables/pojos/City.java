@@ -13,9 +13,9 @@ import java.time.LocalDateTime;
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public record City(
-    Long          cityId,
-    String        city,
-    Long          countryId,
+    Long cityId,
+    String city,
+    Long countryId,
     LocalDateTime lastUpdate
 ) implements Serializable {
 

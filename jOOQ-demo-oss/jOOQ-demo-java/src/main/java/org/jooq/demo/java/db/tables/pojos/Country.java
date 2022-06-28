@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public record Country(
-    Long          countryId,
-    String        country,
+    Long countryId,
+    String country,
     LocalDateTime lastUpdate
 ) implements Serializable {
 

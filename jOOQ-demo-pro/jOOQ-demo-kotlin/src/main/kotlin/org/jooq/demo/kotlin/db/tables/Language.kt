@@ -5,14 +5,17 @@ package org.jooq.demo.kotlin.db.tables
 
 
 import java.time.LocalDateTime
+import java.util.function.Function
 
 import org.jooq.Field
 import org.jooq.ForeignKey
 import org.jooq.Identity
 import org.jooq.Name
 import org.jooq.Record
+import org.jooq.Records
 import org.jooq.Row3
 import org.jooq.Schema
+import org.jooq.SelectField
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
@@ -98,6 +101,7 @@ open class Language(
     override fun getPrimaryKey(): UniqueKey<LanguageRecord> = LANGUAGE_PKEY
     override fun `as`(alias: String): Language = Language(DSL.name(alias), this)
     override fun `as`(alias: Name): Language = Language(alias, this)
+    override fun `as`(alias: Table<*>): Language = Language(alias.getQualifiedName(), this)
 
     /**
      * Rename this table
@@ -109,8 +113,23 @@ open class Language(
      */
     override fun rename(name: Name): Language = Language(name, null)
 
+    /**
+     * Rename this table
+     */
+    override fun rename(name: Table<*>): Language = Language(name.getQualifiedName(), null)
+
     // -------------------------------------------------------------------------
     // Row3 type methods
     // -------------------------------------------------------------------------
     override fun fieldsRow(): Row3<Long?, String?, LocalDateTime?> = super.fieldsRow() as Row3<Long?, String?, LocalDateTime?>
+
+    /**
+     * Convenience mapping calling {@link #convertFrom(Function)}.
+     */
+    fun <U> mapping(from: (Long?, String?, LocalDateTime?) -> U): SelectField<U> = convertFrom(Records.mapping(from))
+
+    /**
+     * Convenience mapping calling {@link #convertFrom(Class, Function)}.
+     */
+    fun <U> mapping(toType: Class<U>, from: (Long?, String?, LocalDateTime?) -> U): SelectField<U> = convertFrom(toType, Records.mapping(from))
 }

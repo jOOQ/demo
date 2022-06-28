@@ -7,14 +7,17 @@ package org.jooq.demo.kotlin.db.tables
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.util.function.Function
 
 import org.jooq.Field
 import org.jooq.ForeignKey
 import org.jooq.Identity
 import org.jooq.Name
 import org.jooq.Record
+import org.jooq.Records
 import org.jooq.Row10
 import org.jooq.Schema
+import org.jooq.SelectField
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
@@ -132,6 +135,7 @@ open class RewardsReport(
     override fun getIdentity(): Identity<RewardsReportRecord, Long?> = super.getIdentity() as Identity<RewardsReportRecord, Long?>
     override fun `as`(alias: String): RewardsReport = RewardsReport(DSL.name(alias), this, parameters)
     override fun `as`(alias: Name): RewardsReport = RewardsReport(alias, this, parameters)
+    override fun `as`(alias: Table<*>): RewardsReport = RewardsReport(alias.getQualifiedName(), this, parameters)
 
     /**
      * Rename this table
@@ -142,6 +146,11 @@ open class RewardsReport(
      * Rename this table
      */
     override fun rename(name: Name): RewardsReport = RewardsReport(name, null, parameters)
+
+    /**
+     * Rename this table
+     */
+    override fun rename(name: Table<*>): RewardsReport = RewardsReport(name.getQualifiedName(), null, parameters)
 
     // -------------------------------------------------------------------------
     // Row10 type methods
@@ -169,4 +178,14 @@ open class RewardsReport(
         minMonthlyPurchases,
         minDollarAmountPurchased
     )).let { if (aliased()) it.`as`(unqualifiedName) else it }
+
+    /**
+     * Convenience mapping calling {@link #convertFrom(Function)}.
+     */
+    fun <U> mapping(from: (Long?, Long?, String?, String?, String?, Long?, Boolean?, LocalDate?, LocalDateTime?, Int?) -> U): SelectField<U> = convertFrom(Records.mapping(from))
+
+    /**
+     * Convenience mapping calling {@link #convertFrom(Class, Function)}.
+     */
+    fun <U> mapping(toType: Class<U>, from: (Long?, Long?, String?, String?, String?, Long?, Boolean?, LocalDate?, LocalDateTime?, Int?) -> U): SelectField<U> = convertFrom(toType, Records.mapping(from))
 }

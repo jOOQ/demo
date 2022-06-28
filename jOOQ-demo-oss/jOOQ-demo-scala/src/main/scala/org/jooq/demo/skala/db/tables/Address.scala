@@ -10,6 +10,7 @@ import java.lang.String
 import java.time.LocalDateTime
 import java.util.Arrays
 import java.util.List
+import java.util.function.Function
 
 import org.jooq.Field
 import org.jooq.ForeignKey
@@ -19,6 +20,7 @@ import org.jooq.Name
 import org.jooq.Record
 import org.jooq.Row8
 import org.jooq.Schema
+import org.jooq.SelectField
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
@@ -144,6 +146,7 @@ extends TableImpl[AddressRecord](
   lazy val city: City = { new City(this, Keys.ADDRESS__ADDRESS_CITY_ID_FKEY) }
   override def as(alias: String): Address = new Address(DSL.name(alias), this)
   override def as(alias: Name): Address = new Address(alias, this)
+  override def as(alias: Table[_]): Address = new Address(alias.getQualifiedName(), this)
 
   /**
    * Rename this table
@@ -155,8 +158,23 @@ extends TableImpl[AddressRecord](
    */
   override def rename(name: Name): Address = new Address(name, null)
 
+  /**
+   * Rename this table
+   */
+  override def rename(name: Table[_]): Address = new Address(name.getQualifiedName(), null)
+
   // -------------------------------------------------------------------------
   // Row8 type methods
   // -------------------------------------------------------------------------
   override def fieldsRow: Row8[Long, String, String, String, Long, String, String, LocalDateTime] = super.fieldsRow.asInstanceOf[ Row8[Long, String, String, String, Long, String, String, LocalDateTime] ]
+
+  /**
+   * Convenience mapping calling {@link #convertFrom(Function)}.
+   */
+  def mapping[U](from: (Long, String, String, String, Long, String, String, LocalDateTime) => U): SelectField[U] = convertFrom(r => from.apply(r.value1(), r.value2(), r.value3(), r.value4(), r.value5(), r.value6(), r.value7(), r.value8()))
+
+  /**
+   * Convenience mapping calling {@link #convertFrom(Class, Function)}.
+   */
+  def mapping[U](toType: Class[U], from: (Long, String, String, String, Long, String, String, LocalDateTime) => U): SelectField[U] = convertFrom(toType,r => from.apply(r.value1(), r.value2(), r.value3(), r.value4(), r.value5(), r.value6(), r.value7(), r.value8()))
 }

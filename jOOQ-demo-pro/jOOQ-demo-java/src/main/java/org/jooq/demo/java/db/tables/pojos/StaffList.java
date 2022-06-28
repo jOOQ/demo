@@ -12,14 +12,14 @@ import java.io.Serializable;
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public record StaffList(
-    Long   id,
+    Long id,
     String name,
     String address,
     String zipCode,
     String phone,
     String city,
     String country,
-    Long   sid
+    Long sid
 ) implements Serializable {
 
     private static final long serialVersionUID = 1L;

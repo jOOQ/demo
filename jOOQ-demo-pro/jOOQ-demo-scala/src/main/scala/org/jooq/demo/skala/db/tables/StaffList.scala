@@ -7,6 +7,7 @@ package org.jooq.demo.skala.db.tables
 import java.lang.Class
 import java.lang.Long
 import java.lang.String
+import java.util.function.Function
 
 import org.jooq.Field
 import org.jooq.ForeignKey
@@ -14,6 +15,7 @@ import org.jooq.Name
 import org.jooq.Record
 import org.jooq.Row8
 import org.jooq.Schema
+import org.jooq.SelectField
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
@@ -53,7 +55,20 @@ extends TableImpl[StaffListRecord](
   aliased,
   parameters,
   DSL.comment(""),
-  TableOptions.view("create view \"staff_list\" as  SELECT s.staff_id AS id,\n    (((s.first_name)::text || ' '::text) || (s.last_name)::text) AS name,\n    a.address,\n    a.postal_code AS \"zip code\",\n    a.phone,\n    city.city,\n    country.country,\n    s.store_id AS sid\n   FROM (((staff s\n     JOIN address a ON ((s.address_id = a.address_id)))\n     JOIN city ON ((a.city_id = city.city_id)))\n     JOIN country ON ((city.country_id = country.country_id)));")
+  TableOptions.view("""
+  create view "staff_list" as  SELECT s.staff_id AS id,
+   (((s.first_name)::text || ' '::text) || (s.last_name)::text) AS name,
+   a.address,
+   a.postal_code AS "zip code",
+   a.phone,
+   city.city,
+   country.country,
+   s.store_id AS sid
+  FROM (((staff s
+    JOIN address a ON ((s.address_id = a.address_id)))
+    JOIN city ON ((a.city_id = city.city_id)))
+    JOIN country ON ((city.country_id = country.country_id)));
+  """)
 ) {
 
   /**
@@ -123,6 +138,7 @@ extends TableImpl[StaffListRecord](
   override def getSchema: Schema = if (aliased()) null else Public.PUBLIC
   override def as(alias: String): StaffList = new StaffList(DSL.name(alias), this)
   override def as(alias: Name): StaffList = new StaffList(alias, this)
+  override def as(alias: Table[_]): StaffList = new StaffList(alias.getQualifiedName(), this)
 
   /**
    * Rename this table
@@ -134,8 +150,23 @@ extends TableImpl[StaffListRecord](
    */
   override def rename(name: Name): StaffList = new StaffList(name, null)
 
+  /**
+   * Rename this table
+   */
+  override def rename(name: Table[_]): StaffList = new StaffList(name.getQualifiedName(), null)
+
   // -------------------------------------------------------------------------
   // Row8 type methods
   // -------------------------------------------------------------------------
   override def fieldsRow: Row8[Long, String, String, String, String, String, String, Long] = super.fieldsRow.asInstanceOf[ Row8[Long, String, String, String, String, String, String, Long] ]
+
+  /**
+   * Convenience mapping calling {@link #convertFrom(Function)}.
+   */
+  def mapping[U](from: (Long, String, String, String, String, String, String, Long) => U): SelectField[U] = convertFrom(r => from.apply(r.value1(), r.value2(), r.value3(), r.value4(), r.value5(), r.value6(), r.value7(), r.value8()))
+
+  /**
+   * Convenience mapping calling {@link #convertFrom(Class, Function)}.
+   */
+  def mapping[U](toType: Class[U], from: (Long, String, String, String, String, String, String, Long) => U): SelectField[U] = convertFrom(toType,r => from.apply(r.value1(), r.value2(), r.value3(), r.value4(), r.value5(), r.value6(), r.value7(), r.value8()))
 }

@@ -19,15 +19,15 @@ import org.jooq.impl.TableRecordImpl
 @Suppress("UNCHECKED_CAST")
 open class SalesByStoreRecord() : TableRecordImpl<SalesByStoreRecord>(SalesByStore.SALES_BY_STORE), Record3<String?, String?, BigDecimal?> {
 
-    var store: String?
+    open var store: String?
         set(value): Unit = set(0, value)
         get(): String? = get(0) as String?
 
-    var manager: String?
+    open var manager: String?
         set(value): Unit = set(1, value)
         get(): String? = get(1) as String?
 
-    var totalSales: BigDecimal?
+    open var totalSales: BigDecimal?
         set(value): Unit = set(2, value)
         get(): BigDecimal? = get(2) as BigDecimal?
 

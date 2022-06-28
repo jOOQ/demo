@@ -12,7 +12,7 @@ import java.io.Serializable;
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public record CustomerList(
-    Long   id,
+    Long id,
     String name,
     String address,
     String zipCode,
@@ -20,7 +20,7 @@ public record CustomerList(
     String city,
     String country,
     String notes,
-    Long   sid
+    Long sid
 ) implements Serializable {
 
     private static final long serialVersionUID = 1L;

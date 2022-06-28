@@ -20,15 +20,15 @@ import org.jooq.impl.UpdatableRecordImpl
 @Suppress("UNCHECKED_CAST")
 open class FilmActorRecord() : UpdatableRecordImpl<FilmActorRecord>(FilmActor.FILM_ACTOR), Record3<Long?, Long?, LocalDateTime?> {
 
-    var actorId: Long?
+    open var actorId: Long?
         set(value): Unit = set(0, value)
         get(): Long? = get(0) as Long?
 
-    var filmId: Long?
+    open var filmId: Long?
         set(value): Unit = set(1, value)
         get(): Long? = get(1) as Long?
 
-    var lastUpdate: LocalDateTime?
+    open var lastUpdate: LocalDateTime?
         set(value): Unit = set(2, value)
         get(): LocalDateTime? = get(2) as LocalDateTime?
 

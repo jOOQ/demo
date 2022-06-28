@@ -5,6 +5,7 @@ package org.jooq.demo.kotlin.db.tables
 
 
 import java.time.LocalDateTime
+import java.util.function.Function
 
 import kotlin.collections.List
 
@@ -14,8 +15,10 @@ import org.jooq.Identity
 import org.jooq.Index
 import org.jooq.Name
 import org.jooq.Record
+import org.jooq.Records
 import org.jooq.Row4
 import org.jooq.Schema
+import org.jooq.SelectField
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
@@ -108,6 +111,7 @@ open class Actor(
     override fun getPrimaryKey(): UniqueKey<ActorRecord> = ACTOR_PKEY
     override fun `as`(alias: String): Actor = Actor(DSL.name(alias), this)
     override fun `as`(alias: Name): Actor = Actor(alias, this)
+    override fun `as`(alias: Table<*>): Actor = Actor(alias.getQualifiedName(), this)
 
     /**
      * Rename this table
@@ -119,8 +123,23 @@ open class Actor(
      */
     override fun rename(name: Name): Actor = Actor(name, null)
 
+    /**
+     * Rename this table
+     */
+    override fun rename(name: Table<*>): Actor = Actor(name.getQualifiedName(), null)
+
     // -------------------------------------------------------------------------
     // Row4 type methods
     // -------------------------------------------------------------------------
     override fun fieldsRow(): Row4<Long?, String?, String?, LocalDateTime?> = super.fieldsRow() as Row4<Long?, String?, String?, LocalDateTime?>
+
+    /**
+     * Convenience mapping calling {@link #convertFrom(Function)}.
+     */
+    fun <U> mapping(from: (Long?, String?, String?, LocalDateTime?) -> U): SelectField<U> = convertFrom(Records.mapping(from))
+
+    /**
+     * Convenience mapping calling {@link #convertFrom(Class, Function)}.
+     */
+    fun <U> mapping(toType: Class<U>, from: (Long?, String?, String?, LocalDateTime?) -> U): SelectField<U> = convertFrom(toType, Records.mapping(from))
 }

@@ -20,27 +20,27 @@ import org.jooq.impl.TableRecordImpl
 @Suppress("UNCHECKED_CAST")
 open class PaymentP2007_01Record() : TableRecordImpl<PaymentP2007_01Record>(PaymentP2007_01.PAYMENT_P2007_01), Record6<Long?, Long?, Long?, Long?, BigDecimal?, LocalDateTime?> {
 
-    var paymentId: Long?
+    open var paymentId: Long?
         set(value): Unit = set(0, value)
         get(): Long? = get(0) as Long?
 
-    var customerId: Long?
+    open var customerId: Long?
         set(value): Unit = set(1, value)
         get(): Long? = get(1) as Long?
 
-    var staffId: Long?
+    open var staffId: Long?
         set(value): Unit = set(2, value)
         get(): Long? = get(2) as Long?
 
-    var rentalId: Long?
+    open var rentalId: Long?
         set(value): Unit = set(3, value)
         get(): Long? = get(3) as Long?
 
-    var amount: BigDecimal?
+    open var amount: BigDecimal?
         set(value): Unit = set(4, value)
         get(): BigDecimal? = get(4) as BigDecimal?
 
-    var paymentDate: LocalDateTime?
+    open var paymentDate: LocalDateTime?
         set(value): Unit = set(5, value)
         get(): LocalDateTime? = get(5) as LocalDateTime?
 

@@ -21,43 +21,43 @@ import org.jooq.impl.UpdatableRecordImpl
 @Suppress("UNCHECKED_CAST")
 open class CustomerRecord() : UpdatableRecordImpl<CustomerRecord>(Customer.CUSTOMER), Record10<Long?, Long?, String?, String?, String?, Long?, Boolean?, LocalDate?, LocalDateTime?, Int?> {
 
-    var customerId: Long?
+    open var customerId: Long?
         set(value): Unit = set(0, value)
         get(): Long? = get(0) as Long?
 
-    var storeId: Long?
+    open var storeId: Long?
         set(value): Unit = set(1, value)
         get(): Long? = get(1) as Long?
 
-    var firstName: String?
+    open var firstName: String?
         set(value): Unit = set(2, value)
         get(): String? = get(2) as String?
 
-    var lastName: String?
+    open var lastName: String?
         set(value): Unit = set(3, value)
         get(): String? = get(3) as String?
 
-    var email: String?
+    open var email: String?
         set(value): Unit = set(4, value)
         get(): String? = get(4) as String?
 
-    var addressId: Long?
+    open var addressId: Long?
         set(value): Unit = set(5, value)
         get(): Long? = get(5) as Long?
 
-    var activebool: Boolean?
+    open var activebool: Boolean?
         set(value): Unit = set(6, value)
         get(): Boolean? = get(6) as Boolean?
 
-    var createDate: LocalDate?
+    open var createDate: LocalDate?
         set(value): Unit = set(7, value)
         get(): LocalDate? = get(7) as LocalDate?
 
-    var lastUpdate: LocalDateTime?
+    open var lastUpdate: LocalDateTime?
         set(value): Unit = set(8, value)
         get(): LocalDateTime? = get(8) as LocalDateTime?
 
-    var active: Int?
+    open var active: Int?
         set(value): Unit = set(9, value)
         get(): Int? = get(9) as Int?
 

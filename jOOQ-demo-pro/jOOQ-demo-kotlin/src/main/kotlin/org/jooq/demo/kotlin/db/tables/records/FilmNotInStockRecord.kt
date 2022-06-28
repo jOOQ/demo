@@ -17,7 +17,7 @@ import org.jooq.impl.TableRecordImpl
 @Suppress("UNCHECKED_CAST")
 open class FilmNotInStockRecord() : TableRecordImpl<FilmNotInStockRecord>(FilmNotInStock.FILM_NOT_IN_STOCK), Record1<Int?> {
 
-    var pFilmCount: Int?
+    open var pFilmCount: Int?
         set(value): Unit = set(0, value)
         get(): Int? = get(0) as Int?
 

@@ -20,15 +20,15 @@ import org.jooq.impl.UpdatableRecordImpl
 @Suppress("UNCHECKED_CAST")
 open class LanguageRecord() : UpdatableRecordImpl<LanguageRecord>(Language.LANGUAGE), Record3<Long?, String?, LocalDateTime?> {
 
-    var languageId: Long?
+    open var languageId: Long?
         set(value): Unit = set(0, value)
         get(): Long? = get(0) as Long?
 
-    var name: String?
+    open var name: String?
         set(value): Unit = set(1, value)
         get(): String? = get(1) as String?
 
-    var lastUpdate: LocalDateTime?
+    open var lastUpdate: LocalDateTime?
         set(value): Unit = set(2, value)
         get(): LocalDateTime? = get(2) as LocalDateTime?
 

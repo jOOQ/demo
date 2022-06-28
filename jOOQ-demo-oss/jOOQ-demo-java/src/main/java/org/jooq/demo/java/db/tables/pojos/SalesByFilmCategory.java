@@ -13,7 +13,7 @@ import java.math.BigDecimal;
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public record SalesByFilmCategory(
-    String     category,
+    String category,
     BigDecimal totalSales
 ) implements Serializable {
 

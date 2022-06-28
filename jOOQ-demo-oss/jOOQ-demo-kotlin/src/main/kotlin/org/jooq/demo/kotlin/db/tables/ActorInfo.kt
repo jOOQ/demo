@@ -4,12 +4,16 @@
 package org.jooq.demo.kotlin.db.tables
 
 
+import java.util.function.Function
+
 import org.jooq.Field
 import org.jooq.ForeignKey
 import org.jooq.Name
 import org.jooq.Record
+import org.jooq.Records
 import org.jooq.Row4
 import org.jooq.Schema
+import org.jooq.SelectField
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
@@ -39,7 +43,22 @@ open class ActorInfo(
     aliased,
     parameters,
     DSL.comment(""),
-    TableOptions.view("create view \"actor_info\" as  SELECT a.actor_id,\n    a.first_name,\n    a.last_name,\n    group_concat(DISTINCT (((c.name)::text || ': '::text) || ( SELECT group_concat((f.title)::text) AS group_concat\n           FROM ((film f\n             JOIN film_category fc_1 ON ((f.film_id = fc_1.film_id)))\n             JOIN film_actor fa_1 ON ((f.film_id = fa_1.film_id)))\n          WHERE ((fc_1.category_id = c.category_id) AND (fa_1.actor_id = a.actor_id))\n          GROUP BY fa_1.actor_id))) AS film_info\n   FROM (((actor a\n     LEFT JOIN film_actor fa ON ((a.actor_id = fa.actor_id)))\n     LEFT JOIN film_category fc ON ((fa.film_id = fc.film_id)))\n     LEFT JOIN category c ON ((fc.category_id = c.category_id)))\n  GROUP BY a.actor_id, a.first_name, a.last_name;")
+    TableOptions.view("""
+    create view "actor_info" as  SELECT a.actor_id,
+      a.first_name,
+      a.last_name,
+      group_concat(DISTINCT (((c.name)::text || ': '::text) || ( SELECT group_concat((f.title)::text) AS group_concat
+             FROM ((film f
+               JOIN film_category fc_1 ON ((f.film_id = fc_1.film_id)))
+               JOIN film_actor fa_1 ON ((f.film_id = fa_1.film_id)))
+            WHERE ((fc_1.category_id = c.category_id) AND (fa_1.actor_id = a.actor_id))
+            GROUP BY fa_1.actor_id))) AS film_info
+     FROM (((actor a
+       LEFT JOIN film_actor fa ON ((a.actor_id = fa.actor_id)))
+       LEFT JOIN film_category fc ON ((fa.film_id = fc.film_id)))
+       LEFT JOIN category c ON ((fc.category_id = c.category_id)))
+    GROUP BY a.actor_id, a.first_name, a.last_name;
+    """)
 ) {
     companion object {
 
@@ -96,6 +115,7 @@ open class ActorInfo(
     override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
     override fun `as`(alias: String): ActorInfo = ActorInfo(DSL.name(alias), this)
     override fun `as`(alias: Name): ActorInfo = ActorInfo(alias, this)
+    override fun `as`(alias: Table<*>): ActorInfo = ActorInfo(alias.getQualifiedName(), this)
 
     /**
      * Rename this table
@@ -107,8 +127,23 @@ open class ActorInfo(
      */
     override fun rename(name: Name): ActorInfo = ActorInfo(name, null)
 
+    /**
+     * Rename this table
+     */
+    override fun rename(name: Table<*>): ActorInfo = ActorInfo(name.getQualifiedName(), null)
+
     // -------------------------------------------------------------------------
     // Row4 type methods
     // -------------------------------------------------------------------------
     override fun fieldsRow(): Row4<Long?, String?, String?, String?> = super.fieldsRow() as Row4<Long?, String?, String?, String?>
+
+    /**
+     * Convenience mapping calling {@link #convertFrom(Function)}.
+     */
+    fun <U> mapping(from: (Long?, String?, String?, String?) -> U): SelectField<U> = convertFrom(Records.mapping(from))
+
+    /**
+     * Convenience mapping calling {@link #convertFrom(Class, Function)}.
+     */
+    fun <U> mapping(toType: Class<U>, from: (Long?, String?, String?, String?) -> U): SelectField<U> = convertFrom(toType, Records.mapping(from))
 }

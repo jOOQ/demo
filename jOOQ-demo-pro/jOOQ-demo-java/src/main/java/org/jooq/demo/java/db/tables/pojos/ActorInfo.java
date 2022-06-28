@@ -12,7 +12,7 @@ import java.io.Serializable;
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public record ActorInfo(
-    Long   actorId,
+    Long actorId,
     String firstName,
     String lastName,
     String filmInfo

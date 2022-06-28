@@ -4,12 +4,16 @@
 package org.jooq.demo.kotlin.db.tables
 
 
+import java.util.function.Function
+
 import org.jooq.Field
 import org.jooq.ForeignKey
 import org.jooq.Name
 import org.jooq.Record
+import org.jooq.Records
 import org.jooq.Row8
 import org.jooq.Schema
+import org.jooq.SelectField
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
@@ -39,7 +43,20 @@ open class StaffList(
     aliased,
     parameters,
     DSL.comment(""),
-    TableOptions.view("create view \"staff_list\" as  SELECT s.staff_id AS id,\n    (((s.first_name)::text || ' '::text) || (s.last_name)::text) AS name,\n    a.address,\n    a.postal_code AS \"zip code\",\n    a.phone,\n    city.city,\n    country.country,\n    s.store_id AS sid\n   FROM (((staff s\n     JOIN address a ON ((s.address_id = a.address_id)))\n     JOIN city ON ((a.city_id = city.city_id)))\n     JOIN country ON ((city.country_id = country.country_id)));")
+    TableOptions.view("""
+    create view "staff_list" as  SELECT s.staff_id AS id,
+     (((s.first_name)::text || ' '::text) || (s.last_name)::text) AS name,
+     a.address,
+     a.postal_code AS "zip code",
+     a.phone,
+     city.city,
+     country.country,
+     s.store_id AS sid
+    FROM (((staff s
+      JOIN address a ON ((s.address_id = a.address_id)))
+      JOIN city ON ((a.city_id = city.city_id)))
+      JOIN country ON ((city.country_id = country.country_id)));
+    """)
 ) {
     companion object {
 
@@ -116,6 +133,7 @@ open class StaffList(
     override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
     override fun `as`(alias: String): StaffList = StaffList(DSL.name(alias), this)
     override fun `as`(alias: Name): StaffList = StaffList(alias, this)
+    override fun `as`(alias: Table<*>): StaffList = StaffList(alias.getQualifiedName(), this)
 
     /**
      * Rename this table
@@ -127,8 +145,23 @@ open class StaffList(
      */
     override fun rename(name: Name): StaffList = StaffList(name, null)
 
+    /**
+     * Rename this table
+     */
+    override fun rename(name: Table<*>): StaffList = StaffList(name.getQualifiedName(), null)
+
     // -------------------------------------------------------------------------
     // Row8 type methods
     // -------------------------------------------------------------------------
     override fun fieldsRow(): Row8<Long?, String?, String?, String?, String?, String?, String?, Long?> = super.fieldsRow() as Row8<Long?, String?, String?, String?, String?, String?, String?, Long?>
+
+    /**
+     * Convenience mapping calling {@link #convertFrom(Function)}.
+     */
+    fun <U> mapping(from: (Long?, String?, String?, String?, String?, String?, String?, Long?) -> U): SelectField<U> = convertFrom(Records.mapping(from))
+
+    /**
+     * Convenience mapping calling {@link #convertFrom(Class, Function)}.
+     */
+    fun <U> mapping(toType: Class<U>, from: (Long?, String?, String?, String?, String?, String?, String?, Long?) -> U): SelectField<U> = convertFrom(toType, Records.mapping(from))
 }

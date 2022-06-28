@@ -13,17 +13,17 @@ import java.time.LocalDateTime;
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public record Staff(
-    Long          staffId,
-    String        firstName,
-    String        lastName,
-    Long          addressId,
-    String        email,
-    Long          storeId,
-    Boolean       active,
-    String        username,
-    String        password,
+    Long staffId,
+    String firstName,
+    String lastName,
+    Long addressId,
+    String email,
+    Long storeId,
+    Boolean active,
+    String username,
+    String password,
     LocalDateTime lastUpdate,
-    byte[]        picture
+    byte[] picture
 ) implements Serializable {
 
     private static final long serialVersionUID = 1L;

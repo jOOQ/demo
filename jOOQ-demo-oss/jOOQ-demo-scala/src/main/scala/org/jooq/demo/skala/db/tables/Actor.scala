@@ -10,6 +10,7 @@ import java.lang.String
 import java.time.LocalDateTime
 import java.util.Arrays
 import java.util.List
+import java.util.function.Function
 
 import org.jooq.Field
 import org.jooq.ForeignKey
@@ -19,6 +20,7 @@ import org.jooq.Name
 import org.jooq.Record
 import org.jooq.Row4
 import org.jooq.Schema
+import org.jooq.SelectField
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
@@ -117,6 +119,7 @@ extends TableImpl[ActorRecord](
   override def getPrimaryKey: UniqueKey[ActorRecord] = Keys.ACTOR_PKEY
   override def as(alias: String): Actor = new Actor(DSL.name(alias), this)
   override def as(alias: Name): Actor = new Actor(alias, this)
+  override def as(alias: Table[_]): Actor = new Actor(alias.getQualifiedName(), this)
 
   /**
    * Rename this table
@@ -128,8 +131,23 @@ extends TableImpl[ActorRecord](
    */
   override def rename(name: Name): Actor = new Actor(name, null)
 
+  /**
+   * Rename this table
+   */
+  override def rename(name: Table[_]): Actor = new Actor(name.getQualifiedName(), null)
+
   // -------------------------------------------------------------------------
   // Row4 type methods
   // -------------------------------------------------------------------------
   override def fieldsRow: Row4[Long, String, String, LocalDateTime] = super.fieldsRow.asInstanceOf[ Row4[Long, String, String, LocalDateTime] ]
+
+  /**
+   * Convenience mapping calling {@link #convertFrom(Function)}.
+   */
+  def mapping[U](from: (Long, String, String, LocalDateTime) => U): SelectField[U] = convertFrom(r => from.apply(r.value1(), r.value2(), r.value3(), r.value4()))
+
+  /**
+   * Convenience mapping calling {@link #convertFrom(Class, Function)}.
+   */
+  def mapping[U](toType: Class[U], from: (Long, String, String, LocalDateTime) => U): SelectField[U] = convertFrom(toType,r => from.apply(r.value1(), r.value2(), r.value3(), r.value4()))
 }

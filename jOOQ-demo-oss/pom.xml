@@ -3,9 +3,10 @@
 
     <modelVersion>4.0.0</modelVersion>
 
+    <!-- We're using JDK 17 distribution here. You can download it from this page: https://www.jooq.org/download/versions -->
     <groupId>org.jooq</groupId>
     <artifactId>jooq-demo</artifactId>
-    <version>3.16.6</version>
+    <version>3.17.1</version>
     <name>jOOQ Demo (Open Source Edition)</name>
     <packaging>pom</packaging>
 
@@ -19,7 +20,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jooq.version>3.16.6</jooq.version>
+        <jooq.version>3.17.1</jooq.version>
         <flyway.version>8.5.11</flyway.version>
         <postgres.version>42.3.4</postgres.version>
         <log4j.version>2.17.1</log4j.version>

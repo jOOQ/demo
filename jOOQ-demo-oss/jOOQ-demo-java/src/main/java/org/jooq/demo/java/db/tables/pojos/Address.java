@@ -13,13 +13,13 @@ import java.time.LocalDateTime;
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public record Address(
-    Long          addressId,
-    String        address,
-    String        address2,
-    String        district,
-    Long          cityId,
-    String        postalCode,
-    String        phone,
+    Long addressId,
+    String address,
+    String address2,
+    String district,
+    Long cityId,
+    String postalCode,
+    String phone,
     LocalDateTime lastUpdate
 ) implements Serializable {
 

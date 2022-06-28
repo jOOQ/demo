@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public record Language(
-    Long          languageId,
-    String        name,
+    Long languageId,
+    String name,
     LocalDateTime lastUpdate
 ) implements Serializable {
 

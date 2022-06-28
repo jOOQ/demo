@@ -14,16 +14,16 @@ import java.time.LocalDateTime;
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public record RewardsReport(
-    Long          customerId,
-    Long          storeId,
-    String        firstName,
-    String        lastName,
-    String        email,
-    Long          addressId,
-    Boolean       activebool,
-    LocalDate     createDate,
+    Long customerId,
+    Long storeId,
+    String firstName,
+    String lastName,
+    String email,
+    Long addressId,
+    Boolean activebool,
+    LocalDate createDate,
     LocalDateTime lastUpdate,
-    Integer       active
+    Integer active
 ) implements Serializable {
 
     private static final long serialVersionUID = 1L;
