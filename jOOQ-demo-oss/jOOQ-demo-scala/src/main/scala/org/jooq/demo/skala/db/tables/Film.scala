@@ -15,7 +15,6 @@ import java.math.BigDecimal
 import java.time.LocalDateTime
 import java.util.Arrays
 import java.util.List
-import java.util.function.Function
 
 import org.jooq.Field
 import org.jooq.ForeignKey
@@ -25,7 +24,6 @@ import org.jooq.Name
 import org.jooq.Record
 import org.jooq.Row14
 import org.jooq.Schema
-import org.jooq.SelectField
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
@@ -194,7 +192,6 @@ extends TableImpl[FilmRecord](
   lazy val filmOriginalLanguageIdFkey: Language = { new Language(this, Keys.FILM__FILM_ORIGINAL_LANGUAGE_ID_FKEY) }
   override def as(alias: String): Film = new Film(DSL.name(alias), this)
   override def as(alias: Name): Film = new Film(alias, this)
-  override def as(alias: Table[_]): Film = new Film(alias.getQualifiedName(), this)
 
   /**
    * Rename this table
@@ -206,23 +203,8 @@ extends TableImpl[FilmRecord](
    */
   override def rename(name: Name): Film = new Film(name, null)
 
-  /**
-   * Rename this table
-   */
-  override def rename(name: Table[_]): Film = new Film(name.getQualifiedName(), null)
-
   // -------------------------------------------------------------------------
   // Row14 type methods
   // -------------------------------------------------------------------------
   override def fieldsRow: Row14[Long, String, String, Integer, Long, Long, Short, BigDecimal, Short, BigDecimal, MpaaRating, LocalDateTime, Array[String], Object] = super.fieldsRow.asInstanceOf[ Row14[Long, String, String, Integer, Long, Long, Short, BigDecimal, Short, BigDecimal, MpaaRating, LocalDateTime, Array[String], Object] ]
-
-  /**
-   * Convenience mapping calling {@link #convertFrom(Function)}.
-   */
-  def mapping[U](from: (Long, String, String, Integer, Long, Long, Short, BigDecimal, Short, BigDecimal, MpaaRating, LocalDateTime, Array[String], Object) => U): SelectField[U] = convertFrom(r => from.apply(r.value1(), r.value2(), r.value3(), r.value4(), r.value5(), r.value6(), r.value7(), r.value8(), r.value9(), r.value10(), r.value11(), r.value12(), r.value13(), r.value14()))
-
-  /**
-   * Convenience mapping calling {@link #convertFrom(Class, Function)}.
-   */
-  def mapping[U](toType: Class[U], from: (Long, String, String, Integer, Long, Long, Short, BigDecimal, Short, BigDecimal, MpaaRating, LocalDateTime, Array[String], Object) => U): SelectField[U] = convertFrom(toType,r => from.apply(r.value1(), r.value2(), r.value3(), r.value4(), r.value5(), r.value6(), r.value7(), r.value8(), r.value9(), r.value10(), r.value11(), r.value12(), r.value13(), r.value14()))
 }

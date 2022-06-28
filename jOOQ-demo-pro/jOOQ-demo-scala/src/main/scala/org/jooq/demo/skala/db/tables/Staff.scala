@@ -11,7 +11,6 @@ import java.lang.String
 import java.time.LocalDateTime
 import java.util.Arrays
 import java.util.List
-import java.util.function.Function
 
 import org.jooq.Field
 import org.jooq.ForeignKey
@@ -20,7 +19,6 @@ import org.jooq.Name
 import org.jooq.Record
 import org.jooq.Row11
 import org.jooq.Schema
-import org.jooq.SelectField
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
@@ -164,7 +162,6 @@ extends TableImpl[StaffRecord](
   lazy val store: Store = { new Store(this, Keys.STAFF__STAFF_STORE_ID_FKEY) }
   override def as(alias: String): Staff = new Staff(DSL.name(alias), this)
   override def as(alias: Name): Staff = new Staff(alias, this)
-  override def as(alias: Table[_]): Staff = new Staff(alias.getQualifiedName(), this)
 
   /**
    * Rename this table
@@ -176,23 +173,8 @@ extends TableImpl[StaffRecord](
    */
   override def rename(name: Name): Staff = new Staff(name, null)
 
-  /**
-   * Rename this table
-   */
-  override def rename(name: Table[_]): Staff = new Staff(name.getQualifiedName(), null)
-
   // -------------------------------------------------------------------------
   // Row11 type methods
   // -------------------------------------------------------------------------
   override def fieldsRow: Row11[Long, String, String, Long, String, Long, Boolean, String, String, LocalDateTime, Array[Byte]] = super.fieldsRow.asInstanceOf[ Row11[Long, String, String, Long, String, Long, Boolean, String, String, LocalDateTime, Array[Byte]] ]
-
-  /**
-   * Convenience mapping calling {@link #convertFrom(Function)}.
-   */
-  def mapping[U](from: (Long, String, String, Long, String, Long, Boolean, String, String, LocalDateTime, Array[Byte]) => U): SelectField[U] = convertFrom(r => from.apply(r.value1(), r.value2(), r.value3(), r.value4(), r.value5(), r.value6(), r.value7(), r.value8(), r.value9(), r.value10(), r.value11()))
-
-  /**
-   * Convenience mapping calling {@link #convertFrom(Class, Function)}.
-   */
-  def mapping[U](toType: Class[U], from: (Long, String, String, Long, String, Long, Boolean, String, String, LocalDateTime, Array[Byte]) => U): SelectField[U] = convertFrom(toType,r => from.apply(r.value1(), r.value2(), r.value3(), r.value4(), r.value5(), r.value6(), r.value7(), r.value8(), r.value9(), r.value10(), r.value11()))
 }

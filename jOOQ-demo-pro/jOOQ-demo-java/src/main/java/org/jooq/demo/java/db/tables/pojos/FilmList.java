@@ -15,14 +15,14 @@ import org.jooq.demo.java.db.enums.MpaaRating;
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public record FilmList(
-    Long fid,
-    String title,
-    String description,
-    String category,
+    Long       fid,
+    String     title,
+    String     description,
+    String     category,
     BigDecimal price,
-    Short length,
+    Short      length,
     MpaaRating rating,
-    String actors
+    String     actors
 ) implements Serializable {
 
     private static final long serialVersionUID = 1L;

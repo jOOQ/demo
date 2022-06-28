@@ -7,19 +7,15 @@ package org.jooq.demo.java.db.tables;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Function7;
 import org.jooq.Identity;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Records;
 import org.jooq.Row7;
 import org.jooq.Schema;
-import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -191,11 +187,6 @@ public class Rental extends TableImpl<RentalRecord> {
         return new Rental(alias, this);
     }
 
-    @Override
-    public Rental as(Table<?> alias) {
-        return new Rental(alias.getQualifiedName(), this);
-    }
-
     /**
      * Rename this table
      */
@@ -212,14 +203,6 @@ public class Rental extends TableImpl<RentalRecord> {
         return new Rental(name, null);
     }
 
-    /**
-     * Rename this table
-     */
-    @Override
-    public Rental rename(Table<?> name) {
-        return new Rental(name.getQualifiedName(), null);
-    }
-
     // -------------------------------------------------------------------------
     // Row7 type methods
     // -------------------------------------------------------------------------
@@ -227,19 +210,5 @@ public class Rental extends TableImpl<RentalRecord> {
     @Override
     public Row7<Long, LocalDateTime, Long, Long, LocalDateTime, Long, LocalDateTime> fieldsRow() {
         return (Row7) super.fieldsRow();
-    }
-
-    /**
-     * Convenience mapping calling {@link #convertFrom(Function)}.
-     */
-    public <U> SelectField<U> mapping(Function7<? super Long, ? super LocalDateTime, ? super Long, ? super Long, ? super LocalDateTime, ? super Long, ? super LocalDateTime, ? extends U> from) {
-        return convertFrom(Records.mapping(from));
-    }
-
-    /**
-     * Convenience mapping calling {@link #convertFrom(Class, Function)}.
-     */
-    public <U> SelectField<U> mapping(Class<U> toType, Function7<? super Long, ? super LocalDateTime, ? super Long, ? super Long, ? super LocalDateTime, ? super Long, ? super LocalDateTime, ? extends U> from) {
-        return convertFrom(toType, Records.mapping(from));
     }
 }

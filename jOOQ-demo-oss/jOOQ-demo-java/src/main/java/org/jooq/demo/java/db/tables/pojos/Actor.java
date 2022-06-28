@@ -13,9 +13,9 @@ import java.time.LocalDateTime;
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public record Actor(
-    Long actorId,
-    String firstName,
-    String lastName,
+    Long          actorId,
+    String        firstName,
+    String        lastName,
     LocalDateTime lastUpdate
 ) implements Serializable {
 

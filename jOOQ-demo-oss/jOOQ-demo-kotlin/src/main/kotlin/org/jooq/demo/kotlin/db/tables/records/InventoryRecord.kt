@@ -20,19 +20,19 @@ import org.jooq.impl.UpdatableRecordImpl
 @Suppress("UNCHECKED_CAST")
 open class InventoryRecord() : UpdatableRecordImpl<InventoryRecord>(Inventory.INVENTORY), Record4<Long?, Long?, Long?, LocalDateTime?> {
 
-    open var inventoryId: Long?
+    var inventoryId: Long?
         set(value): Unit = set(0, value)
         get(): Long? = get(0) as Long?
 
-    open var filmId: Long?
+    var filmId: Long?
         set(value): Unit = set(1, value)
         get(): Long? = get(1) as Long?
 
-    open var storeId: Long?
+    var storeId: Long?
         set(value): Unit = set(2, value)
         get(): Long? = get(2) as Long?
 
-    open var lastUpdate: LocalDateTime?
+    var lastUpdate: LocalDateTime?
         set(value): Unit = set(3, value)
         get(): LocalDateTime? = get(3) as LocalDateTime?
 

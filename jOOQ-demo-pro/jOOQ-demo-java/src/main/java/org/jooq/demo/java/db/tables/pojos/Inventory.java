@@ -13,9 +13,9 @@ import java.time.LocalDateTime;
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public record Inventory(
-    Long inventoryId,
-    Long filmId,
-    Long storeId,
+    Long          inventoryId,
+    Long          filmId,
+    Long          storeId,
     LocalDateTime lastUpdate
 ) implements Serializable {
 

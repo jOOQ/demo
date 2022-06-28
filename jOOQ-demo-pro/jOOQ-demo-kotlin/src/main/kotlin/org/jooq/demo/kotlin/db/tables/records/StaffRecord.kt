@@ -20,47 +20,47 @@ import org.jooq.impl.UpdatableRecordImpl
 @Suppress("UNCHECKED_CAST")
 open class StaffRecord() : UpdatableRecordImpl<StaffRecord>(Staff.STAFF), Record11<Long?, String?, String?, Long?, String?, Long?, Boolean?, String?, String?, LocalDateTime?, ByteArray?> {
 
-    open var staffId: Long?
+    var staffId: Long?
         set(value): Unit = set(0, value)
         get(): Long? = get(0) as Long?
 
-    open var firstName: String?
+    var firstName: String?
         set(value): Unit = set(1, value)
         get(): String? = get(1) as String?
 
-    open var lastName: String?
+    var lastName: String?
         set(value): Unit = set(2, value)
         get(): String? = get(2) as String?
 
-    open var addressId: Long?
+    var addressId: Long?
         set(value): Unit = set(3, value)
         get(): Long? = get(3) as Long?
 
-    open var email: String?
+    var email: String?
         set(value): Unit = set(4, value)
         get(): String? = get(4) as String?
 
-    open var storeId: Long?
+    var storeId: Long?
         set(value): Unit = set(5, value)
         get(): Long? = get(5) as Long?
 
-    open var active: Boolean?
+    var active: Boolean?
         set(value): Unit = set(6, value)
         get(): Boolean? = get(6) as Boolean?
 
-    open var username: String?
+    var username: String?
         set(value): Unit = set(7, value)
         get(): String? = get(7) as String?
 
-    open var password: String?
+    var password: String?
         set(value): Unit = set(8, value)
         get(): String? = get(8) as String?
 
-    open var lastUpdate: LocalDateTime?
+    var lastUpdate: LocalDateTime?
         set(value): Unit = set(9, value)
         get(): LocalDateTime? = get(9) as LocalDateTime?
 
-    open var picture: ByteArray?
+    var picture: ByteArray?
         set(value): Unit = set(10, value)
         get(): ByteArray? = get(10) as ByteArray?
 

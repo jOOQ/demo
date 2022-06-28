@@ -20,35 +20,35 @@ import org.jooq.impl.UpdatableRecordImpl
 @Suppress("UNCHECKED_CAST")
 open class AddressRecord() : UpdatableRecordImpl<AddressRecord>(Address.ADDRESS), Record8<Long?, String?, String?, String?, Long?, String?, String?, LocalDateTime?> {
 
-    open var addressId: Long?
+    var addressId: Long?
         set(value): Unit = set(0, value)
         get(): Long? = get(0) as Long?
 
-    open var address: String?
+    var address: String?
         set(value): Unit = set(1, value)
         get(): String? = get(1) as String?
 
-    open var address2: String?
+    var address2: String?
         set(value): Unit = set(2, value)
         get(): String? = get(2) as String?
 
-    open var district: String?
+    var district: String?
         set(value): Unit = set(3, value)
         get(): String? = get(3) as String?
 
-    open var cityId: Long?
+    var cityId: Long?
         set(value): Unit = set(4, value)
         get(): Long? = get(4) as Long?
 
-    open var postalCode: String?
+    var postalCode: String?
         set(value): Unit = set(5, value)
         get(): String? = get(5) as String?
 
-    open var phone: String?
+    var phone: String?
         set(value): Unit = set(6, value)
         get(): String? = get(6) as String?
 
-    open var lastUpdate: LocalDateTime?
+    var lastUpdate: LocalDateTime?
         set(value): Unit = set(7, value)
         get(): LocalDateTime? = get(7) as LocalDateTime?
 

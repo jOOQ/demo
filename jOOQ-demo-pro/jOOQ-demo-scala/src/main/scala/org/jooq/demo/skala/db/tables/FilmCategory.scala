@@ -10,7 +10,6 @@ import java.lang.String
 import java.time.LocalDateTime
 import java.util.Arrays
 import java.util.List
-import java.util.function.Function
 
 import org.jooq.Field
 import org.jooq.ForeignKey
@@ -18,7 +17,6 @@ import org.jooq.Name
 import org.jooq.Record
 import org.jooq.Row3
 import org.jooq.Schema
-import org.jooq.SelectField
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
@@ -119,7 +117,6 @@ extends TableImpl[FilmCategoryRecord](
   lazy val category: Category = { new Category(this, Keys.FILM_CATEGORY__FILM_CATEGORY_CATEGORY_ID_FKEY) }
   override def as(alias: String): FilmCategory = new FilmCategory(DSL.name(alias), this)
   override def as(alias: Name): FilmCategory = new FilmCategory(alias, this)
-  override def as(alias: Table[_]): FilmCategory = new FilmCategory(alias.getQualifiedName(), this)
 
   /**
    * Rename this table
@@ -131,23 +128,8 @@ extends TableImpl[FilmCategoryRecord](
    */
   override def rename(name: Name): FilmCategory = new FilmCategory(name, null)
 
-  /**
-   * Rename this table
-   */
-  override def rename(name: Table[_]): FilmCategory = new FilmCategory(name.getQualifiedName(), null)
-
   // -------------------------------------------------------------------------
   // Row3 type methods
   // -------------------------------------------------------------------------
   override def fieldsRow: Row3[Long, Long, LocalDateTime] = super.fieldsRow.asInstanceOf[ Row3[Long, Long, LocalDateTime] ]
-
-  /**
-   * Convenience mapping calling {@link #convertFrom(Function)}.
-   */
-  def mapping[U](from: (Long, Long, LocalDateTime) => U): SelectField[U] = convertFrom(r => from.apply(r.value1(), r.value2(), r.value3()))
-
-  /**
-   * Convenience mapping calling {@link #convertFrom(Class, Function)}.
-   */
-  def mapping[U](toType: Class[U], from: (Long, Long, LocalDateTime) => U): SelectField[U] = convertFrom(toType,r => from.apply(r.value1(), r.value2(), r.value3()))
 }

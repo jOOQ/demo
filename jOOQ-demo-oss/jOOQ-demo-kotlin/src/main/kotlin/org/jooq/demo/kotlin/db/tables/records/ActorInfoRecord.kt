@@ -17,19 +17,19 @@ import org.jooq.impl.TableRecordImpl
 @Suppress("UNCHECKED_CAST")
 open class ActorInfoRecord() : TableRecordImpl<ActorInfoRecord>(ActorInfo.ACTOR_INFO), Record4<Long?, String?, String?, String?> {
 
-    open var actorId: Long?
+    var actorId: Long?
         set(value): Unit = set(0, value)
         get(): Long? = get(0) as Long?
 
-    open var firstName: String?
+    var firstName: String?
         set(value): Unit = set(1, value)
         get(): String? = get(1) as String?
 
-    open var lastName: String?
+    var lastName: String?
         set(value): Unit = set(2, value)
         get(): String? = get(2) as String?
 
-    open var filmInfo: String?
+    var filmInfo: String?
         set(value): Unit = set(3, value)
         get(): String? = get(3) as String?
 

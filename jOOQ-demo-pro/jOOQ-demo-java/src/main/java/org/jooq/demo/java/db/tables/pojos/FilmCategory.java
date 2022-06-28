@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public record FilmCategory(
-    Long filmId,
-    Long categoryId,
+    Long          filmId,
+    Long          categoryId,
     LocalDateTime lastUpdate
 ) implements Serializable {
 

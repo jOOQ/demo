@@ -8,19 +8,15 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Function14;
 import org.jooq.Identity;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Records;
 import org.jooq.Row14;
 import org.jooq.Schema;
-import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -225,11 +221,6 @@ public class Film extends TableImpl<FilmRecord> {
         return new Film(alias, this);
     }
 
-    @Override
-    public Film as(Table<?> alias) {
-        return new Film(alias.getQualifiedName(), this);
-    }
-
     /**
      * Rename this table
      */
@@ -246,14 +237,6 @@ public class Film extends TableImpl<FilmRecord> {
         return new Film(name, null);
     }
 
-    /**
-     * Rename this table
-     */
-    @Override
-    public Film rename(Table<?> name) {
-        return new Film(name.getQualifiedName(), null);
-    }
-
     // -------------------------------------------------------------------------
     // Row14 type methods
     // -------------------------------------------------------------------------
@@ -261,19 +244,5 @@ public class Film extends TableImpl<FilmRecord> {
     @Override
     public Row14<Long, String, String, Integer, Long, Long, Short, BigDecimal, Short, BigDecimal, MpaaRating, LocalDateTime, String[], Object> fieldsRow() {
         return (Row14) super.fieldsRow();
-    }
-
-    /**
-     * Convenience mapping calling {@link #convertFrom(Function)}.
-     */
-    public <U> SelectField<U> mapping(Function14<? super Long, ? super String, ? super String, ? super Integer, ? super Long, ? super Long, ? super Short, ? super BigDecimal, ? super Short, ? super BigDecimal, ? super MpaaRating, ? super LocalDateTime, ? super String[], ? super Object, ? extends U> from) {
-        return convertFrom(Records.mapping(from));
-    }
-
-    /**
-     * Convenience mapping calling {@link #convertFrom(Class, Function)}.
-     */
-    public <U> SelectField<U> mapping(Class<U> toType, Function14<? super Long, ? super String, ? super String, ? super Integer, ? super Long, ? super Long, ? super Short, ? super BigDecimal, ? super Short, ? super BigDecimal, ? super MpaaRating, ? super LocalDateTime, ? super String[], ? super Object, ? extends U> from) {
-        return convertFrom(toType, Records.mapping(from));
     }
 }

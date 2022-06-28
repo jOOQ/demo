@@ -4,16 +4,12 @@
 package org.jooq.demo.kotlin.db.tables
 
 
-import java.util.function.Function
-
 import org.jooq.Field
 import org.jooq.ForeignKey
 import org.jooq.Name
 import org.jooq.Record
-import org.jooq.Records
 import org.jooq.Row1
 import org.jooq.Schema
-import org.jooq.SelectField
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
@@ -85,7 +81,6 @@ open class FilmInStock(
     override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
     override fun `as`(alias: String): FilmInStock = FilmInStock(DSL.name(alias), this, parameters)
     override fun `as`(alias: Name): FilmInStock = FilmInStock(alias, this, parameters)
-    override fun `as`(alias: Table<*>): FilmInStock = FilmInStock(alias.getQualifiedName(), this, parameters)
 
     /**
      * Rename this table
@@ -96,11 +91,6 @@ open class FilmInStock(
      * Rename this table
      */
     override fun rename(name: Name): FilmInStock = FilmInStock(name, null, parameters)
-
-    /**
-     * Rename this table
-     */
-    override fun rename(name: Table<*>): FilmInStock = FilmInStock(name.getQualifiedName(), null, parameters)
 
     // -------------------------------------------------------------------------
     // Row1 type methods
@@ -128,14 +118,4 @@ open class FilmInStock(
         pFilmId,
         pStoreId
     )).let { if (aliased()) it.`as`(unqualifiedName) else it }
-
-    /**
-     * Convenience mapping calling {@link #convertFrom(Function)}.
-     */
-    fun <U> mapping(from: (Int?) -> U): SelectField<U> = convertFrom(Records.mapping(from))
-
-    /**
-     * Convenience mapping calling {@link #convertFrom(Class, Function)}.
-     */
-    fun <U> mapping(toType: Class<U>, from: (Int?) -> U): SelectField<U> = convertFrom(toType, Records.mapping(from))
 }

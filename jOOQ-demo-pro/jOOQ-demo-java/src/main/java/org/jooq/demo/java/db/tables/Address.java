@@ -7,19 +7,15 @@ package org.jooq.demo.java.db.tables;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Function8;
 import org.jooq.Identity;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Records;
 import org.jooq.Row8;
 import org.jooq.Schema;
-import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -174,11 +170,6 @@ public class Address extends TableImpl<AddressRecord> {
         return new Address(alias, this);
     }
 
-    @Override
-    public Address as(Table<?> alias) {
-        return new Address(alias.getQualifiedName(), this);
-    }
-
     /**
      * Rename this table
      */
@@ -195,14 +186,6 @@ public class Address extends TableImpl<AddressRecord> {
         return new Address(name, null);
     }
 
-    /**
-     * Rename this table
-     */
-    @Override
-    public Address rename(Table<?> name) {
-        return new Address(name.getQualifiedName(), null);
-    }
-
     // -------------------------------------------------------------------------
     // Row8 type methods
     // -------------------------------------------------------------------------
@@ -210,19 +193,5 @@ public class Address extends TableImpl<AddressRecord> {
     @Override
     public Row8<Long, String, String, String, Long, String, String, LocalDateTime> fieldsRow() {
         return (Row8) super.fieldsRow();
-    }
-
-    /**
-     * Convenience mapping calling {@link #convertFrom(Function)}.
-     */
-    public <U> SelectField<U> mapping(Function8<? super Long, ? super String, ? super String, ? super String, ? super Long, ? super String, ? super String, ? super LocalDateTime, ? extends U> from) {
-        return convertFrom(Records.mapping(from));
-    }
-
-    /**
-     * Convenience mapping calling {@link #convertFrom(Class, Function)}.
-     */
-    public <U> SelectField<U> mapping(Class<U> toType, Function8<? super Long, ? super String, ? super String, ? super String, ? super Long, ? super String, ? super String, ? super LocalDateTime, ? extends U> from) {
-        return convertFrom(toType, Records.mapping(from));
     }
 }

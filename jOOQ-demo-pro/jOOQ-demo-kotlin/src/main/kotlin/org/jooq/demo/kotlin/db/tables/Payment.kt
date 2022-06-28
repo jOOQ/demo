@@ -6,7 +6,6 @@ package org.jooq.demo.kotlin.db.tables
 
 import java.math.BigDecimal
 import java.time.LocalDateTime
-import java.util.function.Function
 
 import kotlin.collections.List
 
@@ -16,10 +15,8 @@ import org.jooq.Identity
 import org.jooq.Index
 import org.jooq.Name
 import org.jooq.Record
-import org.jooq.Records
 import org.jooq.Row6
 import org.jooq.Schema
-import org.jooq.SelectField
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
@@ -140,9 +137,6 @@ open class Payment(
         return _customer;
     }
 
-    val customer: Customer
-        get(): Customer = customer()
-
     /**
      * Get the implicit join path to the <code>public.staff</code> table.
      */
@@ -153,9 +147,6 @@ open class Payment(
         return _staff;
     }
 
-    val staff: Staff
-        get(): Staff = staff()
-
     /**
      * Get the implicit join path to the <code>public.rental</code> table.
      */
@@ -165,12 +156,8 @@ open class Payment(
 
         return _rental;
     }
-
-    val rental: Rental
-        get(): Rental = rental()
     override fun `as`(alias: String): Payment = Payment(DSL.name(alias), this)
     override fun `as`(alias: Name): Payment = Payment(alias, this)
-    override fun `as`(alias: Table<*>): Payment = Payment(alias.getQualifiedName(), this)
 
     /**
      * Rename this table
@@ -182,23 +169,8 @@ open class Payment(
      */
     override fun rename(name: Name): Payment = Payment(name, null)
 
-    /**
-     * Rename this table
-     */
-    override fun rename(name: Table<*>): Payment = Payment(name.getQualifiedName(), null)
-
     // -------------------------------------------------------------------------
     // Row6 type methods
     // -------------------------------------------------------------------------
     override fun fieldsRow(): Row6<Long?, Long?, Long?, Long?, BigDecimal?, LocalDateTime?> = super.fieldsRow() as Row6<Long?, Long?, Long?, Long?, BigDecimal?, LocalDateTime?>
-
-    /**
-     * Convenience mapping calling {@link #convertFrom(Function)}.
-     */
-    fun <U> mapping(from: (Long?, Long?, Long?, Long?, BigDecimal?, LocalDateTime?) -> U): SelectField<U> = convertFrom(Records.mapping(from))
-
-    /**
-     * Convenience mapping calling {@link #convertFrom(Class, Function)}.
-     */
-    fun <U> mapping(toType: Class<U>, from: (Long?, Long?, Long?, Long?, BigDecimal?, LocalDateTime?) -> U): SelectField<U> = convertFrom(toType, Records.mapping(from))
 }

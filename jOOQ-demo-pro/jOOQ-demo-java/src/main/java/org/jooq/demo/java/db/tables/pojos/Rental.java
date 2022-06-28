@@ -13,12 +13,12 @@ import java.time.LocalDateTime;
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public record Rental(
-    Long rentalId,
+    Long          rentalId,
     LocalDateTime rentalDate,
-    Long inventoryId,
-    Long customerId,
+    Long          inventoryId,
+    Long          customerId,
     LocalDateTime returnDate,
-    Long staffId,
+    Long          staffId,
     LocalDateTime lastUpdate
 ) implements Serializable {
 

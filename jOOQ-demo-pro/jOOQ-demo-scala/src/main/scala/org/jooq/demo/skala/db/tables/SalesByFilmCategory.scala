@@ -7,7 +7,6 @@ package org.jooq.demo.skala.db.tables
 import java.lang.Class
 import java.lang.String
 import java.math.BigDecimal
-import java.util.function.Function
 
 import org.jooq.Field
 import org.jooq.ForeignKey
@@ -15,7 +14,6 @@ import org.jooq.Name
 import org.jooq.Record
 import org.jooq.Row2
 import org.jooq.Schema
-import org.jooq.SelectField
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
@@ -55,18 +53,7 @@ extends TableImpl[SalesByFilmCategoryRecord](
   aliased,
   parameters,
   DSL.comment(""),
-  TableOptions.view("""
-  create view "sales_by_film_category" as  SELECT c.name AS category,
-    sum(p.amount) AS total_sales
-   FROM (((((payment p
-     JOIN rental r ON ((p.rental_id = r.rental_id)))
-     JOIN inventory i ON ((r.inventory_id = i.inventory_id)))
-     JOIN film f ON ((i.film_id = f.film_id)))
-     JOIN film_category fc ON ((f.film_id = fc.film_id)))
-     JOIN category c ON ((fc.category_id = c.category_id)))
-  GROUP BY c.name
-  ORDER BY (sum(p.amount)) DESC;
-  """)
+  TableOptions.view("create view \"sales_by_film_category\" as  SELECT c.name AS category,\n    sum(p.amount) AS total_sales\n   FROM (((((payment p\n     JOIN rental r ON ((p.rental_id = r.rental_id)))\n     JOIN inventory i ON ((r.inventory_id = i.inventory_id)))\n     JOIN film f ON ((i.film_id = f.film_id)))\n     JOIN film_category fc ON ((f.film_id = fc.film_id)))\n     JOIN category c ON ((fc.category_id = c.category_id)))\n  GROUP BY c.name\n  ORDER BY (sum(p.amount)) DESC;")
 ) {
 
   /**
@@ -108,7 +95,6 @@ extends TableImpl[SalesByFilmCategoryRecord](
   override def getSchema: Schema = if (aliased()) null else Public.PUBLIC
   override def as(alias: String): SalesByFilmCategory = new SalesByFilmCategory(DSL.name(alias), this)
   override def as(alias: Name): SalesByFilmCategory = new SalesByFilmCategory(alias, this)
-  override def as(alias: Table[_]): SalesByFilmCategory = new SalesByFilmCategory(alias.getQualifiedName(), this)
 
   /**
    * Rename this table
@@ -120,23 +106,8 @@ extends TableImpl[SalesByFilmCategoryRecord](
    */
   override def rename(name: Name): SalesByFilmCategory = new SalesByFilmCategory(name, null)
 
-  /**
-   * Rename this table
-   */
-  override def rename(name: Table[_]): SalesByFilmCategory = new SalesByFilmCategory(name.getQualifiedName(), null)
-
   // -------------------------------------------------------------------------
   // Row2 type methods
   // -------------------------------------------------------------------------
   override def fieldsRow: Row2[String, BigDecimal] = super.fieldsRow.asInstanceOf[ Row2[String, BigDecimal] ]
-
-  /**
-   * Convenience mapping calling {@link #convertFrom(Function)}.
-   */
-  def mapping[U](from: (String, BigDecimal) => U): SelectField[U] = convertFrom(r => from.apply(r.value1(), r.value2()))
-
-  /**
-   * Convenience mapping calling {@link #convertFrom(Class, Function)}.
-   */
-  def mapping[U](toType: Class[U], from: (String, BigDecimal) => U): SelectField[U] = convertFrom(toType,r => from.apply(r.value1(), r.value2()))
 }

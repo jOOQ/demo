@@ -8,19 +8,15 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Function6;
 import org.jooq.Identity;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Records;
 import org.jooq.Row6;
 import org.jooq.Schema;
-import org.jooq.SelectField;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -187,11 +183,6 @@ public class Payment extends TableImpl<PaymentRecord> {
         return new Payment(alias, this);
     }
 
-    @Override
-    public Payment as(Table<?> alias) {
-        return new Payment(alias.getQualifiedName(), this);
-    }
-
     /**
      * Rename this table
      */
@@ -208,14 +199,6 @@ public class Payment extends TableImpl<PaymentRecord> {
         return new Payment(name, null);
     }
 
-    /**
-     * Rename this table
-     */
-    @Override
-    public Payment rename(Table<?> name) {
-        return new Payment(name.getQualifiedName(), null);
-    }
-
     // -------------------------------------------------------------------------
     // Row6 type methods
     // -------------------------------------------------------------------------
@@ -223,19 +206,5 @@ public class Payment extends TableImpl<PaymentRecord> {
     @Override
     public Row6<Long, Long, Long, Long, BigDecimal, LocalDateTime> fieldsRow() {
         return (Row6) super.fieldsRow();
-    }
-
-    /**
-     * Convenience mapping calling {@link #convertFrom(Function)}.
-     */
-    public <U> SelectField<U> mapping(Function6<? super Long, ? super Long, ? super Long, ? super Long, ? super BigDecimal, ? super LocalDateTime, ? extends U> from) {
-        return convertFrom(Records.mapping(from));
-    }
-
-    /**
-     * Convenience mapping calling {@link #convertFrom(Class, Function)}.
-     */
-    public <U> SelectField<U> mapping(Class<U> toType, Function6<? super Long, ? super Long, ? super Long, ? super Long, ? super BigDecimal, ? super LocalDateTime, ? extends U> from) {
-        return convertFrom(toType, Records.mapping(from));
     }
 }

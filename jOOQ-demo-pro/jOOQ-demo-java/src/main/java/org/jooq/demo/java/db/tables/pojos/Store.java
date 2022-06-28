@@ -13,9 +13,9 @@ import java.time.LocalDateTime;
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public record Store(
-    Long storeId,
-    Long managerStaffId,
-    Long addressId,
+    Long          storeId,
+    Long          managerStaffId,
+    Long          addressId,
     LocalDateTime lastUpdate
 ) implements Serializable {
 
