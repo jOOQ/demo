@@ -23,7 +23,9 @@ public record Staff(
     String username,
     String password,
     LocalDateTime lastUpdate,
-    byte[] picture
+    byte[] picture,
+    String fullAddress,
+    String fullName
 ) implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -640,6 +640,27 @@ public class FilmRecord extends UpdatableRecordImpl<FilmRecord> implements Recor
     /**
      * Create a detached, initialised FilmRecord
      */
+    public FilmRecord(Long filmId, String title, String description, Integer releaseYear, Long languageId, Long originalLanguageId, Short rentalDuration, BigDecimal rentalRate, Short length, BigDecimal replacementCost, MpaaRating rating, String[] specialFeatures, Object fulltext) {
+        super(Film.FILM);
+
+        setFilmId(filmId);
+        setTitle(title);
+        setDescription(description);
+        setReleaseYear(releaseYear);
+        setLanguageId(languageId);
+        setOriginalLanguageId(originalLanguageId);
+        setRentalDuration(rentalDuration);
+        setRentalRate(rentalRate);
+        setLength(length);
+        setReplacementCost(replacementCost);
+        setRating(rating);
+        setSpecialFeatures(specialFeatures);
+        setFulltext(fulltext);
+    }
+
+    /**
+     * Create a detached, initialised FilmRecord
+     */
     public FilmRecord(org.jooq.demo.java.db.tables.pojos.Film value) {
         super(Film.FILM);
 

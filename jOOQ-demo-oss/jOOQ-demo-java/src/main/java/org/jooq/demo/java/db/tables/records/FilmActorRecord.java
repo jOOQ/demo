@@ -183,6 +183,16 @@ public class FilmActorRecord extends UpdatableRecordImpl<FilmActorRecord> implem
     /**
      * Create a detached, initialised FilmActorRecord
      */
+    public FilmActorRecord(Long actorId, Long filmId) {
+        super(FilmActor.FILM_ACTOR);
+
+        setActorId(actorId);
+        setFilmId(filmId);
+    }
+
+    /**
+     * Create a detached, initialised FilmActorRecord
+     */
     public FilmActorRecord(org.jooq.demo.java.db.tables.pojos.FilmActor value) {
         super(FilmActor.FILM_ACTOR);
 

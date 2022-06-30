@@ -112,4 +112,19 @@ public class StoreDao extends DAOImpl<StoreRecord, org.jooq.demo.java.db.tables.
     public List<org.jooq.demo.java.db.tables.pojos.Store> fetchByLastUpdate(LocalDateTime... values) {
         return fetch(Store.STORE.LAST_UPDATE, values);
     }
+
+    /**
+     * Fetch records that have <code>full_address BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    public List<org.jooq.demo.java.db.tables.pojos.Store> fetchRangeOfFullAddress(String lowerInclusive, String upperInclusive) {
+        return fetchRange(Store.STORE.FULL_ADDRESS, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>full_address IN (values)</code>
+     */
+    public List<org.jooq.demo.java.db.tables.pojos.Store> fetchByFullAddress(String... values) {
+        return fetch(Store.STORE.FULL_ADDRESS, values);
+    }
 }

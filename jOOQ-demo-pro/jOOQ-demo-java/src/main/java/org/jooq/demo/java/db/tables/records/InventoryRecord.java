@@ -220,6 +220,17 @@ public class InventoryRecord extends UpdatableRecordImpl<InventoryRecord> implem
     /**
      * Create a detached, initialised InventoryRecord
      */
+    public InventoryRecord(Long inventoryId, Long filmId, Long storeId) {
+        super(Inventory.INVENTORY);
+
+        setInventoryId(inventoryId);
+        setFilmId(filmId);
+        setStoreId(storeId);
+    }
+
+    /**
+     * Create a detached, initialised InventoryRecord
+     */
     public InventoryRecord(org.jooq.demo.java.db.tables.pojos.Inventory value) {
         super(Inventory.INVENTORY);
 

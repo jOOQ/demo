@@ -258,7 +258,9 @@
                     <artifactId>jooq-codegen-maven</artifactId>
                     <version>${jooq.version}</version>
 
+                    <!-- Common code generation configuration that applies for all language examples -->
                     <configuration>
+                        <onUnused>SILENT</onUnused>
                         <jdbc>
                             <driver>org.postgresql.Driver</driver>
                             <!-- This URL is exported by testcontainers above -->
@@ -270,6 +272,42 @@
                             <database>
                                 <inputSchema>public</inputSchema>
                                 <excludes>flyway_.*</excludes>
+
+                                <syntheticObjects>
+
+                                    <!-- We want to treat all the LAST_UPDATE columns as readonly, i.e. users aren't
+                                         supposed to be able to write to that column. It is populated by a trigger
+
+                                         This is a commercial edition only feature.
+                                         See: https://www.jooq.org/doc/latest/manual/code-generation/codegen-advanced/codegen-config-database/codegen-database-synthetic-objects/codegen-database-synthetic-readonly-columns/
+                                         -->
+                                    <readonlyColumns>
+                                        <readonlyColumn>
+                                            <tables>.*</tables>
+                                            <fields>last_update</fields>
+                                        </readonlyColumn>
+                                    </readonlyColumns>
+
+                                    <!-- Use synthetic column declarations for your virtual client side computed columns.
+                                         While the synthetic column declaration is generation language agnostic, the
+                                         generator itself is not, so please refer to the individual language demos to see
+                                         how a computed column is configured.
+
+                                         See: https://www.jooq.org/doc/latest/manual/code-generation/codegen-advanced/codegen-config-database/codegen-database-synthetic-objects/codegen-database-synthetic-columns/
+                                         -->
+                                    <columns>
+                                        <column>
+                                            <tables>customer|staff|store</tables>
+                                            <name>full_address</name>
+                                            <type>text</type>
+                                        </column>
+                                        <column>
+                                            <tables>customer|staff</tables>
+                                            <name>full_name</name>
+                                            <type>text</type>
+                                        </column>
+                                    </columns>
+                                </syntheticObjects>
                             </database>
                             <generate>
                                 <pojos>true</pojos>

@@ -183,6 +183,16 @@ public class CountryRecord extends UpdatableRecordImpl<CountryRecord> implements
     /**
      * Create a detached, initialised CountryRecord
      */
+    public CountryRecord(Long countryId, String country) {
+        super(Country.COUNTRY);
+
+        setCountryId(countryId);
+        setCountry(country);
+    }
+
+    /**
+     * Create a detached, initialised CountryRecord
+     */
     public CountryRecord(org.jooq.demo.java.db.tables.pojos.Country value) {
         super(Country.COUNTRY);
 

@@ -331,6 +331,20 @@ public class RentalRecord extends UpdatableRecordImpl<RentalRecord> implements R
     /**
      * Create a detached, initialised RentalRecord
      */
+    public RentalRecord(Long rentalId, LocalDateTime rentalDate, Long inventoryId, Long customerId, LocalDateTime returnDate, Long staffId) {
+        super(Rental.RENTAL);
+
+        setRentalId(rentalId);
+        setRentalDate(rentalDate);
+        setInventoryId(inventoryId);
+        setCustomerId(customerId);
+        setReturnDate(returnDate);
+        setStaffId(staffId);
+    }
+
+    /**
+     * Create a detached, initialised RentalRecord
+     */
     public RentalRecord(org.jooq.demo.java.db.tables.pojos.Rental value) {
         super(Rental.RENTAL);
 

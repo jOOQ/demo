@@ -217,4 +217,34 @@ public class StaffDao extends DAOImpl<StaffRecord, org.jooq.demo.java.db.tables.
     public List<org.jooq.demo.java.db.tables.pojos.Staff> fetchByPicture(byte[]... values) {
         return fetch(Staff.STAFF.PICTURE, values);
     }
+
+    /**
+     * Fetch records that have <code>full_address BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    public List<org.jooq.demo.java.db.tables.pojos.Staff> fetchRangeOfFullAddress(String lowerInclusive, String upperInclusive) {
+        return fetchRange(Staff.STAFF.FULL_ADDRESS, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>full_address IN (values)</code>
+     */
+    public List<org.jooq.demo.java.db.tables.pojos.Staff> fetchByFullAddress(String... values) {
+        return fetch(Staff.STAFF.FULL_ADDRESS, values);
+    }
+
+    /**
+     * Fetch records that have <code>full_name BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    public List<org.jooq.demo.java.db.tables.pojos.Staff> fetchRangeOfFullName(String lowerInclusive, String upperInclusive) {
+        return fetchRange(Staff.STAFF.FULL_NAME, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>full_name IN (values)</code>
+     */
+    public List<org.jooq.demo.java.db.tables.pojos.Staff> fetchByFullName(String... values) {
+        return fetch(Staff.STAFF.FULL_NAME, values);
+    }
 }

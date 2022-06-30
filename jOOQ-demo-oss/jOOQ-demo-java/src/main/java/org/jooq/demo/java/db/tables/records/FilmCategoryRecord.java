@@ -183,6 +183,16 @@ public class FilmCategoryRecord extends UpdatableRecordImpl<FilmCategoryRecord> 
     /**
      * Create a detached, initialised FilmCategoryRecord
      */
+    public FilmCategoryRecord(Long filmId, Long categoryId) {
+        super(FilmCategory.FILM_CATEGORY);
+
+        setFilmId(filmId);
+        setCategoryId(categoryId);
+    }
+
+    /**
+     * Create a detached, initialised FilmCategoryRecord
+     */
     public FilmCategoryRecord(org.jooq.demo.java.db.tables.pojos.FilmCategory value) {
         super(FilmCategory.FILM_CATEGORY);
 

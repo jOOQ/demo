@@ -433,6 +433,23 @@ public class RewardsReportRecord extends TableRecordImpl<RewardsReportRecord> im
     /**
      * Create a detached, initialised RewardsReportRecord
      */
+    public RewardsReportRecord(Long customerId, Long storeId, String firstName, String lastName, String email, Long addressId, Boolean activebool, LocalDate createDate, Integer active) {
+        super(RewardsReport.REWARDS_REPORT);
+
+        setCustomerId(customerId);
+        setStoreId(storeId);
+        setFirstName(firstName);
+        setLastName(lastName);
+        setEmail(email);
+        setAddressId(addressId);
+        setActivebool(activebool);
+        setCreateDate(createDate);
+        setActive(active);
+    }
+
+    /**
+     * Create a detached, initialised RewardsReportRecord
+     */
     public RewardsReportRecord(org.jooq.demo.java.db.tables.pojos.RewardsReport value) {
         super(RewardsReport.REWARDS_REPORT);
 

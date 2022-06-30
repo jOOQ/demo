@@ -183,6 +183,16 @@ public class CategoryRecord extends UpdatableRecordImpl<CategoryRecord> implemen
     /**
      * Create a detached, initialised CategoryRecord
      */
+    public CategoryRecord(Long categoryId, String name) {
+        super(Category.CATEGORY);
+
+        setCategoryId(categoryId);
+        setName(name);
+    }
+
+    /**
+     * Create a detached, initialised CategoryRecord
+     */
     public CategoryRecord(org.jooq.demo.java.db.tables.pojos.Category value) {
         super(Category.CATEGORY);
 

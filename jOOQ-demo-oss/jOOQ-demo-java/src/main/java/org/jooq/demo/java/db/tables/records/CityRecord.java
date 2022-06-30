@@ -220,6 +220,17 @@ public class CityRecord extends UpdatableRecordImpl<CityRecord> implements Recor
     /**
      * Create a detached, initialised CityRecord
      */
+    public CityRecord(Long cityId, String city, Long countryId) {
+        super(City.CITY);
+
+        setCityId(cityId);
+        setCity(city);
+        setCountryId(countryId);
+    }
+
+    /**
+     * Create a detached, initialised CityRecord
+     */
     public CityRecord(org.jooq.demo.java.db.tables.pojos.City value) {
         super(City.CITY);
 

@@ -183,6 +183,16 @@ public class LanguageRecord extends UpdatableRecordImpl<LanguageRecord> implemen
     /**
      * Create a detached, initialised LanguageRecord
      */
+    public LanguageRecord(Long languageId, String name) {
+        super(Language.LANGUAGE);
+
+        setLanguageId(languageId);
+        setName(name);
+    }
+
+    /**
+     * Create a detached, initialised LanguageRecord
+     */
     public LanguageRecord(org.jooq.demo.java.db.tables.pojos.Language value) {
         super(Language.LANGUAGE);
 

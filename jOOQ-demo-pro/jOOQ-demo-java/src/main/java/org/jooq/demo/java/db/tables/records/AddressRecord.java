@@ -368,6 +368,21 @@ public class AddressRecord extends UpdatableRecordImpl<AddressRecord> implements
     /**
      * Create a detached, initialised AddressRecord
      */
+    public AddressRecord(Long addressId, String address, String address2, String district, Long cityId, String postalCode, String phone) {
+        super(Address.ADDRESS);
+
+        setAddressId(addressId);
+        setAddress(address);
+        setAddress2(address2);
+        setDistrict(district);
+        setCityId(cityId);
+        setPostalCode(postalCode);
+        setPhone(phone);
+    }
+
+    /**
+     * Create a detached, initialised AddressRecord
+     */
     public AddressRecord(org.jooq.demo.java.db.tables.pojos.Address value) {
         super(Address.ADDRESS);
 

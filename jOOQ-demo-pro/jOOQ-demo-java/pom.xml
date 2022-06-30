@@ -76,8 +76,27 @@
                         </goals>
                         <configuration>
                             <generator>
+                                <database>
+                                    <forcedTypes>
+
+                                        <!-- Virtual client side computed columns are client side computed columns that are
+                                             based on synthetic column declarations (see above)
+
+                                             See: https://www.jooq.org/doc/latest/manual/code-generation/codegen-advanced/codegen-config-database/codegen-database-forced-types/codegen-database-forced-types-computed/
+                                             -->
+                                        <forcedType>
+                                            <generator>ctx -> DSL.concat(FIRST_NAME, DSL.inline(" "), LAST_NAME)</generator>
+                                            <includeExpression>full_name</includeExpression>
+                                        </forcedType>
+                                        <forcedType>
+                                            <generator>ctx -> DSL.concat(address().ADDRESS_, DSL.inline(", "), address().POSTAL_CODE, DSL.inline(", "), address().city().CITY_, DSL.inline(", "), address().city().country().COUNTRY_)</generator>
+                                            <includeExpression>full_address</includeExpression>
+                                        </forcedType>
+                                    </forcedTypes>
+                                </database>
+
                                 <target>
-                                    <packageName>org.jooq.demo.java.db</packageName>
+                                    <packageName>org.jooq.demo.kotlin.db</packageName>
                                 </target>
                             </generator>
                         </configuration>
@@ -111,7 +130,7 @@
                                     </properties>
                                 </database>
                                 <target>
-                                    <packageName>org.jooq.demo.java.ddl</packageName>
+                                    <packageName>org.jooq.demo.kotlin.ddl</packageName>
                                 </target>
                             </generator>
                         </configuration>

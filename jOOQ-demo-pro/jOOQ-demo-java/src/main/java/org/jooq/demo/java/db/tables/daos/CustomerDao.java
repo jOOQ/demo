@@ -203,4 +203,34 @@ public class CustomerDao extends DAOImpl<CustomerRecord, org.jooq.demo.java.db.t
     public List<org.jooq.demo.java.db.tables.pojos.Customer> fetchByActive(Integer... values) {
         return fetch(Customer.CUSTOMER.ACTIVE, values);
     }
+
+    /**
+     * Fetch records that have <code>full_address BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    public List<org.jooq.demo.java.db.tables.pojos.Customer> fetchRangeOfFullAddress(String lowerInclusive, String upperInclusive) {
+        return fetchRange(Customer.CUSTOMER.FULL_ADDRESS, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>full_address IN (values)</code>
+     */
+    public List<org.jooq.demo.java.db.tables.pojos.Customer> fetchByFullAddress(String... values) {
+        return fetch(Customer.CUSTOMER.FULL_ADDRESS, values);
+    }
+
+    /**
+     * Fetch records that have <code>full_name BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    public List<org.jooq.demo.java.db.tables.pojos.Customer> fetchRangeOfFullName(String lowerInclusive, String upperInclusive) {
+        return fetchRange(Customer.CUSTOMER.FULL_NAME, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>full_name IN (values)</code>
+     */
+    public List<org.jooq.demo.java.db.tables.pojos.Customer> fetchByFullName(String... values) {
+        return fetch(Customer.CUSTOMER.FULL_NAME, values);
+    }
 }

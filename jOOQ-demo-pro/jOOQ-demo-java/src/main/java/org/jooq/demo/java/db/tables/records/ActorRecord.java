@@ -220,6 +220,17 @@ public class ActorRecord extends UpdatableRecordImpl<ActorRecord> implements Rec
     /**
      * Create a detached, initialised ActorRecord
      */
+    public ActorRecord(Long actorId, String firstName, String lastName) {
+        super(Actor.ACTOR);
+
+        setActorId(actorId);
+        setFirstName(firstName);
+        setLastName(lastName);
+    }
+
+    /**
+     * Create a detached, initialised ActorRecord
+     */
     public ActorRecord(org.jooq.demo.java.db.tables.pojos.Actor value) {
         super(Actor.ACTOR);
 

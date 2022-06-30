@@ -127,6 +127,7 @@
                 <!-- More shared defaults are defined in the parent pom.xml -->
                 <configuration>
                     <generator>
+                        <name>org.jooq.codegen.ScalaGenerator</name>
                         <target>
                             <!-- We're version controlling the source code for better documentation on github, etc.
                                  This isn't necessary, though, see also:
@@ -145,6 +146,28 @@
                         </goals>
                         <configuration>
                             <generator>
+                                <database>
+                                    <forcedTypes>
+
+                                        <!-- Virtual client side computed columns are client side computed columns that are
+                                             based on synthetic column declarations (see above)
+
+                                             See: https://www.jooq.org/doc/latest/manual/code-generation/codegen-advanced/codegen-config-database/codegen-database-forced-types/codegen-database-forced-types-computed/
+                                             -->
+
+                                        <!-- Note, a future Scala's Java interop might improve in a way that this explicit
+                                             GeneratorContext type declaration is no longer necessary -->
+                                        <forcedType>
+                                            <generator>{ ctx: org.jooq.GeneratorContext[CustomerRecord, Customer, String] => DSL.concat(FIRST_NAME, DSL.inline(" "), LAST_NAME) }</generator>
+                                            <includeExpression>customer\.full_name</includeExpression>
+                                        </forcedType>
+                                        <forcedType>
+                                            <generator>{ ctx: org.jooq.GeneratorContext[CustomerRecord, Customer, String] => DSL.concat(address.ADDRESS_, DSL.inline(", "), address.POSTAL_CODE, DSL.inline(", "), address.city.CITY_, DSL.inline(", "), address.city.country.COUNTRY_) }</generator>
+                                            <includeExpression>customer\.full_address</includeExpression>
+                                        </forcedType>
+                                    </forcedTypes>
+                                </database>
+
                                 <target>
                                     <packageName>org.jooq.demo.skala.db</packageName>
                                 </target>
@@ -160,7 +183,6 @@
                         </goals>
                         <configuration>
                             <generator>
-                                <name>org.jooq.codegen.ScalaGenerator</name>
                                 <database>
                                     <!-- The DDLDatabase simulates your database migrations and generates code from
                                          this simulation without connecting to an actual database instance. Use this

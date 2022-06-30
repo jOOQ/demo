@@ -23,7 +23,9 @@ public record Customer(
     Boolean activebool,
     LocalDate createDate,
     LocalDateTime lastUpdate,
-    Integer active
+    Integer active,
+    String fullAddress,
+    String fullName
 ) implements Serializable {
 
     private static final long serialVersionUID = 1L;
