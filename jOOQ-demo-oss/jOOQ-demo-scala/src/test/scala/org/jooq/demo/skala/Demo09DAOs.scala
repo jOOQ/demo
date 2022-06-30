@@ -26,8 +26,8 @@ class Demo09DAOs extends AbstractDemo {
     val dao = new ActorDao(ctx.configuration)
 
     dao.insert(
-      Actor(201L, "John", "Doe", null),
-      Actor(202L, "Jane", "Smith", null))
+      new Actor(201L, "John", "Doe", null),
+      new Actor(202L, "Jane", "Smith", null))
     dao.fetchByActorId(201L, 202L).forEach(println(_))
   }
 

@@ -52,6 +52,21 @@
                 <groupId>org.jooq</groupId>
                 <artifactId>jooq-codegen-maven</artifactId>
 
+                <!-- More shared defaults are defined in the parent pom.xml -->
+                <configuration>
+                    <generator>
+                        <generate>
+                            <pojosAsJavaRecordClasses>true</pojosAsJavaRecordClasses>
+                        </generate>
+                        <target>
+                            <!-- We're version controlling the source code for better documentation on github, etc.
+                                 This isn't necessary, though, see also:
+                                 https://www.jooq.org/doc/latest/manual/code-generation/codegen-version-control/ -->
+                            <directory>src/main/java</directory>
+                        </target>
+                    </generator>
+                </configuration>
+
                 <executions>
                     <execution>
                         <id>generate-demo-java</id>
@@ -61,21 +76,57 @@
                         </goals>
                         <configuration>
                             <generator>
-                                <generate>
-                                    <pojosAsJavaRecordClasses>true</pojosAsJavaRecordClasses>
-                                </generate>
                                 <target>
                                     <packageName>org.jooq.demo.java.db</packageName>
+                                </target>
+                            </generator>
+                        </configuration>
+                    </execution>
 
-                                    <!-- We're version controlling the source code for better documentation on github, etc.
-                                         This isn't necessary, though, see also:
-                                         https://www.jooq.org/doc/latest/manual/code-generation/codegen-version-control/ -->
-                                    <directory>src/main/java</directory>
+                    <execution>
+                        <id>generate-demo-java-ddl</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                           <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <generator>
+                                <database>
+                                    <!-- The DDLDatabase simulates your database migrations and generates code from
+                                         this simulation without connecting to an actual database instance. Use this
+                                         to speed up code generation, if you're not using too many vendor specific features.
+
+                                         More info: https://www.jooq.org/doc/latest/manual/code-generation/codegen-ddl/ -->
+                                    <name>org.jooq.meta.extensions.ddl.DDLDatabase</name>
+                                    <properties>
+                                        <property>
+
+                                            <!-- Alternatively, use scripts to reference your DDL scripts on the file system -->
+                                            <key>sql</key>
+                                            <value>
+                                                CREATE TABLE parent (parent_id int primary key, val int);
+                                                CREATE TABLE child (child_id int primary key, parent_id int references parent, val int);
+                                            </value>
+                                        </property>
+                                    </properties>
+                                </database>
+                                <target>
+                                    <packageName>org.jooq.demo.java.ddl</packageName>
                                 </target>
                             </generator>
                         </configuration>
                     </execution>
                 </executions>
+
+                <dependencies>
+
+                    <!-- This is needed for the DDLDatabase -->
+                    <dependency>
+                        <groupId>org.jooq</groupId>
+                        <artifactId>jooq-meta-extensions</artifactId>
+                        <version>${jooq.version}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>
