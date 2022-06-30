@@ -7,6 +7,7 @@ package org.jooq.demo.skala.db.enums;
 import org.jooq.Catalog;
 import org.jooq.EnumType;
 import org.jooq.Schema;
+import org.jooq.demo.skala.db.Public;
 
 
 /**
@@ -38,7 +39,7 @@ public enum MpaaRating implements EnumType {
 
     @Override
     public Schema getSchema() {
-        return org.jooq.demo.skala.db.Public$.MODULE$.PUBLIC();
+        return Public.PUBLIC;
     }
 
     @Override

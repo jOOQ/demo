@@ -26,6 +26,7 @@ class Demo01Querying : AbstractDemo() {
     @Test
     fun typeSafetySimpleQuery() {
         title("A simple type safe query")
+
         val r = ctx.select(ACTOR.FIRST_NAME, ACTOR.LAST_UPDATE)
             .from(ACTOR)
             .where(ACTOR.LAST_NAME.like("A%"))
