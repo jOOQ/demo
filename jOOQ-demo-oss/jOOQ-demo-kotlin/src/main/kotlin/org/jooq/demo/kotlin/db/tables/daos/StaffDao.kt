@@ -152,4 +152,26 @@ open class StaffDao(configuration: Configuration?) : DAOImpl<StaffRecord, org.jo
      * Fetch records that have <code>picture IN (values)</code>
      */
     fun fetchByPicture(vararg values: ByteArray): List<org.jooq.demo.kotlin.db.tables.pojos.Staff> = fetch(Staff.STAFF.PICTURE, *values)
+
+    /**
+     * Fetch records that have <code>full_address BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    fun fetchRangeOfFullAddress(lowerInclusive: String?, upperInclusive: String?): List<org.jooq.demo.kotlin.db.tables.pojos.Staff> = fetchRange(Staff.STAFF.FULL_ADDRESS, lowerInclusive, upperInclusive)
+
+    /**
+     * Fetch records that have <code>full_address IN (values)</code>
+     */
+    fun fetchByFullAddress(vararg values: String): List<org.jooq.demo.kotlin.db.tables.pojos.Staff> = fetch(Staff.STAFF.FULL_ADDRESS, *values)
+
+    /**
+     * Fetch records that have <code>full_name BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    fun fetchRangeOfFullName(lowerInclusive: String?, upperInclusive: String?): List<org.jooq.demo.kotlin.db.tables.pojos.Staff> = fetchRange(Staff.STAFF.FULL_NAME, lowerInclusive, upperInclusive)
+
+    /**
+     * Fetch records that have <code>full_name IN (values)</code>
+     */
+    fun fetchByFullName(vararg values: String): List<org.jooq.demo.kotlin.db.tables.pojos.Staff> = fetch(Staff.STAFF.FULL_NAME, *values)
 }

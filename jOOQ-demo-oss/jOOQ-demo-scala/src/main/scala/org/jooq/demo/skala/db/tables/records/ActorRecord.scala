@@ -138,6 +138,17 @@ class ActorRecord extends UpdatableRecordImpl[ActorRecord](Actor.ACTOR) with Rec
   /**
    * Create a detached, initialised ActorRecord
    */
+  def this(actorId : Long, firstName : String, lastName : String) = {
+    this()
+
+    this.setActorId(actorId)
+    this.setFirstName(firstName)
+    this.setLastName(lastName)
+  }
+
+  /**
+   * Create a detached, initialised ActorRecord
+   */
   def this(value: org.jooq.demo.skala.db.tables.pojos.Actor) = {
     this()
 

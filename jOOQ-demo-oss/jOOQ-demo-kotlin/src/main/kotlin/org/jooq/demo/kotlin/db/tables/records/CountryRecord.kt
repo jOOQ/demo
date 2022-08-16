@@ -88,6 +88,14 @@ open class CountryRecord() : UpdatableRecordImpl<CountryRecord>(Country.COUNTRY)
     /**
      * Create a detached, initialised CountryRecord
      */
+    constructor(countryId: Long? = null, country: String? = null): this() {
+        this.countryId = countryId
+        this.country = country
+    }
+
+    /**
+     * Create a detached, initialised CountryRecord
+     */
     constructor(value: org.jooq.demo.kotlin.db.tables.pojos.Country?): this() {
         if (value != null) {
             this.countryId = value.countryId

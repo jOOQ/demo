@@ -158,6 +158,19 @@ open class AddressRecord() : UpdatableRecordImpl<AddressRecord>(Address.ADDRESS)
     /**
      * Create a detached, initialised AddressRecord
      */
+    constructor(addressId: Long? = null, address: String? = null, address2: String? = null, district: String? = null, cityId: Long? = null, postalCode: String? = null, phone: String? = null): this() {
+        this.addressId = addressId
+        this.address = address
+        this.address2 = address2
+        this.district = district
+        this.cityId = cityId
+        this.postalCode = postalCode
+        this.phone = phone
+    }
+
+    /**
+     * Create a detached, initialised AddressRecord
+     */
     constructor(value: org.jooq.demo.kotlin.db.tables.pojos.Address?): this() {
         if (value != null) {
             this.addressId = value.addressId

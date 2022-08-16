@@ -115,6 +115,16 @@ class FilmCategoryRecord extends UpdatableRecordImpl[FilmCategoryRecord](FilmCat
   /**
    * Create a detached, initialised FilmCategoryRecord
    */
+  def this(filmId : Long, categoryId : Long) = {
+    this()
+
+    this.setFilmId(filmId)
+    this.setCategoryId(categoryId)
+  }
+
+  /**
+   * Create a detached, initialised FilmCategoryRecord
+   */
   def this(value: org.jooq.demo.skala.db.tables.pojos.FilmCategory) = {
     this()
 

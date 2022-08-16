@@ -23,7 +23,9 @@ data class Customer(
     var activebool: Boolean? = null,
     var createDate: LocalDate? = null,
     var lastUpdate: LocalDateTime? = null,
-    var active: Int? = null
+    var active: Int? = null,
+    var fullAddress: String? = null,
+    var fullName: String? = null
 ): Serializable {
 
 }

@@ -18,7 +18,7 @@ import org.jooq.ForeignKey
 import org.jooq.Identity
 import org.jooq.Name
 import org.jooq.Record
-import org.jooq.Row11
+import org.jooq.Row13
 import org.jooq.Schema
 import org.jooq.SelectField
 import org.jooq.Table
@@ -119,12 +119,22 @@ extends TableImpl[StaffRecord](
   /**
    * The column <code>public.staff.last_update</code>.
    */
-  val LAST_UPDATE: TableField[StaffRecord, LocalDateTime] = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).defaultValue(DSL.field("now()", SQLDataType.LOCALDATETIME)), "")
+  val LAST_UPDATE: TableField[StaffRecord, LocalDateTime] = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).readonly(true).defaultValue(DSL.field("now()", SQLDataType.LOCALDATETIME)), "")
 
   /**
    * The column <code>public.staff.picture</code>.
    */
   val PICTURE: TableField[StaffRecord, Array[Byte]] = createField(DSL.name("picture"), SQLDataType.BLOB, "")
+
+  /**
+   * The column <code>public.staff.full_address</code>.
+   */
+  val FULL_ADDRESS: TableField[StaffRecord, String] = createField(DSL.name("full_address"), SQLDataType.CLOB, "")
+
+  /**
+   * The column <code>public.staff.full_name</code>.
+   */
+  val FULL_NAME: TableField[StaffRecord, String] = createField(DSL.name("full_name"), SQLDataType.CLOB, "")
 
   private def this(alias: Name, aliased: Table[StaffRecord]) = this(alias, null, null, aliased, null)
 
@@ -182,17 +192,17 @@ extends TableImpl[StaffRecord](
   override def rename(name: Table[_]): Staff = new Staff(name.getQualifiedName(), null)
 
   // -------------------------------------------------------------------------
-  // Row11 type methods
+  // Row13 type methods
   // -------------------------------------------------------------------------
-  override def fieldsRow: Row11[Long, String, String, Long, String, Long, Boolean, String, String, LocalDateTime, Array[Byte]] = super.fieldsRow.asInstanceOf[ Row11[Long, String, String, Long, String, Long, Boolean, String, String, LocalDateTime, Array[Byte]] ]
+  override def fieldsRow: Row13[Long, String, String, Long, String, Long, Boolean, String, String, LocalDateTime, Array[Byte], String, String] = super.fieldsRow.asInstanceOf[ Row13[Long, String, String, Long, String, Long, Boolean, String, String, LocalDateTime, Array[Byte], String, String] ]
 
   /**
    * Convenience mapping calling {@link #convertFrom(Function)}.
    */
-  def mapping[U](from: (Long, String, String, Long, String, Long, Boolean, String, String, LocalDateTime, Array[Byte]) => U): SelectField[U] = convertFrom(r => from.apply(r.value1(), r.value2(), r.value3(), r.value4(), r.value5(), r.value6(), r.value7(), r.value8(), r.value9(), r.value10(), r.value11()))
+  def mapping[U](from: (Long, String, String, Long, String, Long, Boolean, String, String, LocalDateTime, Array[Byte], String, String) => U): SelectField[U] = convertFrom(r => from.apply(r.value1(), r.value2(), r.value3(), r.value4(), r.value5(), r.value6(), r.value7(), r.value8(), r.value9(), r.value10(), r.value11(), r.value12(), r.value13()))
 
   /**
    * Convenience mapping calling {@link #convertFrom(Class, Function)}.
    */
-  def mapping[U](toType: Class[U], from: (Long, String, String, Long, String, Long, Boolean, String, String, LocalDateTime, Array[Byte]) => U): SelectField[U] = convertFrom(toType,r => from.apply(r.value1(), r.value2(), r.value3(), r.value4(), r.value5(), r.value6(), r.value7(), r.value8(), r.value9(), r.value10(), r.value11()))
+  def mapping[U](toType: Class[U], from: (Long, String, String, Long, String, Long, Boolean, String, String, LocalDateTime, Array[Byte], String, String) => U): SelectField[U] = convertFrom(toType,r => from.apply(r.value1(), r.value2(), r.value3(), r.value4(), r.value5(), r.value6(), r.value7(), r.value8(), r.value9(), r.value10(), r.value11(), r.value12(), r.value13()))
 }

@@ -104,7 +104,7 @@ open class RewardsReport(
     /**
      * The column <code>public.rewards_report.last_update</code>.
      */
-    val LAST_UPDATE: TableField<RewardsReportRecord, LocalDateTime?> = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).defaultValue(DSL.field("now()", SQLDataType.LOCALDATETIME)), this, "")
+    val LAST_UPDATE: TableField<RewardsReportRecord, LocalDateTime?> = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).readonly(true).defaultValue(DSL.field("now()", SQLDataType.LOCALDATETIME)), this, "")
 
     /**
      * The column <code>public.rewards_report.active</code>.

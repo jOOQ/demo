@@ -135,7 +135,7 @@ extends TableImpl[FilmRecord](
   /**
    * The column <code>public.film.last_update</code>.
    */
-  val LAST_UPDATE: TableField[FilmRecord, LocalDateTime] = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).defaultValue(DSL.field("now()", SQLDataType.LOCALDATETIME)), "")
+  val LAST_UPDATE: TableField[FilmRecord, LocalDateTime] = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).readonly(true).defaultValue(DSL.field("now()", SQLDataType.LOCALDATETIME)), "")
 
   /**
    * The column <code>public.film.special_features</code>.

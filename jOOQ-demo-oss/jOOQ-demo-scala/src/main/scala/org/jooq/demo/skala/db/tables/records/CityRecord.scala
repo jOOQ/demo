@@ -138,6 +138,17 @@ class CityRecord extends UpdatableRecordImpl[CityRecord](City.CITY) with Record4
   /**
    * Create a detached, initialised CityRecord
    */
+  def this(cityId : Long, city : String, countryId : Long) = {
+    this()
+
+    this.setCityId(cityId)
+    this.setCity(city)
+    this.setCountryId(countryId)
+  }
+
+  /**
+   * Create a detached, initialised CityRecord
+   */
   def this(value: org.jooq.demo.skala.db.tables.pojos.City) = {
     this()
 

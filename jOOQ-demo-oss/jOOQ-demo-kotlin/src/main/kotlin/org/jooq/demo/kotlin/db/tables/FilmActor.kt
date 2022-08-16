@@ -80,7 +80,7 @@ open class FilmActor(
     /**
      * The column <code>public.film_actor.last_update</code>.
      */
-    val LAST_UPDATE: TableField<FilmActorRecord, LocalDateTime?> = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).defaultValue(DSL.field("now()", SQLDataType.LOCALDATETIME)), this, "")
+    val LAST_UPDATE: TableField<FilmActorRecord, LocalDateTime?> = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).readonly(true).defaultValue(DSL.field("now()", SQLDataType.LOCALDATETIME)), this, "")
 
     private constructor(alias: Name, aliased: Table<FilmActorRecord>?): this(alias, null, null, aliased, null)
     private constructor(alias: Name, aliased: Table<FilmActorRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, aliased, parameters)

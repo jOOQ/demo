@@ -142,4 +142,26 @@ open class CustomerDao(configuration: Configuration?) : DAOImpl<CustomerRecord, 
      * Fetch records that have <code>active IN (values)</code>
      */
     fun fetchByActive(vararg values: Int): List<org.jooq.demo.kotlin.db.tables.pojos.Customer> = fetch(Customer.CUSTOMER.ACTIVE, *values.toTypedArray())
+
+    /**
+     * Fetch records that have <code>full_address BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    fun fetchRangeOfFullAddress(lowerInclusive: String?, upperInclusive: String?): List<org.jooq.demo.kotlin.db.tables.pojos.Customer> = fetchRange(Customer.CUSTOMER.FULL_ADDRESS, lowerInclusive, upperInclusive)
+
+    /**
+     * Fetch records that have <code>full_address IN (values)</code>
+     */
+    fun fetchByFullAddress(vararg values: String): List<org.jooq.demo.kotlin.db.tables.pojos.Customer> = fetch(Customer.CUSTOMER.FULL_ADDRESS, *values)
+
+    /**
+     * Fetch records that have <code>full_name BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    fun fetchRangeOfFullName(lowerInclusive: String?, upperInclusive: String?): List<org.jooq.demo.kotlin.db.tables.pojos.Customer> = fetchRange(Customer.CUSTOMER.FULL_NAME, lowerInclusive, upperInclusive)
+
+    /**
+     * Fetch records that have <code>full_name IN (values)</code>
+     */
+    fun fetchByFullName(vararg values: String): List<org.jooq.demo.kotlin.db.tables.pojos.Customer> = fetch(Customer.CUSTOMER.FULL_NAME, *values)
 }

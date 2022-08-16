@@ -104,7 +104,7 @@ extends TableImpl[RentalRecord](
   /**
    * The column <code>public.rental.last_update</code>.
    */
-  val LAST_UPDATE: TableField[RentalRecord, LocalDateTime] = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).defaultValue(DSL.field("now()", SQLDataType.LOCALDATETIME)), "")
+  val LAST_UPDATE: TableField[RentalRecord, LocalDateTime] = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).readonly(true).defaultValue(DSL.field("now()", SQLDataType.LOCALDATETIME)), "")
 
   private def this(alias: Name, aliased: Table[RentalRecord]) = this(alias, null, null, aliased, null)
 

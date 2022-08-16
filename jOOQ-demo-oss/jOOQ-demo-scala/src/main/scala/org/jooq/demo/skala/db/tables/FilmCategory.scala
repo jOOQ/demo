@@ -81,7 +81,7 @@ extends TableImpl[FilmCategoryRecord](
   /**
    * The column <code>public.film_category.last_update</code>.
    */
-  val LAST_UPDATE: TableField[FilmCategoryRecord, LocalDateTime] = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).defaultValue(DSL.field("now()", SQLDataType.LOCALDATETIME)), "")
+  val LAST_UPDATE: TableField[FilmCategoryRecord, LocalDateTime] = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).readonly(true).defaultValue(DSL.field("now()", SQLDataType.LOCALDATETIME)), "")
 
   private def this(alias: Name, aliased: Table[FilmCategoryRecord]) = this(alias, null, null, aliased, null)
 

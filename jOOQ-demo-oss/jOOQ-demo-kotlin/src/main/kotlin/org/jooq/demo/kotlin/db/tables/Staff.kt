@@ -15,7 +15,7 @@ import org.jooq.Identity
 import org.jooq.Name
 import org.jooq.Record
 import org.jooq.Records
-import org.jooq.Row11
+import org.jooq.Row13
 import org.jooq.Schema
 import org.jooq.SelectField
 import org.jooq.Table
@@ -114,12 +114,22 @@ open class Staff(
     /**
      * The column <code>public.staff.last_update</code>.
      */
-    val LAST_UPDATE: TableField<StaffRecord, LocalDateTime?> = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).defaultValue(DSL.field("now()", SQLDataType.LOCALDATETIME)), this, "")
+    val LAST_UPDATE: TableField<StaffRecord, LocalDateTime?> = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).readonly(true).defaultValue(DSL.field("now()", SQLDataType.LOCALDATETIME)), this, "")
 
     /**
      * The column <code>public.staff.picture</code>.
      */
     val PICTURE: TableField<StaffRecord, ByteArray?> = createField(DSL.name("picture"), SQLDataType.BLOB, this, "")
+
+    /**
+     * The column <code>public.staff.full_address</code>.
+     */
+    val FULL_ADDRESS: TableField<StaffRecord, String?> = createField(DSL.name("full_address"), SQLDataType.CLOB.virtual(), this, "", { ctx -> DSL.concat(address.ADDRESS_, DSL.inline(", "), address.POSTAL_CODE, DSL.inline(", "), address.city.CITY_, DSL.inline(", "), address.city.country.COUNTRY_) })
+
+    /**
+     * The column <code>public.staff.full_name</code>.
+     */
+    val FULL_NAME: TableField<StaffRecord, String?> = createField(DSL.name("full_name"), SQLDataType.CLOB.virtual(), this, "", { ctx -> DSL.concat(FIRST_NAME, DSL.inline(" "), LAST_NAME) })
 
     private constructor(alias: Name, aliased: Table<StaffRecord>?): this(alias, null, null, aliased, null)
     private constructor(alias: Name, aliased: Table<StaffRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, aliased, parameters)
@@ -193,17 +203,17 @@ open class Staff(
     override fun rename(name: Table<*>): Staff = Staff(name.getQualifiedName(), null)
 
     // -------------------------------------------------------------------------
-    // Row11 type methods
+    // Row13 type methods
     // -------------------------------------------------------------------------
-    override fun fieldsRow(): Row11<Long?, String?, String?, Long?, String?, Long?, Boolean?, String?, String?, LocalDateTime?, ByteArray?> = super.fieldsRow() as Row11<Long?, String?, String?, Long?, String?, Long?, Boolean?, String?, String?, LocalDateTime?, ByteArray?>
+    override fun fieldsRow(): Row13<Long?, String?, String?, Long?, String?, Long?, Boolean?, String?, String?, LocalDateTime?, ByteArray?, String?, String?> = super.fieldsRow() as Row13<Long?, String?, String?, Long?, String?, Long?, Boolean?, String?, String?, LocalDateTime?, ByteArray?, String?, String?>
 
     /**
      * Convenience mapping calling {@link #convertFrom(Function)}.
      */
-    fun <U> mapping(from: (Long?, String?, String?, Long?, String?, Long?, Boolean?, String?, String?, LocalDateTime?, ByteArray?) -> U): SelectField<U> = convertFrom(Records.mapping(from))
+    fun <U> mapping(from: (Long?, String?, String?, Long?, String?, Long?, Boolean?, String?, String?, LocalDateTime?, ByteArray?, String?, String?) -> U): SelectField<U> = convertFrom(Records.mapping(from))
 
     /**
      * Convenience mapping calling {@link #convertFrom(Class, Function)}.
      */
-    fun <U> mapping(toType: Class<U>, from: (Long?, String?, String?, Long?, String?, Long?, Boolean?, String?, String?, LocalDateTime?, ByteArray?) -> U): SelectField<U> = convertFrom(toType, Records.mapping(from))
+    fun <U> mapping(toType: Class<U>, from: (Long?, String?, String?, Long?, String?, Long?, Boolean?, String?, String?, LocalDateTime?, ByteArray?, String?, String?) -> U): SelectField<U> = convertFrom(toType, Records.mapping(from))
 }

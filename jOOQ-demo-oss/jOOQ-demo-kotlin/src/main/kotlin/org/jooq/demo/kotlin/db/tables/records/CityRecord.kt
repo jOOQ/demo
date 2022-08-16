@@ -102,6 +102,15 @@ open class CityRecord() : UpdatableRecordImpl<CityRecord>(City.CITY), Record4<Lo
     /**
      * Create a detached, initialised CityRecord
      */
+    constructor(cityId: Long? = null, city: String? = null, countryId: Long? = null): this() {
+        this.cityId = cityId
+        this.city = city
+        this.countryId = countryId
+    }
+
+    /**
+     * Create a detached, initialised CityRecord
+     */
     constructor(value: org.jooq.demo.kotlin.db.tables.pojos.City?): this() {
         if (value != null) {
             this.cityId = value.cityId

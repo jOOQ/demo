@@ -28,10 +28,12 @@ case class Staff(
   var username: String,
   var password: String,
   var lastUpdate: LocalDateTime,
-  var picture: Array[Byte]
+  var picture: Array[Byte],
+  var fullAddress: String,
+  var fullName: String
 ) extends Serializable {
 
-  def this() = this(null, null, null, null, null, null, null, null, null, null, null)
+  def this() = this(null, null, null, null, null, null, null, null, null, null, null, null, null)
 
   def this(value: Staff) = this(
     value.staffId,
@@ -44,7 +46,9 @@ case class Staff(
     value.username,
     value.password,
     value.lastUpdate,
-    value.picture
+    value.picture,
+    value.fullAddress,
+    value.fullName
   )
 
   /**
@@ -177,5 +181,29 @@ case class Staff(
    */
   def setPicture(picture: Array[Byte]): Unit = {
     this.picture = picture
+  }
+
+  /**
+   * Getter for <code>public.staff.full_address</code>.
+   */
+  def getFullAddress: String = this.fullAddress
+
+  /**
+   * Setter for <code>public.staff.full_address</code>.
+   */
+  def setFullAddress(fullAddress: String): Unit = {
+    this.fullAddress = fullAddress
+  }
+
+  /**
+   * Getter for <code>public.staff.full_name</code>.
+   */
+  def getFullName: String = this.fullName
+
+  /**
+   * Setter for <code>public.staff.full_name</code>.
+   */
+  def setFullName(fullName: String): Unit = {
+    this.fullName = fullName
   }
 }

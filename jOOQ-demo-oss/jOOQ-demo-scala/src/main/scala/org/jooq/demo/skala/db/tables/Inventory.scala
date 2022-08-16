@@ -89,7 +89,7 @@ extends TableImpl[InventoryRecord](
   /**
    * The column <code>public.inventory.last_update</code>.
    */
-  val LAST_UPDATE: TableField[InventoryRecord, LocalDateTime] = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).defaultValue(DSL.field("now()", SQLDataType.LOCALDATETIME)), "")
+  val LAST_UPDATE: TableField[InventoryRecord, LocalDateTime] = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).readonly(true).defaultValue(DSL.field("now()", SQLDataType.LOCALDATETIME)), "")
 
   private def this(alias: Name, aliased: Table[InventoryRecord]) = this(alias, null, null, aliased, null)
 

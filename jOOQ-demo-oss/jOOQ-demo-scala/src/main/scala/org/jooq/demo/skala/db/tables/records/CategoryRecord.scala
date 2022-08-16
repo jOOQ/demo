@@ -116,6 +116,16 @@ class CategoryRecord extends UpdatableRecordImpl[CategoryRecord](Category.CATEGO
   /**
    * Create a detached, initialised CategoryRecord
    */
+  def this(categoryId : Long, name : String) = {
+    this()
+
+    this.setCategoryId(categoryId)
+    this.setName(name)
+  }
+
+  /**
+   * Create a detached, initialised CategoryRecord
+   */
   def this(value: org.jooq.demo.skala.db.tables.pojos.Category) = {
     this()
 

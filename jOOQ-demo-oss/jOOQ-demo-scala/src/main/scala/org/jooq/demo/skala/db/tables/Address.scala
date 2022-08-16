@@ -109,7 +109,7 @@ extends TableImpl[AddressRecord](
   /**
    * The column <code>public.address.last_update</code>.
    */
-  val LAST_UPDATE: TableField[AddressRecord, LocalDateTime] = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).defaultValue(DSL.field("now()", SQLDataType.LOCALDATETIME)), "")
+  val LAST_UPDATE: TableField[AddressRecord, LocalDateTime] = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).readonly(true).defaultValue(DSL.field("now()", SQLDataType.LOCALDATETIME)), "")
 
   private def this(alias: Name, aliased: Table[AddressRecord]) = this(alias, null, null, aliased, null)
 

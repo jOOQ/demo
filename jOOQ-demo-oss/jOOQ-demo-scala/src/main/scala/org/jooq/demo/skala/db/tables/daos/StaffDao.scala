@@ -156,4 +156,26 @@ class StaffDao(configuration: Configuration) extends DAOImpl[StaffRecord, org.jo
    * Fetch records that have <code>picture IN (values)</code>
    */
   def fetchByPicture(values: Array[Byte]*): List[org.jooq.demo.skala.db.tables.pojos.Staff] = fetch(Staff.STAFF.PICTURE, values:_*)
+
+  /**
+   * Fetch records that have <code>full_address BETWEEN lowerInclusive AND
+   * upperInclusive</code>
+   */
+  def fetchRangeOfFullAddress(lowerInclusive: String, upperInclusive: String): List[org.jooq.demo.skala.db.tables.pojos.Staff] = fetchRange(Staff.STAFF.FULL_ADDRESS, lowerInclusive, upperInclusive)
+
+  /**
+   * Fetch records that have <code>full_address IN (values)</code>
+   */
+  def fetchByFullAddress(values: String*): List[org.jooq.demo.skala.db.tables.pojos.Staff] = fetch(Staff.STAFF.FULL_ADDRESS, values:_*)
+
+  /**
+   * Fetch records that have <code>full_name BETWEEN lowerInclusive AND
+   * upperInclusive</code>
+   */
+  def fetchRangeOfFullName(lowerInclusive: String, upperInclusive: String): List[org.jooq.demo.skala.db.tables.pojos.Staff] = fetchRange(Staff.STAFF.FULL_NAME, lowerInclusive, upperInclusive)
+
+  /**
+   * Fetch records that have <code>full_name IN (values)</code>
+   */
+  def fetchByFullName(values: String*): List[org.jooq.demo.skala.db.tables.pojos.Staff] = fetch(Staff.STAFF.FULL_NAME, values:_*)
 }

@@ -248,6 +248,25 @@ open class FilmRecord() : UpdatableRecordImpl<FilmRecord>(Film.FILM), Record14<L
     /**
      * Create a detached, initialised FilmRecord
      */
+    constructor(filmId: Long? = null, title: String? = null, description: String? = null, releaseYear: Int? = null, languageId: Long? = null, originalLanguageId: Long? = null, rentalDuration: Short? = null, rentalRate: BigDecimal? = null, length: Short? = null, replacementCost: BigDecimal? = null, rating: MpaaRating? = null, specialFeatures: Array<String?>? = null, fulltext: Any? = null): this() {
+        this.filmId = filmId
+        this.title = title
+        this.description = description
+        this.releaseYear = releaseYear
+        this.languageId = languageId
+        this.originalLanguageId = originalLanguageId
+        this.rentalDuration = rentalDuration
+        this.rentalRate = rentalRate
+        this.length = length
+        this.replacementCost = replacementCost
+        this.rating = rating
+        this.specialFeatures = specialFeatures
+        this.fulltext = fulltext
+    }
+
+    /**
+     * Create a detached, initialised FilmRecord
+     */
     constructor(value: org.jooq.demo.kotlin.db.tables.pojos.Film?): this() {
         if (value != null) {
             this.filmId = value.filmId

@@ -144,6 +144,18 @@ open class RentalRecord() : UpdatableRecordImpl<RentalRecord>(Rental.RENTAL), Re
     /**
      * Create a detached, initialised RentalRecord
      */
+    constructor(rentalId: Long? = null, rentalDate: LocalDateTime? = null, inventoryId: Long? = null, customerId: Long? = null, returnDate: LocalDateTime? = null, staffId: Long? = null): this() {
+        this.rentalId = rentalId
+        this.rentalDate = rentalDate
+        this.inventoryId = inventoryId
+        this.customerId = customerId
+        this.returnDate = returnDate
+        this.staffId = staffId
+    }
+
+    /**
+     * Create a detached, initialised RentalRecord
+     */
     constructor(value: org.jooq.demo.kotlin.db.tables.pojos.Rental?): this() {
         if (value != null) {
             this.rentalId = value.rentalId

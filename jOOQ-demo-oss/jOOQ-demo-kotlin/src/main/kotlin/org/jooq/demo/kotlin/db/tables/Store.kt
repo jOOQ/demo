@@ -16,7 +16,7 @@ import org.jooq.Index
 import org.jooq.Name
 import org.jooq.Record
 import org.jooq.Records
-import org.jooq.Row4
+import org.jooq.Row5
 import org.jooq.Schema
 import org.jooq.SelectField
 import org.jooq.Table
@@ -86,7 +86,12 @@ open class Store(
     /**
      * The column <code>public.store.last_update</code>.
      */
-    val LAST_UPDATE: TableField<StoreRecord, LocalDateTime?> = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).defaultValue(DSL.field("now()", SQLDataType.LOCALDATETIME)), this, "")
+    val LAST_UPDATE: TableField<StoreRecord, LocalDateTime?> = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).readonly(true).defaultValue(DSL.field("now()", SQLDataType.LOCALDATETIME)), this, "")
+
+    /**
+     * The column <code>public.store.full_address</code>.
+     */
+    val FULL_ADDRESS: TableField<StoreRecord, String?> = createField(DSL.name("full_address"), SQLDataType.CLOB.virtual(), this, "", { ctx -> DSL.concat(address.ADDRESS_, DSL.inline(", "), address.POSTAL_CODE, DSL.inline(", "), address.city.CITY_, DSL.inline(", "), address.city.country.COUNTRY_) })
 
     private constructor(alias: Name, aliased: Table<StoreRecord>?): this(alias, null, null, aliased, null)
     private constructor(alias: Name, aliased: Table<StoreRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, aliased, parameters)
@@ -161,17 +166,17 @@ open class Store(
     override fun rename(name: Table<*>): Store = Store(name.getQualifiedName(), null)
 
     // -------------------------------------------------------------------------
-    // Row4 type methods
+    // Row5 type methods
     // -------------------------------------------------------------------------
-    override fun fieldsRow(): Row4<Long?, Long?, Long?, LocalDateTime?> = super.fieldsRow() as Row4<Long?, Long?, Long?, LocalDateTime?>
+    override fun fieldsRow(): Row5<Long?, Long?, Long?, LocalDateTime?, String?> = super.fieldsRow() as Row5<Long?, Long?, Long?, LocalDateTime?, String?>
 
     /**
      * Convenience mapping calling {@link #convertFrom(Function)}.
      */
-    fun <U> mapping(from: (Long?, Long?, Long?, LocalDateTime?) -> U): SelectField<U> = convertFrom(Records.mapping(from))
+    fun <U> mapping(from: (Long?, Long?, Long?, LocalDateTime?, String?) -> U): SelectField<U> = convertFrom(Records.mapping(from))
 
     /**
      * Convenience mapping calling {@link #convertFrom(Class, Function)}.
      */
-    fun <U> mapping(toType: Class<U>, from: (Long?, Long?, Long?, LocalDateTime?) -> U): SelectField<U> = convertFrom(toType, Records.mapping(from))
+    fun <U> mapping(toType: Class<U>, from: (Long?, Long?, Long?, LocalDateTime?, String?) -> U): SelectField<U> = convertFrom(toType, Records.mapping(from))
 }

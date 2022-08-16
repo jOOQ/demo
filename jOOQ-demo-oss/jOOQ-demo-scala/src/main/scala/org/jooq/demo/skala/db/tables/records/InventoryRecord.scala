@@ -137,6 +137,17 @@ class InventoryRecord extends UpdatableRecordImpl[InventoryRecord](Inventory.INV
   /**
    * Create a detached, initialised InventoryRecord
    */
+  def this(inventoryId : Long, filmId : Long, storeId : Long) = {
+    this()
+
+    this.setInventoryId(inventoryId)
+    this.setFilmId(filmId)
+    this.setStoreId(storeId)
+  }
+
+  /**
+   * Create a detached, initialised InventoryRecord
+   */
   def this(value: org.jooq.demo.skala.db.tables.pojos.Inventory) = {
     this()
 
