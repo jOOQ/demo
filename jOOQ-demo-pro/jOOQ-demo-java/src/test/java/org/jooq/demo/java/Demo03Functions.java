@@ -36,7 +36,7 @@ public class Demo03Functions extends AbstractDemo {
     }
 
     private Field<String> difference(Field<String> f1, Field<String> f2) {
-        return field("difference({0}, {1})", f1.getDataType(), f1, f2);
+        return field("(length({0}) - length({1}))", f1.getDataType(), f1, f2);
     }
 
     @Test
