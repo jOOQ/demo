@@ -4,6 +4,7 @@ import org.jooq.demo.AbstractDemo
 import org.jooq.demo.AbstractDemo._
 import org.jooq.demo.skala.db.Tables.ACTOR
 import org.jooq.exception.DataAccessException
+import org.jooq.impl.DSL
 import org.jooq.impl.DSL.using
 import org.jooq.tools.jdbc.{MockConnection, MockDataProvider, MockFileDatabase, MockResult}
 import org.junit.{After, Test}
@@ -44,7 +45,7 @@ class Demo14Mocking extends AbstractDemo {
     }
 
     title("Of course, jOOQ being a JDBC based API, you can equally mock jOOQ")
-    println(using(new MockConnection(p), ctx.dialect).selectFrom(ACTOR).fetch)
+    println(DSL.using(new MockConnection(p), ctx.dialect).selectFrom(ACTOR).fetch)
   }
 
   @Test
