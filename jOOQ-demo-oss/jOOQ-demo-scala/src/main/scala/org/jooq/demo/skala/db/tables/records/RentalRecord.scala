@@ -203,20 +203,6 @@ class RentalRecord extends UpdatableRecordImpl[RentalRecord](Rental.RENTAL) with
   /**
    * Create a detached, initialised RentalRecord
    */
-  def this(rentalId : Long, rentalDate : LocalDateTime, inventoryId : Long, customerId : Long, returnDate : LocalDateTime, staffId : Long) = {
-    this()
-
-    this.setRentalId(rentalId)
-    this.setRentalDate(rentalDate)
-    this.setInventoryId(inventoryId)
-    this.setCustomerId(customerId)
-    this.setReturnDate(returnDate)
-    this.setStaffId(staffId)
-  }
-
-  /**
-   * Create a detached, initialised RentalRecord
-   */
   def this(value: org.jooq.demo.skala.db.tables.pojos.Rental) = {
     this()
 

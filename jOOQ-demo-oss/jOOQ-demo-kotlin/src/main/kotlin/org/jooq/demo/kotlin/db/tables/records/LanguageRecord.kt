@@ -88,14 +88,6 @@ open class LanguageRecord() : UpdatableRecordImpl<LanguageRecord>(Language.LANGU
     /**
      * Create a detached, initialised LanguageRecord
      */
-    constructor(languageId: Long? = null, name: String? = null): this() {
-        this.languageId = languageId
-        this.name = name
-    }
-
-    /**
-     * Create a detached, initialised LanguageRecord
-     */
     constructor(value: org.jooq.demo.kotlin.db.tables.pojos.Language?): this() {
         if (value != null) {
             this.languageId = value.languageId

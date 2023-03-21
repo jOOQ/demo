@@ -266,23 +266,6 @@ class RewardsReportRecord extends TableRecordImpl[RewardsReportRecord](RewardsRe
   /**
    * Create a detached, initialised RewardsReportRecord
    */
-  def this(customerId : Long, storeId : Long, firstName : String, lastName : String, email : String, addressId : Long, activebool : Boolean, createDate : LocalDate, active : Integer) = {
-    this()
-
-    this.setCustomerId(customerId)
-    this.setStoreId(storeId)
-    this.setFirstName(firstName)
-    this.setLastName(lastName)
-    this.setEmail(email)
-    this.setAddressId(addressId)
-    this.setActivebool(activebool)
-    this.setCreateDate(createDate)
-    this.setActive(active)
-  }
-
-  /**
-   * Create a detached, initialised RewardsReportRecord
-   */
   def this(value: org.jooq.demo.skala.db.tables.pojos.RewardsReport) = {
     this()
 

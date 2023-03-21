@@ -226,21 +226,6 @@ class AddressRecord extends UpdatableRecordImpl[AddressRecord](Address.ADDRESS) 
   /**
    * Create a detached, initialised AddressRecord
    */
-  def this(addressId : Long, address : String, address2 : String, district : String, cityId : Long, postalCode : String, phone : String) = {
-    this()
-
-    this.setAddressId(addressId)
-    this.setAddress(address)
-    this.setAddress2(address2)
-    this.setDistrict(district)
-    this.setCityId(cityId)
-    this.setPostalCode(postalCode)
-    this.setPhone(phone)
-  }
-
-  /**
-   * Create a detached, initialised AddressRecord
-   */
   def this(value: org.jooq.demo.skala.db.tables.pojos.Address) = {
     this()
 

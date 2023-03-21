@@ -18,7 +18,7 @@ import org.jooq.Identity
 import org.jooq.Index
 import org.jooq.Name
 import org.jooq.Record
-import org.jooq.Row5
+import org.jooq.Row4
 import org.jooq.Schema
 import org.jooq.SelectField
 import org.jooq.Table
@@ -89,12 +89,7 @@ extends TableImpl[StoreRecord](
   /**
    * The column <code>public.store.last_update</code>.
    */
-  val LAST_UPDATE: TableField[StoreRecord, LocalDateTime] = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).readonly(true).defaultValue(DSL.field("now()", SQLDataType.LOCALDATETIME)), "")
-
-  /**
-   * The column <code>public.store.full_address</code>.
-   */
-  val FULL_ADDRESS: TableField[StoreRecord, String] = createField(DSL.name("full_address"), SQLDataType.CLOB, "")
+  val LAST_UPDATE: TableField[StoreRecord, LocalDateTime] = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).defaultValue(DSL.field("now()", SQLDataType.LOCALDATETIME)), "")
 
   private def this(alias: Name, aliased: Table[StoreRecord]) = this(alias, null, null, aliased, null)
 
@@ -154,17 +149,18 @@ extends TableImpl[StoreRecord](
   override def rename(name: Table[_]): Store = new Store(name.getQualifiedName(), null)
 
   // -------------------------------------------------------------------------
-  // Row5 type methods
+  // Row4 type methods
   // -------------------------------------------------------------------------
-  override def fieldsRow: Row5[Long, Long, Long, LocalDateTime, String] = super.fieldsRow.asInstanceOf[ Row5[Long, Long, Long, LocalDateTime, String] ]
+  override def fieldsRow: Row4[Long, Long, Long, LocalDateTime] = super.fieldsRow.asInstanceOf[ Row4[Long, Long, Long, LocalDateTime] ]
 
   /**
-   * Convenience mapping calling {@link #convertFrom(Function)}.
+   * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
    */
-  def mapping[U](from: (Long, Long, Long, LocalDateTime, String) => U): SelectField[U] = convertFrom(r => from.apply(r.value1(), r.value2(), r.value3(), r.value4(), r.value5()))
+  def mapping[U](from: (Long, Long, Long, LocalDateTime) => U): SelectField[U] = convertFrom(r => from.apply(r.value1(), r.value2(), r.value3(), r.value4()))
 
   /**
-   * Convenience mapping calling {@link #convertFrom(Class, Function)}.
+   * Convenience mapping calling {@link SelectField#convertFrom(Class,
+   * Function)}.
    */
-  def mapping[U](toType: Class[U], from: (Long, Long, Long, LocalDateTime, String) => U): SelectField[U] = convertFrom(toType,r => from.apply(r.value1(), r.value2(), r.value3(), r.value4(), r.value5()))
+  def mapping[U](toType: Class[U], from: (Long, Long, Long, LocalDateTime) => U): SelectField[U] = convertFrom(toType,r => from.apply(r.value1(), r.value2(), r.value3(), r.value4()))
 }

@@ -133,12 +133,13 @@ open class SalesByStore(
     override fun fieldsRow(): Row3<String?, String?, BigDecimal?> = super.fieldsRow() as Row3<String?, String?, BigDecimal?>
 
     /**
-     * Convenience mapping calling {@link #convertFrom(Function)}.
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
     fun <U> mapping(from: (String?, String?, BigDecimal?) -> U): SelectField<U> = convertFrom(Records.mapping(from))
 
     /**
-     * Convenience mapping calling {@link #convertFrom(Class, Function)}.
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
      */
     fun <U> mapping(toType: Class<U>, from: (String?, String?, BigDecimal?) -> U): SelectField<U> = convertFrom(toType, Records.mapping(from))
 }

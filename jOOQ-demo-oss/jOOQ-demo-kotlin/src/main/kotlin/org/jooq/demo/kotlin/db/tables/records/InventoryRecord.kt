@@ -102,15 +102,6 @@ open class InventoryRecord() : UpdatableRecordImpl<InventoryRecord>(Inventory.IN
     /**
      * Create a detached, initialised InventoryRecord
      */
-    constructor(inventoryId: Long? = null, filmId: Long? = null, storeId: Long? = null): this() {
-        this.inventoryId = inventoryId
-        this.filmId = filmId
-        this.storeId = storeId
-    }
-
-    /**
-     * Create a detached, initialised InventoryRecord
-     */
     constructor(value: org.jooq.demo.kotlin.db.tables.pojos.Inventory?): this() {
         if (value != null) {
             this.inventoryId = value.inventoryId

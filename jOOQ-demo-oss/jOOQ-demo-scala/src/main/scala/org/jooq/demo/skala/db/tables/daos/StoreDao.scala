@@ -5,7 +5,6 @@ package org.jooq.demo.skala.db.tables.daos
 
 
 import java.lang.Long
-import java.lang.String
 import java.time.LocalDateTime
 import java.util.List
 
@@ -75,15 +74,4 @@ class StoreDao(configuration: Configuration) extends DAOImpl[StoreRecord, org.jo
    * Fetch records that have <code>last_update IN (values)</code>
    */
   def fetchByLastUpdate(values: LocalDateTime*): List[org.jooq.demo.skala.db.tables.pojos.Store] = fetch(Store.STORE.LAST_UPDATE, values:_*)
-
-  /**
-   * Fetch records that have <code>full_address BETWEEN lowerInclusive AND
-   * upperInclusive</code>
-   */
-  def fetchRangeOfFullAddress(lowerInclusive: String, upperInclusive: String): List[org.jooq.demo.skala.db.tables.pojos.Store] = fetchRange(Store.STORE.FULL_ADDRESS, lowerInclusive, upperInclusive)
-
-  /**
-   * Fetch records that have <code>full_address IN (values)</code>
-   */
-  def fetchByFullAddress(values: String*): List[org.jooq.demo.skala.db.tables.pojos.Store] = fetch(Store.STORE.FULL_ADDRESS, values:_*)
 }

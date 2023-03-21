@@ -16,8 +16,7 @@ data class Store(
     var storeId: Long? = null,
     var managerStaffId: Long? = null,
     var addressId: Long? = null,
-    var lastUpdate: LocalDateTime? = null,
-    var fullAddress: String? = null
+    var lastUpdate: LocalDateTime? = null
 ): Serializable {
 
 }

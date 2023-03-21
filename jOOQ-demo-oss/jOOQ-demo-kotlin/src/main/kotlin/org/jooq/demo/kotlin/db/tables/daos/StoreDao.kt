@@ -75,15 +75,4 @@ open class StoreDao(configuration: Configuration?) : DAOImpl<StoreRecord, org.jo
      * Fetch records that have <code>last_update IN (values)</code>
      */
     fun fetchByLastUpdate(vararg values: LocalDateTime): List<org.jooq.demo.kotlin.db.tables.pojos.Store> = fetch(Store.STORE.LAST_UPDATE, *values)
-
-    /**
-     * Fetch records that have <code>full_address BETWEEN lowerInclusive AND
-     * upperInclusive</code>
-     */
-    fun fetchRangeOfFullAddress(lowerInclusive: String?, upperInclusive: String?): List<org.jooq.demo.kotlin.db.tables.pojos.Store> = fetchRange(Store.STORE.FULL_ADDRESS, lowerInclusive, upperInclusive)
-
-    /**
-     * Fetch records that have <code>full_address IN (values)</code>
-     */
-    fun fetchByFullAddress(vararg values: String): List<org.jooq.demo.kotlin.db.tables.pojos.Store> = fetch(Store.STORE.FULL_ADDRESS, *values)
 }

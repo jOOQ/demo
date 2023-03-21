@@ -116,16 +116,6 @@ class LanguageRecord extends UpdatableRecordImpl[LanguageRecord](Language.LANGUA
   /**
    * Create a detached, initialised LanguageRecord
    */
-  def this(languageId : Long, name : String) = {
-    this()
-
-    this.setLanguageId(languageId)
-    this.setName(name)
-  }
-
-  /**
-   * Create a detached, initialised LanguageRecord
-   */
   def this(value: org.jooq.demo.skala.db.tables.pojos.Language) = {
     this()
 
