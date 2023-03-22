@@ -41,12 +41,12 @@ open class SalesByFilmCategoryRecord() : TableRecordImpl<SalesByFilmCategoryReco
     override fun value2(): BigDecimal? = totalSales
 
     override fun value1(value: String?): SalesByFilmCategoryRecord {
-        this.category = value
+        set(0, value)
         return this
     }
 
     override fun value2(value: BigDecimal?): SalesByFilmCategoryRecord {
-        this.totalSales = value
+        set(1, value)
         return this
     }
 
@@ -62,6 +62,7 @@ open class SalesByFilmCategoryRecord() : TableRecordImpl<SalesByFilmCategoryReco
     constructor(category: String? = null, totalSales: BigDecimal? = null): this() {
         this.category = category
         this.totalSales = totalSales
+        resetChangedOnNotNull()
     }
 
     /**
@@ -71,6 +72,7 @@ open class SalesByFilmCategoryRecord() : TableRecordImpl<SalesByFilmCategoryReco
         if (value != null) {
             this.category = value.category
             this.totalSales = value.totalSales
+            resetChangedOnNotNull()
         }
     }
 }

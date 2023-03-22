@@ -215,17 +215,7 @@ public class InventoryRecord extends UpdatableRecordImpl<InventoryRecord> implem
         setFilmId(filmId);
         setStoreId(storeId);
         setLastUpdate(lastUpdate);
-    }
-
-    /**
-     * Create a detached, initialised InventoryRecord
-     */
-    public InventoryRecord(Long inventoryId, Long filmId, Long storeId) {
-        super(Inventory.INVENTORY);
-
-        setInventoryId(inventoryId);
-        setFilmId(filmId);
-        setStoreId(storeId);
+        resetChangedOnNotNull();
     }
 
     /**
@@ -239,6 +229,7 @@ public class InventoryRecord extends UpdatableRecordImpl<InventoryRecord> implem
             setFilmId(value.filmId());
             setStoreId(value.storeId());
             setLastUpdate(value.lastUpdate());
+            resetChangedOnNotNull();
         }
     }
 }

@@ -106,12 +106,12 @@ open class Film(
     /**
      * The column <code>public.film.rental_duration</code>.
      */
-    val RENTAL_DURATION: TableField<FilmRecord, Short?> = createField(DSL.name("rental_duration"), SQLDataType.SMALLINT.nullable(false).defaultValue(DSL.field("3", SQLDataType.SMALLINT)), this, "")
+    val RENTAL_DURATION: TableField<FilmRecord, Short?> = createField(DSL.name("rental_duration"), SQLDataType.SMALLINT.nullable(false).defaultValue(DSL.field(DSL.raw("3"), SQLDataType.SMALLINT)), this, "")
 
     /**
      * The column <code>public.film.rental_rate</code>.
      */
-    val RENTAL_RATE: TableField<FilmRecord, BigDecimal?> = createField(DSL.name("rental_rate"), SQLDataType.NUMERIC(4, 2).nullable(false).defaultValue(DSL.field("4.99", SQLDataType.NUMERIC)), this, "")
+    val RENTAL_RATE: TableField<FilmRecord, BigDecimal?> = createField(DSL.name("rental_rate"), SQLDataType.NUMERIC(4, 2).nullable(false).defaultValue(DSL.field(DSL.raw("4.99"), SQLDataType.NUMERIC)), this, "")
 
     /**
      * The column <code>public.film.length</code>.
@@ -121,22 +121,22 @@ open class Film(
     /**
      * The column <code>public.film.replacement_cost</code>.
      */
-    val REPLACEMENT_COST: TableField<FilmRecord, BigDecimal?> = createField(DSL.name("replacement_cost"), SQLDataType.NUMERIC(5, 2).nullable(false).defaultValue(DSL.field("19.99", SQLDataType.NUMERIC)), this, "")
+    val REPLACEMENT_COST: TableField<FilmRecord, BigDecimal?> = createField(DSL.name("replacement_cost"), SQLDataType.NUMERIC(5, 2).nullable(false).defaultValue(DSL.field(DSL.raw("19.99"), SQLDataType.NUMERIC)), this, "")
 
     /**
      * The column <code>public.film.rating</code>.
      */
-    val RATING: TableField<FilmRecord, MpaaRating?> = createField(DSL.name("rating"), SQLDataType.VARCHAR.defaultValue(DSL.field("'G'::mpaa_rating", SQLDataType.VARCHAR)).asEnumDataType(org.jooq.demo.kotlin.db.enums.MpaaRating::class.java), this, "")
+    val RATING: TableField<FilmRecord, MpaaRating?> = createField(DSL.name("rating"), SQLDataType.VARCHAR.defaultValue(DSL.field(DSL.raw("'G'::mpaa_rating"), SQLDataType.VARCHAR)).asEnumDataType(org.jooq.demo.kotlin.db.enums.MpaaRating::class.java), this, "")
 
     /**
      * The column <code>public.film.last_update</code>.
      */
-    val LAST_UPDATE: TableField<FilmRecord, LocalDateTime?> = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).readonly(true).defaultValue(DSL.field("now()", SQLDataType.LOCALDATETIME)), this, "")
+    val LAST_UPDATE: TableField<FilmRecord, LocalDateTime?> = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).defaultValue(DSL.field(DSL.raw("now()"), SQLDataType.LOCALDATETIME)), this, "")
 
     /**
      * The column <code>public.film.special_features</code>.
      */
-    val SPECIAL_FEATURES: TableField<FilmRecord, Array<String?>?> = createField(DSL.name("special_features"), SQLDataType.CLOB.getArrayDataType(), this, "")
+    val SPECIAL_FEATURES: TableField<FilmRecord, Array<String?>?> = createField(DSL.name("special_features"), SQLDataType.CLOB.array(), this, "")
     @Deprecated(message = "Unknown data type. If this is a qualified, user-defined type, it may have been excluded from code generation. If this is a built-in type, you can define an explicit org.jooq.Binding to specify how this type should be handled. Deprecation can be turned off using <deprecationOnUnknownTypes/> in your code generator configuration.")
     val FULLTEXT: TableField<FilmRecord, Any?> = createField(DSL.name("fulltext"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tsvector\"").nullable(false), this, "")
 
@@ -220,12 +220,13 @@ open class Film(
     override fun fieldsRow(): Row14<Long?, String?, String?, Int?, Long?, Long?, Short?, BigDecimal?, Short?, BigDecimal?, MpaaRating?, LocalDateTime?, Array<String?>?, Any?> = super.fieldsRow() as Row14<Long?, String?, String?, Int?, Long?, Long?, Short?, BigDecimal?, Short?, BigDecimal?, MpaaRating?, LocalDateTime?, Array<String?>?, Any?>
 
     /**
-     * Convenience mapping calling {@link #convertFrom(Function)}.
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
     fun <U> mapping(from: (Long?, String?, String?, Int?, Long?, Long?, Short?, BigDecimal?, Short?, BigDecimal?, MpaaRating?, LocalDateTime?, Array<String?>?, Any?) -> U): SelectField<U> = convertFrom(Records.mapping(from))
 
     /**
-     * Convenience mapping calling {@link #convertFrom(Class, Function)}.
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
      */
     fun <U> mapping(toType: Class<U>, from: (Long?, String?, String?, Int?, Long?, Long?, Short?, BigDecimal?, Short?, BigDecimal?, MpaaRating?, LocalDateTime?, Array<String?>?, Any?) -> U): SelectField<U> = convertFrom(toType, Records.mapping(from))
 }

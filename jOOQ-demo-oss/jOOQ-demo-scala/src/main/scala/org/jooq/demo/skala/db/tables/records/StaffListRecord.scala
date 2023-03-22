@@ -213,6 +213,7 @@ class StaffListRecord extends TableRecordImpl[StaffListRecord](StaffList.STAFF_L
     this.setCity(city)
     this.setCountry(country)
     this.setSid(sid)
+    resetChangedOnNotNull()
   }
 
   /**
@@ -230,6 +231,7 @@ class StaffListRecord extends TableRecordImpl[StaffListRecord](StaffList.STAFF_L
       this.setCity(value.getCity)
       this.setCountry(value.getCountry)
       this.setSid(value.getSid)
+      resetChangedOnNotNull()
     }
   }
 }

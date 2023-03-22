@@ -55,17 +55,17 @@ open class LanguageRecord() : UpdatableRecordImpl<LanguageRecord>(Language.LANGU
     override fun value3(): LocalDateTime? = lastUpdate
 
     override fun value1(value: Long?): LanguageRecord {
-        this.languageId = value
+        set(0, value)
         return this
     }
 
     override fun value2(value: String?): LanguageRecord {
-        this.name = value
+        set(1, value)
         return this
     }
 
     override fun value3(value: LocalDateTime?): LanguageRecord {
-        this.lastUpdate = value
+        set(2, value)
         return this
     }
 
@@ -83,14 +83,7 @@ open class LanguageRecord() : UpdatableRecordImpl<LanguageRecord>(Language.LANGU
         this.languageId = languageId
         this.name = name
         this.lastUpdate = lastUpdate
-    }
-
-    /**
-     * Create a detached, initialised LanguageRecord
-     */
-    constructor(languageId: Long? = null, name: String? = null): this() {
-        this.languageId = languageId
-        this.name = name
+        resetChangedOnNotNull()
     }
 
     /**
@@ -101,6 +94,7 @@ open class LanguageRecord() : UpdatableRecordImpl<LanguageRecord>(Language.LANGU
             this.languageId = value.languageId
             this.name = value.name
             this.lastUpdate = value.lastUpdate
+            resetChangedOnNotNull()
         }
     }
 }

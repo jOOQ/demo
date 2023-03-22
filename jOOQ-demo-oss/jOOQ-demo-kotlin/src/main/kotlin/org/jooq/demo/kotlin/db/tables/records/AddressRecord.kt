@@ -90,42 +90,42 @@ open class AddressRecord() : UpdatableRecordImpl<AddressRecord>(Address.ADDRESS)
     override fun value8(): LocalDateTime? = lastUpdate
 
     override fun value1(value: Long?): AddressRecord {
-        this.addressId = value
+        set(0, value)
         return this
     }
 
     override fun value2(value: String?): AddressRecord {
-        this.address = value
+        set(1, value)
         return this
     }
 
     override fun value3(value: String?): AddressRecord {
-        this.address2 = value
+        set(2, value)
         return this
     }
 
     override fun value4(value: String?): AddressRecord {
-        this.district = value
+        set(3, value)
         return this
     }
 
     override fun value5(value: Long?): AddressRecord {
-        this.cityId = value
+        set(4, value)
         return this
     }
 
     override fun value6(value: String?): AddressRecord {
-        this.postalCode = value
+        set(5, value)
         return this
     }
 
     override fun value7(value: String?): AddressRecord {
-        this.phone = value
+        set(6, value)
         return this
     }
 
     override fun value8(value: LocalDateTime?): AddressRecord {
-        this.lastUpdate = value
+        set(7, value)
         return this
     }
 
@@ -153,19 +153,7 @@ open class AddressRecord() : UpdatableRecordImpl<AddressRecord>(Address.ADDRESS)
         this.postalCode = postalCode
         this.phone = phone
         this.lastUpdate = lastUpdate
-    }
-
-    /**
-     * Create a detached, initialised AddressRecord
-     */
-    constructor(addressId: Long? = null, address: String? = null, address2: String? = null, district: String? = null, cityId: Long? = null, postalCode: String? = null, phone: String? = null): this() {
-        this.addressId = addressId
-        this.address = address
-        this.address2 = address2
-        this.district = district
-        this.cityId = cityId
-        this.postalCode = postalCode
-        this.phone = phone
+        resetChangedOnNotNull()
     }
 
     /**
@@ -181,6 +169,7 @@ open class AddressRecord() : UpdatableRecordImpl<AddressRecord>(Address.ADDRESS)
             this.postalCode = value.postalCode
             this.phone = value.phone
             this.lastUpdate = value.lastUpdate
+            resetChangedOnNotNull()
         }
     }
 }

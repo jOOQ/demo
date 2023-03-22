@@ -84,42 +84,42 @@ open class FilmListRecord() : TableRecordImpl<FilmListRecord>(FilmList.FILM_LIST
     override fun value8(): String? = actors
 
     override fun value1(value: Long?): FilmListRecord {
-        this.fid = value
+        set(0, value)
         return this
     }
 
     override fun value2(value: String?): FilmListRecord {
-        this.title = value
+        set(1, value)
         return this
     }
 
     override fun value3(value: String?): FilmListRecord {
-        this.description = value
+        set(2, value)
         return this
     }
 
     override fun value4(value: String?): FilmListRecord {
-        this.category = value
+        set(3, value)
         return this
     }
 
     override fun value5(value: BigDecimal?): FilmListRecord {
-        this.price = value
+        set(4, value)
         return this
     }
 
     override fun value6(value: Short?): FilmListRecord {
-        this.length = value
+        set(5, value)
         return this
     }
 
     override fun value7(value: MpaaRating?): FilmListRecord {
-        this.rating = value
+        set(6, value)
         return this
     }
 
     override fun value8(value: String?): FilmListRecord {
-        this.actors = value
+        set(7, value)
         return this
     }
 
@@ -147,6 +147,7 @@ open class FilmListRecord() : TableRecordImpl<FilmListRecord>(FilmList.FILM_LIST
         this.length = length
         this.rating = rating
         this.actors = actors
+        resetChangedOnNotNull()
     }
 
     /**
@@ -162,6 +163,7 @@ open class FilmListRecord() : TableRecordImpl<FilmListRecord>(FilmList.FILM_LIST
             this.length = value.length
             this.rating = value.rating
             this.actors = value.actors
+            resetChangedOnNotNull()
         }
     }
 }

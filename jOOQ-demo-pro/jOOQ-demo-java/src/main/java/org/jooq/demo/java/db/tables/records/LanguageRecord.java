@@ -178,6 +178,7 @@ public class LanguageRecord extends UpdatableRecordImpl<LanguageRecord> implemen
         setLanguageId(languageId);
         setName(name);
         setLastUpdate(lastUpdate);
+        resetChangedOnNotNull();
     }
 
     /**
@@ -188,6 +189,7 @@ public class LanguageRecord extends UpdatableRecordImpl<LanguageRecord> implemen
 
         setLanguageId(languageId);
         setName(name);
+        resetChangedOnNotNull();
     }
 
     /**
@@ -200,6 +202,7 @@ public class LanguageRecord extends UpdatableRecordImpl<LanguageRecord> implemen
             setLanguageId(value.languageId());
             setName(value.name());
             setLastUpdate(value.lastUpdate());
+            resetChangedOnNotNull();
         }
     }
 }

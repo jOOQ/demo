@@ -354,6 +354,7 @@ public class NicerButSlowerFilmListRecord extends TableRecordImpl<NicerButSlower
         setLength(length);
         setRating(rating);
         setActors(actors);
+        resetChangedOnNotNull();
     }
 
     /**
@@ -371,6 +372,7 @@ public class NicerButSlowerFilmListRecord extends TableRecordImpl<NicerButSlower
             setLength(value.length());
             setRating(value.rating());
             setActors(value.actors());
+            resetChangedOnNotNull();
         }
     }
 }

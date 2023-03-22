@@ -87,7 +87,7 @@ public class Rental extends TableImpl<RentalRecord> {
     /**
      * The column <code>public.rental.last_update</code>.
      */
-    public final TableField<RentalRecord, LocalDateTime> LAST_UPDATE = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).readonly(true).defaultValue(DSL.field("now()", SQLDataType.LOCALDATETIME)), this, "");
+    public final TableField<RentalRecord, LocalDateTime> LAST_UPDATE = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).readonly(true).defaultValue(DSL.field(DSL.raw("now()"), SQLDataType.LOCALDATETIME)), this, "");
 
     private Rental(Name alias, Table<RentalRecord> aliased) {
         this(alias, aliased, null);
@@ -230,14 +230,15 @@ public class Rental extends TableImpl<RentalRecord> {
     }
 
     /**
-     * Convenience mapping calling {@link #convertFrom(Function)}.
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
     public <U> SelectField<U> mapping(Function7<? super Long, ? super LocalDateTime, ? super Long, ? super Long, ? super LocalDateTime, ? super Long, ? super LocalDateTime, ? extends U> from) {
         return convertFrom(Records.mapping(from));
     }
 
     /**
-     * Convenience mapping calling {@link #convertFrom(Class, Function)}.
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
      */
     public <U> SelectField<U> mapping(Class<U> toType, Function7<? super Long, ? super LocalDateTime, ? super Long, ? super Long, ? super LocalDateTime, ? super Long, ? super LocalDateTime, ? extends U> from) {
         return convertFrom(toType, Records.mapping(from));

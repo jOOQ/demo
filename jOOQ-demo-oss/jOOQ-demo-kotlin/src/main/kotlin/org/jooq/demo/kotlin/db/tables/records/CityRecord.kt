@@ -62,22 +62,22 @@ open class CityRecord() : UpdatableRecordImpl<CityRecord>(City.CITY), Record4<Lo
     override fun value4(): LocalDateTime? = lastUpdate
 
     override fun value1(value: Long?): CityRecord {
-        this.cityId = value
+        set(0, value)
         return this
     }
 
     override fun value2(value: String?): CityRecord {
-        this.city = value
+        set(1, value)
         return this
     }
 
     override fun value3(value: Long?): CityRecord {
-        this.countryId = value
+        set(2, value)
         return this
     }
 
     override fun value4(value: LocalDateTime?): CityRecord {
-        this.lastUpdate = value
+        set(3, value)
         return this
     }
 
@@ -97,15 +97,7 @@ open class CityRecord() : UpdatableRecordImpl<CityRecord>(City.CITY), Record4<Lo
         this.city = city
         this.countryId = countryId
         this.lastUpdate = lastUpdate
-    }
-
-    /**
-     * Create a detached, initialised CityRecord
-     */
-    constructor(cityId: Long? = null, city: String? = null, countryId: Long? = null): this() {
-        this.cityId = cityId
-        this.city = city
-        this.countryId = countryId
+        resetChangedOnNotNull()
     }
 
     /**
@@ -117,6 +109,7 @@ open class CityRecord() : UpdatableRecordImpl<CityRecord>(City.CITY), Record4<Lo
             this.city = value.city
             this.countryId = value.countryId
             this.lastUpdate = value.lastUpdate
+            resetChangedOnNotNull()
         }
     }
 }

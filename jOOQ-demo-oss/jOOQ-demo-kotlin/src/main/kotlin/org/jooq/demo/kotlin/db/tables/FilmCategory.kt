@@ -78,7 +78,7 @@ open class FilmCategory(
     /**
      * The column <code>public.film_category.last_update</code>.
      */
-    val LAST_UPDATE: TableField<FilmCategoryRecord, LocalDateTime?> = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).readonly(true).defaultValue(DSL.field("now()", SQLDataType.LOCALDATETIME)), this, "")
+    val LAST_UPDATE: TableField<FilmCategoryRecord, LocalDateTime?> = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).defaultValue(DSL.field(DSL.raw("now()"), SQLDataType.LOCALDATETIME)), this, "")
 
     private constructor(alias: Name, aliased: Table<FilmCategoryRecord>?): this(alias, null, null, aliased, null)
     private constructor(alias: Name, aliased: Table<FilmCategoryRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, aliased, parameters)
@@ -156,12 +156,13 @@ open class FilmCategory(
     override fun fieldsRow(): Row3<Long?, Long?, LocalDateTime?> = super.fieldsRow() as Row3<Long?, Long?, LocalDateTime?>
 
     /**
-     * Convenience mapping calling {@link #convertFrom(Function)}.
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
     fun <U> mapping(from: (Long?, Long?, LocalDateTime?) -> U): SelectField<U> = convertFrom(Records.mapping(from))
 
     /**
-     * Convenience mapping calling {@link #convertFrom(Class, Function)}.
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
      */
     fun <U> mapping(toType: Class<U>, from: (Long?, Long?, LocalDateTime?) -> U): SelectField<U> = convertFrom(toType, Records.mapping(from))
 }

@@ -104,7 +104,7 @@ extends TableImpl[RentalRecord](
   /**
    * The column <code>public.rental.last_update</code>.
    */
-  val LAST_UPDATE: TableField[RentalRecord, LocalDateTime] = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).readonly(true).defaultValue(DSL.field("now()", SQLDataType.LOCALDATETIME)), "")
+  val LAST_UPDATE: TableField[RentalRecord, LocalDateTime] = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).defaultValue(DSL.field(DSL.raw("now()"), SQLDataType.LOCALDATETIME)), "")
 
   private def this(alias: Name, aliased: Table[RentalRecord]) = this(alias, null, null, aliased, null)
 
@@ -174,12 +174,13 @@ extends TableImpl[RentalRecord](
   override def fieldsRow: Row7[Long, LocalDateTime, Long, Long, LocalDateTime, Long, LocalDateTime] = super.fieldsRow.asInstanceOf[ Row7[Long, LocalDateTime, Long, Long, LocalDateTime, Long, LocalDateTime] ]
 
   /**
-   * Convenience mapping calling {@link #convertFrom(Function)}.
+   * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
    */
   def mapping[U](from: (Long, LocalDateTime, Long, Long, LocalDateTime, Long, LocalDateTime) => U): SelectField[U] = convertFrom(r => from.apply(r.value1(), r.value2(), r.value3(), r.value4(), r.value5(), r.value6(), r.value7()))
 
   /**
-   * Convenience mapping calling {@link #convertFrom(Class, Function)}.
+   * Convenience mapping calling {@link SelectField#convertFrom(Class,
+   * Function)}.
    */
   def mapping[U](toType: Class[U], from: (Long, LocalDateTime, Long, Long, LocalDateTime, Long, LocalDateTime) => U): SelectField[U] = convertFrom(toType,r => from.apply(r.value1(), r.value2(), r.value3(), r.value4(), r.value5(), r.value6(), r.value7()))
 }

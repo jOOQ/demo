@@ -11,12 +11,12 @@ import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Function13;
+import org.jooq.Function11;
 import org.jooq.Identity;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Records;
-import org.jooq.Row13;
+import org.jooq.Row11;
 import org.jooq.Schema;
 import org.jooq.SelectField;
 import org.jooq.Table;
@@ -85,7 +85,7 @@ public class Staff extends TableImpl<StaffRecord> {
     /**
      * The column <code>public.staff.active</code>.
      */
-    public final TableField<StaffRecord, Boolean> ACTIVE = createField(DSL.name("active"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("true", SQLDataType.BOOLEAN)), this, "");
+    public final TableField<StaffRecord, Boolean> ACTIVE = createField(DSL.name("active"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field(DSL.raw("true"), SQLDataType.BOOLEAN)), this, "");
 
     /**
      * The column <code>public.staff.username</code>.
@@ -100,22 +100,12 @@ public class Staff extends TableImpl<StaffRecord> {
     /**
      * The column <code>public.staff.last_update</code>.
      */
-    public final TableField<StaffRecord, LocalDateTime> LAST_UPDATE = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).readonly(true).defaultValue(DSL.field("now()", SQLDataType.LOCALDATETIME)), this, "");
+    public final TableField<StaffRecord, LocalDateTime> LAST_UPDATE = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).defaultValue(DSL.field(DSL.raw("now()"), SQLDataType.LOCALDATETIME)), this, "");
 
     /**
      * The column <code>public.staff.picture</code>.
      */
     public final TableField<StaffRecord, byte[]> PICTURE = createField(DSL.name("picture"), SQLDataType.BLOB, this, "");
-
-    /**
-     * The column <code>public.staff.full_address</code>.
-     */
-    public final TableField<StaffRecord, String> FULL_ADDRESS = createField(DSL.name("full_address"), SQLDataType.CLOB.virtual(), this, "", ctx -> DSL.concat(address().ADDRESS_, DSL.inline(", "), address().POSTAL_CODE, DSL.inline(", "), address().city().CITY_, DSL.inline(", "), address().city().country().COUNTRY_));
-
-    /**
-     * The column <code>public.staff.full_name</code>.
-     */
-    public final TableField<StaffRecord, String> FULL_NAME = createField(DSL.name("full_name"), SQLDataType.CLOB.virtual(), this, "", ctx -> DSL.concat(FIRST_NAME, DSL.inline(" "), LAST_NAME));
 
     private Staff(Name alias, Table<StaffRecord> aliased) {
         this(alias, aliased, null);
@@ -233,25 +223,26 @@ public class Staff extends TableImpl<StaffRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row13 type methods
+    // Row11 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row13<Long, String, String, Long, String, Long, Boolean, String, String, LocalDateTime, byte[], String, String> fieldsRow() {
-        return (Row13) super.fieldsRow();
+    public Row11<Long, String, String, Long, String, Long, Boolean, String, String, LocalDateTime, byte[]> fieldsRow() {
+        return (Row11) super.fieldsRow();
     }
 
     /**
-     * Convenience mapping calling {@link #convertFrom(Function)}.
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
-    public <U> SelectField<U> mapping(Function13<? super Long, ? super String, ? super String, ? super Long, ? super String, ? super Long, ? super Boolean, ? super String, ? super String, ? super LocalDateTime, ? super byte[], ? super String, ? super String, ? extends U> from) {
+    public <U> SelectField<U> mapping(Function11<? super Long, ? super String, ? super String, ? super Long, ? super String, ? super Long, ? super Boolean, ? super String, ? super String, ? super LocalDateTime, ? super byte[], ? extends U> from) {
         return convertFrom(Records.mapping(from));
     }
 
     /**
-     * Convenience mapping calling {@link #convertFrom(Class, Function)}.
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function13<? super Long, ? super String, ? super String, ? super Long, ? super String, ? super Long, ? super Boolean, ? super String, ? super String, ? super LocalDateTime, ? super byte[], ? super String, ? super String, ? extends U> from) {
+    public <U> SelectField<U> mapping(Class<U> toType, Function11<? super Long, ? super String, ? super String, ? super Long, ? super String, ? super Long, ? super Boolean, ? super String, ? super String, ? super LocalDateTime, ? super byte[], ? extends U> from) {
         return convertFrom(toType, Records.mapping(from));
     }
 }

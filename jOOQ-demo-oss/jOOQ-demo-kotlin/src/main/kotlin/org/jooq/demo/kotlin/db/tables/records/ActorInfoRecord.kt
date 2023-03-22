@@ -53,22 +53,22 @@ open class ActorInfoRecord() : TableRecordImpl<ActorInfoRecord>(ActorInfo.ACTOR_
     override fun value4(): String? = filmInfo
 
     override fun value1(value: Long?): ActorInfoRecord {
-        this.actorId = value
+        set(0, value)
         return this
     }
 
     override fun value2(value: String?): ActorInfoRecord {
-        this.firstName = value
+        set(1, value)
         return this
     }
 
     override fun value3(value: String?): ActorInfoRecord {
-        this.lastName = value
+        set(2, value)
         return this
     }
 
     override fun value4(value: String?): ActorInfoRecord {
-        this.filmInfo = value
+        set(3, value)
         return this
     }
 
@@ -88,6 +88,7 @@ open class ActorInfoRecord() : TableRecordImpl<ActorInfoRecord>(ActorInfo.ACTOR_
         this.firstName = firstName
         this.lastName = lastName
         this.filmInfo = filmInfo
+        resetChangedOnNotNull()
     }
 
     /**
@@ -99,6 +100,7 @@ open class ActorInfoRecord() : TableRecordImpl<ActorInfoRecord>(ActorInfo.ACTOR_
             this.firstName = value.firstName
             this.lastName = value.lastName
             this.filmInfo = value.filmInfo
+            resetChangedOnNotNull()
         }
     }
 }

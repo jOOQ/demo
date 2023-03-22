@@ -77,32 +77,32 @@ open class PaymentRecord() : UpdatableRecordImpl<PaymentRecord>(Payment.PAYMENT)
     override fun value6(): LocalDateTime? = paymentDate
 
     override fun value1(value: Long?): PaymentRecord {
-        this.paymentId = value
+        set(0, value)
         return this
     }
 
     override fun value2(value: Long?): PaymentRecord {
-        this.customerId = value
+        set(1, value)
         return this
     }
 
     override fun value3(value: Long?): PaymentRecord {
-        this.staffId = value
+        set(2, value)
         return this
     }
 
     override fun value4(value: Long?): PaymentRecord {
-        this.rentalId = value
+        set(3, value)
         return this
     }
 
     override fun value5(value: BigDecimal?): PaymentRecord {
-        this.amount = value
+        set(4, value)
         return this
     }
 
     override fun value6(value: LocalDateTime?): PaymentRecord {
-        this.paymentDate = value
+        set(5, value)
         return this
     }
 
@@ -126,6 +126,7 @@ open class PaymentRecord() : UpdatableRecordImpl<PaymentRecord>(Payment.PAYMENT)
         this.rentalId = rentalId
         this.amount = amount
         this.paymentDate = paymentDate
+        resetChangedOnNotNull()
     }
 
     /**
@@ -139,6 +140,7 @@ open class PaymentRecord() : UpdatableRecordImpl<PaymentRecord>(Payment.PAYMENT)
             this.rentalId = value.rentalId
             this.amount = value.amount
             this.paymentDate = value.paymentDate
+            resetChangedOnNotNull()
         }
     }
 }

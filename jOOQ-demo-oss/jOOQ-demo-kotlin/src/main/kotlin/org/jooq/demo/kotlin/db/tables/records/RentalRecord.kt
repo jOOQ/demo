@@ -83,37 +83,37 @@ open class RentalRecord() : UpdatableRecordImpl<RentalRecord>(Rental.RENTAL), Re
     override fun value7(): LocalDateTime? = lastUpdate
 
     override fun value1(value: Long?): RentalRecord {
-        this.rentalId = value
+        set(0, value)
         return this
     }
 
     override fun value2(value: LocalDateTime?): RentalRecord {
-        this.rentalDate = value
+        set(1, value)
         return this
     }
 
     override fun value3(value: Long?): RentalRecord {
-        this.inventoryId = value
+        set(2, value)
         return this
     }
 
     override fun value4(value: Long?): RentalRecord {
-        this.customerId = value
+        set(3, value)
         return this
     }
 
     override fun value5(value: LocalDateTime?): RentalRecord {
-        this.returnDate = value
+        set(4, value)
         return this
     }
 
     override fun value6(value: Long?): RentalRecord {
-        this.staffId = value
+        set(5, value)
         return this
     }
 
     override fun value7(value: LocalDateTime?): RentalRecord {
-        this.lastUpdate = value
+        set(6, value)
         return this
     }
 
@@ -139,18 +139,7 @@ open class RentalRecord() : UpdatableRecordImpl<RentalRecord>(Rental.RENTAL), Re
         this.returnDate = returnDate
         this.staffId = staffId
         this.lastUpdate = lastUpdate
-    }
-
-    /**
-     * Create a detached, initialised RentalRecord
-     */
-    constructor(rentalId: Long? = null, rentalDate: LocalDateTime? = null, inventoryId: Long? = null, customerId: Long? = null, returnDate: LocalDateTime? = null, staffId: Long? = null): this() {
-        this.rentalId = rentalId
-        this.rentalDate = rentalDate
-        this.inventoryId = inventoryId
-        this.customerId = customerId
-        this.returnDate = returnDate
-        this.staffId = staffId
+        resetChangedOnNotNull()
     }
 
     /**
@@ -165,6 +154,7 @@ open class RentalRecord() : UpdatableRecordImpl<RentalRecord>(Rental.RENTAL), Re
             this.returnDate = value.returnDate
             this.staffId = value.staffId
             this.lastUpdate = value.lastUpdate
+            resetChangedOnNotNull()
         }
     }
 }

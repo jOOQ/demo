@@ -178,16 +178,7 @@ public class CountryRecord extends UpdatableRecordImpl<CountryRecord> implements
         setCountryId(countryId);
         setCountry(country);
         setLastUpdate(lastUpdate);
-    }
-
-    /**
-     * Create a detached, initialised CountryRecord
-     */
-    public CountryRecord(Long countryId, String country) {
-        super(Country.COUNTRY);
-
-        setCountryId(countryId);
-        setCountry(country);
+        resetChangedOnNotNull();
     }
 
     /**
@@ -200,6 +191,7 @@ public class CountryRecord extends UpdatableRecordImpl<CountryRecord> implements
             setCountryId(value.countryId());
             setCountry(value.country());
             setLastUpdate(value.lastUpdate());
+            resetChangedOnNotNull();
         }
     }
 }

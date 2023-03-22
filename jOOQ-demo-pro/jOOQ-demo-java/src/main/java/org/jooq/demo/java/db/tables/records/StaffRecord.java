@@ -548,6 +548,7 @@ public class StaffRecord extends UpdatableRecordImpl<StaffRecord> implements Rec
         setPicture(picture);
         setFullAddress(fullAddress);
         setFullName(fullName);
+        resetChangedOnNotNull();
     }
 
     /**
@@ -568,6 +569,7 @@ public class StaffRecord extends UpdatableRecordImpl<StaffRecord> implements Rec
         setPicture(picture);
         setFullAddress(fullAddress);
         setFullName(fullName);
+        resetChangedOnNotNull();
     }
 
     /**
@@ -590,6 +592,7 @@ public class StaffRecord extends UpdatableRecordImpl<StaffRecord> implements Rec
             setPicture(value.picture());
             setFullAddress(value.fullAddress());
             setFullName(value.fullName());
+            resetChangedOnNotNull();
         }
     }
 }

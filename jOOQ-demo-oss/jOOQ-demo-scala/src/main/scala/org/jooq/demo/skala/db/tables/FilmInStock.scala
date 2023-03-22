@@ -136,12 +136,13 @@ extends TableImpl[FilmInStockRecord](
   ))).map(r => if (aliased()) r.as(getUnqualifiedName) else r).get
 
   /**
-   * Convenience mapping calling {@link #convertFrom(Function)}.
+   * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
    */
   def mapping[U](from: (Integer) => U): SelectField[U] = convertFrom(r => from.apply(r.value1()))
 
   /**
-   * Convenience mapping calling {@link #convertFrom(Class, Function)}.
+   * Convenience mapping calling {@link SelectField#convertFrom(Class,
+   * Function)}.
    */
   def mapping[U](toType: Class[U], from: (Integer) => U): SelectField[U] = convertFrom(toType,r => from.apply(r.value1()))
 }

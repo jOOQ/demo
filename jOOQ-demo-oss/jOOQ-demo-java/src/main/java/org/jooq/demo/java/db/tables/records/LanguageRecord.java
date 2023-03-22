@@ -178,16 +178,7 @@ public class LanguageRecord extends UpdatableRecordImpl<LanguageRecord> implemen
         setLanguageId(languageId);
         setName(name);
         setLastUpdate(lastUpdate);
-    }
-
-    /**
-     * Create a detached, initialised LanguageRecord
-     */
-    public LanguageRecord(Long languageId, String name) {
-        super(Language.LANGUAGE);
-
-        setLanguageId(languageId);
-        setName(name);
+        resetChangedOnNotNull();
     }
 
     /**
@@ -200,6 +191,7 @@ public class LanguageRecord extends UpdatableRecordImpl<LanguageRecord> implemen
             setLanguageId(value.languageId());
             setName(value.name());
             setLastUpdate(value.lastUpdate());
+            resetChangedOnNotNull();
         }
     }
 }

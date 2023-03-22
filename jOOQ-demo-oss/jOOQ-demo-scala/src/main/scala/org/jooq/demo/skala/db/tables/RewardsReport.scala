@@ -26,7 +26,7 @@ import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
 import org.jooq.demo.skala.db.Public
-import org.jooq.demo.skala.db.tables.records.RewardsReportRecord
+import org.jooq.demo.skala.db.tables.records.CustomerRecord
 import org.jooq.impl.DSL
 import org.jooq.impl.SQLDataType
 import org.jooq.impl.TableImpl
@@ -48,11 +48,11 @@ object RewardsReport {
 class RewardsReport(
   alias: Name,
   child: Table[_ <: Record],
-  path: ForeignKey[_ <: Record, RewardsReportRecord],
-  aliased: Table[RewardsReportRecord],
+  path: ForeignKey[_ <: Record, CustomerRecord],
+  aliased: Table[CustomerRecord],
   parameters: Array[ Field[_] ]
 )
-extends TableImpl[RewardsReportRecord](
+extends TableImpl[CustomerRecord](
   alias,
   Public.PUBLIC,
   child,
@@ -66,59 +66,59 @@ extends TableImpl[RewardsReportRecord](
   /**
    * The class holding records for this type
    */
-  override def getRecordType: Class[RewardsReportRecord] = classOf[RewardsReportRecord]
+  override def getRecordType: Class[CustomerRecord] = classOf[CustomerRecord]
 
   /**
    * The column <code>public.rewards_report.customer_id</code>.
    */
-  val CUSTOMER_ID: TableField[RewardsReportRecord, Long] = createField(DSL.name("customer_id"), SQLDataType.BIGINT.nullable(false).identity(true).defaultValue(DSL.field("nextval('customer_customer_id_seq'::regclass)", SQLDataType.BIGINT)), "")
+  val CUSTOMER_ID: TableField[CustomerRecord, Long] = createField(DSL.name("customer_id"), SQLDataType.BIGINT.nullable(false).identity(true).defaultValue(DSL.field(DSL.raw("nextval('customer_customer_id_seq'::regclass)"), SQLDataType.BIGINT)), "")
 
   /**
    * The column <code>public.rewards_report.store_id</code>.
    */
-  val STORE_ID: TableField[RewardsReportRecord, Long] = createField(DSL.name("store_id"), SQLDataType.BIGINT.nullable(false), "")
+  val STORE_ID: TableField[CustomerRecord, Long] = createField(DSL.name("store_id"), SQLDataType.BIGINT.nullable(false), "")
 
   /**
    * The column <code>public.rewards_report.first_name</code>.
    */
-  val FIRST_NAME: TableField[RewardsReportRecord, String] = createField(DSL.name("first_name"), SQLDataType.VARCHAR(45).nullable(false), "")
+  val FIRST_NAME: TableField[CustomerRecord, String] = createField(DSL.name("first_name"), SQLDataType.VARCHAR(45).nullable(false), "")
 
   /**
    * The column <code>public.rewards_report.last_name</code>.
    */
-  val LAST_NAME: TableField[RewardsReportRecord, String] = createField(DSL.name("last_name"), SQLDataType.VARCHAR(45).nullable(false), "")
+  val LAST_NAME: TableField[CustomerRecord, String] = createField(DSL.name("last_name"), SQLDataType.VARCHAR(45).nullable(false), "")
 
   /**
    * The column <code>public.rewards_report.email</code>.
    */
-  val EMAIL: TableField[RewardsReportRecord, String] = createField(DSL.name("email"), SQLDataType.VARCHAR(50), "")
+  val EMAIL: TableField[CustomerRecord, String] = createField(DSL.name("email"), SQLDataType.VARCHAR(50), "")
 
   /**
    * The column <code>public.rewards_report.address_id</code>.
    */
-  val ADDRESS_ID: TableField[RewardsReportRecord, Long] = createField(DSL.name("address_id"), SQLDataType.BIGINT.nullable(false), "")
+  val ADDRESS_ID: TableField[CustomerRecord, Long] = createField(DSL.name("address_id"), SQLDataType.BIGINT.nullable(false), "")
 
   /**
    * The column <code>public.rewards_report.activebool</code>.
    */
-  val ACTIVEBOOL: TableField[RewardsReportRecord, Boolean] = createField(DSL.name("activebool"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("true", SQLDataType.BOOLEAN)), "")
+  val ACTIVEBOOL: TableField[CustomerRecord, Boolean] = createField(DSL.name("activebool"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field(DSL.raw("true"), SQLDataType.BOOLEAN)), "")
 
   /**
    * The column <code>public.rewards_report.create_date</code>.
    */
-  val CREATE_DATE: TableField[RewardsReportRecord, LocalDate] = createField(DSL.name("create_date"), SQLDataType.LOCALDATE.nullable(false).defaultValue(DSL.field("('now'::text)::date", SQLDataType.LOCALDATE)), "")
+  val CREATE_DATE: TableField[CustomerRecord, LocalDate] = createField(DSL.name("create_date"), SQLDataType.LOCALDATE.nullable(false).defaultValue(DSL.field(DSL.raw("('now'::text)::date"), SQLDataType.LOCALDATE)), "")
 
   /**
    * The column <code>public.rewards_report.last_update</code>.
    */
-  val LAST_UPDATE: TableField[RewardsReportRecord, LocalDateTime] = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).readonly(true).defaultValue(DSL.field("now()", SQLDataType.LOCALDATETIME)), "")
+  val LAST_UPDATE: TableField[CustomerRecord, LocalDateTime] = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).defaultValue(DSL.field(DSL.raw("now()"), SQLDataType.LOCALDATETIME)), "")
 
   /**
    * The column <code>public.rewards_report.active</code>.
    */
-  val ACTIVE: TableField[RewardsReportRecord, Integer] = createField(DSL.name("active"), SQLDataType.INTEGER, "")
+  val ACTIVE: TableField[CustomerRecord, Integer] = createField(DSL.name("active"), SQLDataType.INTEGER, "")
 
-  private def this(alias: Name, aliased: Table[RewardsReportRecord]) = this(alias, null, null, aliased, Array(
+  private def this(alias: Name, aliased: Table[CustomerRecord]) = this(alias, null, null, aliased, Array(
     DSL.value(null, SQLDataType.INTEGER),
     DSL.value(null, SQLDataType.NUMERIC)
   ))
@@ -140,7 +140,7 @@ extends TableImpl[RewardsReportRecord](
 
   override def getSchema: Schema = if (aliased()) null else Public.PUBLIC
 
-  override def getIdentity: Identity[RewardsReportRecord, Long] = super.getIdentity.asInstanceOf[ Identity[RewardsReportRecord, Long] ]
+  override def getIdentity: Identity[CustomerRecord, Long] = super.getIdentity.asInstanceOf[ Identity[CustomerRecord, Long] ]
   override def as(alias: String): RewardsReport = new RewardsReport(DSL.name(alias), null, null, this, parameters)
   override def as(alias: Name): RewardsReport = new RewardsReport(alias, null, null, this, parameters)
   override def as(alias: Table[_]): RewardsReport = new RewardsReport(alias.getQualifiedName(), null, null, this, parameters)
@@ -188,12 +188,13 @@ extends TableImpl[RewardsReportRecord](
   ))).map(r => if (aliased()) r.as(getUnqualifiedName) else r).get
 
   /**
-   * Convenience mapping calling {@link #convertFrom(Function)}.
+   * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
    */
   def mapping[U](from: (Long, Long, String, String, String, Long, Boolean, LocalDate, LocalDateTime, Integer) => U): SelectField[U] = convertFrom(r => from.apply(r.value1(), r.value2(), r.value3(), r.value4(), r.value5(), r.value6(), r.value7(), r.value8(), r.value9(), r.value10()))
 
   /**
-   * Convenience mapping calling {@link #convertFrom(Class, Function)}.
+   * Convenience mapping calling {@link SelectField#convertFrom(Class,
+   * Function)}.
    */
   def mapping[U](toType: Class[U], from: (Long, Long, String, String, String, Long, Boolean, LocalDate, LocalDateTime, Integer) => U): SelectField[U] = convertFrom(toType,r => from.apply(r.value1(), r.value2(), r.value3(), r.value4(), r.value5(), r.value6(), r.value7(), r.value8(), r.value9(), r.value10()))
 }

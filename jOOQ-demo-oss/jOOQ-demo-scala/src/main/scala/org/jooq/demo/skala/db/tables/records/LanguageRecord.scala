@@ -111,16 +111,7 @@ class LanguageRecord extends UpdatableRecordImpl[LanguageRecord](Language.LANGUA
     this.setLanguageId(languageId)
     this.setName(name)
     this.setLastUpdate(lastUpdate)
-  }
-
-  /**
-   * Create a detached, initialised LanguageRecord
-   */
-  def this(languageId : Long, name : String) = {
-    this()
-
-    this.setLanguageId(languageId)
-    this.setName(name)
+    resetChangedOnNotNull()
   }
 
   /**
@@ -133,6 +124,7 @@ class LanguageRecord extends UpdatableRecordImpl[LanguageRecord](Language.LANGUA
       this.setLanguageId(value.getLanguageId)
       this.setName(value.getName)
       this.setLastUpdate(value.getLastUpdate)
+      resetChangedOnNotNull()
     }
   }
 }

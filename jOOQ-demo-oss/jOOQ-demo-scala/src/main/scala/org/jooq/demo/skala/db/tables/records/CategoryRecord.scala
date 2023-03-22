@@ -111,16 +111,7 @@ class CategoryRecord extends UpdatableRecordImpl[CategoryRecord](Category.CATEGO
     this.setCategoryId(categoryId)
     this.setName(name)
     this.setLastUpdate(lastUpdate)
-  }
-
-  /**
-   * Create a detached, initialised CategoryRecord
-   */
-  def this(categoryId : Long, name : String) = {
-    this()
-
-    this.setCategoryId(categoryId)
-    this.setName(name)
+    resetChangedOnNotNull()
   }
 
   /**
@@ -133,6 +124,7 @@ class CategoryRecord extends UpdatableRecordImpl[CategoryRecord](Category.CATEGO
       this.setCategoryId(value.getCategoryId)
       this.setName(value.getName)
       this.setLastUpdate(value.getLastUpdate)
+      resetChangedOnNotNull()
     }
   }
 }

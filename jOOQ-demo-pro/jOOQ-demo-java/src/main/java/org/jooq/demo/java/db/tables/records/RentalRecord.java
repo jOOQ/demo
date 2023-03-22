@@ -326,6 +326,7 @@ public class RentalRecord extends UpdatableRecordImpl<RentalRecord> implements R
         setReturnDate(returnDate);
         setStaffId(staffId);
         setLastUpdate(lastUpdate);
+        resetChangedOnNotNull();
     }
 
     /**
@@ -340,6 +341,7 @@ public class RentalRecord extends UpdatableRecordImpl<RentalRecord> implements R
         setCustomerId(customerId);
         setReturnDate(returnDate);
         setStaffId(staffId);
+        resetChangedOnNotNull();
     }
 
     /**
@@ -356,6 +358,7 @@ public class RentalRecord extends UpdatableRecordImpl<RentalRecord> implements R
             setReturnDate(value.returnDate());
             setStaffId(value.staffId());
             setLastUpdate(value.lastUpdate());
+            resetChangedOnNotNull();
         }
     }
 }

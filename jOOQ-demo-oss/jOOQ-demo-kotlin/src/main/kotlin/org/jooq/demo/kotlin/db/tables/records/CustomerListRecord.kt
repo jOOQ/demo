@@ -88,47 +88,47 @@ open class CustomerListRecord() : TableRecordImpl<CustomerListRecord>(CustomerLi
     override fun value9(): Long? = sid
 
     override fun value1(value: Long?): CustomerListRecord {
-        this.id = value
+        set(0, value)
         return this
     }
 
     override fun value2(value: String?): CustomerListRecord {
-        this.name = value
+        set(1, value)
         return this
     }
 
     override fun value3(value: String?): CustomerListRecord {
-        this.address = value
+        set(2, value)
         return this
     }
 
     override fun value4(value: String?): CustomerListRecord {
-        this.zipCode = value
+        set(3, value)
         return this
     }
 
     override fun value5(value: String?): CustomerListRecord {
-        this.phone = value
+        set(4, value)
         return this
     }
 
     override fun value6(value: String?): CustomerListRecord {
-        this.city = value
+        set(5, value)
         return this
     }
 
     override fun value7(value: String?): CustomerListRecord {
-        this.country = value
+        set(6, value)
         return this
     }
 
     override fun value8(value: String?): CustomerListRecord {
-        this.notes = value
+        set(7, value)
         return this
     }
 
     override fun value9(value: Long?): CustomerListRecord {
-        this.sid = value
+        set(8, value)
         return this
     }
 
@@ -158,6 +158,7 @@ open class CustomerListRecord() : TableRecordImpl<CustomerListRecord>(CustomerLi
         this.country = country
         this.notes = notes
         this.sid = sid
+        resetChangedOnNotNull()
     }
 
     /**
@@ -174,6 +175,7 @@ open class CustomerListRecord() : TableRecordImpl<CustomerListRecord>(CustomerLi
             this.country = value.country
             this.notes = value.notes
             this.sid = value.sid
+            resetChangedOnNotNull()
         }
     }
 }

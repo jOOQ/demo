@@ -62,22 +62,22 @@ open class ActorRecord() : UpdatableRecordImpl<ActorRecord>(Actor.ACTOR), Record
     override fun value4(): LocalDateTime? = lastUpdate
 
     override fun value1(value: Long?): ActorRecord {
-        this.actorId = value
+        set(0, value)
         return this
     }
 
     override fun value2(value: String?): ActorRecord {
-        this.firstName = value
+        set(1, value)
         return this
     }
 
     override fun value3(value: String?): ActorRecord {
-        this.lastName = value
+        set(2, value)
         return this
     }
 
     override fun value4(value: LocalDateTime?): ActorRecord {
-        this.lastUpdate = value
+        set(3, value)
         return this
     }
 
@@ -97,15 +97,7 @@ open class ActorRecord() : UpdatableRecordImpl<ActorRecord>(Actor.ACTOR), Record
         this.firstName = firstName
         this.lastName = lastName
         this.lastUpdate = lastUpdate
-    }
-
-    /**
-     * Create a detached, initialised ActorRecord
-     */
-    constructor(actorId: Long? = null, firstName: String? = null, lastName: String? = null): this() {
-        this.actorId = actorId
-        this.firstName = firstName
-        this.lastName = lastName
+        resetChangedOnNotNull()
     }
 
     /**
@@ -117,6 +109,7 @@ open class ActorRecord() : UpdatableRecordImpl<ActorRecord>(Actor.ACTOR), Record
             this.firstName = value.firstName
             this.lastName = value.lastName
             this.lastUpdate = value.lastUpdate
+            resetChangedOnNotNull()
         }
     }
 }

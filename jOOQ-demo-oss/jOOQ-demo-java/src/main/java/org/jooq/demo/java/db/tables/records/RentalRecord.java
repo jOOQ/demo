@@ -326,20 +326,7 @@ public class RentalRecord extends UpdatableRecordImpl<RentalRecord> implements R
         setReturnDate(returnDate);
         setStaffId(staffId);
         setLastUpdate(lastUpdate);
-    }
-
-    /**
-     * Create a detached, initialised RentalRecord
-     */
-    public RentalRecord(Long rentalId, LocalDateTime rentalDate, Long inventoryId, Long customerId, LocalDateTime returnDate, Long staffId) {
-        super(Rental.RENTAL);
-
-        setRentalId(rentalId);
-        setRentalDate(rentalDate);
-        setInventoryId(inventoryId);
-        setCustomerId(customerId);
-        setReturnDate(returnDate);
-        setStaffId(staffId);
+        resetChangedOnNotNull();
     }
 
     /**
@@ -356,6 +343,7 @@ public class RentalRecord extends UpdatableRecordImpl<RentalRecord> implements R
             setReturnDate(value.returnDate());
             setStaffId(value.staffId());
             setLastUpdate(value.lastUpdate());
+            resetChangedOnNotNull();
         }
     }
 }

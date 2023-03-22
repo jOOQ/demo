@@ -25,9 +25,9 @@ import org.jooq.demo.skala.db.routines._GroupConcat
 import org.jooq.demo.skala.db.tables.FilmInStock
 import org.jooq.demo.skala.db.tables.FilmNotInStock
 import org.jooq.demo.skala.db.tables.RewardsReport
+import org.jooq.demo.skala.db.tables.records.CustomerRecord
 import org.jooq.demo.skala.db.tables.records.FilmInStockRecord
 import org.jooq.demo.skala.db.tables.records.FilmNotInStockRecord
-import org.jooq.demo.skala.db.tables.records.RewardsReportRecord
 
 
 /**
@@ -336,7 +336,7 @@ object Routines {
       configuration: Configuration
     , minMonthlyPurchases: Integer
     , minDollarAmountPurchased: BigDecimal
-  ): Result[RewardsReportRecord] = configuration.dsl().selectFrom(org.jooq.demo.skala.db.tables.RewardsReport.REWARDS_REPORT.call(
+  ): Result[CustomerRecord] = configuration.dsl().selectFrom(org.jooq.demo.skala.db.tables.RewardsReport.REWARDS_REPORT.call(
       minMonthlyPurchases
     , minDollarAmountPurchased
   )).fetch()

@@ -32,7 +32,7 @@ open class FilmNotInStockRecord() : TableRecordImpl<FilmNotInStockRecord>(FilmNo
     override fun value1(): Int? = pFilmCount
 
     override fun value1(value: Int?): FilmNotInStockRecord {
-        this.pFilmCount = value
+        set(0, value)
         return this
     }
 
@@ -46,6 +46,7 @@ open class FilmNotInStockRecord() : TableRecordImpl<FilmNotInStockRecord>(FilmNo
      */
     constructor(pFilmCount: Int? = null): this() {
         this.pFilmCount = pFilmCount
+        resetChangedOnNotNull()
     }
 
     /**
@@ -54,6 +55,7 @@ open class FilmNotInStockRecord() : TableRecordImpl<FilmNotInStockRecord>(FilmNo
     constructor(value: org.jooq.demo.kotlin.db.tables.pojos.FilmNotInStock?): this() {
         if (value != null) {
             this.pFilmCount = value.pFilmCount
+            resetChangedOnNotNull()
         }
     }
 }

@@ -96,7 +96,7 @@
                                 </database>
 
                                 <target>
-                                    <packageName>org.jooq.demo.kotlin.db</packageName>
+                                    <packageName>org.jooq.demo.java.db</packageName>
                                 </target>
                             </generator>
                         </configuration>
@@ -130,7 +130,7 @@
                                     </properties>
                                 </database>
                                 <target>
-                                    <packageName>org.jooq.demo.kotlin.ddl</packageName>
+                                    <packageName>org.jooq.demo.java.ddl</packageName>
                                 </target>
                             </generator>
                         </configuration>

@@ -81,42 +81,42 @@ open class StaffListRecord() : TableRecordImpl<StaffListRecord>(StaffList.STAFF_
     override fun value8(): Long? = sid
 
     override fun value1(value: Long?): StaffListRecord {
-        this.id = value
+        set(0, value)
         return this
     }
 
     override fun value2(value: String?): StaffListRecord {
-        this.name = value
+        set(1, value)
         return this
     }
 
     override fun value3(value: String?): StaffListRecord {
-        this.address = value
+        set(2, value)
         return this
     }
 
     override fun value4(value: String?): StaffListRecord {
-        this.zipCode = value
+        set(3, value)
         return this
     }
 
     override fun value5(value: String?): StaffListRecord {
-        this.phone = value
+        set(4, value)
         return this
     }
 
     override fun value6(value: String?): StaffListRecord {
-        this.city = value
+        set(5, value)
         return this
     }
 
     override fun value7(value: String?): StaffListRecord {
-        this.country = value
+        set(6, value)
         return this
     }
 
     override fun value8(value: Long?): StaffListRecord {
-        this.sid = value
+        set(7, value)
         return this
     }
 
@@ -144,6 +144,7 @@ open class StaffListRecord() : TableRecordImpl<StaffListRecord>(StaffList.STAFF_
         this.city = city
         this.country = country
         this.sid = sid
+        resetChangedOnNotNull()
     }
 
     /**
@@ -159,6 +160,7 @@ open class StaffListRecord() : TableRecordImpl<StaffListRecord>(StaffList.STAFF_
             this.city = value.city
             this.country = value.country
             this.sid = value.sid
+            resetChangedOnNotNull()
         }
     }
 }

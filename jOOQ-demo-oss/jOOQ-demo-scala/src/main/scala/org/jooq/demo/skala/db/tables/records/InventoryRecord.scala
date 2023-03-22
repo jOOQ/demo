@@ -132,17 +132,7 @@ class InventoryRecord extends UpdatableRecordImpl[InventoryRecord](Inventory.INV
     this.setFilmId(filmId)
     this.setStoreId(storeId)
     this.setLastUpdate(lastUpdate)
-  }
-
-  /**
-   * Create a detached, initialised InventoryRecord
-   */
-  def this(inventoryId : Long, filmId : Long, storeId : Long) = {
-    this()
-
-    this.setInventoryId(inventoryId)
-    this.setFilmId(filmId)
-    this.setStoreId(storeId)
+    resetChangedOnNotNull()
   }
 
   /**
@@ -156,6 +146,7 @@ class InventoryRecord extends UpdatableRecordImpl[InventoryRecord](Inventory.INV
       this.setFilmId(value.getFilmId)
       this.setStoreId(value.getStoreId)
       this.setLastUpdate(value.getLastUpdate)
+      resetChangedOnNotNull()
     }
   }
 }

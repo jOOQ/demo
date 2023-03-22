@@ -178,16 +178,7 @@ public class CategoryRecord extends UpdatableRecordImpl<CategoryRecord> implemen
         setCategoryId(categoryId);
         setName(name);
         setLastUpdate(lastUpdate);
-    }
-
-    /**
-     * Create a detached, initialised CategoryRecord
-     */
-    public CategoryRecord(Long categoryId, String name) {
-        super(Category.CATEGORY);
-
-        setCategoryId(categoryId);
-        setName(name);
+        resetChangedOnNotNull();
     }
 
     /**
@@ -200,6 +191,7 @@ public class CategoryRecord extends UpdatableRecordImpl<CategoryRecord> implemen
             setCategoryId(value.categoryId());
             setName(value.name());
             setLastUpdate(value.lastUpdate());
+            resetChangedOnNotNull();
         }
     }
 }

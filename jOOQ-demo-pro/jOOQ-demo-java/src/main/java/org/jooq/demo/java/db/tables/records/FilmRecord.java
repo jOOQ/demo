@@ -635,6 +635,7 @@ public class FilmRecord extends UpdatableRecordImpl<FilmRecord> implements Recor
         setLastUpdate(lastUpdate);
         setSpecialFeatures(specialFeatures);
         setFulltext(fulltext);
+        resetChangedOnNotNull();
     }
 
     /**
@@ -656,6 +657,7 @@ public class FilmRecord extends UpdatableRecordImpl<FilmRecord> implements Recor
         setRating(rating);
         setSpecialFeatures(specialFeatures);
         setFulltext(fulltext);
+        resetChangedOnNotNull();
     }
 
     /**
@@ -679,6 +681,7 @@ public class FilmRecord extends UpdatableRecordImpl<FilmRecord> implements Recor
             setLastUpdate(value.lastUpdate());
             setSpecialFeatures(value.specialFeatures());
             setFulltext(value.fulltext());
+            resetChangedOnNotNull();
         }
     }
 }

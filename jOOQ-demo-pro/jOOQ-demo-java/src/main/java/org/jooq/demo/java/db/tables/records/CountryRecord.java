@@ -178,6 +178,7 @@ public class CountryRecord extends UpdatableRecordImpl<CountryRecord> implements
         setCountryId(countryId);
         setCountry(country);
         setLastUpdate(lastUpdate);
+        resetChangedOnNotNull();
     }
 
     /**
@@ -188,6 +189,7 @@ public class CountryRecord extends UpdatableRecordImpl<CountryRecord> implements
 
         setCountryId(countryId);
         setCountry(country);
+        resetChangedOnNotNull();
     }
 
     /**
@@ -200,6 +202,7 @@ public class CountryRecord extends UpdatableRecordImpl<CountryRecord> implements
             setCountryId(value.countryId());
             setCountry(value.country());
             setLastUpdate(value.lastUpdate());
+            resetChangedOnNotNull();
         }
     }
 }

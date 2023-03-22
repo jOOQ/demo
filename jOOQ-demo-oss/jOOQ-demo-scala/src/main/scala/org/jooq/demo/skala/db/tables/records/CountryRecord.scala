@@ -111,16 +111,7 @@ class CountryRecord extends UpdatableRecordImpl[CountryRecord](Country.COUNTRY) 
     this.setCountryId(countryId)
     this.setCountry(country)
     this.setLastUpdate(lastUpdate)
-  }
-
-  /**
-   * Create a detached, initialised CountryRecord
-   */
-  def this(countryId : Long, country : String) = {
-    this()
-
-    this.setCountryId(countryId)
-    this.setCountry(country)
+    resetChangedOnNotNull()
   }
 
   /**
@@ -133,6 +124,7 @@ class CountryRecord extends UpdatableRecordImpl[CountryRecord](Country.COUNTRY) 
       this.setCountryId(value.getCountryId)
       this.setCountry(value.getCountry)
       this.setLastUpdate(value.getLastUpdate)
+      resetChangedOnNotNull()
     }
   }
 }

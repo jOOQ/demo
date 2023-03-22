@@ -21,9 +21,9 @@ import org.jooq.demo.java.db.routines._GroupConcat;
 import org.jooq.demo.java.db.tables.FilmInStock;
 import org.jooq.demo.java.db.tables.FilmNotInStock;
 import org.jooq.demo.java.db.tables.RewardsReport;
+import org.jooq.demo.java.db.tables.records.CustomerRecord;
 import org.jooq.demo.java.db.tables.records.FilmInStockRecord;
 import org.jooq.demo.java.db.tables.records.FilmNotInStockRecord;
-import org.jooq.demo.java.db.tables.records.RewardsReportRecord;
 
 
 /**
@@ -341,7 +341,7 @@ public class Routines {
     /**
      * Call <code>public.rewards_report</code>.
      */
-    public static Result<RewardsReportRecord> rewardsReport(
+    public static Result<CustomerRecord> rewardsReport(
           Configuration configuration
         , Integer minMonthlyPurchases
         , BigDecimal minDollarAmountPurchased

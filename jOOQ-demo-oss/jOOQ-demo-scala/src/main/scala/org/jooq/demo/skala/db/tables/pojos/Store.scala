@@ -6,7 +6,6 @@ package org.jooq.demo.skala.db.tables.pojos
 
 import java.io.Serializable
 import java.lang.Long
-import java.lang.String
 import java.time.LocalDateTime
 
 
@@ -17,18 +16,16 @@ case class Store(
   var storeId: Long,
   var managerStaffId: Long,
   var addressId: Long,
-  var lastUpdate: LocalDateTime,
-  var fullAddress: String
+  var lastUpdate: LocalDateTime
 ) extends Serializable {
 
-  def this() = this(null, null, null, null, null)
+  def this() = this(null, null, null, null)
 
   def this(value: Store) = this(
     value.storeId,
     value.managerStaffId,
     value.addressId,
-    value.lastUpdate,
-    value.fullAddress
+    value.lastUpdate
   )
 
   /**
@@ -77,17 +74,5 @@ case class Store(
    */
   def setLastUpdate(lastUpdate: LocalDateTime): Unit = {
     this.lastUpdate = lastUpdate
-  }
-
-  /**
-   * Getter for <code>public.store.full_address</code>.
-   */
-  def getFullAddress: String = this.fullAddress
-
-  /**
-   * Setter for <code>public.store.full_address</code>.
-   */
-  def setFullAddress(fullAddress: String): Unit = {
-    this.fullAddress = fullAddress
   }
 }

@@ -177,6 +177,7 @@ class PaymentRecord extends UpdatableRecordImpl[PaymentRecord](Payment.PAYMENT) 
     this.setRentalId(rentalId)
     this.setAmount(amount)
     this.setPaymentDate(paymentDate)
+    resetChangedOnNotNull()
   }
 
   /**
@@ -192,6 +193,7 @@ class PaymentRecord extends UpdatableRecordImpl[PaymentRecord](Payment.PAYMENT) 
       this.setRentalId(value.getRentalId)
       this.setAmount(value.getAmount)
       this.setPaymentDate(value.getPaymentDate)
+      resetChangedOnNotNull()
     }
   }
 }

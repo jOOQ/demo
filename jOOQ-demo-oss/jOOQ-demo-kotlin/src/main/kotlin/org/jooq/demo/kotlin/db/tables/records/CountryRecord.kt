@@ -55,17 +55,17 @@ open class CountryRecord() : UpdatableRecordImpl<CountryRecord>(Country.COUNTRY)
     override fun value3(): LocalDateTime? = lastUpdate
 
     override fun value1(value: Long?): CountryRecord {
-        this.countryId = value
+        set(0, value)
         return this
     }
 
     override fun value2(value: String?): CountryRecord {
-        this.country = value
+        set(1, value)
         return this
     }
 
     override fun value3(value: LocalDateTime?): CountryRecord {
-        this.lastUpdate = value
+        set(2, value)
         return this
     }
 
@@ -83,14 +83,7 @@ open class CountryRecord() : UpdatableRecordImpl<CountryRecord>(Country.COUNTRY)
         this.countryId = countryId
         this.country = country
         this.lastUpdate = lastUpdate
-    }
-
-    /**
-     * Create a detached, initialised CountryRecord
-     */
-    constructor(countryId: Long? = null, country: String? = null): this() {
-        this.countryId = countryId
-        this.country = country
+        resetChangedOnNotNull()
     }
 
     /**
@@ -101,6 +94,7 @@ open class CountryRecord() : UpdatableRecordImpl<CountryRecord>(Country.COUNTRY)
             this.countryId = value.countryId
             this.country = value.country
             this.lastUpdate = value.lastUpdate
+            resetChangedOnNotNull()
         }
     }
 }

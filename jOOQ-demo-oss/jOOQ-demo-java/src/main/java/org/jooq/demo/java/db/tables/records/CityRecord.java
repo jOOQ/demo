@@ -215,17 +215,7 @@ public class CityRecord extends UpdatableRecordImpl<CityRecord> implements Recor
         setCity(city);
         setCountryId(countryId);
         setLastUpdate(lastUpdate);
-    }
-
-    /**
-     * Create a detached, initialised CityRecord
-     */
-    public CityRecord(Long cityId, String city, Long countryId) {
-        super(City.CITY);
-
-        setCityId(cityId);
-        setCity(city);
-        setCountryId(countryId);
+        resetChangedOnNotNull();
     }
 
     /**
@@ -239,6 +229,7 @@ public class CityRecord extends UpdatableRecordImpl<CityRecord> implements Recor
             setCity(value.city());
             setCountryId(value.countryId());
             setLastUpdate(value.lastUpdate());
+            resetChangedOnNotNull();
         }
     }
 }

@@ -133,17 +133,7 @@ class ActorRecord extends UpdatableRecordImpl[ActorRecord](Actor.ACTOR) with Rec
     this.setFirstName(firstName)
     this.setLastName(lastName)
     this.setLastUpdate(lastUpdate)
-  }
-
-  /**
-   * Create a detached, initialised ActorRecord
-   */
-  def this(actorId : Long, firstName : String, lastName : String) = {
-    this()
-
-    this.setActorId(actorId)
-    this.setFirstName(firstName)
-    this.setLastName(lastName)
+    resetChangedOnNotNull()
   }
 
   /**
@@ -157,6 +147,7 @@ class ActorRecord extends UpdatableRecordImpl[ActorRecord](Actor.ACTOR) with Rec
       this.setFirstName(value.getFirstName)
       this.setLastName(value.getLastName)
       this.setLastUpdate(value.getLastUpdate)
+      resetChangedOnNotNull()
     }
   }
 }

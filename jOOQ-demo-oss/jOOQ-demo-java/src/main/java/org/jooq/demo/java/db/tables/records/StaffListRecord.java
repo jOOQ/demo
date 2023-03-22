@@ -351,6 +351,7 @@ public class StaffListRecord extends TableRecordImpl<StaffListRecord> implements
         setCity(city);
         setCountry(country);
         setSid(sid);
+        resetChangedOnNotNull();
     }
 
     /**
@@ -368,6 +369,7 @@ public class StaffListRecord extends TableRecordImpl<StaffListRecord> implements
             setCity(value.city());
             setCountry(value.country());
             setSid(value.sid());
+            resetChangedOnNotNull();
         }
     }
 }

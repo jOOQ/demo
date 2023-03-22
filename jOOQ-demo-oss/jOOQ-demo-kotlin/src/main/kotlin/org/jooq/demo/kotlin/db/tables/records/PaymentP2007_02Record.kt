@@ -70,32 +70,32 @@ open class PaymentP2007_02Record() : TableRecordImpl<PaymentP2007_02Record>(Paym
     override fun value6(): LocalDateTime? = paymentDate
 
     override fun value1(value: Long?): PaymentP2007_02Record {
-        this.paymentId = value
+        set(0, value)
         return this
     }
 
     override fun value2(value: Long?): PaymentP2007_02Record {
-        this.customerId = value
+        set(1, value)
         return this
     }
 
     override fun value3(value: Long?): PaymentP2007_02Record {
-        this.staffId = value
+        set(2, value)
         return this
     }
 
     override fun value4(value: Long?): PaymentP2007_02Record {
-        this.rentalId = value
+        set(3, value)
         return this
     }
 
     override fun value5(value: BigDecimal?): PaymentP2007_02Record {
-        this.amount = value
+        set(4, value)
         return this
     }
 
     override fun value6(value: LocalDateTime?): PaymentP2007_02Record {
-        this.paymentDate = value
+        set(5, value)
         return this
     }
 
@@ -119,6 +119,7 @@ open class PaymentP2007_02Record() : TableRecordImpl<PaymentP2007_02Record>(Paym
         this.rentalId = rentalId
         this.amount = amount
         this.paymentDate = paymentDate
+        resetChangedOnNotNull()
     }
 
     /**
@@ -132,6 +133,7 @@ open class PaymentP2007_02Record() : TableRecordImpl<PaymentP2007_02Record>(Paym
             this.rentalId = value.rentalId
             this.amount = value.amount
             this.paymentDate = value.paymentDate
+            resetChangedOnNotNull()
         }
     }
 }

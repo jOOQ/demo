@@ -290,6 +290,7 @@ public class PaymentRecord extends UpdatableRecordImpl<PaymentRecord> implements
         setRentalId(rentalId);
         setAmount(amount);
         setPaymentDate(paymentDate);
+        resetChangedOnNotNull();
     }
 
     /**
@@ -305,6 +306,7 @@ public class PaymentRecord extends UpdatableRecordImpl<PaymentRecord> implements
             setRentalId(value.rentalId());
             setAmount(value.amount());
             setPaymentDate(value.paymentDate());
+            resetChangedOnNotNull();
         }
     }
 }

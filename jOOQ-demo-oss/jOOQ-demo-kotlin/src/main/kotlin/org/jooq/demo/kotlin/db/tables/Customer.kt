@@ -17,7 +17,7 @@ import org.jooq.Index
 import org.jooq.Name
 import org.jooq.Record
 import org.jooq.Records
-import org.jooq.Row12
+import org.jooq.Row10
 import org.jooq.Schema
 import org.jooq.SelectField
 import org.jooq.Table
@@ -104,32 +104,22 @@ open class Customer(
     /**
      * The column <code>public.customer.activebool</code>.
      */
-    val ACTIVEBOOL: TableField<CustomerRecord, Boolean?> = createField(DSL.name("activebool"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("true", SQLDataType.BOOLEAN)), this, "")
+    val ACTIVEBOOL: TableField<CustomerRecord, Boolean?> = createField(DSL.name("activebool"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field(DSL.raw("true"), SQLDataType.BOOLEAN)), this, "")
 
     /**
      * The column <code>public.customer.create_date</code>.
      */
-    val CREATE_DATE: TableField<CustomerRecord, LocalDate?> = createField(DSL.name("create_date"), SQLDataType.LOCALDATE.nullable(false).defaultValue(DSL.field("('now'::text)::date", SQLDataType.LOCALDATE)), this, "")
+    val CREATE_DATE: TableField<CustomerRecord, LocalDate?> = createField(DSL.name("create_date"), SQLDataType.LOCALDATE.nullable(false).defaultValue(DSL.field(DSL.raw("('now'::text)::date"), SQLDataType.LOCALDATE)), this, "")
 
     /**
      * The column <code>public.customer.last_update</code>.
      */
-    val LAST_UPDATE: TableField<CustomerRecord, LocalDateTime?> = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).readonly(true).defaultValue(DSL.field("now()", SQLDataType.LOCALDATETIME)), this, "")
+    val LAST_UPDATE: TableField<CustomerRecord, LocalDateTime?> = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).defaultValue(DSL.field(DSL.raw("now()"), SQLDataType.LOCALDATETIME)), this, "")
 
     /**
      * The column <code>public.customer.active</code>.
      */
     val ACTIVE: TableField<CustomerRecord, Int?> = createField(DSL.name("active"), SQLDataType.INTEGER, this, "")
-
-    /**
-     * The column <code>public.customer.full_address</code>.
-     */
-    val FULL_ADDRESS: TableField<CustomerRecord, String?> = createField(DSL.name("full_address"), SQLDataType.CLOB.virtual(), this, "", { ctx -> DSL.concat(address.ADDRESS_, DSL.inline(", "), address.POSTAL_CODE, DSL.inline(", "), address.city.CITY_, DSL.inline(", "), address.city.country.COUNTRY_) })
-
-    /**
-     * The column <code>public.customer.full_name</code>.
-     */
-    val FULL_NAME: TableField<CustomerRecord, String?> = createField(DSL.name("full_name"), SQLDataType.CLOB.virtual(), this, "", { ctx -> DSL.concat(FIRST_NAME, DSL.inline(" "), LAST_NAME) })
 
     private constructor(alias: Name, aliased: Table<CustomerRecord>?): this(alias, null, null, aliased, null)
     private constructor(alias: Name, aliased: Table<CustomerRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, aliased, parameters)
@@ -204,17 +194,18 @@ open class Customer(
     override fun rename(name: Table<*>): Customer = Customer(name.getQualifiedName(), null)
 
     // -------------------------------------------------------------------------
-    // Row12 type methods
+    // Row10 type methods
     // -------------------------------------------------------------------------
-    override fun fieldsRow(): Row12<Long?, Long?, String?, String?, String?, Long?, Boolean?, LocalDate?, LocalDateTime?, Int?, String?, String?> = super.fieldsRow() as Row12<Long?, Long?, String?, String?, String?, Long?, Boolean?, LocalDate?, LocalDateTime?, Int?, String?, String?>
+    override fun fieldsRow(): Row10<Long?, Long?, String?, String?, String?, Long?, Boolean?, LocalDate?, LocalDateTime?, Int?> = super.fieldsRow() as Row10<Long?, Long?, String?, String?, String?, Long?, Boolean?, LocalDate?, LocalDateTime?, Int?>
 
     /**
-     * Convenience mapping calling {@link #convertFrom(Function)}.
+     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
-    fun <U> mapping(from: (Long?, Long?, String?, String?, String?, Long?, Boolean?, LocalDate?, LocalDateTime?, Int?, String?, String?) -> U): SelectField<U> = convertFrom(Records.mapping(from))
+    fun <U> mapping(from: (Long?, Long?, String?, String?, String?, Long?, Boolean?, LocalDate?, LocalDateTime?, Int?) -> U): SelectField<U> = convertFrom(Records.mapping(from))
 
     /**
-     * Convenience mapping calling {@link #convertFrom(Class, Function)}.
+     * Convenience mapping calling {@link SelectField#convertFrom(Class,
+     * Function)}.
      */
-    fun <U> mapping(toType: Class<U>, from: (Long?, Long?, String?, String?, String?, Long?, Boolean?, LocalDate?, LocalDateTime?, Int?, String?, String?) -> U): SelectField<U> = convertFrom(toType, Records.mapping(from))
+    fun <U> mapping(toType: Class<U>, from: (Long?, Long?, String?, String?, String?, Long?, Boolean?, LocalDate?, LocalDateTime?, Int?) -> U): SelectField<U> = convertFrom(toType, Records.mapping(from))
 }

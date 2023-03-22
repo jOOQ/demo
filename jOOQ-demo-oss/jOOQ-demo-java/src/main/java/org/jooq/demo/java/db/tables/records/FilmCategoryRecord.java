@@ -178,16 +178,7 @@ public class FilmCategoryRecord extends UpdatableRecordImpl<FilmCategoryRecord> 
         setFilmId(filmId);
         setCategoryId(categoryId);
         setLastUpdate(lastUpdate);
-    }
-
-    /**
-     * Create a detached, initialised FilmCategoryRecord
-     */
-    public FilmCategoryRecord(Long filmId, Long categoryId) {
-        super(FilmCategory.FILM_CATEGORY);
-
-        setFilmId(filmId);
-        setCategoryId(categoryId);
+        resetChangedOnNotNull();
     }
 
     /**
@@ -200,6 +191,7 @@ public class FilmCategoryRecord extends UpdatableRecordImpl<FilmCategoryRecord> 
             setFilmId(value.filmId());
             setCategoryId(value.categoryId());
             setLastUpdate(value.lastUpdate());
+            resetChangedOnNotNull();
         }
     }
 }

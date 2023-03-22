@@ -221,21 +221,7 @@ class AddressRecord extends UpdatableRecordImpl[AddressRecord](Address.ADDRESS) 
     this.setPostalCode(postalCode)
     this.setPhone(phone)
     this.setLastUpdate(lastUpdate)
-  }
-
-  /**
-   * Create a detached, initialised AddressRecord
-   */
-  def this(addressId : Long, address : String, address2 : String, district : String, cityId : Long, postalCode : String, phone : String) = {
-    this()
-
-    this.setAddressId(addressId)
-    this.setAddress(address)
-    this.setAddress2(address2)
-    this.setDistrict(district)
-    this.setCityId(cityId)
-    this.setPostalCode(postalCode)
-    this.setPhone(phone)
+    resetChangedOnNotNull()
   }
 
   /**
@@ -253,6 +239,7 @@ class AddressRecord extends UpdatableRecordImpl[AddressRecord](Address.ADDRESS) 
       this.setPostalCode(value.getPostalCode)
       this.setPhone(value.getPhone)
       this.setLastUpdate(value.getLastUpdate)
+      resetChangedOnNotNull()
     }
   }
 }

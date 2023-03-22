@@ -45,9 +45,9 @@ import org.jooq.demo.java.db.tables.SalesByStore;
 import org.jooq.demo.java.db.tables.Staff;
 import org.jooq.demo.java.db.tables.StaffList;
 import org.jooq.demo.java.db.tables.Store;
+import org.jooq.demo.java.db.tables.records.CustomerRecord;
 import org.jooq.demo.java.db.tables.records.FilmInStockRecord;
 import org.jooq.demo.java.db.tables.records.FilmNotInStockRecord;
-import org.jooq.demo.java.db.tables.records.RewardsReportRecord;
 import org.jooq.impl.SchemaImpl;
 
 
@@ -277,7 +277,7 @@ public class Public extends SchemaImpl {
     /**
      * Call <code>public.rewards_report</code>.
      */
-    public static Result<RewardsReportRecord> REWARDS_REPORT(
+    public static Result<CustomerRecord> REWARDS_REPORT(
           Configuration configuration
         , Integer minMonthlyPurchases
         , BigDecimal minDollarAmountPurchased

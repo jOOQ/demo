@@ -55,17 +55,17 @@ open class CategoryRecord() : UpdatableRecordImpl<CategoryRecord>(Category.CATEG
     override fun value3(): LocalDateTime? = lastUpdate
 
     override fun value1(value: Long?): CategoryRecord {
-        this.categoryId = value
+        set(0, value)
         return this
     }
 
     override fun value2(value: String?): CategoryRecord {
-        this.name = value
+        set(1, value)
         return this
     }
 
     override fun value3(value: LocalDateTime?): CategoryRecord {
-        this.lastUpdate = value
+        set(2, value)
         return this
     }
 
@@ -83,14 +83,7 @@ open class CategoryRecord() : UpdatableRecordImpl<CategoryRecord>(Category.CATEG
         this.categoryId = categoryId
         this.name = name
         this.lastUpdate = lastUpdate
-    }
-
-    /**
-     * Create a detached, initialised CategoryRecord
-     */
-    constructor(categoryId: Long? = null, name: String? = null): this() {
-        this.categoryId = categoryId
-        this.name = name
+        resetChangedOnNotNull()
     }
 
     /**
@@ -101,6 +94,7 @@ open class CategoryRecord() : UpdatableRecordImpl<CategoryRecord>(Category.CATEG
             this.categoryId = value.categoryId
             this.name = value.name
             this.lastUpdate = value.lastUpdate
+            resetChangedOnNotNull()
         }
     }
 }

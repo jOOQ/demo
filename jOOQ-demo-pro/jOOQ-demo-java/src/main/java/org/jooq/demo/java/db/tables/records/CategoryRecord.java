@@ -178,6 +178,7 @@ public class CategoryRecord extends UpdatableRecordImpl<CategoryRecord> implemen
         setCategoryId(categoryId);
         setName(name);
         setLastUpdate(lastUpdate);
+        resetChangedOnNotNull();
     }
 
     /**
@@ -188,6 +189,7 @@ public class CategoryRecord extends UpdatableRecordImpl<CategoryRecord> implemen
 
         setCategoryId(categoryId);
         setName(name);
+        resetChangedOnNotNull();
     }
 
     /**
@@ -200,6 +202,7 @@ public class CategoryRecord extends UpdatableRecordImpl<CategoryRecord> implemen
             setCategoryId(value.categoryId());
             setName(value.name());
             setLastUpdate(value.lastUpdate());
+            resetChangedOnNotNull();
         }
     }
 }

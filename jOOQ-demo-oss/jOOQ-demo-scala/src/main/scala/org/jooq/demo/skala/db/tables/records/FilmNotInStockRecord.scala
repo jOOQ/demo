@@ -58,6 +58,7 @@ class FilmNotInStockRecord extends TableRecordImpl[FilmNotInStockRecord](FilmNot
     this()
 
     this.setPFilmCount(pFilmCount)
+    resetChangedOnNotNull()
   }
 
   /**
@@ -68,6 +69,7 @@ class FilmNotInStockRecord extends TableRecordImpl[FilmNotInStockRecord](FilmNot
 
     if (value != null) {
       this.setPFilmCount(value.getPFilmCount)
+      resetChangedOnNotNull()
     }
   }
 }

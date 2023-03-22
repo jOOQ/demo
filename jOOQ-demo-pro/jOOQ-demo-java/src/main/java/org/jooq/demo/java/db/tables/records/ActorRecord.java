@@ -215,6 +215,7 @@ public class ActorRecord extends UpdatableRecordImpl<ActorRecord> implements Rec
         setFirstName(firstName);
         setLastName(lastName);
         setLastUpdate(lastUpdate);
+        resetChangedOnNotNull();
     }
 
     /**
@@ -226,6 +227,7 @@ public class ActorRecord extends UpdatableRecordImpl<ActorRecord> implements Rec
         setActorId(actorId);
         setFirstName(firstName);
         setLastName(lastName);
+        resetChangedOnNotNull();
     }
 
     /**
@@ -239,6 +241,7 @@ public class ActorRecord extends UpdatableRecordImpl<ActorRecord> implements Rec
             setFirstName(value.firstName());
             setLastName(value.lastName());
             setLastUpdate(value.lastUpdate());
+            resetChangedOnNotNull();
         }
     }
 }

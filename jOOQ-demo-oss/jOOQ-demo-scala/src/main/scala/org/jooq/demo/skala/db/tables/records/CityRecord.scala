@@ -133,17 +133,7 @@ class CityRecord extends UpdatableRecordImpl[CityRecord](City.CITY) with Record4
     this.setCity(city)
     this.setCountryId(countryId)
     this.setLastUpdate(lastUpdate)
-  }
-
-  /**
-   * Create a detached, initialised CityRecord
-   */
-  def this(cityId : Long, city : String, countryId : Long) = {
-    this()
-
-    this.setCityId(cityId)
-    this.setCity(city)
-    this.setCountryId(countryId)
+    resetChangedOnNotNull()
   }
 
   /**
@@ -157,6 +147,7 @@ class CityRecord extends UpdatableRecordImpl[CityRecord](City.CITY) with Record4
       this.setCity(value.getCity)
       this.setCountryId(value.getCountryId)
       this.setLastUpdate(value.getLastUpdate)
+      resetChangedOnNotNull()
     }
   }
 }

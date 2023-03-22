@@ -55,17 +55,17 @@ open class FilmCategoryRecord() : UpdatableRecordImpl<FilmCategoryRecord>(FilmCa
     override fun value3(): LocalDateTime? = lastUpdate
 
     override fun value1(value: Long?): FilmCategoryRecord {
-        this.filmId = value
+        set(0, value)
         return this
     }
 
     override fun value2(value: Long?): FilmCategoryRecord {
-        this.categoryId = value
+        set(1, value)
         return this
     }
 
     override fun value3(value: LocalDateTime?): FilmCategoryRecord {
-        this.lastUpdate = value
+        set(2, value)
         return this
     }
 
@@ -83,14 +83,7 @@ open class FilmCategoryRecord() : UpdatableRecordImpl<FilmCategoryRecord>(FilmCa
         this.filmId = filmId
         this.categoryId = categoryId
         this.lastUpdate = lastUpdate
-    }
-
-    /**
-     * Create a detached, initialised FilmCategoryRecord
-     */
-    constructor(filmId: Long? = null, categoryId: Long? = null): this() {
-        this.filmId = filmId
-        this.categoryId = categoryId
+        resetChangedOnNotNull()
     }
 
     /**
@@ -101,6 +94,7 @@ open class FilmCategoryRecord() : UpdatableRecordImpl<FilmCategoryRecord>(FilmCa
             this.filmId = value.filmId
             this.categoryId = value.categoryId
             this.lastUpdate = value.lastUpdate
+            resetChangedOnNotNull()
         }
     }
 }

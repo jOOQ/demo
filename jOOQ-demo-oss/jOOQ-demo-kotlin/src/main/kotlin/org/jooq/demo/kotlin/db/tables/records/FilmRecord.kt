@@ -137,73 +137,73 @@ open class FilmRecord() : UpdatableRecordImpl<FilmRecord>(Film.FILM), Record14<L
     override fun value14(): Any? = fulltext
 
     override fun value1(value: Long?): FilmRecord {
-        this.filmId = value
+        set(0, value)
         return this
     }
 
     override fun value2(value: String?): FilmRecord {
-        this.title = value
+        set(1, value)
         return this
     }
 
     override fun value3(value: String?): FilmRecord {
-        this.description = value
+        set(2, value)
         return this
     }
 
     override fun value4(value: Int?): FilmRecord {
-        this.releaseYear = value
+        set(3, value)
         return this
     }
 
     override fun value5(value: Long?): FilmRecord {
-        this.languageId = value
+        set(4, value)
         return this
     }
 
     override fun value6(value: Long?): FilmRecord {
-        this.originalLanguageId = value
+        set(5, value)
         return this
     }
 
     override fun value7(value: Short?): FilmRecord {
-        this.rentalDuration = value
+        set(6, value)
         return this
     }
 
     override fun value8(value: BigDecimal?): FilmRecord {
-        this.rentalRate = value
+        set(7, value)
         return this
     }
 
     override fun value9(value: Short?): FilmRecord {
-        this.length = value
+        set(8, value)
         return this
     }
 
     override fun value10(value: BigDecimal?): FilmRecord {
-        this.replacementCost = value
+        set(9, value)
         return this
     }
 
     override fun value11(value: MpaaRating?): FilmRecord {
-        this.rating = value
+        set(10, value)
         return this
     }
 
     override fun value12(value: LocalDateTime?): FilmRecord {
-        this.lastUpdate = value
+        set(11, value)
         return this
     }
 
     override fun value13(value: Array<String?>?): FilmRecord {
-        this.specialFeatures = value
+        set(12, value)
         return this
     }
 
     @Deprecated(message = "Unknown data type. If this is a qualified, user-defined type, it may have been excluded from code generation. If this is a built-in type, you can define an explicit org.jooq.Binding to specify how this type should be handled. Deprecation can be turned off using <deprecationOnUnknownTypes/> in your code generator configuration.")
     override fun value14(value: Any?): FilmRecord {
-        this.fulltext = value
+        set(13, value)
         return this
     }
 
@@ -243,25 +243,7 @@ open class FilmRecord() : UpdatableRecordImpl<FilmRecord>(Film.FILM), Record14<L
         this.lastUpdate = lastUpdate
         this.specialFeatures = specialFeatures
         this.fulltext = fulltext
-    }
-
-    /**
-     * Create a detached, initialised FilmRecord
-     */
-    constructor(filmId: Long? = null, title: String? = null, description: String? = null, releaseYear: Int? = null, languageId: Long? = null, originalLanguageId: Long? = null, rentalDuration: Short? = null, rentalRate: BigDecimal? = null, length: Short? = null, replacementCost: BigDecimal? = null, rating: MpaaRating? = null, specialFeatures: Array<String?>? = null, fulltext: Any? = null): this() {
-        this.filmId = filmId
-        this.title = title
-        this.description = description
-        this.releaseYear = releaseYear
-        this.languageId = languageId
-        this.originalLanguageId = originalLanguageId
-        this.rentalDuration = rentalDuration
-        this.rentalRate = rentalRate
-        this.length = length
-        this.replacementCost = replacementCost
-        this.rating = rating
-        this.specialFeatures = specialFeatures
-        this.fulltext = fulltext
+        resetChangedOnNotNull()
     }
 
     /**
@@ -283,6 +265,7 @@ open class FilmRecord() : UpdatableRecordImpl<FilmRecord>(Film.FILM), Record14<L
             this.lastUpdate = value.lastUpdate
             this.specialFeatures = value.specialFeatures
             this.fulltext = value.fulltext
+            resetChangedOnNotNull()
         }
     }
 }

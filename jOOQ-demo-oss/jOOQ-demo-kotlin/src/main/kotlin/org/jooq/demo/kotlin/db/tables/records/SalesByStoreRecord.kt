@@ -48,17 +48,17 @@ open class SalesByStoreRecord() : TableRecordImpl<SalesByStoreRecord>(SalesBySto
     override fun value3(): BigDecimal? = totalSales
 
     override fun value1(value: String?): SalesByStoreRecord {
-        this.store = value
+        set(0, value)
         return this
     }
 
     override fun value2(value: String?): SalesByStoreRecord {
-        this.manager = value
+        set(1, value)
         return this
     }
 
     override fun value3(value: BigDecimal?): SalesByStoreRecord {
-        this.totalSales = value
+        set(2, value)
         return this
     }
 
@@ -76,6 +76,7 @@ open class SalesByStoreRecord() : TableRecordImpl<SalesByStoreRecord>(SalesBySto
         this.store = store
         this.manager = manager
         this.totalSales = totalSales
+        resetChangedOnNotNull()
     }
 
     /**
@@ -86,6 +87,7 @@ open class SalesByStoreRecord() : TableRecordImpl<SalesByStoreRecord>(SalesBySto
             this.store = value.store
             this.manager = value.manager
             this.totalSales = value.totalSales
+            resetChangedOnNotNull()
         }
     }
 }

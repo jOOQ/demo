@@ -110,16 +110,7 @@ class FilmActorRecord extends UpdatableRecordImpl[FilmActorRecord](FilmActor.FIL
     this.setActorId(actorId)
     this.setFilmId(filmId)
     this.setLastUpdate(lastUpdate)
-  }
-
-  /**
-   * Create a detached, initialised FilmActorRecord
-   */
-  def this(actorId : Long, filmId : Long) = {
-    this()
-
-    this.setActorId(actorId)
-    this.setFilmId(filmId)
+    resetChangedOnNotNull()
   }
 
   /**
@@ -132,6 +123,7 @@ class FilmActorRecord extends UpdatableRecordImpl[FilmActorRecord](FilmActor.FIL
       this.setActorId(value.getActorId)
       this.setFilmId(value.getFilmId)
       this.setLastUpdate(value.getLastUpdate)
+      resetChangedOnNotNull()
     }
   }
 }

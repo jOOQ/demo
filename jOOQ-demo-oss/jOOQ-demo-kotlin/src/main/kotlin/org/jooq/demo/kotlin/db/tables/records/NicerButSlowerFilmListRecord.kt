@@ -84,42 +84,42 @@ open class NicerButSlowerFilmListRecord() : TableRecordImpl<NicerButSlowerFilmLi
     override fun value8(): String? = actors
 
     override fun value1(value: Long?): NicerButSlowerFilmListRecord {
-        this.fid = value
+        set(0, value)
         return this
     }
 
     override fun value2(value: String?): NicerButSlowerFilmListRecord {
-        this.title = value
+        set(1, value)
         return this
     }
 
     override fun value3(value: String?): NicerButSlowerFilmListRecord {
-        this.description = value
+        set(2, value)
         return this
     }
 
     override fun value4(value: String?): NicerButSlowerFilmListRecord {
-        this.category = value
+        set(3, value)
         return this
     }
 
     override fun value5(value: BigDecimal?): NicerButSlowerFilmListRecord {
-        this.price = value
+        set(4, value)
         return this
     }
 
     override fun value6(value: Short?): NicerButSlowerFilmListRecord {
-        this.length = value
+        set(5, value)
         return this
     }
 
     override fun value7(value: MpaaRating?): NicerButSlowerFilmListRecord {
-        this.rating = value
+        set(6, value)
         return this
     }
 
     override fun value8(value: String?): NicerButSlowerFilmListRecord {
-        this.actors = value
+        set(7, value)
         return this
     }
 
@@ -147,6 +147,7 @@ open class NicerButSlowerFilmListRecord() : TableRecordImpl<NicerButSlowerFilmLi
         this.length = length
         this.rating = rating
         this.actors = actors
+        resetChangedOnNotNull()
     }
 
     /**
@@ -162,6 +163,7 @@ open class NicerButSlowerFilmListRecord() : TableRecordImpl<NicerButSlowerFilmLi
             this.length = value.length
             this.rating = value.rating
             this.actors = value.actors
+            resetChangedOnNotNull()
         }
     }
 }

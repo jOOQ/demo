@@ -110,16 +110,7 @@ class FilmCategoryRecord extends UpdatableRecordImpl[FilmCategoryRecord](FilmCat
     this.setFilmId(filmId)
     this.setCategoryId(categoryId)
     this.setLastUpdate(lastUpdate)
-  }
-
-  /**
-   * Create a detached, initialised FilmCategoryRecord
-   */
-  def this(filmId : Long, categoryId : Long) = {
-    this()
-
-    this.setFilmId(filmId)
-    this.setCategoryId(categoryId)
+    resetChangedOnNotNull()
   }
 
   /**
@@ -132,6 +123,7 @@ class FilmCategoryRecord extends UpdatableRecordImpl[FilmCategoryRecord](FilmCat
       this.setFilmId(value.getFilmId)
       this.setCategoryId(value.getCategoryId)
       this.setLastUpdate(value.getLastUpdate)
+      resetChangedOnNotNull()
     }
   }
 }

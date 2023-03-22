@@ -635,27 +635,7 @@ public class FilmRecord extends UpdatableRecordImpl<FilmRecord> implements Recor
         setLastUpdate(lastUpdate);
         setSpecialFeatures(specialFeatures);
         setFulltext(fulltext);
-    }
-
-    /**
-     * Create a detached, initialised FilmRecord
-     */
-    public FilmRecord(Long filmId, String title, String description, Integer releaseYear, Long languageId, Long originalLanguageId, Short rentalDuration, BigDecimal rentalRate, Short length, BigDecimal replacementCost, MpaaRating rating, String[] specialFeatures, Object fulltext) {
-        super(Film.FILM);
-
-        setFilmId(filmId);
-        setTitle(title);
-        setDescription(description);
-        setReleaseYear(releaseYear);
-        setLanguageId(languageId);
-        setOriginalLanguageId(originalLanguageId);
-        setRentalDuration(rentalDuration);
-        setRentalRate(rentalRate);
-        setLength(length);
-        setReplacementCost(replacementCost);
-        setRating(rating);
-        setSpecialFeatures(specialFeatures);
-        setFulltext(fulltext);
+        resetChangedOnNotNull();
     }
 
     /**
@@ -679,6 +659,7 @@ public class FilmRecord extends UpdatableRecordImpl<FilmRecord> implements Recor
             setLastUpdate(value.lastUpdate());
             setSpecialFeatures(value.specialFeatures());
             setFulltext(value.fulltext());
+            resetChangedOnNotNull();
         }
     }
 }

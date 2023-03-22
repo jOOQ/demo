@@ -23,9 +23,7 @@ data class Staff(
     var username: String? = null,
     var password: String? = null,
     var lastUpdate: LocalDateTime? = null,
-    var picture: ByteArray? = null,
-    var fullAddress: String? = null,
-    var fullName: String? = null
+    var picture: ByteArray? = null
 ): Serializable {
 
 }

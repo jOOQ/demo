@@ -16,8 +16,7 @@ public record Store(
     Long storeId,
     Long managerStaffId,
     Long addressId,
-    LocalDateTime lastUpdate,
-    String fullAddress
+    LocalDateTime lastUpdate
 ) implements Serializable {
 
     private static final long serialVersionUID = 1L;

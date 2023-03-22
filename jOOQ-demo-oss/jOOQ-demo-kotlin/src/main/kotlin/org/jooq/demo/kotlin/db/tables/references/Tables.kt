@@ -40,9 +40,9 @@ import org.jooq.demo.kotlin.db.tables.SalesByStore
 import org.jooq.demo.kotlin.db.tables.Staff
 import org.jooq.demo.kotlin.db.tables.StaffList
 import org.jooq.demo.kotlin.db.tables.Store
+import org.jooq.demo.kotlin.db.tables.records.CustomerRecord
 import org.jooq.demo.kotlin.db.tables.records.FilmInStockRecord
 import org.jooq.demo.kotlin.db.tables.records.FilmNotInStockRecord
-import org.jooq.demo.kotlin.db.tables.records.RewardsReportRecord
 
 
 
@@ -251,7 +251,7 @@ fun REWARDS_REPORT(
       configuration: Configuration
     , minMonthlyPurchases: Int?
     , minDollarAmountPurchased: BigDecimal?
-): Result<RewardsReportRecord> = configuration.dsl().selectFrom(org.jooq.demo.kotlin.db.tables.RewardsReport.REWARDS_REPORT.call(
+): Result<CustomerRecord> = configuration.dsl().selectFrom(org.jooq.demo.kotlin.db.tables.RewardsReport.REWARDS_REPORT.call(
       minMonthlyPurchases
     , minDollarAmountPurchased
 )).fetch()

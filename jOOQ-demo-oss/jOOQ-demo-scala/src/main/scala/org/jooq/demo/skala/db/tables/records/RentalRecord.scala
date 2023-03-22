@@ -198,20 +198,7 @@ class RentalRecord extends UpdatableRecordImpl[RentalRecord](Rental.RENTAL) with
     this.setReturnDate(returnDate)
     this.setStaffId(staffId)
     this.setLastUpdate(lastUpdate)
-  }
-
-  /**
-   * Create a detached, initialised RentalRecord
-   */
-  def this(rentalId : Long, rentalDate : LocalDateTime, inventoryId : Long, customerId : Long, returnDate : LocalDateTime, staffId : Long) = {
-    this()
-
-    this.setRentalId(rentalId)
-    this.setRentalDate(rentalDate)
-    this.setInventoryId(inventoryId)
-    this.setCustomerId(customerId)
-    this.setReturnDate(returnDate)
-    this.setStaffId(staffId)
+    resetChangedOnNotNull()
   }
 
   /**
@@ -228,6 +215,7 @@ class RentalRecord extends UpdatableRecordImpl[RentalRecord](Rental.RENTAL) with
       this.setReturnDate(value.getReturnDate)
       this.setStaffId(value.getStaffId)
       this.setLastUpdate(value.getLastUpdate)
+      resetChangedOnNotNull()
     }
   }
 }

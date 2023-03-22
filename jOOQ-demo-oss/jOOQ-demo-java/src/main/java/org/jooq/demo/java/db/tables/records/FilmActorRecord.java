@@ -178,16 +178,7 @@ public class FilmActorRecord extends UpdatableRecordImpl<FilmActorRecord> implem
         setActorId(actorId);
         setFilmId(filmId);
         setLastUpdate(lastUpdate);
-    }
-
-    /**
-     * Create a detached, initialised FilmActorRecord
-     */
-    public FilmActorRecord(Long actorId, Long filmId) {
-        super(FilmActor.FILM_ACTOR);
-
-        setActorId(actorId);
-        setFilmId(filmId);
+        resetChangedOnNotNull();
     }
 
     /**
@@ -200,6 +191,7 @@ public class FilmActorRecord extends UpdatableRecordImpl<FilmActorRecord> implem
             setActorId(value.actorId());
             setFilmId(value.filmId());
             setLastUpdate(value.lastUpdate());
+            resetChangedOnNotNull();
         }
     }
 }

@@ -21,9 +21,9 @@ import org.jooq.demo.kotlin.db.routines._GroupConcat
 import org.jooq.demo.kotlin.db.tables.FilmInStock
 import org.jooq.demo.kotlin.db.tables.FilmNotInStock
 import org.jooq.demo.kotlin.db.tables.RewardsReport
+import org.jooq.demo.kotlin.db.tables.records.CustomerRecord
 import org.jooq.demo.kotlin.db.tables.records.FilmInStockRecord
 import org.jooq.demo.kotlin.db.tables.records.FilmNotInStockRecord
-import org.jooq.demo.kotlin.db.tables.records.RewardsReportRecord
 
 
 
@@ -328,7 +328,7 @@ fun rewardsReport(
       configuration: Configuration
     , minMonthlyPurchases: Int?
     , minDollarAmountPurchased: BigDecimal?
-): Result<RewardsReportRecord> = configuration.dsl().selectFrom(org.jooq.demo.kotlin.db.tables.RewardsReport.REWARDS_REPORT.call(
+): Result<CustomerRecord> = configuration.dsl().selectFrom(org.jooq.demo.kotlin.db.tables.RewardsReport.REWARDS_REPORT.call(
       minMonthlyPurchases
     , minDollarAmountPurchased
 )).fetch()

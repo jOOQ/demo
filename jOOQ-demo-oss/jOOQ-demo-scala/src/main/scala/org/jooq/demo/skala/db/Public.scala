@@ -47,9 +47,9 @@ import org.jooq.demo.skala.db.tables.SalesByStore
 import org.jooq.demo.skala.db.tables.Staff
 import org.jooq.demo.skala.db.tables.StaffList
 import org.jooq.demo.skala.db.tables.Store
+import org.jooq.demo.skala.db.tables.records.CustomerRecord
 import org.jooq.demo.skala.db.tables.records.FilmInStockRecord
 import org.jooq.demo.skala.db.tables.records.FilmNotInStockRecord
-import org.jooq.demo.skala.db.tables.records.RewardsReportRecord
 import org.jooq.impl.SchemaImpl
 
 
@@ -271,7 +271,7 @@ class Public extends SchemaImpl("public", DefaultCatalog.DEFAULT_CATALOG) {
       configuration: Configuration
     , minMonthlyPurchases: Integer
     , minDollarAmountPurchased: BigDecimal
-  ): Result[RewardsReportRecord] = configuration.dsl().selectFrom(org.jooq.demo.skala.db.tables.RewardsReport.REWARDS_REPORT.call(
+  ): Result[CustomerRecord] = configuration.dsl().selectFrom(org.jooq.demo.skala.db.tables.RewardsReport.REWARDS_REPORT.call(
       minMonthlyPurchases
     , minDollarAmountPurchased
   )).fetch()

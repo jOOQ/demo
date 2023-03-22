@@ -512,6 +512,7 @@ public class CustomerRecord extends UpdatableRecordImpl<CustomerRecord> implemen
         setActive(active);
         setFullAddress(fullAddress);
         setFullName(fullName);
+        resetChangedOnNotNull();
     }
 
     /**
@@ -531,6 +532,7 @@ public class CustomerRecord extends UpdatableRecordImpl<CustomerRecord> implemen
         setActive(active);
         setFullAddress(fullAddress);
         setFullName(fullName);
+        resetChangedOnNotNull();
     }
 
     /**
@@ -552,6 +554,7 @@ public class CustomerRecord extends UpdatableRecordImpl<CustomerRecord> implemen
             setActive(value.active());
             setFullAddress(value.fullAddress());
             setFullName(value.fullName());
+            resetChangedOnNotNull();
         }
     }
 }

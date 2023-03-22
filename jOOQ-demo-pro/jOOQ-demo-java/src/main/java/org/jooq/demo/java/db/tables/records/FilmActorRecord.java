@@ -178,6 +178,7 @@ public class FilmActorRecord extends UpdatableRecordImpl<FilmActorRecord> implem
         setActorId(actorId);
         setFilmId(filmId);
         setLastUpdate(lastUpdate);
+        resetChangedOnNotNull();
     }
 
     /**
@@ -188,6 +189,7 @@ public class FilmActorRecord extends UpdatableRecordImpl<FilmActorRecord> implem
 
         setActorId(actorId);
         setFilmId(filmId);
+        resetChangedOnNotNull();
     }
 
     /**
@@ -200,6 +202,7 @@ public class FilmActorRecord extends UpdatableRecordImpl<FilmActorRecord> implem
             setActorId(value.actorId());
             setFilmId(value.filmId());
             setLastUpdate(value.lastUpdate());
+            resetChangedOnNotNull();
         }
     }
 }

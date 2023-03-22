@@ -252,6 +252,7 @@ public class StoreRecord extends UpdatableRecordImpl<StoreRecord> implements Rec
         setAddressId(addressId);
         setLastUpdate(lastUpdate);
         setFullAddress(fullAddress);
+        resetChangedOnNotNull();
     }
 
     /**
@@ -264,6 +265,7 @@ public class StoreRecord extends UpdatableRecordImpl<StoreRecord> implements Rec
         setManagerStaffId(managerStaffId);
         setAddressId(addressId);
         setFullAddress(fullAddress);
+        resetChangedOnNotNull();
     }
 
     /**
@@ -278,6 +280,7 @@ public class StoreRecord extends UpdatableRecordImpl<StoreRecord> implements Rec
             setAddressId(value.addressId());
             setLastUpdate(value.lastUpdate());
             setFullAddress(value.fullAddress());
+            resetChangedOnNotNull();
         }
     }
 }

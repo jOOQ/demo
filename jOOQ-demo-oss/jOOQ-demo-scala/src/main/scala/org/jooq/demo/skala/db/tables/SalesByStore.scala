@@ -137,12 +137,13 @@ extends TableImpl[SalesByStoreRecord](
   override def fieldsRow: Row3[String, String, BigDecimal] = super.fieldsRow.asInstanceOf[ Row3[String, String, BigDecimal] ]
 
   /**
-   * Convenience mapping calling {@link #convertFrom(Function)}.
+   * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
    */
   def mapping[U](from: (String, String, BigDecimal) => U): SelectField[U] = convertFrom(r => from.apply(r.value1(), r.value2(), r.value3()))
 
   /**
-   * Convenience mapping calling {@link #convertFrom(Class, Function)}.
+   * Convenience mapping calling {@link SelectField#convertFrom(Class,
+   * Function)}.
    */
   def mapping[U](toType: Class[U], from: (String, String, BigDecimal) => U): SelectField[U] = convertFrom(toType,r => from.apply(r.value1(), r.value2(), r.value3()))
 }

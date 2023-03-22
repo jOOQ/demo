@@ -170,6 +170,7 @@ class PaymentP2007_01Record extends TableRecordImpl[PaymentP2007_01Record](Payme
     this.setRentalId(rentalId)
     this.setAmount(amount)
     this.setPaymentDate(paymentDate)
+    resetChangedOnNotNull()
   }
 
   /**
@@ -185,6 +186,7 @@ class PaymentP2007_01Record extends TableRecordImpl[PaymentP2007_01Record](Payme
       this.setRentalId(value.getRentalId)
       this.setAmount(value.getAmount)
       this.setPaymentDate(value.getPaymentDate)
+      resetChangedOnNotNull()
     }
   }
 }

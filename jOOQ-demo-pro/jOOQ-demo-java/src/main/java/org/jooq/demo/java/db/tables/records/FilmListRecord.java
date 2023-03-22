@@ -354,6 +354,7 @@ public class FilmListRecord extends TableRecordImpl<FilmListRecord> implements R
         setLength(length);
         setRating(rating);
         setActors(actors);
+        resetChangedOnNotNull();
     }
 
     /**
@@ -371,6 +372,7 @@ public class FilmListRecord extends TableRecordImpl<FilmListRecord> implements R
             setLength(value.length());
             setRating(value.rating());
             setActors(value.actors());
+            resetChangedOnNotNull();
         }
     }
 }
