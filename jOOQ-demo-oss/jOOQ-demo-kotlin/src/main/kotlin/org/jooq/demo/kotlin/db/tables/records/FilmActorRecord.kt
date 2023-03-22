@@ -88,6 +88,14 @@ open class FilmActorRecord() : UpdatableRecordImpl<FilmActorRecord>(FilmActor.FI
     /**
      * Create a detached, initialised FilmActorRecord
      */
+    constructor(actorId: Long? = null, filmId: Long? = null): this() {
+        this.actorId = actorId
+        this.filmId = filmId
+    }
+
+    /**
+     * Create a detached, initialised FilmActorRecord
+     */
     constructor(value: org.jooq.demo.kotlin.db.tables.pojos.FilmActor?): this() {
         if (value != null) {
             this.actorId = value.actorId

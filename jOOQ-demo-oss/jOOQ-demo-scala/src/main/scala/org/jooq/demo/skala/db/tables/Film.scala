@@ -135,7 +135,7 @@ extends TableImpl[FilmRecord](
   /**
    * The column <code>public.film.last_update</code>.
    */
-  val LAST_UPDATE: TableField[FilmRecord, LocalDateTime] = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).defaultValue(DSL.field("now()", SQLDataType.LOCALDATETIME)), "")
+  val LAST_UPDATE: TableField[FilmRecord, LocalDateTime] = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).readonly(true).defaultValue(DSL.field("now()", SQLDataType.LOCALDATETIME)), "")
 
   /**
    * The column <code>public.film.special_features</code>.
@@ -217,13 +217,12 @@ extends TableImpl[FilmRecord](
   override def fieldsRow: Row14[Long, String, String, Integer, Long, Long, Short, BigDecimal, Short, BigDecimal, MpaaRating, LocalDateTime, Array[String], Object] = super.fieldsRow.asInstanceOf[ Row14[Long, String, String, Integer, Long, Long, Short, BigDecimal, Short, BigDecimal, MpaaRating, LocalDateTime, Array[String], Object] ]
 
   /**
-   * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+   * Convenience mapping calling {@link #convertFrom(Function)}.
    */
   def mapping[U](from: (Long, String, String, Integer, Long, Long, Short, BigDecimal, Short, BigDecimal, MpaaRating, LocalDateTime, Array[String], Object) => U): SelectField[U] = convertFrom(r => from.apply(r.value1(), r.value2(), r.value3(), r.value4(), r.value5(), r.value6(), r.value7(), r.value8(), r.value9(), r.value10(), r.value11(), r.value12(), r.value13(), r.value14()))
 
   /**
-   * Convenience mapping calling {@link SelectField#convertFrom(Class,
-   * Function)}.
+   * Convenience mapping calling {@link #convertFrom(Class, Function)}.
    */
   def mapping[U](toType: Class[U], from: (Long, String, String, Integer, Long, Long, Short, BigDecimal, Short, BigDecimal, MpaaRating, LocalDateTime, Array[String], Object) => U): SelectField[U] = convertFrom(toType,r => from.apply(r.value1(), r.value2(), r.value3(), r.value4(), r.value5(), r.value6(), r.value7(), r.value8(), r.value9(), r.value10(), r.value11(), r.value12(), r.value13(), r.value14()))
 }

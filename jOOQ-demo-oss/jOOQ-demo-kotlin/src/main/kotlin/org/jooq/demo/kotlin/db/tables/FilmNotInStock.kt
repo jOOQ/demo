@@ -130,13 +130,12 @@ open class FilmNotInStock(
     )).let { if (aliased()) it.`as`(unqualifiedName) else it }
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     * Convenience mapping calling {@link #convertFrom(Function)}.
      */
     fun <U> mapping(from: (Int?) -> U): SelectField<U> = convertFrom(Records.mapping(from))
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Class,
-     * Function)}.
+     * Convenience mapping calling {@link #convertFrom(Class, Function)}.
      */
     fun <U> mapping(toType: Class<U>, from: (Int?) -> U): SelectField<U> = convertFrom(toType, Records.mapping(from))
 }

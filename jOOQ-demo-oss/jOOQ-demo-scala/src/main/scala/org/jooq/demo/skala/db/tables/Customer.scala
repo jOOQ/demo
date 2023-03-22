@@ -21,7 +21,7 @@ import org.jooq.Identity
 import org.jooq.Index
 import org.jooq.Name
 import org.jooq.Record
-import org.jooq.Row10
+import org.jooq.Row12
 import org.jooq.Schema
 import org.jooq.SelectField
 import org.jooq.Table
@@ -117,12 +117,22 @@ extends TableImpl[CustomerRecord](
   /**
    * The column <code>public.customer.last_update</code>.
    */
-  val LAST_UPDATE: TableField[CustomerRecord, LocalDateTime] = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).defaultValue(DSL.field("now()", SQLDataType.LOCALDATETIME)), "")
+  val LAST_UPDATE: TableField[CustomerRecord, LocalDateTime] = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).readonly(true).defaultValue(DSL.field("now()", SQLDataType.LOCALDATETIME)), "")
 
   /**
    * The column <code>public.customer.active</code>.
    */
   val ACTIVE: TableField[CustomerRecord, Integer] = createField(DSL.name("active"), SQLDataType.INTEGER, "")
+
+  /**
+   * The column <code>public.customer.full_address</code>.
+   */
+  val FULL_ADDRESS: TableField[CustomerRecord, String] = createField0(DSL.name("full_address"), SQLDataType.CLOB.virtual(), this, "", { ctx: org.jooq.GeneratorContext[CustomerRecord, Customer, String] => DSL.concat(address.ADDRESS_, DSL.inline(", "), address.POSTAL_CODE, DSL.inline(", "), address.city.CITY_, DSL.inline(", "), address.city.country.COUNTRY_) })
+
+  /**
+   * The column <code>public.customer.full_name</code>.
+   */
+  val FULL_NAME: TableField[CustomerRecord, String] = createField0(DSL.name("full_name"), SQLDataType.CLOB.virtual(), this, "", { ctx: org.jooq.GeneratorContext[CustomerRecord, Customer, String] => DSL.concat(FIRST_NAME, DSL.inline(" "), LAST_NAME) })
 
   private def this(alias: Name, aliased: Table[CustomerRecord]) = this(alias, null, null, aliased, null)
 
@@ -182,18 +192,17 @@ extends TableImpl[CustomerRecord](
   override def rename(name: Table[_]): Customer = new Customer(name.getQualifiedName(), null)
 
   // -------------------------------------------------------------------------
-  // Row10 type methods
+  // Row12 type methods
   // -------------------------------------------------------------------------
-  override def fieldsRow: Row10[Long, Long, String, String, String, Long, Boolean, LocalDate, LocalDateTime, Integer] = super.fieldsRow.asInstanceOf[ Row10[Long, Long, String, String, String, Long, Boolean, LocalDate, LocalDateTime, Integer] ]
+  override def fieldsRow: Row12[Long, Long, String, String, String, Long, Boolean, LocalDate, LocalDateTime, Integer, String, String] = super.fieldsRow.asInstanceOf[ Row12[Long, Long, String, String, String, Long, Boolean, LocalDate, LocalDateTime, Integer, String, String] ]
 
   /**
-   * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+   * Convenience mapping calling {@link #convertFrom(Function)}.
    */
-  def mapping[U](from: (Long, Long, String, String, String, Long, Boolean, LocalDate, LocalDateTime, Integer) => U): SelectField[U] = convertFrom(r => from.apply(r.value1(), r.value2(), r.value3(), r.value4(), r.value5(), r.value6(), r.value7(), r.value8(), r.value9(), r.value10()))
+  def mapping[U](from: (Long, Long, String, String, String, Long, Boolean, LocalDate, LocalDateTime, Integer, String, String) => U): SelectField[U] = convertFrom(r => from.apply(r.value1(), r.value2(), r.value3(), r.value4(), r.value5(), r.value6(), r.value7(), r.value8(), r.value9(), r.value10(), r.value11(), r.value12()))
 
   /**
-   * Convenience mapping calling {@link SelectField#convertFrom(Class,
-   * Function)}.
+   * Convenience mapping calling {@link #convertFrom(Class, Function)}.
    */
-  def mapping[U](toType: Class[U], from: (Long, Long, String, String, String, Long, Boolean, LocalDate, LocalDateTime, Integer) => U): SelectField[U] = convertFrom(toType,r => from.apply(r.value1(), r.value2(), r.value3(), r.value4(), r.value5(), r.value6(), r.value7(), r.value8(), r.value9(), r.value10()))
+  def mapping[U](toType: Class[U], from: (Long, Long, String, String, String, Long, Boolean, LocalDate, LocalDateTime, Integer, String, String) => U): SelectField[U] = convertFrom(toType,r => from.apply(r.value1(), r.value2(), r.value3(), r.value4(), r.value5(), r.value6(), r.value7(), r.value8(), r.value9(), r.value10(), r.value11(), r.value12()))
 }

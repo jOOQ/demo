@@ -412,6 +412,27 @@ class FilmRecord extends UpdatableRecordImpl[FilmRecord](Film.FILM) with Record1
   /**
    * Create a detached, initialised FilmRecord
    */
+  def this(filmId : Long, title : String, description : String, releaseYear : Integer, languageId : Long, originalLanguageId : Long, rentalDuration : Short, rentalRate : BigDecimal, length : Short, replacementCost : BigDecimal, rating : MpaaRating, specialFeatures : Array[String], fulltext : Object) = {
+    this()
+
+    this.setFilmId(filmId)
+    this.setTitle(title)
+    this.setDescription(description)
+    this.setReleaseYear(releaseYear)
+    this.setLanguageId(languageId)
+    this.setOriginalLanguageId(originalLanguageId)
+    this.setRentalDuration(rentalDuration)
+    this.setRentalRate(rentalRate)
+    this.setLength(length)
+    this.setReplacementCost(replacementCost)
+    this.setRating(rating)
+    this.setSpecialFeatures(specialFeatures)
+    this.setFulltext(fulltext)
+  }
+
+  /**
+   * Create a detached, initialised FilmRecord
+   */
   def this(value: org.jooq.demo.skala.db.tables.pojos.Film) = {
     this()
 

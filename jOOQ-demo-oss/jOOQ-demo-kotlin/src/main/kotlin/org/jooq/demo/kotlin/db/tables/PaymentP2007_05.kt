@@ -194,13 +194,12 @@ open class PaymentP2007_05(
     override fun fieldsRow(): Row6<Long?, Long?, Long?, Long?, BigDecimal?, LocalDateTime?> = super.fieldsRow() as Row6<Long?, Long?, Long?, Long?, BigDecimal?, LocalDateTime?>
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     * Convenience mapping calling {@link #convertFrom(Function)}.
      */
     fun <U> mapping(from: (Long?, Long?, Long?, Long?, BigDecimal?, LocalDateTime?) -> U): SelectField<U> = convertFrom(Records.mapping(from))
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Class,
-     * Function)}.
+     * Convenience mapping calling {@link #convertFrom(Class, Function)}.
      */
     fun <U> mapping(toType: Class<U>, from: (Long?, Long?, Long?, Long?, BigDecimal?, LocalDateTime?) -> U): SelectField<U> = convertFrom(toType, Records.mapping(from))
 }

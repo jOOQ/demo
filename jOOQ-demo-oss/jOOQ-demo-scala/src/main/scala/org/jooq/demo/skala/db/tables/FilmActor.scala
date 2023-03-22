@@ -83,7 +83,7 @@ extends TableImpl[FilmActorRecord](
   /**
    * The column <code>public.film_actor.last_update</code>.
    */
-  val LAST_UPDATE: TableField[FilmActorRecord, LocalDateTime] = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).defaultValue(DSL.field("now()", SQLDataType.LOCALDATETIME)), "")
+  val LAST_UPDATE: TableField[FilmActorRecord, LocalDateTime] = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).readonly(true).defaultValue(DSL.field("now()", SQLDataType.LOCALDATETIME)), "")
 
   private def this(alias: Name, aliased: Table[FilmActorRecord]) = this(alias, null, null, aliased, null)
 
@@ -146,13 +146,12 @@ extends TableImpl[FilmActorRecord](
   override def fieldsRow: Row3[Long, Long, LocalDateTime] = super.fieldsRow.asInstanceOf[ Row3[Long, Long, LocalDateTime] ]
 
   /**
-   * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+   * Convenience mapping calling {@link #convertFrom(Function)}.
    */
   def mapping[U](from: (Long, Long, LocalDateTime) => U): SelectField[U] = convertFrom(r => from.apply(r.value1(), r.value2(), r.value3()))
 
   /**
-   * Convenience mapping calling {@link SelectField#convertFrom(Class,
-   * Function)}.
+   * Convenience mapping calling {@link #convertFrom(Class, Function)}.
    */
   def mapping[U](toType: Class[U], from: (Long, Long, LocalDateTime) => U): SelectField[U] = convertFrom(toType,r => from.apply(r.value1(), r.value2(), r.value3()))
 }

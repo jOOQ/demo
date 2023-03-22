@@ -26,10 +26,12 @@ case class Customer(
   var activebool: Boolean,
   var createDate: LocalDate,
   var lastUpdate: LocalDateTime,
-  var active: Integer
+  var active: Integer,
+  var fullAddress: String,
+  var fullName: String
 ) extends Serializable {
 
-  def this() = this(null, null, null, null, null, null, null, null, null, null)
+  def this() = this(null, null, null, null, null, null, null, null, null, null, null, null)
 
   def this(value: Customer) = this(
     value.customerId,
@@ -41,7 +43,9 @@ case class Customer(
     value.activebool,
     value.createDate,
     value.lastUpdate,
-    value.active
+    value.active,
+    value.fullAddress,
+    value.fullName
   )
 
   /**
@@ -162,5 +166,29 @@ case class Customer(
    */
   def setActive(active: Integer): Unit = {
     this.active = active
+  }
+
+  /**
+   * Getter for <code>public.customer.full_address</code>.
+   */
+  def getFullAddress: String = this.fullAddress
+
+  /**
+   * Setter for <code>public.customer.full_address</code>.
+   */
+  def setFullAddress(fullAddress: String): Unit = {
+    this.fullAddress = fullAddress
+  }
+
+  /**
+   * Getter for <code>public.customer.full_name</code>.
+   */
+  def getFullName: String = this.fullName
+
+  /**
+   * Setter for <code>public.customer.full_name</code>.
+   */
+  def setFullName(fullName: String): Unit = {
+    this.fullName = fullName
   }
 }

@@ -170,13 +170,12 @@ extends TableImpl[CustomerListRecord](
   override def fieldsRow: Row9[Long, String, String, String, String, String, String, String, Long] = super.fieldsRow.asInstanceOf[ Row9[Long, String, String, String, String, String, String, String, Long] ]
 
   /**
-   * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+   * Convenience mapping calling {@link #convertFrom(Function)}.
    */
   def mapping[U](from: (Long, String, String, String, String, String, String, String, Long) => U): SelectField[U] = convertFrom(r => from.apply(r.value1(), r.value2(), r.value3(), r.value4(), r.value5(), r.value6(), r.value7(), r.value8(), r.value9()))
 
   /**
-   * Convenience mapping calling {@link SelectField#convertFrom(Class,
-   * Function)}.
+   * Convenience mapping calling {@link #convertFrom(Class, Function)}.
    */
   def mapping[U](toType: Class[U], from: (Long, String, String, String, String, String, String, String, Long) => U): SelectField[U] = convertFrom(toType,r => from.apply(r.value1(), r.value2(), r.value3(), r.value4(), r.value5(), r.value6(), r.value7(), r.value8(), r.value9()))
 }

@@ -138,13 +138,12 @@ open class ActorInfo(
     override fun fieldsRow(): Row4<Long?, String?, String?, String?> = super.fieldsRow() as Row4<Long?, String?, String?, String?>
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     * Convenience mapping calling {@link #convertFrom(Function)}.
      */
     fun <U> mapping(from: (Long?, String?, String?, String?) -> U): SelectField<U> = convertFrom(Records.mapping(from))
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Class,
-     * Function)}.
+     * Convenience mapping calling {@link #convertFrom(Class, Function)}.
      */
     fun <U> mapping(toType: Class<U>, from: (Long?, String?, String?, String?) -> U): SelectField<U> = convertFrom(toType, Records.mapping(from))
 }

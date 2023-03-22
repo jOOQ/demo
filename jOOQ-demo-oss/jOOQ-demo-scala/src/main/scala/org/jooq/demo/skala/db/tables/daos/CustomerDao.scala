@@ -144,4 +144,26 @@ class CustomerDao(configuration: Configuration) extends DAOImpl[CustomerRecord, 
    * Fetch records that have <code>active IN (values)</code>
    */
   def fetchByActive(values: Integer*): List[org.jooq.demo.skala.db.tables.pojos.Customer] = fetch(Customer.CUSTOMER.ACTIVE, values:_*)
+
+  /**
+   * Fetch records that have <code>full_address BETWEEN lowerInclusive AND
+   * upperInclusive</code>
+   */
+  def fetchRangeOfFullAddress(lowerInclusive: String, upperInclusive: String): List[org.jooq.demo.skala.db.tables.pojos.Customer] = fetchRange(Customer.CUSTOMER.FULL_ADDRESS, lowerInclusive, upperInclusive)
+
+  /**
+   * Fetch records that have <code>full_address IN (values)</code>
+   */
+  def fetchByFullAddress(values: String*): List[org.jooq.demo.skala.db.tables.pojos.Customer] = fetch(Customer.CUSTOMER.FULL_ADDRESS, values:_*)
+
+  /**
+   * Fetch records that have <code>full_name BETWEEN lowerInclusive AND
+   * upperInclusive</code>
+   */
+  def fetchRangeOfFullName(lowerInclusive: String, upperInclusive: String): List[org.jooq.demo.skala.db.tables.pojos.Customer] = fetchRange(Customer.CUSTOMER.FULL_NAME, lowerInclusive, upperInclusive)
+
+  /**
+   * Fetch records that have <code>full_name IN (values)</code>
+   */
+  def fetchByFullName(values: String*): List[org.jooq.demo.skala.db.tables.pojos.Customer] = fetch(Customer.CUSTOMER.FULL_NAME, values:_*)
 }

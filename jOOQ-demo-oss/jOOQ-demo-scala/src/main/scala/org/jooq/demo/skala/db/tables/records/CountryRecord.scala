@@ -116,6 +116,16 @@ class CountryRecord extends UpdatableRecordImpl[CountryRecord](Country.COUNTRY) 
   /**
    * Create a detached, initialised CountryRecord
    */
+  def this(countryId : Long, country : String) = {
+    this()
+
+    this.setCountryId(countryId)
+    this.setCountry(country)
+  }
+
+  /**
+   * Create a detached, initialised CountryRecord
+   */
   def this(value: org.jooq.demo.skala.db.tables.pojos.Country) = {
     this()
 

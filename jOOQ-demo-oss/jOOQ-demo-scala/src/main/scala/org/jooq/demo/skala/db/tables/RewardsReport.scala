@@ -111,7 +111,7 @@ extends TableImpl[RewardsReportRecord](
   /**
    * The column <code>public.rewards_report.last_update</code>.
    */
-  val LAST_UPDATE: TableField[RewardsReportRecord, LocalDateTime] = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).defaultValue(DSL.field("now()", SQLDataType.LOCALDATETIME)), "")
+  val LAST_UPDATE: TableField[RewardsReportRecord, LocalDateTime] = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).readonly(true).defaultValue(DSL.field("now()", SQLDataType.LOCALDATETIME)), "")
 
   /**
    * The column <code>public.rewards_report.active</code>.
@@ -188,13 +188,12 @@ extends TableImpl[RewardsReportRecord](
   ))).map(r => if (aliased()) r.as(getUnqualifiedName) else r).get
 
   /**
-   * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+   * Convenience mapping calling {@link #convertFrom(Function)}.
    */
   def mapping[U](from: (Long, Long, String, String, String, Long, Boolean, LocalDate, LocalDateTime, Integer) => U): SelectField[U] = convertFrom(r => from.apply(r.value1(), r.value2(), r.value3(), r.value4(), r.value5(), r.value6(), r.value7(), r.value8(), r.value9(), r.value10()))
 
   /**
-   * Convenience mapping calling {@link SelectField#convertFrom(Class,
-   * Function)}.
+   * Convenience mapping calling {@link #convertFrom(Class, Function)}.
    */
   def mapping[U](toType: Class[U], from: (Long, Long, String, String, String, Long, Boolean, LocalDate, LocalDateTime, Integer) => U): SelectField[U] = convertFrom(toType,r => from.apply(r.value1(), r.value2(), r.value3(), r.value4(), r.value5(), r.value6(), r.value7(), r.value8(), r.value9(), r.value10()))
 }

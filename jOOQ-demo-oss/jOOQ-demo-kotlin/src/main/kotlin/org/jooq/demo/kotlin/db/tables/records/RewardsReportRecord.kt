@@ -180,6 +180,21 @@ open class RewardsReportRecord() : TableRecordImpl<RewardsReportRecord>(RewardsR
     /**
      * Create a detached, initialised RewardsReportRecord
      */
+    constructor(customerId: Long? = null, storeId: Long? = null, firstName: String? = null, lastName: String? = null, email: String? = null, addressId: Long? = null, activebool: Boolean? = null, createDate: LocalDate? = null, active: Int? = null): this() {
+        this.customerId = customerId
+        this.storeId = storeId
+        this.firstName = firstName
+        this.lastName = lastName
+        this.email = email
+        this.addressId = addressId
+        this.activebool = activebool
+        this.createDate = createDate
+        this.active = active
+    }
+
+    /**
+     * Create a detached, initialised RewardsReportRecord
+     */
     constructor(value: org.jooq.demo.kotlin.db.tables.pojos.RewardsReport?): this() {
         if (value != null) {
             this.customerId = value.customerId

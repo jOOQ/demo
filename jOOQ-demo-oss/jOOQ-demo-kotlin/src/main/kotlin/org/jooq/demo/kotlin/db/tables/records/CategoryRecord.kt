@@ -88,6 +88,14 @@ open class CategoryRecord() : UpdatableRecordImpl<CategoryRecord>(Category.CATEG
     /**
      * Create a detached, initialised CategoryRecord
      */
+    constructor(categoryId: Long? = null, name: String? = null): this() {
+        this.categoryId = categoryId
+        this.name = name
+    }
+
+    /**
+     * Create a detached, initialised CategoryRecord
+     */
     constructor(value: org.jooq.demo.kotlin.db.tables.pojos.Category?): this() {
         if (value != null) {
             this.categoryId = value.categoryId

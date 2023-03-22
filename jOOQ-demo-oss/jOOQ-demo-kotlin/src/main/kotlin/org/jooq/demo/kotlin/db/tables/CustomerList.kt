@@ -165,13 +165,12 @@ open class CustomerList(
     override fun fieldsRow(): Row9<Long?, String?, String?, String?, String?, String?, String?, String?, Long?> = super.fieldsRow() as Row9<Long?, String?, String?, String?, String?, String?, String?, String?, Long?>
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     * Convenience mapping calling {@link #convertFrom(Function)}.
      */
     fun <U> mapping(from: (Long?, String?, String?, String?, String?, String?, String?, String?, Long?) -> U): SelectField<U> = convertFrom(Records.mapping(from))
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Class,
-     * Function)}.
+     * Convenience mapping calling {@link #convertFrom(Class, Function)}.
      */
     fun <U> mapping(toType: Class<U>, from: (Long?, String?, String?, String?, String?, String?, String?, String?, Long?) -> U): SelectField<U> = convertFrom(toType, Records.mapping(from))
 }

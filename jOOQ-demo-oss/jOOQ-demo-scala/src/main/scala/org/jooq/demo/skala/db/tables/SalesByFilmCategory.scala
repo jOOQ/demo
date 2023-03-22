@@ -131,13 +131,12 @@ extends TableImpl[SalesByFilmCategoryRecord](
   override def fieldsRow: Row2[String, BigDecimal] = super.fieldsRow.asInstanceOf[ Row2[String, BigDecimal] ]
 
   /**
-   * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+   * Convenience mapping calling {@link #convertFrom(Function)}.
    */
   def mapping[U](from: (String, BigDecimal) => U): SelectField[U] = convertFrom(r => from.apply(r.value1(), r.value2()))
 
   /**
-   * Convenience mapping calling {@link SelectField#convertFrom(Class,
-   * Function)}.
+   * Convenience mapping calling {@link #convertFrom(Class, Function)}.
    */
   def mapping[U](toType: Class[U], from: (String, BigDecimal) => U): SelectField[U] = convertFrom(toType,r => from.apply(r.value1(), r.value2()))
 }
