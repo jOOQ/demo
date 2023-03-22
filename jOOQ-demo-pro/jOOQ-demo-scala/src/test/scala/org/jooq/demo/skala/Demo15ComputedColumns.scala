@@ -13,8 +13,8 @@ class Demo15ComputedColumns extends AbstractDemo {
 
   @Test
   def fetchVirtualClientSideComputedColumns() {
-    ctx.select(CUSTOMER.FULL_NAME, CUSTOMER.FULL_ADDRESS)
-      .from(CUSTOMER)
+    ctx.select(STAFF.FULL_NAME, STAFF.FULL_ADDRESS)
+      .from(STAFF)
       .fetch
   }
 

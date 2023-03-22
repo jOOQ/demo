@@ -27,8 +27,8 @@ public class Demo15ComputedColumns extends AbstractDemo {
 //
 //    @Test
 //    public void fetchVirtualClientSideComputedColumns() {
-//        ctx.select(CUSTOMER.FULL_NAME, CUSTOMER.FULL_ADDRESS)
-//            .from(CUSTOMER)
+//        ctx.select(STAFF.FULL_NAME, STAFF.FULL_ADDRESS)
+//            .from(STAFF)
 //            .fetch();
 //    }
 //

@@ -297,12 +297,12 @@
                                          -->
                                     <columns>
                                         <column>
-                                            <tables>customer|staff|store</tables>
+                                            <tables>staff|store</tables>
                                             <name>full_address</name>
                                             <type>text</type>
                                         </column>
                                         <column>
-                                            <tables>customer|staff</tables>
+                                            <tables>staff</tables>
                                             <name>full_name</name>
                                             <type>text</type>
                                         </column>

@@ -1,7 +1,7 @@
 package org.jooq.demo.kotlin
 
 import org.jooq.demo.AbstractDemo
-import org.jooq.demo.kotlin.db.tables.references.CUSTOMER
+import org.jooq.demo.kotlin.db.tables.references.*
 import org.junit.Test
 
 
@@ -13,10 +13,10 @@ class Demo15ComputedColumns : AbstractDemo() {
 //    @Test
 //    fun fetchVirtualClientSideComputedColumns() {
 //        ctx.select(
-//                CUSTOMER.FULL_NAME,
-//                CUSTOMER.FULL_ADDRESS
+//                STAFF.FULL_NAME,
+//                STAFF.FULL_ADDRESS
 //            )
-//            .from(CUSTOMER)
+//            .from(STAFF)
 //            .fetch()
 //    }
 //
