@@ -57,7 +57,6 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Public extends SchemaImpl {
 
-    // Test (should be removed)
     private static final long serialVersionUID = 1L;
 
     /**
