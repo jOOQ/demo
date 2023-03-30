@@ -25,7 +25,7 @@ open class CountryDao(configuration: Configuration?) : DAOImpl<CountryRecord, or
      */
     constructor(): this(null)
 
-    override fun getId(o: org.jooq.demo.kotlin.db.tables.pojos.Country): Long? = o.countryId
+    public override fun getId(o: org.jooq.demo.kotlin.db.tables.pojos.Country): Long? = o.countryId
 
     /**
      * Fetch records that have <code>country_id BETWEEN lowerInclusive AND

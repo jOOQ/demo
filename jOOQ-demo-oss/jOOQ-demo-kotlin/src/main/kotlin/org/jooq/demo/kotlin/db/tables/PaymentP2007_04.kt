@@ -68,7 +68,7 @@ open class PaymentP2007_04(
     /**
      * The class holding records for this type
      */
-    override fun getRecordType(): Class<PaymentP2007_04Record> = PaymentP2007_04Record::class.java
+    public override fun getRecordType(): Class<PaymentP2007_04Record> = PaymentP2007_04Record::class.java
 
     /**
      * The column <code>public.payment_p2007_04.payment_id</code>.
@@ -119,10 +119,10 @@ open class PaymentP2007_04(
     constructor(): this(DSL.name("payment_p2007_04"), null)
 
     constructor(child: Table<out Record>, key: ForeignKey<out Record, PaymentP2007_04Record>): this(Internal.createPathAlias(child, key), child, key, PAYMENT_P2007_04, null)
-    override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
-    override fun getIndexes(): List<Index> = listOf(IDX_FK_PAYMENT_P2007_04_CUSTOMER_ID, IDX_FK_PAYMENT_P2007_04_STAFF_ID)
-    override fun getIdentity(): Identity<PaymentP2007_04Record, Long?> = super.getIdentity() as Identity<PaymentP2007_04Record, Long?>
-    override fun getReferences(): List<ForeignKey<PaymentP2007_04Record, *>> = listOf(PAYMENT_P2007_04__PAYMENT_P2007_04_CUSTOMER_ID_FKEY, PAYMENT_P2007_04__PAYMENT_P2007_04_STAFF_ID_FKEY, PAYMENT_P2007_04__PAYMENT_P2007_04_RENTAL_ID_FKEY)
+    public override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
+    public override fun getIndexes(): List<Index> = listOf(IDX_FK_PAYMENT_P2007_04_CUSTOMER_ID, IDX_FK_PAYMENT_P2007_04_STAFF_ID)
+    public override fun getIdentity(): Identity<PaymentP2007_04Record, Long?> = super.getIdentity() as Identity<PaymentP2007_04Record, Long?>
+    public override fun getReferences(): List<ForeignKey<PaymentP2007_04Record, *>> = listOf(PAYMENT_P2007_04__PAYMENT_P2007_04_CUSTOMER_ID_FKEY, PAYMENT_P2007_04__PAYMENT_P2007_04_STAFF_ID_FKEY, PAYMENT_P2007_04__PAYMENT_P2007_04_RENTAL_ID_FKEY)
 
     private lateinit var _customer: Customer
     private lateinit var _staff: Staff
@@ -166,32 +166,32 @@ open class PaymentP2007_04(
 
     val rental: Rental
         get(): Rental = rental()
-    override fun getChecks(): List<Check<PaymentP2007_04Record>> = listOf(
+    public override fun getChecks(): List<Check<PaymentP2007_04Record>> = listOf(
         Internal.createCheck(this, DSL.name("payment_p2007_04_payment_date_check"), "(((payment_date >= '2007-04-01 00:00:00'::timestamp without time zone) AND (payment_date < '2007-05-01 00:00:00'::timestamp without time zone)))", true)
     )
-    override fun `as`(alias: String): PaymentP2007_04 = PaymentP2007_04(DSL.name(alias), this)
-    override fun `as`(alias: Name): PaymentP2007_04 = PaymentP2007_04(alias, this)
-    override fun `as`(alias: Table<*>): PaymentP2007_04 = PaymentP2007_04(alias.getQualifiedName(), this)
+    public override fun `as`(alias: String): PaymentP2007_04 = PaymentP2007_04(DSL.name(alias), this)
+    public override fun `as`(alias: Name): PaymentP2007_04 = PaymentP2007_04(alias, this)
+    public override fun `as`(alias: Table<*>): PaymentP2007_04 = PaymentP2007_04(alias.getQualifiedName(), this)
 
     /**
      * Rename this table
      */
-    override fun rename(name: String): PaymentP2007_04 = PaymentP2007_04(DSL.name(name), null)
+    public override fun rename(name: String): PaymentP2007_04 = PaymentP2007_04(DSL.name(name), null)
 
     /**
      * Rename this table
      */
-    override fun rename(name: Name): PaymentP2007_04 = PaymentP2007_04(name, null)
+    public override fun rename(name: Name): PaymentP2007_04 = PaymentP2007_04(name, null)
 
     /**
      * Rename this table
      */
-    override fun rename(name: Table<*>): PaymentP2007_04 = PaymentP2007_04(name.getQualifiedName(), null)
+    public override fun rename(name: Table<*>): PaymentP2007_04 = PaymentP2007_04(name.getQualifiedName(), null)
 
     // -------------------------------------------------------------------------
     // Row6 type methods
     // -------------------------------------------------------------------------
-    override fun fieldsRow(): Row6<Long?, Long?, Long?, Long?, BigDecimal?, LocalDateTime?> = super.fieldsRow() as Row6<Long?, Long?, Long?, Long?, BigDecimal?, LocalDateTime?>
+    public override fun fieldsRow(): Row6<Long?, Long?, Long?, Long?, BigDecimal?, LocalDateTime?> = super.fieldsRow() as Row6<Long?, Long?, Long?, Long?, BigDecimal?, LocalDateTime?>
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.

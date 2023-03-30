@@ -55,7 +55,7 @@ open class FilmNotInStock(
     /**
      * The class holding records for this type
      */
-    override fun getRecordType(): Class<FilmNotInStockRecord> = FilmNotInStockRecord::class.java
+    public override fun getRecordType(): Class<FilmNotInStockRecord> = FilmNotInStockRecord::class.java
 
     /**
      * The column <code>public.film_not_in_stock.p_film_count</code>.
@@ -82,30 +82,30 @@ open class FilmNotInStock(
      * Create a <code>public.film_not_in_stock</code> table reference
      */
     constructor(): this(DSL.name("film_not_in_stock"), null)
-    override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
-    override fun `as`(alias: String): FilmNotInStock = FilmNotInStock(DSL.name(alias), this, parameters)
-    override fun `as`(alias: Name): FilmNotInStock = FilmNotInStock(alias, this, parameters)
-    override fun `as`(alias: Table<*>): FilmNotInStock = FilmNotInStock(alias.getQualifiedName(), this, parameters)
+    public override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
+    public override fun `as`(alias: String): FilmNotInStock = FilmNotInStock(DSL.name(alias), this, parameters)
+    public override fun `as`(alias: Name): FilmNotInStock = FilmNotInStock(alias, this, parameters)
+    public override fun `as`(alias: Table<*>): FilmNotInStock = FilmNotInStock(alias.getQualifiedName(), this, parameters)
 
     /**
      * Rename this table
      */
-    override fun rename(name: String): FilmNotInStock = FilmNotInStock(DSL.name(name), null, parameters)
+    public override fun rename(name: String): FilmNotInStock = FilmNotInStock(DSL.name(name), null, parameters)
 
     /**
      * Rename this table
      */
-    override fun rename(name: Name): FilmNotInStock = FilmNotInStock(name, null, parameters)
+    public override fun rename(name: Name): FilmNotInStock = FilmNotInStock(name, null, parameters)
 
     /**
      * Rename this table
      */
-    override fun rename(name: Table<*>): FilmNotInStock = FilmNotInStock(name.getQualifiedName(), null, parameters)
+    public override fun rename(name: Table<*>): FilmNotInStock = FilmNotInStock(name.getQualifiedName(), null, parameters)
 
     // -------------------------------------------------------------------------
     // Row1 type methods
     // -------------------------------------------------------------------------
-    override fun fieldsRow(): Row1<Int?> = super.fieldsRow() as Row1<Int?>
+    public override fun fieldsRow(): Row1<Int?> = super.fieldsRow() as Row1<Int?>
 
     /**
      * Call this table-valued function

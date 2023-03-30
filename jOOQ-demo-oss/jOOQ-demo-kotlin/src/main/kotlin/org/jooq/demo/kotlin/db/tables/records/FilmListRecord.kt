@@ -56,74 +56,74 @@ open class FilmListRecord() : TableRecordImpl<FilmListRecord>(FilmList.FILM_LIST
     // Record8 type implementation
     // -------------------------------------------------------------------------
 
-    override fun fieldsRow(): Row8<Long?, String?, String?, String?, BigDecimal?, Short?, MpaaRating?, String?> = super.fieldsRow() as Row8<Long?, String?, String?, String?, BigDecimal?, Short?, MpaaRating?, String?>
-    override fun valuesRow(): Row8<Long?, String?, String?, String?, BigDecimal?, Short?, MpaaRating?, String?> = super.valuesRow() as Row8<Long?, String?, String?, String?, BigDecimal?, Short?, MpaaRating?, String?>
-    override fun field1(): Field<Long?> = FilmList.FILM_LIST.FID
-    override fun field2(): Field<String?> = FilmList.FILM_LIST.TITLE
-    override fun field3(): Field<String?> = FilmList.FILM_LIST.DESCRIPTION
-    override fun field4(): Field<String?> = FilmList.FILM_LIST.CATEGORY
-    override fun field5(): Field<BigDecimal?> = FilmList.FILM_LIST.PRICE
-    override fun field6(): Field<Short?> = FilmList.FILM_LIST.LENGTH
-    override fun field7(): Field<MpaaRating?> = FilmList.FILM_LIST.RATING
-    override fun field8(): Field<String?> = FilmList.FILM_LIST.ACTORS
-    override fun component1(): Long? = fid
-    override fun component2(): String? = title
-    override fun component3(): String? = description
-    override fun component4(): String? = category
-    override fun component5(): BigDecimal? = price
-    override fun component6(): Short? = length
-    override fun component7(): MpaaRating? = rating
-    override fun component8(): String? = actors
-    override fun value1(): Long? = fid
-    override fun value2(): String? = title
-    override fun value3(): String? = description
-    override fun value4(): String? = category
-    override fun value5(): BigDecimal? = price
-    override fun value6(): Short? = length
-    override fun value7(): MpaaRating? = rating
-    override fun value8(): String? = actors
+    public override fun fieldsRow(): Row8<Long?, String?, String?, String?, BigDecimal?, Short?, MpaaRating?, String?> = super.fieldsRow() as Row8<Long?, String?, String?, String?, BigDecimal?, Short?, MpaaRating?, String?>
+    public override fun valuesRow(): Row8<Long?, String?, String?, String?, BigDecimal?, Short?, MpaaRating?, String?> = super.valuesRow() as Row8<Long?, String?, String?, String?, BigDecimal?, Short?, MpaaRating?, String?>
+    public override fun field1(): Field<Long?> = FilmList.FILM_LIST.FID
+    public override fun field2(): Field<String?> = FilmList.FILM_LIST.TITLE
+    public override fun field3(): Field<String?> = FilmList.FILM_LIST.DESCRIPTION
+    public override fun field4(): Field<String?> = FilmList.FILM_LIST.CATEGORY
+    public override fun field5(): Field<BigDecimal?> = FilmList.FILM_LIST.PRICE
+    public override fun field6(): Field<Short?> = FilmList.FILM_LIST.LENGTH
+    public override fun field7(): Field<MpaaRating?> = FilmList.FILM_LIST.RATING
+    public override fun field8(): Field<String?> = FilmList.FILM_LIST.ACTORS
+    public override fun component1(): Long? = fid
+    public override fun component2(): String? = title
+    public override fun component3(): String? = description
+    public override fun component4(): String? = category
+    public override fun component5(): BigDecimal? = price
+    public override fun component6(): Short? = length
+    public override fun component7(): MpaaRating? = rating
+    public override fun component8(): String? = actors
+    public override fun value1(): Long? = fid
+    public override fun value2(): String? = title
+    public override fun value3(): String? = description
+    public override fun value4(): String? = category
+    public override fun value5(): BigDecimal? = price
+    public override fun value6(): Short? = length
+    public override fun value7(): MpaaRating? = rating
+    public override fun value8(): String? = actors
 
-    override fun value1(value: Long?): FilmListRecord {
+    public override fun value1(value: Long?): FilmListRecord {
         set(0, value)
         return this
     }
 
-    override fun value2(value: String?): FilmListRecord {
+    public override fun value2(value: String?): FilmListRecord {
         set(1, value)
         return this
     }
 
-    override fun value3(value: String?): FilmListRecord {
+    public override fun value3(value: String?): FilmListRecord {
         set(2, value)
         return this
     }
 
-    override fun value4(value: String?): FilmListRecord {
+    public override fun value4(value: String?): FilmListRecord {
         set(3, value)
         return this
     }
 
-    override fun value5(value: BigDecimal?): FilmListRecord {
+    public override fun value5(value: BigDecimal?): FilmListRecord {
         set(4, value)
         return this
     }
 
-    override fun value6(value: Short?): FilmListRecord {
+    public override fun value6(value: Short?): FilmListRecord {
         set(5, value)
         return this
     }
 
-    override fun value7(value: MpaaRating?): FilmListRecord {
+    public override fun value7(value: MpaaRating?): FilmListRecord {
         set(6, value)
         return this
     }
 
-    override fun value8(value: String?): FilmListRecord {
+    public override fun value8(value: String?): FilmListRecord {
         set(7, value)
         return this
     }
 
-    override fun values(value1: Long?, value2: String?, value3: String?, value4: String?, value5: BigDecimal?, value6: Short?, value7: MpaaRating?, value8: String?): FilmListRecord {
+    public override fun values(value1: Long?, value2: String?, value3: String?, value4: String?, value5: BigDecimal?, value6: Short?, value7: MpaaRating?, value8: String?): FilmListRecord {
         this.value1(value1)
         this.value2(value2)
         this.value3(value3)

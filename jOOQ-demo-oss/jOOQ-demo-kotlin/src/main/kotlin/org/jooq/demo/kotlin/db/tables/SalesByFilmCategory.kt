@@ -68,7 +68,7 @@ open class SalesByFilmCategory(
     /**
      * The class holding records for this type
      */
-    override fun getRecordType(): Class<SalesByFilmCategoryRecord> = SalesByFilmCategoryRecord::class.java
+    public override fun getRecordType(): Class<SalesByFilmCategoryRecord> = SalesByFilmCategoryRecord::class.java
 
     /**
      * The column <code>public.sales_by_film_category.category</code>.
@@ -101,30 +101,30 @@ open class SalesByFilmCategory(
     constructor(): this(DSL.name("sales_by_film_category"), null)
 
     constructor(child: Table<out Record>, key: ForeignKey<out Record, SalesByFilmCategoryRecord>): this(Internal.createPathAlias(child, key), child, key, SALES_BY_FILM_CATEGORY, null)
-    override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
-    override fun `as`(alias: String): SalesByFilmCategory = SalesByFilmCategory(DSL.name(alias), this)
-    override fun `as`(alias: Name): SalesByFilmCategory = SalesByFilmCategory(alias, this)
-    override fun `as`(alias: Table<*>): SalesByFilmCategory = SalesByFilmCategory(alias.getQualifiedName(), this)
+    public override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
+    public override fun `as`(alias: String): SalesByFilmCategory = SalesByFilmCategory(DSL.name(alias), this)
+    public override fun `as`(alias: Name): SalesByFilmCategory = SalesByFilmCategory(alias, this)
+    public override fun `as`(alias: Table<*>): SalesByFilmCategory = SalesByFilmCategory(alias.getQualifiedName(), this)
 
     /**
      * Rename this table
      */
-    override fun rename(name: String): SalesByFilmCategory = SalesByFilmCategory(DSL.name(name), null)
+    public override fun rename(name: String): SalesByFilmCategory = SalesByFilmCategory(DSL.name(name), null)
 
     /**
      * Rename this table
      */
-    override fun rename(name: Name): SalesByFilmCategory = SalesByFilmCategory(name, null)
+    public override fun rename(name: Name): SalesByFilmCategory = SalesByFilmCategory(name, null)
 
     /**
      * Rename this table
      */
-    override fun rename(name: Table<*>): SalesByFilmCategory = SalesByFilmCategory(name.getQualifiedName(), null)
+    public override fun rename(name: Table<*>): SalesByFilmCategory = SalesByFilmCategory(name.getQualifiedName(), null)
 
     // -------------------------------------------------------------------------
     // Row2 type methods
     // -------------------------------------------------------------------------
-    override fun fieldsRow(): Row2<String?, BigDecimal?> = super.fieldsRow() as Row2<String?, BigDecimal?>
+    public override fun fieldsRow(): Row2<String?, BigDecimal?> = super.fieldsRow() as Row2<String?, BigDecimal?>
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.

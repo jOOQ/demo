@@ -68,104 +68,104 @@ open class StaffRecord() : UpdatableRecordImpl<StaffRecord>(Staff.STAFF), Record
     // Primary key information
     // -------------------------------------------------------------------------
 
-    override fun key(): Record1<Long?> = super.key() as Record1<Long?>
+    public override fun key(): Record1<Long?> = super.key() as Record1<Long?>
 
     // -------------------------------------------------------------------------
     // Record11 type implementation
     // -------------------------------------------------------------------------
 
-    override fun fieldsRow(): Row11<Long?, String?, String?, Long?, String?, Long?, Boolean?, String?, String?, LocalDateTime?, ByteArray?> = super.fieldsRow() as Row11<Long?, String?, String?, Long?, String?, Long?, Boolean?, String?, String?, LocalDateTime?, ByteArray?>
-    override fun valuesRow(): Row11<Long?, String?, String?, Long?, String?, Long?, Boolean?, String?, String?, LocalDateTime?, ByteArray?> = super.valuesRow() as Row11<Long?, String?, String?, Long?, String?, Long?, Boolean?, String?, String?, LocalDateTime?, ByteArray?>
-    override fun field1(): Field<Long?> = Staff.STAFF.STAFF_ID
-    override fun field2(): Field<String?> = Staff.STAFF.FIRST_NAME
-    override fun field3(): Field<String?> = Staff.STAFF.LAST_NAME
-    override fun field4(): Field<Long?> = Staff.STAFF.ADDRESS_ID
-    override fun field5(): Field<String?> = Staff.STAFF.EMAIL
-    override fun field6(): Field<Long?> = Staff.STAFF.STORE_ID
-    override fun field7(): Field<Boolean?> = Staff.STAFF.ACTIVE
-    override fun field8(): Field<String?> = Staff.STAFF.USERNAME
-    override fun field9(): Field<String?> = Staff.STAFF.PASSWORD
-    override fun field10(): Field<LocalDateTime?> = Staff.STAFF.LAST_UPDATE
-    override fun field11(): Field<ByteArray?> = Staff.STAFF.PICTURE
-    override fun component1(): Long? = staffId
-    override fun component2(): String? = firstName
-    override fun component3(): String? = lastName
-    override fun component4(): Long? = addressId
-    override fun component5(): String? = email
-    override fun component6(): Long? = storeId
-    override fun component7(): Boolean? = active
-    override fun component8(): String? = username
-    override fun component9(): String? = password
-    override fun component10(): LocalDateTime? = lastUpdate
-    override fun component11(): ByteArray? = picture
-    override fun value1(): Long? = staffId
-    override fun value2(): String? = firstName
-    override fun value3(): String? = lastName
-    override fun value4(): Long? = addressId
-    override fun value5(): String? = email
-    override fun value6(): Long? = storeId
-    override fun value7(): Boolean? = active
-    override fun value8(): String? = username
-    override fun value9(): String? = password
-    override fun value10(): LocalDateTime? = lastUpdate
-    override fun value11(): ByteArray? = picture
+    public override fun fieldsRow(): Row11<Long?, String?, String?, Long?, String?, Long?, Boolean?, String?, String?, LocalDateTime?, ByteArray?> = super.fieldsRow() as Row11<Long?, String?, String?, Long?, String?, Long?, Boolean?, String?, String?, LocalDateTime?, ByteArray?>
+    public override fun valuesRow(): Row11<Long?, String?, String?, Long?, String?, Long?, Boolean?, String?, String?, LocalDateTime?, ByteArray?> = super.valuesRow() as Row11<Long?, String?, String?, Long?, String?, Long?, Boolean?, String?, String?, LocalDateTime?, ByteArray?>
+    public override fun field1(): Field<Long?> = Staff.STAFF.STAFF_ID
+    public override fun field2(): Field<String?> = Staff.STAFF.FIRST_NAME
+    public override fun field3(): Field<String?> = Staff.STAFF.LAST_NAME
+    public override fun field4(): Field<Long?> = Staff.STAFF.ADDRESS_ID
+    public override fun field5(): Field<String?> = Staff.STAFF.EMAIL
+    public override fun field6(): Field<Long?> = Staff.STAFF.STORE_ID
+    public override fun field7(): Field<Boolean?> = Staff.STAFF.ACTIVE
+    public override fun field8(): Field<String?> = Staff.STAFF.USERNAME
+    public override fun field9(): Field<String?> = Staff.STAFF.PASSWORD
+    public override fun field10(): Field<LocalDateTime?> = Staff.STAFF.LAST_UPDATE
+    public override fun field11(): Field<ByteArray?> = Staff.STAFF.PICTURE
+    public override fun component1(): Long? = staffId
+    public override fun component2(): String? = firstName
+    public override fun component3(): String? = lastName
+    public override fun component4(): Long? = addressId
+    public override fun component5(): String? = email
+    public override fun component6(): Long? = storeId
+    public override fun component7(): Boolean? = active
+    public override fun component8(): String? = username
+    public override fun component9(): String? = password
+    public override fun component10(): LocalDateTime? = lastUpdate
+    public override fun component11(): ByteArray? = picture
+    public override fun value1(): Long? = staffId
+    public override fun value2(): String? = firstName
+    public override fun value3(): String? = lastName
+    public override fun value4(): Long? = addressId
+    public override fun value5(): String? = email
+    public override fun value6(): Long? = storeId
+    public override fun value7(): Boolean? = active
+    public override fun value8(): String? = username
+    public override fun value9(): String? = password
+    public override fun value10(): LocalDateTime? = lastUpdate
+    public override fun value11(): ByteArray? = picture
 
-    override fun value1(value: Long?): StaffRecord {
+    public override fun value1(value: Long?): StaffRecord {
         set(0, value)
         return this
     }
 
-    override fun value2(value: String?): StaffRecord {
+    public override fun value2(value: String?): StaffRecord {
         set(1, value)
         return this
     }
 
-    override fun value3(value: String?): StaffRecord {
+    public override fun value3(value: String?): StaffRecord {
         set(2, value)
         return this
     }
 
-    override fun value4(value: Long?): StaffRecord {
+    public override fun value4(value: Long?): StaffRecord {
         set(3, value)
         return this
     }
 
-    override fun value5(value: String?): StaffRecord {
+    public override fun value5(value: String?): StaffRecord {
         set(4, value)
         return this
     }
 
-    override fun value6(value: Long?): StaffRecord {
+    public override fun value6(value: Long?): StaffRecord {
         set(5, value)
         return this
     }
 
-    override fun value7(value: Boolean?): StaffRecord {
+    public override fun value7(value: Boolean?): StaffRecord {
         set(6, value)
         return this
     }
 
-    override fun value8(value: String?): StaffRecord {
+    public override fun value8(value: String?): StaffRecord {
         set(7, value)
         return this
     }
 
-    override fun value9(value: String?): StaffRecord {
+    public override fun value9(value: String?): StaffRecord {
         set(8, value)
         return this
     }
 
-    override fun value10(value: LocalDateTime?): StaffRecord {
+    public override fun value10(value: LocalDateTime?): StaffRecord {
         set(9, value)
         return this
     }
 
-    override fun value11(value: ByteArray?): StaffRecord {
+    public override fun value11(value: ByteArray?): StaffRecord {
         set(10, value)
         return this
     }
 
-    override fun values(value1: Long?, value2: String?, value3: String?, value4: Long?, value5: String?, value6: Long?, value7: Boolean?, value8: String?, value9: String?, value10: LocalDateTime?, value11: ByteArray?): StaffRecord {
+    public override fun values(value1: Long?, value2: String?, value3: String?, value4: Long?, value5: String?, value6: Long?, value7: Boolean?, value8: String?, value9: String?, value10: LocalDateTime?, value11: ByteArray?): StaffRecord {
         this.value1(value1)
         this.value2(value2)
         this.value3(value3)

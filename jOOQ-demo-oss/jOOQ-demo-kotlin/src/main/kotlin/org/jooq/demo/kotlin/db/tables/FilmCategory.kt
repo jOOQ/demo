@@ -63,7 +63,7 @@ open class FilmCategory(
     /**
      * The class holding records for this type
      */
-    override fun getRecordType(): Class<FilmCategoryRecord> = FilmCategoryRecord::class.java
+    public override fun getRecordType(): Class<FilmCategoryRecord> = FilmCategoryRecord::class.java
 
     /**
      * The column <code>public.film_category.film_id</code>.
@@ -99,9 +99,9 @@ open class FilmCategory(
     constructor(): this(DSL.name("film_category"), null)
 
     constructor(child: Table<out Record>, key: ForeignKey<out Record, FilmCategoryRecord>): this(Internal.createPathAlias(child, key), child, key, FILM_CATEGORY, null)
-    override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
-    override fun getPrimaryKey(): UniqueKey<FilmCategoryRecord> = FILM_CATEGORY_PKEY
-    override fun getReferences(): List<ForeignKey<FilmCategoryRecord, *>> = listOf(FILM_CATEGORY__FILM_CATEGORY_FILM_ID_FKEY, FILM_CATEGORY__FILM_CATEGORY_CATEGORY_ID_FKEY)
+    public override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
+    public override fun getPrimaryKey(): UniqueKey<FilmCategoryRecord> = FILM_CATEGORY_PKEY
+    public override fun getReferences(): List<ForeignKey<FilmCategoryRecord, *>> = listOf(FILM_CATEGORY__FILM_CATEGORY_FILM_ID_FKEY, FILM_CATEGORY__FILM_CATEGORY_CATEGORY_ID_FKEY)
 
     private lateinit var _film: Film
     private lateinit var _category: Category
@@ -131,29 +131,29 @@ open class FilmCategory(
 
     val category: Category
         get(): Category = category()
-    override fun `as`(alias: String): FilmCategory = FilmCategory(DSL.name(alias), this)
-    override fun `as`(alias: Name): FilmCategory = FilmCategory(alias, this)
-    override fun `as`(alias: Table<*>): FilmCategory = FilmCategory(alias.getQualifiedName(), this)
+    public override fun `as`(alias: String): FilmCategory = FilmCategory(DSL.name(alias), this)
+    public override fun `as`(alias: Name): FilmCategory = FilmCategory(alias, this)
+    public override fun `as`(alias: Table<*>): FilmCategory = FilmCategory(alias.getQualifiedName(), this)
 
     /**
      * Rename this table
      */
-    override fun rename(name: String): FilmCategory = FilmCategory(DSL.name(name), null)
+    public override fun rename(name: String): FilmCategory = FilmCategory(DSL.name(name), null)
 
     /**
      * Rename this table
      */
-    override fun rename(name: Name): FilmCategory = FilmCategory(name, null)
+    public override fun rename(name: Name): FilmCategory = FilmCategory(name, null)
 
     /**
      * Rename this table
      */
-    override fun rename(name: Table<*>): FilmCategory = FilmCategory(name.getQualifiedName(), null)
+    public override fun rename(name: Table<*>): FilmCategory = FilmCategory(name.getQualifiedName(), null)
 
     // -------------------------------------------------------------------------
     // Row3 type methods
     // -------------------------------------------------------------------------
-    override fun fieldsRow(): Row3<Long?, Long?, LocalDateTime?> = super.fieldsRow() as Row3<Long?, Long?, LocalDateTime?>
+    public override fun fieldsRow(): Row3<Long?, Long?, LocalDateTime?> = super.fieldsRow() as Row3<Long?, Long?, LocalDateTime?>
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.

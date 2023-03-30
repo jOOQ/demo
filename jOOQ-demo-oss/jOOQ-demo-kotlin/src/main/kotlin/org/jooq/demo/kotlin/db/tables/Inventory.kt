@@ -66,7 +66,7 @@ open class Inventory(
     /**
      * The class holding records for this type
      */
-    override fun getRecordType(): Class<InventoryRecord> = InventoryRecord::class.java
+    public override fun getRecordType(): Class<InventoryRecord> = InventoryRecord::class.java
 
     /**
      * The column <code>public.inventory.inventory_id</code>.
@@ -107,11 +107,11 @@ open class Inventory(
     constructor(): this(DSL.name("inventory"), null)
 
     constructor(child: Table<out Record>, key: ForeignKey<out Record, InventoryRecord>): this(Internal.createPathAlias(child, key), child, key, INVENTORY, null)
-    override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
-    override fun getIndexes(): List<Index> = listOf(IDX_STORE_ID_FILM_ID)
-    override fun getIdentity(): Identity<InventoryRecord, Long?> = super.getIdentity() as Identity<InventoryRecord, Long?>
-    override fun getPrimaryKey(): UniqueKey<InventoryRecord> = INVENTORY_PKEY
-    override fun getReferences(): List<ForeignKey<InventoryRecord, *>> = listOf(INVENTORY__INVENTORY_FILM_ID_FKEY, INVENTORY__INVENTORY_STORE_ID_FKEY)
+    public override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
+    public override fun getIndexes(): List<Index> = listOf(IDX_STORE_ID_FILM_ID)
+    public override fun getIdentity(): Identity<InventoryRecord, Long?> = super.getIdentity() as Identity<InventoryRecord, Long?>
+    public override fun getPrimaryKey(): UniqueKey<InventoryRecord> = INVENTORY_PKEY
+    public override fun getReferences(): List<ForeignKey<InventoryRecord, *>> = listOf(INVENTORY__INVENTORY_FILM_ID_FKEY, INVENTORY__INVENTORY_STORE_ID_FKEY)
 
     private lateinit var _film: Film
     private lateinit var _store: Store
@@ -141,29 +141,29 @@ open class Inventory(
 
     val store: Store
         get(): Store = store()
-    override fun `as`(alias: String): Inventory = Inventory(DSL.name(alias), this)
-    override fun `as`(alias: Name): Inventory = Inventory(alias, this)
-    override fun `as`(alias: Table<*>): Inventory = Inventory(alias.getQualifiedName(), this)
+    public override fun `as`(alias: String): Inventory = Inventory(DSL.name(alias), this)
+    public override fun `as`(alias: Name): Inventory = Inventory(alias, this)
+    public override fun `as`(alias: Table<*>): Inventory = Inventory(alias.getQualifiedName(), this)
 
     /**
      * Rename this table
      */
-    override fun rename(name: String): Inventory = Inventory(DSL.name(name), null)
+    public override fun rename(name: String): Inventory = Inventory(DSL.name(name), null)
 
     /**
      * Rename this table
      */
-    override fun rename(name: Name): Inventory = Inventory(name, null)
+    public override fun rename(name: Name): Inventory = Inventory(name, null)
 
     /**
      * Rename this table
      */
-    override fun rename(name: Table<*>): Inventory = Inventory(name.getQualifiedName(), null)
+    public override fun rename(name: Table<*>): Inventory = Inventory(name.getQualifiedName(), null)
 
     // -------------------------------------------------------------------------
     // Row4 type methods
     // -------------------------------------------------------------------------
-    override fun fieldsRow(): Row4<Long?, Long?, Long?, LocalDateTime?> = super.fieldsRow() as Row4<Long?, Long?, Long?, LocalDateTime?>
+    public override fun fieldsRow(): Row4<Long?, Long?, Long?, LocalDateTime?> = super.fieldsRow() as Row4<Long?, Long?, Long?, LocalDateTime?>
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.

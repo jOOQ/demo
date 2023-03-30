@@ -65,96 +65,96 @@ open class CustomerRecord() : UpdatableRecordImpl<CustomerRecord>(Customer.CUSTO
     // Primary key information
     // -------------------------------------------------------------------------
 
-    override fun key(): Record1<Long?> = super.key() as Record1<Long?>
+    public override fun key(): Record1<Long?> = super.key() as Record1<Long?>
 
     // -------------------------------------------------------------------------
     // Record10 type implementation
     // -------------------------------------------------------------------------
 
-    override fun fieldsRow(): Row10<Long?, Long?, String?, String?, String?, Long?, Boolean?, LocalDate?, LocalDateTime?, Int?> = super.fieldsRow() as Row10<Long?, Long?, String?, String?, String?, Long?, Boolean?, LocalDate?, LocalDateTime?, Int?>
-    override fun valuesRow(): Row10<Long?, Long?, String?, String?, String?, Long?, Boolean?, LocalDate?, LocalDateTime?, Int?> = super.valuesRow() as Row10<Long?, Long?, String?, String?, String?, Long?, Boolean?, LocalDate?, LocalDateTime?, Int?>
-    override fun field1(): Field<Long?> = Customer.CUSTOMER.CUSTOMER_ID
-    override fun field2(): Field<Long?> = Customer.CUSTOMER.STORE_ID
-    override fun field3(): Field<String?> = Customer.CUSTOMER.FIRST_NAME
-    override fun field4(): Field<String?> = Customer.CUSTOMER.LAST_NAME
-    override fun field5(): Field<String?> = Customer.CUSTOMER.EMAIL
-    override fun field6(): Field<Long?> = Customer.CUSTOMER.ADDRESS_ID
-    override fun field7(): Field<Boolean?> = Customer.CUSTOMER.ACTIVEBOOL
-    override fun field8(): Field<LocalDate?> = Customer.CUSTOMER.CREATE_DATE
-    override fun field9(): Field<LocalDateTime?> = Customer.CUSTOMER.LAST_UPDATE
-    override fun field10(): Field<Int?> = Customer.CUSTOMER.ACTIVE
-    override fun component1(): Long? = customerId
-    override fun component2(): Long? = storeId
-    override fun component3(): String? = firstName
-    override fun component4(): String? = lastName
-    override fun component5(): String? = email
-    override fun component6(): Long? = addressId
-    override fun component7(): Boolean? = activebool
-    override fun component8(): LocalDate? = createDate
-    override fun component9(): LocalDateTime? = lastUpdate
-    override fun component10(): Int? = active
-    override fun value1(): Long? = customerId
-    override fun value2(): Long? = storeId
-    override fun value3(): String? = firstName
-    override fun value4(): String? = lastName
-    override fun value5(): String? = email
-    override fun value6(): Long? = addressId
-    override fun value7(): Boolean? = activebool
-    override fun value8(): LocalDate? = createDate
-    override fun value9(): LocalDateTime? = lastUpdate
-    override fun value10(): Int? = active
+    public override fun fieldsRow(): Row10<Long?, Long?, String?, String?, String?, Long?, Boolean?, LocalDate?, LocalDateTime?, Int?> = super.fieldsRow() as Row10<Long?, Long?, String?, String?, String?, Long?, Boolean?, LocalDate?, LocalDateTime?, Int?>
+    public override fun valuesRow(): Row10<Long?, Long?, String?, String?, String?, Long?, Boolean?, LocalDate?, LocalDateTime?, Int?> = super.valuesRow() as Row10<Long?, Long?, String?, String?, String?, Long?, Boolean?, LocalDate?, LocalDateTime?, Int?>
+    public override fun field1(): Field<Long?> = Customer.CUSTOMER.CUSTOMER_ID
+    public override fun field2(): Field<Long?> = Customer.CUSTOMER.STORE_ID
+    public override fun field3(): Field<String?> = Customer.CUSTOMER.FIRST_NAME
+    public override fun field4(): Field<String?> = Customer.CUSTOMER.LAST_NAME
+    public override fun field5(): Field<String?> = Customer.CUSTOMER.EMAIL
+    public override fun field6(): Field<Long?> = Customer.CUSTOMER.ADDRESS_ID
+    public override fun field7(): Field<Boolean?> = Customer.CUSTOMER.ACTIVEBOOL
+    public override fun field8(): Field<LocalDate?> = Customer.CUSTOMER.CREATE_DATE
+    public override fun field9(): Field<LocalDateTime?> = Customer.CUSTOMER.LAST_UPDATE
+    public override fun field10(): Field<Int?> = Customer.CUSTOMER.ACTIVE
+    public override fun component1(): Long? = customerId
+    public override fun component2(): Long? = storeId
+    public override fun component3(): String? = firstName
+    public override fun component4(): String? = lastName
+    public override fun component5(): String? = email
+    public override fun component6(): Long? = addressId
+    public override fun component7(): Boolean? = activebool
+    public override fun component8(): LocalDate? = createDate
+    public override fun component9(): LocalDateTime? = lastUpdate
+    public override fun component10(): Int? = active
+    public override fun value1(): Long? = customerId
+    public override fun value2(): Long? = storeId
+    public override fun value3(): String? = firstName
+    public override fun value4(): String? = lastName
+    public override fun value5(): String? = email
+    public override fun value6(): Long? = addressId
+    public override fun value7(): Boolean? = activebool
+    public override fun value8(): LocalDate? = createDate
+    public override fun value9(): LocalDateTime? = lastUpdate
+    public override fun value10(): Int? = active
 
-    override fun value1(value: Long?): CustomerRecord {
+    public override fun value1(value: Long?): CustomerRecord {
         set(0, value)
         return this
     }
 
-    override fun value2(value: Long?): CustomerRecord {
+    public override fun value2(value: Long?): CustomerRecord {
         set(1, value)
         return this
     }
 
-    override fun value3(value: String?): CustomerRecord {
+    public override fun value3(value: String?): CustomerRecord {
         set(2, value)
         return this
     }
 
-    override fun value4(value: String?): CustomerRecord {
+    public override fun value4(value: String?): CustomerRecord {
         set(3, value)
         return this
     }
 
-    override fun value5(value: String?): CustomerRecord {
+    public override fun value5(value: String?): CustomerRecord {
         set(4, value)
         return this
     }
 
-    override fun value6(value: Long?): CustomerRecord {
+    public override fun value6(value: Long?): CustomerRecord {
         set(5, value)
         return this
     }
 
-    override fun value7(value: Boolean?): CustomerRecord {
+    public override fun value7(value: Boolean?): CustomerRecord {
         set(6, value)
         return this
     }
 
-    override fun value8(value: LocalDate?): CustomerRecord {
+    public override fun value8(value: LocalDate?): CustomerRecord {
         set(7, value)
         return this
     }
 
-    override fun value9(value: LocalDateTime?): CustomerRecord {
+    public override fun value9(value: LocalDateTime?): CustomerRecord {
         set(8, value)
         return this
     }
 
-    override fun value10(value: Int?): CustomerRecord {
+    public override fun value10(value: Int?): CustomerRecord {
         set(9, value)
         return this
     }
 
-    override fun values(value1: Long?, value2: Long?, value3: String?, value4: String?, value5: String?, value6: Long?, value7: Boolean?, value8: LocalDate?, value9: LocalDateTime?, value10: Int?): CustomerRecord {
+    public override fun values(value1: Long?, value2: Long?, value3: String?, value4: String?, value5: String?, value6: Long?, value7: Boolean?, value8: LocalDate?, value9: LocalDateTime?, value10: Int?): CustomerRecord {
         this.value1(value1)
         this.value2(value2)
         this.value3(value3)

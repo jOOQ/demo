@@ -60,7 +60,7 @@ open class Country(
     /**
      * The class holding records for this type
      */
-    override fun getRecordType(): Class<CountryRecord> = CountryRecord::class.java
+    public override fun getRecordType(): Class<CountryRecord> = CountryRecord::class.java
 
     /**
      * The column <code>public.country.country_id</code>.
@@ -96,32 +96,32 @@ open class Country(
     constructor(): this(DSL.name("country"), null)
 
     constructor(child: Table<out Record>, key: ForeignKey<out Record, CountryRecord>): this(Internal.createPathAlias(child, key), child, key, COUNTRY, null)
-    override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
-    override fun getIdentity(): Identity<CountryRecord, Long?> = super.getIdentity() as Identity<CountryRecord, Long?>
-    override fun getPrimaryKey(): UniqueKey<CountryRecord> = COUNTRY_PKEY
-    override fun `as`(alias: String): Country = Country(DSL.name(alias), this)
-    override fun `as`(alias: Name): Country = Country(alias, this)
-    override fun `as`(alias: Table<*>): Country = Country(alias.getQualifiedName(), this)
+    public override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
+    public override fun getIdentity(): Identity<CountryRecord, Long?> = super.getIdentity() as Identity<CountryRecord, Long?>
+    public override fun getPrimaryKey(): UniqueKey<CountryRecord> = COUNTRY_PKEY
+    public override fun `as`(alias: String): Country = Country(DSL.name(alias), this)
+    public override fun `as`(alias: Name): Country = Country(alias, this)
+    public override fun `as`(alias: Table<*>): Country = Country(alias.getQualifiedName(), this)
 
     /**
      * Rename this table
      */
-    override fun rename(name: String): Country = Country(DSL.name(name), null)
+    public override fun rename(name: String): Country = Country(DSL.name(name), null)
 
     /**
      * Rename this table
      */
-    override fun rename(name: Name): Country = Country(name, null)
+    public override fun rename(name: Name): Country = Country(name, null)
 
     /**
      * Rename this table
      */
-    override fun rename(name: Table<*>): Country = Country(name.getQualifiedName(), null)
+    public override fun rename(name: Table<*>): Country = Country(name.getQualifiedName(), null)
 
     // -------------------------------------------------------------------------
     // Row3 type methods
     // -------------------------------------------------------------------------
-    override fun fieldsRow(): Row3<Long?, String?, LocalDateTime?> = super.fieldsRow() as Row3<Long?, String?, LocalDateTime?>
+    public override fun fieldsRow(): Row3<Long?, String?, LocalDateTime?> = super.fieldsRow() as Row3<Long?, String?, LocalDateTime?>
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.

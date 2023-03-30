@@ -25,18 +25,18 @@ open class FilmInStockRecord() : TableRecordImpl<FilmInStockRecord>(FilmInStock.
     // Record1 type implementation
     // -------------------------------------------------------------------------
 
-    override fun fieldsRow(): Row1<Int?> = super.fieldsRow() as Row1<Int?>
-    override fun valuesRow(): Row1<Int?> = super.valuesRow() as Row1<Int?>
-    override fun field1(): Field<Int?> = FilmInStock.FILM_IN_STOCK.P_FILM_COUNT
-    override fun component1(): Int? = pFilmCount
-    override fun value1(): Int? = pFilmCount
+    public override fun fieldsRow(): Row1<Int?> = super.fieldsRow() as Row1<Int?>
+    public override fun valuesRow(): Row1<Int?> = super.valuesRow() as Row1<Int?>
+    public override fun field1(): Field<Int?> = FilmInStock.FILM_IN_STOCK.P_FILM_COUNT
+    public override fun component1(): Int? = pFilmCount
+    public override fun value1(): Int? = pFilmCount
 
-    override fun value1(value: Int?): FilmInStockRecord {
+    public override fun value1(value: Int?): FilmInStockRecord {
         set(0, value)
         return this
     }
 
-    override fun values(value1: Int?): FilmInStockRecord {
+    public override fun values(value1: Int?): FilmInStockRecord {
         this.value1(value1)
         return this
     }

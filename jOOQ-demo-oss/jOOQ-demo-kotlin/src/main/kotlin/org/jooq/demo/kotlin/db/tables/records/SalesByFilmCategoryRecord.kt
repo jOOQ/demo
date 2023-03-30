@@ -31,26 +31,26 @@ open class SalesByFilmCategoryRecord() : TableRecordImpl<SalesByFilmCategoryReco
     // Record2 type implementation
     // -------------------------------------------------------------------------
 
-    override fun fieldsRow(): Row2<String?, BigDecimal?> = super.fieldsRow() as Row2<String?, BigDecimal?>
-    override fun valuesRow(): Row2<String?, BigDecimal?> = super.valuesRow() as Row2<String?, BigDecimal?>
-    override fun field1(): Field<String?> = SalesByFilmCategory.SALES_BY_FILM_CATEGORY.CATEGORY
-    override fun field2(): Field<BigDecimal?> = SalesByFilmCategory.SALES_BY_FILM_CATEGORY.TOTAL_SALES
-    override fun component1(): String? = category
-    override fun component2(): BigDecimal? = totalSales
-    override fun value1(): String? = category
-    override fun value2(): BigDecimal? = totalSales
+    public override fun fieldsRow(): Row2<String?, BigDecimal?> = super.fieldsRow() as Row2<String?, BigDecimal?>
+    public override fun valuesRow(): Row2<String?, BigDecimal?> = super.valuesRow() as Row2<String?, BigDecimal?>
+    public override fun field1(): Field<String?> = SalesByFilmCategory.SALES_BY_FILM_CATEGORY.CATEGORY
+    public override fun field2(): Field<BigDecimal?> = SalesByFilmCategory.SALES_BY_FILM_CATEGORY.TOTAL_SALES
+    public override fun component1(): String? = category
+    public override fun component2(): BigDecimal? = totalSales
+    public override fun value1(): String? = category
+    public override fun value2(): BigDecimal? = totalSales
 
-    override fun value1(value: String?): SalesByFilmCategoryRecord {
+    public override fun value1(value: String?): SalesByFilmCategoryRecord {
         set(0, value)
         return this
     }
 
-    override fun value2(value: BigDecimal?): SalesByFilmCategoryRecord {
+    public override fun value2(value: BigDecimal?): SalesByFilmCategoryRecord {
         set(1, value)
         return this
     }
 
-    override fun values(value1: String?, value2: BigDecimal?): SalesByFilmCategoryRecord {
+    public override fun values(value1: String?, value2: BigDecimal?): SalesByFilmCategoryRecord {
         this.value1(value1)
         this.value2(value2)
         return this

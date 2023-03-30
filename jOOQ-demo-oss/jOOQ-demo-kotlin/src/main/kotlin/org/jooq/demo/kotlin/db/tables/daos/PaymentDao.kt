@@ -26,7 +26,7 @@ open class PaymentDao(configuration: Configuration?) : DAOImpl<PaymentRecord, or
      */
     constructor(): this(null)
 
-    override fun getId(o: org.jooq.demo.kotlin.db.tables.pojos.Payment): Long? = o.paymentId
+    public override fun getId(o: org.jooq.demo.kotlin.db.tables.pojos.Payment): Long? = o.paymentId
 
     /**
      * Fetch records that have <code>payment_id BETWEEN lowerInclusive AND

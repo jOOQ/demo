@@ -25,7 +25,7 @@ open class CategoryDao(configuration: Configuration?) : DAOImpl<CategoryRecord, 
      */
     constructor(): this(null)
 
-    override fun getId(o: org.jooq.demo.kotlin.db.tables.pojos.Category): Long? = o.categoryId
+    public override fun getId(o: org.jooq.demo.kotlin.db.tables.pojos.Category): Long? = o.categoryId
 
     /**
      * Fetch records that have <code>category_id BETWEEN lowerInclusive AND

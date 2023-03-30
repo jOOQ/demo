@@ -40,48 +40,48 @@ open class CityRecord() : UpdatableRecordImpl<CityRecord>(City.CITY), Record4<Lo
     // Primary key information
     // -------------------------------------------------------------------------
 
-    override fun key(): Record1<Long?> = super.key() as Record1<Long?>
+    public override fun key(): Record1<Long?> = super.key() as Record1<Long?>
 
     // -------------------------------------------------------------------------
     // Record4 type implementation
     // -------------------------------------------------------------------------
 
-    override fun fieldsRow(): Row4<Long?, String?, Long?, LocalDateTime?> = super.fieldsRow() as Row4<Long?, String?, Long?, LocalDateTime?>
-    override fun valuesRow(): Row4<Long?, String?, Long?, LocalDateTime?> = super.valuesRow() as Row4<Long?, String?, Long?, LocalDateTime?>
-    override fun field1(): Field<Long?> = City.CITY.CITY_ID
-    override fun field2(): Field<String?> = City.CITY.CITY_
-    override fun field3(): Field<Long?> = City.CITY.COUNTRY_ID
-    override fun field4(): Field<LocalDateTime?> = City.CITY.LAST_UPDATE
-    override fun component1(): Long? = cityId
-    override fun component2(): String? = city
-    override fun component3(): Long? = countryId
-    override fun component4(): LocalDateTime? = lastUpdate
-    override fun value1(): Long? = cityId
-    override fun value2(): String? = city
-    override fun value3(): Long? = countryId
-    override fun value4(): LocalDateTime? = lastUpdate
+    public override fun fieldsRow(): Row4<Long?, String?, Long?, LocalDateTime?> = super.fieldsRow() as Row4<Long?, String?, Long?, LocalDateTime?>
+    public override fun valuesRow(): Row4<Long?, String?, Long?, LocalDateTime?> = super.valuesRow() as Row4<Long?, String?, Long?, LocalDateTime?>
+    public override fun field1(): Field<Long?> = City.CITY.CITY_ID
+    public override fun field2(): Field<String?> = City.CITY.CITY_
+    public override fun field3(): Field<Long?> = City.CITY.COUNTRY_ID
+    public override fun field4(): Field<LocalDateTime?> = City.CITY.LAST_UPDATE
+    public override fun component1(): Long? = cityId
+    public override fun component2(): String? = city
+    public override fun component3(): Long? = countryId
+    public override fun component4(): LocalDateTime? = lastUpdate
+    public override fun value1(): Long? = cityId
+    public override fun value2(): String? = city
+    public override fun value3(): Long? = countryId
+    public override fun value4(): LocalDateTime? = lastUpdate
 
-    override fun value1(value: Long?): CityRecord {
+    public override fun value1(value: Long?): CityRecord {
         set(0, value)
         return this
     }
 
-    override fun value2(value: String?): CityRecord {
+    public override fun value2(value: String?): CityRecord {
         set(1, value)
         return this
     }
 
-    override fun value3(value: Long?): CityRecord {
+    public override fun value3(value: Long?): CityRecord {
         set(2, value)
         return this
     }
 
-    override fun value4(value: LocalDateTime?): CityRecord {
+    public override fun value4(value: LocalDateTime?): CityRecord {
         set(3, value)
         return this
     }
 
-    override fun values(value1: Long?, value2: String?, value3: Long?, value4: LocalDateTime?): CityRecord {
+    public override fun values(value1: Long?, value2: String?, value3: Long?, value4: LocalDateTime?): CityRecord {
         this.value1(value1)
         this.value2(value2)
         this.value3(value3)

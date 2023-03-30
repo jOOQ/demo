@@ -36,40 +36,40 @@ open class FilmActorRecord() : UpdatableRecordImpl<FilmActorRecord>(FilmActor.FI
     // Primary key information
     // -------------------------------------------------------------------------
 
-    override fun key(): Record2<Long?, Long?> = super.key() as Record2<Long?, Long?>
+    public override fun key(): Record2<Long?, Long?> = super.key() as Record2<Long?, Long?>
 
     // -------------------------------------------------------------------------
     // Record3 type implementation
     // -------------------------------------------------------------------------
 
-    override fun fieldsRow(): Row3<Long?, Long?, LocalDateTime?> = super.fieldsRow() as Row3<Long?, Long?, LocalDateTime?>
-    override fun valuesRow(): Row3<Long?, Long?, LocalDateTime?> = super.valuesRow() as Row3<Long?, Long?, LocalDateTime?>
-    override fun field1(): Field<Long?> = FilmActor.FILM_ACTOR.ACTOR_ID
-    override fun field2(): Field<Long?> = FilmActor.FILM_ACTOR.FILM_ID
-    override fun field3(): Field<LocalDateTime?> = FilmActor.FILM_ACTOR.LAST_UPDATE
-    override fun component1(): Long? = actorId
-    override fun component2(): Long? = filmId
-    override fun component3(): LocalDateTime? = lastUpdate
-    override fun value1(): Long? = actorId
-    override fun value2(): Long? = filmId
-    override fun value3(): LocalDateTime? = lastUpdate
+    public override fun fieldsRow(): Row3<Long?, Long?, LocalDateTime?> = super.fieldsRow() as Row3<Long?, Long?, LocalDateTime?>
+    public override fun valuesRow(): Row3<Long?, Long?, LocalDateTime?> = super.valuesRow() as Row3<Long?, Long?, LocalDateTime?>
+    public override fun field1(): Field<Long?> = FilmActor.FILM_ACTOR.ACTOR_ID
+    public override fun field2(): Field<Long?> = FilmActor.FILM_ACTOR.FILM_ID
+    public override fun field3(): Field<LocalDateTime?> = FilmActor.FILM_ACTOR.LAST_UPDATE
+    public override fun component1(): Long? = actorId
+    public override fun component2(): Long? = filmId
+    public override fun component3(): LocalDateTime? = lastUpdate
+    public override fun value1(): Long? = actorId
+    public override fun value2(): Long? = filmId
+    public override fun value3(): LocalDateTime? = lastUpdate
 
-    override fun value1(value: Long?): FilmActorRecord {
+    public override fun value1(value: Long?): FilmActorRecord {
         set(0, value)
         return this
     }
 
-    override fun value2(value: Long?): FilmActorRecord {
+    public override fun value2(value: Long?): FilmActorRecord {
         set(1, value)
         return this
     }
 
-    override fun value3(value: LocalDateTime?): FilmActorRecord {
+    public override fun value3(value: LocalDateTime?): FilmActorRecord {
         set(2, value)
         return this
     }
 
-    override fun values(value1: Long?, value2: Long?, value3: LocalDateTime?): FilmActorRecord {
+    public override fun values(value1: Long?, value2: Long?, value3: LocalDateTime?): FilmActorRecord {
         this.value1(value1)
         this.value2(value2)
         this.value3(value3)

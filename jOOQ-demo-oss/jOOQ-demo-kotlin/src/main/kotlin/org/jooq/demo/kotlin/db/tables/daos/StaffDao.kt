@@ -25,7 +25,7 @@ open class StaffDao(configuration: Configuration?) : DAOImpl<StaffRecord, org.jo
      */
     constructor(): this(null)
 
-    override fun getId(o: org.jooq.demo.kotlin.db.tables.pojos.Staff): Long? = o.staffId
+    public override fun getId(o: org.jooq.demo.kotlin.db.tables.pojos.Staff): Long? = o.staffId
 
     /**
      * Fetch records that have <code>staff_id BETWEEN lowerInclusive AND

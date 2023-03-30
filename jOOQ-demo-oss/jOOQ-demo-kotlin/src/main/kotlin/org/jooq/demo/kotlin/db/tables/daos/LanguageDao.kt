@@ -25,7 +25,7 @@ open class LanguageDao(configuration: Configuration?) : DAOImpl<LanguageRecord, 
      */
     constructor(): this(null)
 
-    override fun getId(o: org.jooq.demo.kotlin.db.tables.pojos.Language): Long? = o.languageId
+    public override fun getId(o: org.jooq.demo.kotlin.db.tables.pojos.Language): Long? = o.languageId
 
     /**
      * Fetch records that have <code>language_id BETWEEN lowerInclusive AND

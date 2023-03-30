@@ -69,7 +69,7 @@ open class Customer(
     /**
      * The class holding records for this type
      */
-    override fun getRecordType(): Class<CustomerRecord> = CustomerRecord::class.java
+    public override fun getRecordType(): Class<CustomerRecord> = CustomerRecord::class.java
 
     /**
      * The column <code>public.customer.customer_id</code>.
@@ -140,11 +140,11 @@ open class Customer(
     constructor(): this(DSL.name("customer"), null)
 
     constructor(child: Table<out Record>, key: ForeignKey<out Record, CustomerRecord>): this(Internal.createPathAlias(child, key), child, key, CUSTOMER, null)
-    override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
-    override fun getIndexes(): List<Index> = listOf(IDX_FK_ADDRESS_ID, IDX_FK_STORE_ID, IDX_LAST_NAME)
-    override fun getIdentity(): Identity<CustomerRecord, Long?> = super.getIdentity() as Identity<CustomerRecord, Long?>
-    override fun getPrimaryKey(): UniqueKey<CustomerRecord> = CUSTOMER_PKEY
-    override fun getReferences(): List<ForeignKey<CustomerRecord, *>> = listOf(CUSTOMER__CUSTOMER_STORE_ID_FKEY, CUSTOMER__CUSTOMER_ADDRESS_ID_FKEY)
+    public override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
+    public override fun getIndexes(): List<Index> = listOf(IDX_FK_ADDRESS_ID, IDX_FK_STORE_ID, IDX_LAST_NAME)
+    public override fun getIdentity(): Identity<CustomerRecord, Long?> = super.getIdentity() as Identity<CustomerRecord, Long?>
+    public override fun getPrimaryKey(): UniqueKey<CustomerRecord> = CUSTOMER_PKEY
+    public override fun getReferences(): List<ForeignKey<CustomerRecord, *>> = listOf(CUSTOMER__CUSTOMER_STORE_ID_FKEY, CUSTOMER__CUSTOMER_ADDRESS_ID_FKEY)
 
     private lateinit var _store: Store
     private lateinit var _address: Address
@@ -174,29 +174,29 @@ open class Customer(
 
     val address: Address
         get(): Address = address()
-    override fun `as`(alias: String): Customer = Customer(DSL.name(alias), this)
-    override fun `as`(alias: Name): Customer = Customer(alias, this)
-    override fun `as`(alias: Table<*>): Customer = Customer(alias.getQualifiedName(), this)
+    public override fun `as`(alias: String): Customer = Customer(DSL.name(alias), this)
+    public override fun `as`(alias: Name): Customer = Customer(alias, this)
+    public override fun `as`(alias: Table<*>): Customer = Customer(alias.getQualifiedName(), this)
 
     /**
      * Rename this table
      */
-    override fun rename(name: String): Customer = Customer(DSL.name(name), null)
+    public override fun rename(name: String): Customer = Customer(DSL.name(name), null)
 
     /**
      * Rename this table
      */
-    override fun rename(name: Name): Customer = Customer(name, null)
+    public override fun rename(name: Name): Customer = Customer(name, null)
 
     /**
      * Rename this table
      */
-    override fun rename(name: Table<*>): Customer = Customer(name.getQualifiedName(), null)
+    public override fun rename(name: Table<*>): Customer = Customer(name.getQualifiedName(), null)
 
     // -------------------------------------------------------------------------
     // Row10 type methods
     // -------------------------------------------------------------------------
-    override fun fieldsRow(): Row10<Long?, Long?, String?, String?, String?, Long?, Boolean?, LocalDate?, LocalDateTime?, Int?> = super.fieldsRow() as Row10<Long?, Long?, String?, String?, String?, Long?, Boolean?, LocalDate?, LocalDateTime?, Int?>
+    public override fun fieldsRow(): Row10<Long?, Long?, String?, String?, String?, Long?, Boolean?, LocalDate?, LocalDateTime?, Int?> = super.fieldsRow() as Row10<Long?, Long?, String?, String?, String?, Long?, Boolean?, LocalDate?, LocalDateTime?, Int?>
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.

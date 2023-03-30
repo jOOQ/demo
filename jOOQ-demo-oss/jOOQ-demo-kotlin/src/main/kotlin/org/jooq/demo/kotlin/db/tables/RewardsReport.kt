@@ -59,7 +59,7 @@ open class RewardsReport(
     /**
      * The class holding records for this type
      */
-    override fun getRecordType(): Class<CustomerRecord> = CustomerRecord::class.java
+    public override fun getRecordType(): Class<CustomerRecord> = CustomerRecord::class.java
 
     /**
      * The column <code>public.rewards_report.customer_id</code>.
@@ -131,31 +131,31 @@ open class RewardsReport(
      * Create a <code>public.rewards_report</code> table reference
      */
     constructor(): this(DSL.name("rewards_report"), null)
-    override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
-    override fun getIdentity(): Identity<CustomerRecord, Long?> = super.getIdentity() as Identity<CustomerRecord, Long?>
-    override fun `as`(alias: String): RewardsReport = RewardsReport(DSL.name(alias), this, parameters)
-    override fun `as`(alias: Name): RewardsReport = RewardsReport(alias, this, parameters)
-    override fun `as`(alias: Table<*>): RewardsReport = RewardsReport(alias.getQualifiedName(), this, parameters)
+    public override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
+    public override fun getIdentity(): Identity<CustomerRecord, Long?> = super.getIdentity() as Identity<CustomerRecord, Long?>
+    public override fun `as`(alias: String): RewardsReport = RewardsReport(DSL.name(alias), this, parameters)
+    public override fun `as`(alias: Name): RewardsReport = RewardsReport(alias, this, parameters)
+    public override fun `as`(alias: Table<*>): RewardsReport = RewardsReport(alias.getQualifiedName(), this, parameters)
 
     /**
      * Rename this table
      */
-    override fun rename(name: String): RewardsReport = RewardsReport(DSL.name(name), null, parameters)
+    public override fun rename(name: String): RewardsReport = RewardsReport(DSL.name(name), null, parameters)
 
     /**
      * Rename this table
      */
-    override fun rename(name: Name): RewardsReport = RewardsReport(name, null, parameters)
+    public override fun rename(name: Name): RewardsReport = RewardsReport(name, null, parameters)
 
     /**
      * Rename this table
      */
-    override fun rename(name: Table<*>): RewardsReport = RewardsReport(name.getQualifiedName(), null, parameters)
+    public override fun rename(name: Table<*>): RewardsReport = RewardsReport(name.getQualifiedName(), null, parameters)
 
     // -------------------------------------------------------------------------
     // Row10 type methods
     // -------------------------------------------------------------------------
-    override fun fieldsRow(): Row10<Long?, Long?, String?, String?, String?, Long?, Boolean?, LocalDate?, LocalDateTime?, Int?> = super.fieldsRow() as Row10<Long?, Long?, String?, String?, String?, Long?, Boolean?, LocalDate?, LocalDateTime?, Int?>
+    public override fun fieldsRow(): Row10<Long?, Long?, String?, String?, String?, Long?, Boolean?, LocalDate?, LocalDateTime?, Int?> = super.fieldsRow() as Row10<Long?, Long?, String?, String?, String?, Long?, Boolean?, LocalDate?, LocalDateTime?, Int?>
 
     /**
      * Call this table-valued function

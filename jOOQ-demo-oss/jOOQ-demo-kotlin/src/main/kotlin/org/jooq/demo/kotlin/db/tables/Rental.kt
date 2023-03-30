@@ -68,7 +68,7 @@ open class Rental(
     /**
      * The class holding records for this type
      */
-    override fun getRecordType(): Class<RentalRecord> = RentalRecord::class.java
+    public override fun getRecordType(): Class<RentalRecord> = RentalRecord::class.java
 
     /**
      * The column <code>public.rental.rental_id</code>.
@@ -124,11 +124,11 @@ open class Rental(
     constructor(): this(DSL.name("rental"), null)
 
     constructor(child: Table<out Record>, key: ForeignKey<out Record, RentalRecord>): this(Internal.createPathAlias(child, key), child, key, RENTAL, null)
-    override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
-    override fun getIndexes(): List<Index> = listOf(IDX_FK_INVENTORY_ID, IDX_UNQ_RENTAL_RENTAL_DATE_INVENTORY_ID_CUSTOMER_ID)
-    override fun getIdentity(): Identity<RentalRecord, Long?> = super.getIdentity() as Identity<RentalRecord, Long?>
-    override fun getPrimaryKey(): UniqueKey<RentalRecord> = RENTAL_PKEY
-    override fun getReferences(): List<ForeignKey<RentalRecord, *>> = listOf(RENTAL__RENTAL_INVENTORY_ID_FKEY, RENTAL__RENTAL_CUSTOMER_ID_FKEY, RENTAL__RENTAL_STAFF_ID_FKEY)
+    public override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
+    public override fun getIndexes(): List<Index> = listOf(IDX_FK_INVENTORY_ID, IDX_UNQ_RENTAL_RENTAL_DATE_INVENTORY_ID_CUSTOMER_ID)
+    public override fun getIdentity(): Identity<RentalRecord, Long?> = super.getIdentity() as Identity<RentalRecord, Long?>
+    public override fun getPrimaryKey(): UniqueKey<RentalRecord> = RENTAL_PKEY
+    public override fun getReferences(): List<ForeignKey<RentalRecord, *>> = listOf(RENTAL__RENTAL_INVENTORY_ID_FKEY, RENTAL__RENTAL_CUSTOMER_ID_FKEY, RENTAL__RENTAL_STAFF_ID_FKEY)
 
     private lateinit var _inventory: Inventory
     private lateinit var _customer: Customer
@@ -172,29 +172,29 @@ open class Rental(
 
     val staff: Staff
         get(): Staff = staff()
-    override fun `as`(alias: String): Rental = Rental(DSL.name(alias), this)
-    override fun `as`(alias: Name): Rental = Rental(alias, this)
-    override fun `as`(alias: Table<*>): Rental = Rental(alias.getQualifiedName(), this)
+    public override fun `as`(alias: String): Rental = Rental(DSL.name(alias), this)
+    public override fun `as`(alias: Name): Rental = Rental(alias, this)
+    public override fun `as`(alias: Table<*>): Rental = Rental(alias.getQualifiedName(), this)
 
     /**
      * Rename this table
      */
-    override fun rename(name: String): Rental = Rental(DSL.name(name), null)
+    public override fun rename(name: String): Rental = Rental(DSL.name(name), null)
 
     /**
      * Rename this table
      */
-    override fun rename(name: Name): Rental = Rental(name, null)
+    public override fun rename(name: Name): Rental = Rental(name, null)
 
     /**
      * Rename this table
      */
-    override fun rename(name: Table<*>): Rental = Rental(name.getQualifiedName(), null)
+    public override fun rename(name: Table<*>): Rental = Rental(name.getQualifiedName(), null)
 
     // -------------------------------------------------------------------------
     // Row7 type methods
     // -------------------------------------------------------------------------
-    override fun fieldsRow(): Row7<Long?, LocalDateTime?, Long?, Long?, LocalDateTime?, Long?, LocalDateTime?> = super.fieldsRow() as Row7<Long?, LocalDateTime?, Long?, Long?, LocalDateTime?, Long?, LocalDateTime?>
+    public override fun fieldsRow(): Row7<Long?, LocalDateTime?, Long?, Long?, LocalDateTime?, Long?, LocalDateTime?> = super.fieldsRow() as Row7<Long?, LocalDateTime?, Long?, Long?, LocalDateTime?, Long?, LocalDateTime?>
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.

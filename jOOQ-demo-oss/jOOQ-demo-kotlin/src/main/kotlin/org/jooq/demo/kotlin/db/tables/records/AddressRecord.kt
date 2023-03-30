@@ -56,80 +56,80 @@ open class AddressRecord() : UpdatableRecordImpl<AddressRecord>(Address.ADDRESS)
     // Primary key information
     // -------------------------------------------------------------------------
 
-    override fun key(): Record1<Long?> = super.key() as Record1<Long?>
+    public override fun key(): Record1<Long?> = super.key() as Record1<Long?>
 
     // -------------------------------------------------------------------------
     // Record8 type implementation
     // -------------------------------------------------------------------------
 
-    override fun fieldsRow(): Row8<Long?, String?, String?, String?, Long?, String?, String?, LocalDateTime?> = super.fieldsRow() as Row8<Long?, String?, String?, String?, Long?, String?, String?, LocalDateTime?>
-    override fun valuesRow(): Row8<Long?, String?, String?, String?, Long?, String?, String?, LocalDateTime?> = super.valuesRow() as Row8<Long?, String?, String?, String?, Long?, String?, String?, LocalDateTime?>
-    override fun field1(): Field<Long?> = Address.ADDRESS.ADDRESS_ID
-    override fun field2(): Field<String?> = Address.ADDRESS.ADDRESS_
-    override fun field3(): Field<String?> = Address.ADDRESS.ADDRESS2
-    override fun field4(): Field<String?> = Address.ADDRESS.DISTRICT
-    override fun field5(): Field<Long?> = Address.ADDRESS.CITY_ID
-    override fun field6(): Field<String?> = Address.ADDRESS.POSTAL_CODE
-    override fun field7(): Field<String?> = Address.ADDRESS.PHONE
-    override fun field8(): Field<LocalDateTime?> = Address.ADDRESS.LAST_UPDATE
-    override fun component1(): Long? = addressId
-    override fun component2(): String? = address
-    override fun component3(): String? = address2
-    override fun component4(): String? = district
-    override fun component5(): Long? = cityId
-    override fun component6(): String? = postalCode
-    override fun component7(): String? = phone
-    override fun component8(): LocalDateTime? = lastUpdate
-    override fun value1(): Long? = addressId
-    override fun value2(): String? = address
-    override fun value3(): String? = address2
-    override fun value4(): String? = district
-    override fun value5(): Long? = cityId
-    override fun value6(): String? = postalCode
-    override fun value7(): String? = phone
-    override fun value8(): LocalDateTime? = lastUpdate
+    public override fun fieldsRow(): Row8<Long?, String?, String?, String?, Long?, String?, String?, LocalDateTime?> = super.fieldsRow() as Row8<Long?, String?, String?, String?, Long?, String?, String?, LocalDateTime?>
+    public override fun valuesRow(): Row8<Long?, String?, String?, String?, Long?, String?, String?, LocalDateTime?> = super.valuesRow() as Row8<Long?, String?, String?, String?, Long?, String?, String?, LocalDateTime?>
+    public override fun field1(): Field<Long?> = Address.ADDRESS.ADDRESS_ID
+    public override fun field2(): Field<String?> = Address.ADDRESS.ADDRESS_
+    public override fun field3(): Field<String?> = Address.ADDRESS.ADDRESS2
+    public override fun field4(): Field<String?> = Address.ADDRESS.DISTRICT
+    public override fun field5(): Field<Long?> = Address.ADDRESS.CITY_ID
+    public override fun field6(): Field<String?> = Address.ADDRESS.POSTAL_CODE
+    public override fun field7(): Field<String?> = Address.ADDRESS.PHONE
+    public override fun field8(): Field<LocalDateTime?> = Address.ADDRESS.LAST_UPDATE
+    public override fun component1(): Long? = addressId
+    public override fun component2(): String? = address
+    public override fun component3(): String? = address2
+    public override fun component4(): String? = district
+    public override fun component5(): Long? = cityId
+    public override fun component6(): String? = postalCode
+    public override fun component7(): String? = phone
+    public override fun component8(): LocalDateTime? = lastUpdate
+    public override fun value1(): Long? = addressId
+    public override fun value2(): String? = address
+    public override fun value3(): String? = address2
+    public override fun value4(): String? = district
+    public override fun value5(): Long? = cityId
+    public override fun value6(): String? = postalCode
+    public override fun value7(): String? = phone
+    public override fun value8(): LocalDateTime? = lastUpdate
 
-    override fun value1(value: Long?): AddressRecord {
+    public override fun value1(value: Long?): AddressRecord {
         set(0, value)
         return this
     }
 
-    override fun value2(value: String?): AddressRecord {
+    public override fun value2(value: String?): AddressRecord {
         set(1, value)
         return this
     }
 
-    override fun value3(value: String?): AddressRecord {
+    public override fun value3(value: String?): AddressRecord {
         set(2, value)
         return this
     }
 
-    override fun value4(value: String?): AddressRecord {
+    public override fun value4(value: String?): AddressRecord {
         set(3, value)
         return this
     }
 
-    override fun value5(value: Long?): AddressRecord {
+    public override fun value5(value: Long?): AddressRecord {
         set(4, value)
         return this
     }
 
-    override fun value6(value: String?): AddressRecord {
+    public override fun value6(value: String?): AddressRecord {
         set(5, value)
         return this
     }
 
-    override fun value7(value: String?): AddressRecord {
+    public override fun value7(value: String?): AddressRecord {
         set(6, value)
         return this
     }
 
-    override fun value8(value: LocalDateTime?): AddressRecord {
+    public override fun value8(value: LocalDateTime?): AddressRecord {
         set(7, value)
         return this
     }
 
-    override fun values(value1: Long?, value2: String?, value3: String?, value4: String?, value5: Long?, value6: String?, value7: String?, value8: LocalDateTime?): AddressRecord {
+    public override fun values(value1: Long?, value2: String?, value3: String?, value4: String?, value5: Long?, value6: String?, value7: String?, value8: LocalDateTime?): AddressRecord {
         this.value1(value1)
         this.value2(value2)
         this.value3(value3)

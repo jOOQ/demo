@@ -69,7 +69,7 @@ open class StaffList(
     /**
      * The class holding records for this type
      */
-    override fun getRecordType(): Class<StaffListRecord> = StaffListRecord::class.java
+    public override fun getRecordType(): Class<StaffListRecord> = StaffListRecord::class.java
 
     /**
      * The column <code>public.staff_list.id</code>.
@@ -130,30 +130,30 @@ open class StaffList(
     constructor(): this(DSL.name("staff_list"), null)
 
     constructor(child: Table<out Record>, key: ForeignKey<out Record, StaffListRecord>): this(Internal.createPathAlias(child, key), child, key, STAFF_LIST, null)
-    override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
-    override fun `as`(alias: String): StaffList = StaffList(DSL.name(alias), this)
-    override fun `as`(alias: Name): StaffList = StaffList(alias, this)
-    override fun `as`(alias: Table<*>): StaffList = StaffList(alias.getQualifiedName(), this)
+    public override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
+    public override fun `as`(alias: String): StaffList = StaffList(DSL.name(alias), this)
+    public override fun `as`(alias: Name): StaffList = StaffList(alias, this)
+    public override fun `as`(alias: Table<*>): StaffList = StaffList(alias.getQualifiedName(), this)
 
     /**
      * Rename this table
      */
-    override fun rename(name: String): StaffList = StaffList(DSL.name(name), null)
+    public override fun rename(name: String): StaffList = StaffList(DSL.name(name), null)
 
     /**
      * Rename this table
      */
-    override fun rename(name: Name): StaffList = StaffList(name, null)
+    public override fun rename(name: Name): StaffList = StaffList(name, null)
 
     /**
      * Rename this table
      */
-    override fun rename(name: Table<*>): StaffList = StaffList(name.getQualifiedName(), null)
+    public override fun rename(name: Table<*>): StaffList = StaffList(name.getQualifiedName(), null)
 
     // -------------------------------------------------------------------------
     // Row8 type methods
     // -------------------------------------------------------------------------
-    override fun fieldsRow(): Row8<Long?, String?, String?, String?, String?, String?, String?, Long?> = super.fieldsRow() as Row8<Long?, String?, String?, String?, String?, String?, String?, Long?>
+    public override fun fieldsRow(): Row8<Long?, String?, String?, String?, String?, String?, String?, Long?> = super.fieldsRow() as Row8<Long?, String?, String?, String?, String?, String?, String?, Long?>
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.

@@ -25,7 +25,7 @@ open class CityDao(configuration: Configuration?) : DAOImpl<CityRecord, org.jooq
      */
     constructor(): this(null)
 
-    override fun getId(o: org.jooq.demo.kotlin.db.tables.pojos.City): Long? = o.cityId
+    public override fun getId(o: org.jooq.demo.kotlin.db.tables.pojos.City): Long? = o.cityId
 
     /**
      * Fetch records that have <code>city_id BETWEEN lowerInclusive AND

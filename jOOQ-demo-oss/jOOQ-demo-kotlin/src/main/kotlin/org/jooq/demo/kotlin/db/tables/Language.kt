@@ -60,7 +60,7 @@ open class Language(
     /**
      * The class holding records for this type
      */
-    override fun getRecordType(): Class<LanguageRecord> = LanguageRecord::class.java
+    public override fun getRecordType(): Class<LanguageRecord> = LanguageRecord::class.java
 
     /**
      * The column <code>public.language.language_id</code>.
@@ -96,32 +96,32 @@ open class Language(
     constructor(): this(DSL.name("language"), null)
 
     constructor(child: Table<out Record>, key: ForeignKey<out Record, LanguageRecord>): this(Internal.createPathAlias(child, key), child, key, LANGUAGE, null)
-    override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
-    override fun getIdentity(): Identity<LanguageRecord, Long?> = super.getIdentity() as Identity<LanguageRecord, Long?>
-    override fun getPrimaryKey(): UniqueKey<LanguageRecord> = LANGUAGE_PKEY
-    override fun `as`(alias: String): Language = Language(DSL.name(alias), this)
-    override fun `as`(alias: Name): Language = Language(alias, this)
-    override fun `as`(alias: Table<*>): Language = Language(alias.getQualifiedName(), this)
+    public override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
+    public override fun getIdentity(): Identity<LanguageRecord, Long?> = super.getIdentity() as Identity<LanguageRecord, Long?>
+    public override fun getPrimaryKey(): UniqueKey<LanguageRecord> = LANGUAGE_PKEY
+    public override fun `as`(alias: String): Language = Language(DSL.name(alias), this)
+    public override fun `as`(alias: Name): Language = Language(alias, this)
+    public override fun `as`(alias: Table<*>): Language = Language(alias.getQualifiedName(), this)
 
     /**
      * Rename this table
      */
-    override fun rename(name: String): Language = Language(DSL.name(name), null)
+    public override fun rename(name: String): Language = Language(DSL.name(name), null)
 
     /**
      * Rename this table
      */
-    override fun rename(name: Name): Language = Language(name, null)
+    public override fun rename(name: Name): Language = Language(name, null)
 
     /**
      * Rename this table
      */
-    override fun rename(name: Table<*>): Language = Language(name.getQualifiedName(), null)
+    public override fun rename(name: Table<*>): Language = Language(name.getQualifiedName(), null)
 
     // -------------------------------------------------------------------------
     // Row3 type methods
     // -------------------------------------------------------------------------
-    override fun fieldsRow(): Row3<Long?, String?, LocalDateTime?> = super.fieldsRow() as Row3<Long?, String?, LocalDateTime?>
+    public override fun fieldsRow(): Row3<Long?, String?, LocalDateTime?> = super.fieldsRow() as Row3<Long?, String?, LocalDateTime?>
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.

@@ -20,8 +20,8 @@ enum class MpaaRating(@get:JvmName("literal") public val literal: String) : Enum
     `PG-13`("PG-13"),
     R("R"),
     `NC-17`("NC-17");
-    override fun getCatalog(): Catalog? = schema.catalog
-    override fun getSchema(): Schema = Public.PUBLIC
-    override fun getName(): String = "mpaa_rating"
-    override fun getLiteral(): String = literal
+    public override fun getCatalog(): Catalog? = schema.catalog
+    public override fun getSchema(): Schema = Public.PUBLIC
+    public override fun getName(): String = "mpaa_rating"
+    public override fun getLiteral(): String = literal
 }

@@ -64,7 +64,7 @@ open class Actor(
     /**
      * The class holding records for this type
      */
-    override fun getRecordType(): Class<ActorRecord> = ActorRecord::class.java
+    public override fun getRecordType(): Class<ActorRecord> = ActorRecord::class.java
 
     /**
      * The column <code>public.actor.actor_id</code>.
@@ -105,33 +105,33 @@ open class Actor(
     constructor(): this(DSL.name("actor"), null)
 
     constructor(child: Table<out Record>, key: ForeignKey<out Record, ActorRecord>): this(Internal.createPathAlias(child, key), child, key, ACTOR, null)
-    override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
-    override fun getIndexes(): List<Index> = listOf(IDX_ACTOR_LAST_NAME)
-    override fun getIdentity(): Identity<ActorRecord, Long?> = super.getIdentity() as Identity<ActorRecord, Long?>
-    override fun getPrimaryKey(): UniqueKey<ActorRecord> = ACTOR_PKEY
-    override fun `as`(alias: String): Actor = Actor(DSL.name(alias), this)
-    override fun `as`(alias: Name): Actor = Actor(alias, this)
-    override fun `as`(alias: Table<*>): Actor = Actor(alias.getQualifiedName(), this)
+    public override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
+    public override fun getIndexes(): List<Index> = listOf(IDX_ACTOR_LAST_NAME)
+    public override fun getIdentity(): Identity<ActorRecord, Long?> = super.getIdentity() as Identity<ActorRecord, Long?>
+    public override fun getPrimaryKey(): UniqueKey<ActorRecord> = ACTOR_PKEY
+    public override fun `as`(alias: String): Actor = Actor(DSL.name(alias), this)
+    public override fun `as`(alias: Name): Actor = Actor(alias, this)
+    public override fun `as`(alias: Table<*>): Actor = Actor(alias.getQualifiedName(), this)
 
     /**
      * Rename this table
      */
-    override fun rename(name: String): Actor = Actor(DSL.name(name), null)
+    public override fun rename(name: String): Actor = Actor(DSL.name(name), null)
 
     /**
      * Rename this table
      */
-    override fun rename(name: Name): Actor = Actor(name, null)
+    public override fun rename(name: Name): Actor = Actor(name, null)
 
     /**
      * Rename this table
      */
-    override fun rename(name: Table<*>): Actor = Actor(name.getQualifiedName(), null)
+    public override fun rename(name: Table<*>): Actor = Actor(name.getQualifiedName(), null)
 
     // -------------------------------------------------------------------------
     // Row4 type methods
     // -------------------------------------------------------------------------
-    override fun fieldsRow(): Row4<Long?, String?, String?, LocalDateTime?> = super.fieldsRow() as Row4<Long?, String?, String?, LocalDateTime?>
+    public override fun fieldsRow(): Row4<Long?, String?, String?, LocalDateTime?> = super.fieldsRow() as Row4<Long?, String?, String?, LocalDateTime?>
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
