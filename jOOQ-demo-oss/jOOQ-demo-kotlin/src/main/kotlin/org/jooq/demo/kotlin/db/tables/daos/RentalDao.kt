@@ -25,7 +25,7 @@ open class RentalDao(configuration: Configuration?) : DAOImpl<RentalRecord, org.
      */
     constructor(): this(null)
 
-    public override fun getId(o: org.jooq.demo.kotlin.db.tables.pojos.Rental): Long? = o.rentalId
+    override fun getId(o: org.jooq.demo.kotlin.db.tables.pojos.Rental): Long? = o.rentalId
 
     /**
      * Fetch records that have <code>rental_id BETWEEN lowerInclusive AND

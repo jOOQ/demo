@@ -53,74 +53,74 @@ open class StaffListRecord() : TableRecordImpl<StaffListRecord>(StaffList.STAFF_
     // Record8 type implementation
     // -------------------------------------------------------------------------
 
-    public override fun fieldsRow(): Row8<Long?, String?, String?, String?, String?, String?, String?, Long?> = super.fieldsRow() as Row8<Long?, String?, String?, String?, String?, String?, String?, Long?>
-    public override fun valuesRow(): Row8<Long?, String?, String?, String?, String?, String?, String?, Long?> = super.valuesRow() as Row8<Long?, String?, String?, String?, String?, String?, String?, Long?>
-    public override fun field1(): Field<Long?> = StaffList.STAFF_LIST.ID
-    public override fun field2(): Field<String?> = StaffList.STAFF_LIST.NAME
-    public override fun field3(): Field<String?> = StaffList.STAFF_LIST.ADDRESS
-    public override fun field4(): Field<String?> = org.jooq.demo.kotlin.db.tables.StaffList.STAFF_LIST.`ZIP CODE`
-    public override fun field5(): Field<String?> = StaffList.STAFF_LIST.PHONE
-    public override fun field6(): Field<String?> = StaffList.STAFF_LIST.CITY
-    public override fun field7(): Field<String?> = StaffList.STAFF_LIST.COUNTRY
-    public override fun field8(): Field<Long?> = StaffList.STAFF_LIST.SID
-    public override fun component1(): Long? = id
-    public override fun component2(): String? = name
-    public override fun component3(): String? = address
-    public override fun component4(): String? = zipCode
-    public override fun component5(): String? = phone
-    public override fun component6(): String? = city
-    public override fun component7(): String? = country
-    public override fun component8(): Long? = sid
-    public override fun value1(): Long? = id
-    public override fun value2(): String? = name
-    public override fun value3(): String? = address
-    public override fun value4(): String? = zipCode
-    public override fun value5(): String? = phone
-    public override fun value6(): String? = city
-    public override fun value7(): String? = country
-    public override fun value8(): Long? = sid
+    override fun fieldsRow(): Row8<Long?, String?, String?, String?, String?, String?, String?, Long?> = super.fieldsRow() as Row8<Long?, String?, String?, String?, String?, String?, String?, Long?>
+    override fun valuesRow(): Row8<Long?, String?, String?, String?, String?, String?, String?, Long?> = super.valuesRow() as Row8<Long?, String?, String?, String?, String?, String?, String?, Long?>
+    override fun field1(): Field<Long?> = StaffList.STAFF_LIST.ID
+    override fun field2(): Field<String?> = StaffList.STAFF_LIST.NAME
+    override fun field3(): Field<String?> = StaffList.STAFF_LIST.ADDRESS
+    override fun field4(): Field<String?> = org.jooq.demo.kotlin.db.tables.StaffList.STAFF_LIST.`ZIP CODE`
+    override fun field5(): Field<String?> = StaffList.STAFF_LIST.PHONE
+    override fun field6(): Field<String?> = StaffList.STAFF_LIST.CITY
+    override fun field7(): Field<String?> = StaffList.STAFF_LIST.COUNTRY
+    override fun field8(): Field<Long?> = StaffList.STAFF_LIST.SID
+    override fun component1(): Long? = id
+    override fun component2(): String? = name
+    override fun component3(): String? = address
+    override fun component4(): String? = zipCode
+    override fun component5(): String? = phone
+    override fun component6(): String? = city
+    override fun component7(): String? = country
+    override fun component8(): Long? = sid
+    override fun value1(): Long? = id
+    override fun value2(): String? = name
+    override fun value3(): String? = address
+    override fun value4(): String? = zipCode
+    override fun value5(): String? = phone
+    override fun value6(): String? = city
+    override fun value7(): String? = country
+    override fun value8(): Long? = sid
 
-    public override fun value1(value: Long?): StaffListRecord {
+    override fun value1(value: Long?): StaffListRecord {
         set(0, value)
         return this
     }
 
-    public override fun value2(value: String?): StaffListRecord {
+    override fun value2(value: String?): StaffListRecord {
         set(1, value)
         return this
     }
 
-    public override fun value3(value: String?): StaffListRecord {
+    override fun value3(value: String?): StaffListRecord {
         set(2, value)
         return this
     }
 
-    public override fun value4(value: String?): StaffListRecord {
+    override fun value4(value: String?): StaffListRecord {
         set(3, value)
         return this
     }
 
-    public override fun value5(value: String?): StaffListRecord {
+    override fun value5(value: String?): StaffListRecord {
         set(4, value)
         return this
     }
 
-    public override fun value6(value: String?): StaffListRecord {
+    override fun value6(value: String?): StaffListRecord {
         set(5, value)
         return this
     }
 
-    public override fun value7(value: String?): StaffListRecord {
+    override fun value7(value: String?): StaffListRecord {
         set(6, value)
         return this
     }
 
-    public override fun value8(value: Long?): StaffListRecord {
+    override fun value8(value: Long?): StaffListRecord {
         set(7, value)
         return this
     }
 
-    public override fun values(value1: Long?, value2: String?, value3: String?, value4: String?, value5: String?, value6: String?, value7: String?, value8: Long?): StaffListRecord {
+    override fun values(value1: Long?, value2: String?, value3: String?, value4: String?, value5: String?, value6: String?, value7: String?, value8: Long?): StaffListRecord {
         this.value1(value1)
         this.value2(value2)
         this.value3(value3)

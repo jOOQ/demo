@@ -36,40 +36,40 @@ open class CategoryRecord() : UpdatableRecordImpl<CategoryRecord>(Category.CATEG
     // Primary key information
     // -------------------------------------------------------------------------
 
-    public override fun key(): Record1<Long?> = super.key() as Record1<Long?>
+    override fun key(): Record1<Long?> = super.key() as Record1<Long?>
 
     // -------------------------------------------------------------------------
     // Record3 type implementation
     // -------------------------------------------------------------------------
 
-    public override fun fieldsRow(): Row3<Long?, String?, LocalDateTime?> = super.fieldsRow() as Row3<Long?, String?, LocalDateTime?>
-    public override fun valuesRow(): Row3<Long?, String?, LocalDateTime?> = super.valuesRow() as Row3<Long?, String?, LocalDateTime?>
-    public override fun field1(): Field<Long?> = Category.CATEGORY.CATEGORY_ID
-    public override fun field2(): Field<String?> = Category.CATEGORY.NAME
-    public override fun field3(): Field<LocalDateTime?> = Category.CATEGORY.LAST_UPDATE
-    public override fun component1(): Long? = categoryId
-    public override fun component2(): String? = name
-    public override fun component3(): LocalDateTime? = lastUpdate
-    public override fun value1(): Long? = categoryId
-    public override fun value2(): String? = name
-    public override fun value3(): LocalDateTime? = lastUpdate
+    override fun fieldsRow(): Row3<Long?, String?, LocalDateTime?> = super.fieldsRow() as Row3<Long?, String?, LocalDateTime?>
+    override fun valuesRow(): Row3<Long?, String?, LocalDateTime?> = super.valuesRow() as Row3<Long?, String?, LocalDateTime?>
+    override fun field1(): Field<Long?> = Category.CATEGORY.CATEGORY_ID
+    override fun field2(): Field<String?> = Category.CATEGORY.NAME
+    override fun field3(): Field<LocalDateTime?> = Category.CATEGORY.LAST_UPDATE
+    override fun component1(): Long? = categoryId
+    override fun component2(): String? = name
+    override fun component3(): LocalDateTime? = lastUpdate
+    override fun value1(): Long? = categoryId
+    override fun value2(): String? = name
+    override fun value3(): LocalDateTime? = lastUpdate
 
-    public override fun value1(value: Long?): CategoryRecord {
+    override fun value1(value: Long?): CategoryRecord {
         set(0, value)
         return this
     }
 
-    public override fun value2(value: String?): CategoryRecord {
+    override fun value2(value: String?): CategoryRecord {
         set(1, value)
         return this
     }
 
-    public override fun value3(value: LocalDateTime?): CategoryRecord {
+    override fun value3(value: LocalDateTime?): CategoryRecord {
         set(2, value)
         return this
     }
 
-    public override fun values(value1: Long?, value2: String?, value3: LocalDateTime?): CategoryRecord {
+    override fun values(value1: Long?, value2: String?, value3: LocalDateTime?): CategoryRecord {
         this.value1(value1)
         this.value2(value2)
         this.value3(value3)

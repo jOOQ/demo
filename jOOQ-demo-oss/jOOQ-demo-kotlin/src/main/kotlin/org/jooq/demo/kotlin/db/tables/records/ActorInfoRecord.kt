@@ -37,42 +37,42 @@ open class ActorInfoRecord() : TableRecordImpl<ActorInfoRecord>(ActorInfo.ACTOR_
     // Record4 type implementation
     // -------------------------------------------------------------------------
 
-    public override fun fieldsRow(): Row4<Long?, String?, String?, String?> = super.fieldsRow() as Row4<Long?, String?, String?, String?>
-    public override fun valuesRow(): Row4<Long?, String?, String?, String?> = super.valuesRow() as Row4<Long?, String?, String?, String?>
-    public override fun field1(): Field<Long?> = ActorInfo.ACTOR_INFO.ACTOR_ID
-    public override fun field2(): Field<String?> = ActorInfo.ACTOR_INFO.FIRST_NAME
-    public override fun field3(): Field<String?> = ActorInfo.ACTOR_INFO.LAST_NAME
-    public override fun field4(): Field<String?> = ActorInfo.ACTOR_INFO.FILM_INFO
-    public override fun component1(): Long? = actorId
-    public override fun component2(): String? = firstName
-    public override fun component3(): String? = lastName
-    public override fun component4(): String? = filmInfo
-    public override fun value1(): Long? = actorId
-    public override fun value2(): String? = firstName
-    public override fun value3(): String? = lastName
-    public override fun value4(): String? = filmInfo
+    override fun fieldsRow(): Row4<Long?, String?, String?, String?> = super.fieldsRow() as Row4<Long?, String?, String?, String?>
+    override fun valuesRow(): Row4<Long?, String?, String?, String?> = super.valuesRow() as Row4<Long?, String?, String?, String?>
+    override fun field1(): Field<Long?> = ActorInfo.ACTOR_INFO.ACTOR_ID
+    override fun field2(): Field<String?> = ActorInfo.ACTOR_INFO.FIRST_NAME
+    override fun field3(): Field<String?> = ActorInfo.ACTOR_INFO.LAST_NAME
+    override fun field4(): Field<String?> = ActorInfo.ACTOR_INFO.FILM_INFO
+    override fun component1(): Long? = actorId
+    override fun component2(): String? = firstName
+    override fun component3(): String? = lastName
+    override fun component4(): String? = filmInfo
+    override fun value1(): Long? = actorId
+    override fun value2(): String? = firstName
+    override fun value3(): String? = lastName
+    override fun value4(): String? = filmInfo
 
-    public override fun value1(value: Long?): ActorInfoRecord {
+    override fun value1(value: Long?): ActorInfoRecord {
         set(0, value)
         return this
     }
 
-    public override fun value2(value: String?): ActorInfoRecord {
+    override fun value2(value: String?): ActorInfoRecord {
         set(1, value)
         return this
     }
 
-    public override fun value3(value: String?): ActorInfoRecord {
+    override fun value3(value: String?): ActorInfoRecord {
         set(2, value)
         return this
     }
 
-    public override fun value4(value: String?): ActorInfoRecord {
+    override fun value4(value: String?): ActorInfoRecord {
         set(3, value)
         return this
     }
 
-    public override fun values(value1: Long?, value2: String?, value3: String?, value4: String?): ActorInfoRecord {
+    override fun values(value1: Long?, value2: String?, value3: String?, value4: String?): ActorInfoRecord {
         this.value1(value1)
         this.value2(value2)
         this.value3(value3)

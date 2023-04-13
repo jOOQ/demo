@@ -40,48 +40,48 @@ open class InventoryRecord() : UpdatableRecordImpl<InventoryRecord>(Inventory.IN
     // Primary key information
     // -------------------------------------------------------------------------
 
-    public override fun key(): Record1<Long?> = super.key() as Record1<Long?>
+    override fun key(): Record1<Long?> = super.key() as Record1<Long?>
 
     // -------------------------------------------------------------------------
     // Record4 type implementation
     // -------------------------------------------------------------------------
 
-    public override fun fieldsRow(): Row4<Long?, Long?, Long?, LocalDateTime?> = super.fieldsRow() as Row4<Long?, Long?, Long?, LocalDateTime?>
-    public override fun valuesRow(): Row4<Long?, Long?, Long?, LocalDateTime?> = super.valuesRow() as Row4<Long?, Long?, Long?, LocalDateTime?>
-    public override fun field1(): Field<Long?> = Inventory.INVENTORY.INVENTORY_ID
-    public override fun field2(): Field<Long?> = Inventory.INVENTORY.FILM_ID
-    public override fun field3(): Field<Long?> = Inventory.INVENTORY.STORE_ID
-    public override fun field4(): Field<LocalDateTime?> = Inventory.INVENTORY.LAST_UPDATE
-    public override fun component1(): Long? = inventoryId
-    public override fun component2(): Long? = filmId
-    public override fun component3(): Long? = storeId
-    public override fun component4(): LocalDateTime? = lastUpdate
-    public override fun value1(): Long? = inventoryId
-    public override fun value2(): Long? = filmId
-    public override fun value3(): Long? = storeId
-    public override fun value4(): LocalDateTime? = lastUpdate
+    override fun fieldsRow(): Row4<Long?, Long?, Long?, LocalDateTime?> = super.fieldsRow() as Row4<Long?, Long?, Long?, LocalDateTime?>
+    override fun valuesRow(): Row4<Long?, Long?, Long?, LocalDateTime?> = super.valuesRow() as Row4<Long?, Long?, Long?, LocalDateTime?>
+    override fun field1(): Field<Long?> = Inventory.INVENTORY.INVENTORY_ID
+    override fun field2(): Field<Long?> = Inventory.INVENTORY.FILM_ID
+    override fun field3(): Field<Long?> = Inventory.INVENTORY.STORE_ID
+    override fun field4(): Field<LocalDateTime?> = Inventory.INVENTORY.LAST_UPDATE
+    override fun component1(): Long? = inventoryId
+    override fun component2(): Long? = filmId
+    override fun component3(): Long? = storeId
+    override fun component4(): LocalDateTime? = lastUpdate
+    override fun value1(): Long? = inventoryId
+    override fun value2(): Long? = filmId
+    override fun value3(): Long? = storeId
+    override fun value4(): LocalDateTime? = lastUpdate
 
-    public override fun value1(value: Long?): InventoryRecord {
+    override fun value1(value: Long?): InventoryRecord {
         set(0, value)
         return this
     }
 
-    public override fun value2(value: Long?): InventoryRecord {
+    override fun value2(value: Long?): InventoryRecord {
         set(1, value)
         return this
     }
 
-    public override fun value3(value: Long?): InventoryRecord {
+    override fun value3(value: Long?): InventoryRecord {
         set(2, value)
         return this
     }
 
-    public override fun value4(value: LocalDateTime?): InventoryRecord {
+    override fun value4(value: LocalDateTime?): InventoryRecord {
         set(3, value)
         return this
     }
 
-    public override fun values(value1: Long?, value2: Long?, value3: Long?, value4: LocalDateTime?): InventoryRecord {
+    override fun values(value1: Long?, value2: Long?, value3: Long?, value4: LocalDateTime?): InventoryRecord {
         this.value1(value1)
         this.value2(value2)
         this.value3(value3)

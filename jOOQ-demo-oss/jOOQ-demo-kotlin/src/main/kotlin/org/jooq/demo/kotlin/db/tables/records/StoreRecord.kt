@@ -40,48 +40,48 @@ open class StoreRecord() : UpdatableRecordImpl<StoreRecord>(Store.STORE), Record
     // Primary key information
     // -------------------------------------------------------------------------
 
-    public override fun key(): Record1<Long?> = super.key() as Record1<Long?>
+    override fun key(): Record1<Long?> = super.key() as Record1<Long?>
 
     // -------------------------------------------------------------------------
     // Record4 type implementation
     // -------------------------------------------------------------------------
 
-    public override fun fieldsRow(): Row4<Long?, Long?, Long?, LocalDateTime?> = super.fieldsRow() as Row4<Long?, Long?, Long?, LocalDateTime?>
-    public override fun valuesRow(): Row4<Long?, Long?, Long?, LocalDateTime?> = super.valuesRow() as Row4<Long?, Long?, Long?, LocalDateTime?>
-    public override fun field1(): Field<Long?> = Store.STORE.STORE_ID
-    public override fun field2(): Field<Long?> = Store.STORE.MANAGER_STAFF_ID
-    public override fun field3(): Field<Long?> = Store.STORE.ADDRESS_ID
-    public override fun field4(): Field<LocalDateTime?> = Store.STORE.LAST_UPDATE
-    public override fun component1(): Long? = storeId
-    public override fun component2(): Long? = managerStaffId
-    public override fun component3(): Long? = addressId
-    public override fun component4(): LocalDateTime? = lastUpdate
-    public override fun value1(): Long? = storeId
-    public override fun value2(): Long? = managerStaffId
-    public override fun value3(): Long? = addressId
-    public override fun value4(): LocalDateTime? = lastUpdate
+    override fun fieldsRow(): Row4<Long?, Long?, Long?, LocalDateTime?> = super.fieldsRow() as Row4<Long?, Long?, Long?, LocalDateTime?>
+    override fun valuesRow(): Row4<Long?, Long?, Long?, LocalDateTime?> = super.valuesRow() as Row4<Long?, Long?, Long?, LocalDateTime?>
+    override fun field1(): Field<Long?> = Store.STORE.STORE_ID
+    override fun field2(): Field<Long?> = Store.STORE.MANAGER_STAFF_ID
+    override fun field3(): Field<Long?> = Store.STORE.ADDRESS_ID
+    override fun field4(): Field<LocalDateTime?> = Store.STORE.LAST_UPDATE
+    override fun component1(): Long? = storeId
+    override fun component2(): Long? = managerStaffId
+    override fun component3(): Long? = addressId
+    override fun component4(): LocalDateTime? = lastUpdate
+    override fun value1(): Long? = storeId
+    override fun value2(): Long? = managerStaffId
+    override fun value3(): Long? = addressId
+    override fun value4(): LocalDateTime? = lastUpdate
 
-    public override fun value1(value: Long?): StoreRecord {
+    override fun value1(value: Long?): StoreRecord {
         set(0, value)
         return this
     }
 
-    public override fun value2(value: Long?): StoreRecord {
+    override fun value2(value: Long?): StoreRecord {
         set(1, value)
         return this
     }
 
-    public override fun value3(value: Long?): StoreRecord {
+    override fun value3(value: Long?): StoreRecord {
         set(2, value)
         return this
     }
 
-    public override fun value4(value: LocalDateTime?): StoreRecord {
+    override fun value4(value: LocalDateTime?): StoreRecord {
         set(3, value)
         return this
     }
 
-    public override fun values(value1: Long?, value2: Long?, value3: Long?, value4: LocalDateTime?): StoreRecord {
+    override fun values(value1: Long?, value2: Long?, value3: Long?, value4: LocalDateTime?): StoreRecord {
         this.value1(value1)
         this.value2(value2)
         this.value3(value3)

@@ -69,7 +69,7 @@ open class Payment(
     /**
      * The class holding records for this type
      */
-    public override fun getRecordType(): Class<PaymentRecord> = PaymentRecord::class.java
+    override fun getRecordType(): Class<PaymentRecord> = PaymentRecord::class.java
 
     /**
      * The column <code>public.payment.payment_id</code>.
@@ -120,11 +120,11 @@ open class Payment(
     constructor(): this(DSL.name("payment"), null)
 
     constructor(child: Table<out Record>, key: ForeignKey<out Record, PaymentRecord>): this(Internal.createPathAlias(child, key), child, key, PAYMENT, null)
-    public override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
-    public override fun getIndexes(): List<Index> = listOf(IDX_FK_CUSTOMER_ID, IDX_FK_STAFF_ID)
-    public override fun getIdentity(): Identity<PaymentRecord, Long?> = super.getIdentity() as Identity<PaymentRecord, Long?>
-    public override fun getPrimaryKey(): UniqueKey<PaymentRecord> = PAYMENT_PKEY
-    public override fun getReferences(): List<ForeignKey<PaymentRecord, *>> = listOf(PAYMENT__PAYMENT_CUSTOMER_ID_FKEY, PAYMENT__PAYMENT_STAFF_ID_FKEY, PAYMENT__PAYMENT_RENTAL_ID_FKEY)
+    override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
+    override fun getIndexes(): List<Index> = listOf(IDX_FK_CUSTOMER_ID, IDX_FK_STAFF_ID)
+    override fun getIdentity(): Identity<PaymentRecord, Long?> = super.getIdentity() as Identity<PaymentRecord, Long?>
+    override fun getPrimaryKey(): UniqueKey<PaymentRecord> = PAYMENT_PKEY
+    override fun getReferences(): List<ForeignKey<PaymentRecord, *>> = listOf(PAYMENT__PAYMENT_CUSTOMER_ID_FKEY, PAYMENT__PAYMENT_STAFF_ID_FKEY, PAYMENT__PAYMENT_RENTAL_ID_FKEY)
 
     private lateinit var _customer: Customer
     private lateinit var _staff: Staff
@@ -168,29 +168,29 @@ open class Payment(
 
     val rental: Rental
         get(): Rental = rental()
-    public override fun `as`(alias: String): Payment = Payment(DSL.name(alias), this)
-    public override fun `as`(alias: Name): Payment = Payment(alias, this)
-    public override fun `as`(alias: Table<*>): Payment = Payment(alias.getQualifiedName(), this)
+    override fun `as`(alias: String): Payment = Payment(DSL.name(alias), this)
+    override fun `as`(alias: Name): Payment = Payment(alias, this)
+    override fun `as`(alias: Table<*>): Payment = Payment(alias.getQualifiedName(), this)
 
     /**
      * Rename this table
      */
-    public override fun rename(name: String): Payment = Payment(DSL.name(name), null)
+    override fun rename(name: String): Payment = Payment(DSL.name(name), null)
 
     /**
      * Rename this table
      */
-    public override fun rename(name: Name): Payment = Payment(name, null)
+    override fun rename(name: Name): Payment = Payment(name, null)
 
     /**
      * Rename this table
      */
-    public override fun rename(name: Table<*>): Payment = Payment(name.getQualifiedName(), null)
+    override fun rename(name: Table<*>): Payment = Payment(name.getQualifiedName(), null)
 
     // -------------------------------------------------------------------------
     // Row6 type methods
     // -------------------------------------------------------------------------
-    public override fun fieldsRow(): Row6<Long?, Long?, Long?, Long?, BigDecimal?, LocalDateTime?> = super.fieldsRow() as Row6<Long?, Long?, Long?, Long?, BigDecimal?, LocalDateTime?>
+    override fun fieldsRow(): Row6<Long?, Long?, Long?, Long?, BigDecimal?, LocalDateTime?> = super.fieldsRow() as Row6<Long?, Long?, Long?, Long?, BigDecimal?, LocalDateTime?>
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.

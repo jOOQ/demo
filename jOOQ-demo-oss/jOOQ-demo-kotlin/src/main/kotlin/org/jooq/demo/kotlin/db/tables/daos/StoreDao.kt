@@ -25,7 +25,7 @@ open class StoreDao(configuration: Configuration?) : DAOImpl<StoreRecord, org.jo
      */
     constructor(): this(null)
 
-    public override fun getId(o: org.jooq.demo.kotlin.db.tables.pojos.Store): Long? = o.storeId
+    override fun getId(o: org.jooq.demo.kotlin.db.tables.pojos.Store): Long? = o.storeId
 
     /**
      * Fetch records that have <code>store_id BETWEEN lowerInclusive AND

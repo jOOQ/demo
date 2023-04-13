@@ -49,64 +49,64 @@ open class PaymentRecord() : UpdatableRecordImpl<PaymentRecord>(Payment.PAYMENT)
     // Primary key information
     // -------------------------------------------------------------------------
 
-    public override fun key(): Record1<Long?> = super.key() as Record1<Long?>
+    override fun key(): Record1<Long?> = super.key() as Record1<Long?>
 
     // -------------------------------------------------------------------------
     // Record6 type implementation
     // -------------------------------------------------------------------------
 
-    public override fun fieldsRow(): Row6<Long?, Long?, Long?, Long?, BigDecimal?, LocalDateTime?> = super.fieldsRow() as Row6<Long?, Long?, Long?, Long?, BigDecimal?, LocalDateTime?>
-    public override fun valuesRow(): Row6<Long?, Long?, Long?, Long?, BigDecimal?, LocalDateTime?> = super.valuesRow() as Row6<Long?, Long?, Long?, Long?, BigDecimal?, LocalDateTime?>
-    public override fun field1(): Field<Long?> = Payment.PAYMENT.PAYMENT_ID
-    public override fun field2(): Field<Long?> = Payment.PAYMENT.CUSTOMER_ID
-    public override fun field3(): Field<Long?> = Payment.PAYMENT.STAFF_ID
-    public override fun field4(): Field<Long?> = Payment.PAYMENT.RENTAL_ID
-    public override fun field5(): Field<BigDecimal?> = Payment.PAYMENT.AMOUNT
-    public override fun field6(): Field<LocalDateTime?> = Payment.PAYMENT.PAYMENT_DATE
-    public override fun component1(): Long? = paymentId
-    public override fun component2(): Long? = customerId
-    public override fun component3(): Long? = staffId
-    public override fun component4(): Long? = rentalId
-    public override fun component5(): BigDecimal? = amount
-    public override fun component6(): LocalDateTime? = paymentDate
-    public override fun value1(): Long? = paymentId
-    public override fun value2(): Long? = customerId
-    public override fun value3(): Long? = staffId
-    public override fun value4(): Long? = rentalId
-    public override fun value5(): BigDecimal? = amount
-    public override fun value6(): LocalDateTime? = paymentDate
+    override fun fieldsRow(): Row6<Long?, Long?, Long?, Long?, BigDecimal?, LocalDateTime?> = super.fieldsRow() as Row6<Long?, Long?, Long?, Long?, BigDecimal?, LocalDateTime?>
+    override fun valuesRow(): Row6<Long?, Long?, Long?, Long?, BigDecimal?, LocalDateTime?> = super.valuesRow() as Row6<Long?, Long?, Long?, Long?, BigDecimal?, LocalDateTime?>
+    override fun field1(): Field<Long?> = Payment.PAYMENT.PAYMENT_ID
+    override fun field2(): Field<Long?> = Payment.PAYMENT.CUSTOMER_ID
+    override fun field3(): Field<Long?> = Payment.PAYMENT.STAFF_ID
+    override fun field4(): Field<Long?> = Payment.PAYMENT.RENTAL_ID
+    override fun field5(): Field<BigDecimal?> = Payment.PAYMENT.AMOUNT
+    override fun field6(): Field<LocalDateTime?> = Payment.PAYMENT.PAYMENT_DATE
+    override fun component1(): Long? = paymentId
+    override fun component2(): Long? = customerId
+    override fun component3(): Long? = staffId
+    override fun component4(): Long? = rentalId
+    override fun component5(): BigDecimal? = amount
+    override fun component6(): LocalDateTime? = paymentDate
+    override fun value1(): Long? = paymentId
+    override fun value2(): Long? = customerId
+    override fun value3(): Long? = staffId
+    override fun value4(): Long? = rentalId
+    override fun value5(): BigDecimal? = amount
+    override fun value6(): LocalDateTime? = paymentDate
 
-    public override fun value1(value: Long?): PaymentRecord {
+    override fun value1(value: Long?): PaymentRecord {
         set(0, value)
         return this
     }
 
-    public override fun value2(value: Long?): PaymentRecord {
+    override fun value2(value: Long?): PaymentRecord {
         set(1, value)
         return this
     }
 
-    public override fun value3(value: Long?): PaymentRecord {
+    override fun value3(value: Long?): PaymentRecord {
         set(2, value)
         return this
     }
 
-    public override fun value4(value: Long?): PaymentRecord {
+    override fun value4(value: Long?): PaymentRecord {
         set(3, value)
         return this
     }
 
-    public override fun value5(value: BigDecimal?): PaymentRecord {
+    override fun value5(value: BigDecimal?): PaymentRecord {
         set(4, value)
         return this
     }
 
-    public override fun value6(value: LocalDateTime?): PaymentRecord {
+    override fun value6(value: LocalDateTime?): PaymentRecord {
         set(5, value)
         return this
     }
 
-    public override fun values(value1: Long?, value2: Long?, value3: Long?, value4: Long?, value5: BigDecimal?, value6: LocalDateTime?): PaymentRecord {
+    override fun values(value1: Long?, value2: Long?, value3: Long?, value4: Long?, value5: BigDecimal?, value6: LocalDateTime?): PaymentRecord {
         this.value1(value1)
         this.value2(value2)
         this.value3(value3)

@@ -82,132 +82,132 @@ open class FilmRecord() : UpdatableRecordImpl<FilmRecord>(Film.FILM), Record14<L
     // Primary key information
     // -------------------------------------------------------------------------
 
-    public override fun key(): Record1<Long?> = super.key() as Record1<Long?>
+    override fun key(): Record1<Long?> = super.key() as Record1<Long?>
 
     // -------------------------------------------------------------------------
     // Record14 type implementation
     // -------------------------------------------------------------------------
 
-    public override fun fieldsRow(): Row14<Long?, String?, String?, Int?, Long?, Long?, Short?, BigDecimal?, Short?, BigDecimal?, MpaaRating?, LocalDateTime?, Array<String?>?, Any?> = super.fieldsRow() as Row14<Long?, String?, String?, Int?, Long?, Long?, Short?, BigDecimal?, Short?, BigDecimal?, MpaaRating?, LocalDateTime?, Array<String?>?, Any?>
-    public override fun valuesRow(): Row14<Long?, String?, String?, Int?, Long?, Long?, Short?, BigDecimal?, Short?, BigDecimal?, MpaaRating?, LocalDateTime?, Array<String?>?, Any?> = super.valuesRow() as Row14<Long?, String?, String?, Int?, Long?, Long?, Short?, BigDecimal?, Short?, BigDecimal?, MpaaRating?, LocalDateTime?, Array<String?>?, Any?>
-    public override fun field1(): Field<Long?> = Film.FILM.FILM_ID
-    public override fun field2(): Field<String?> = Film.FILM.TITLE
-    public override fun field3(): Field<String?> = Film.FILM.DESCRIPTION
-    public override fun field4(): Field<Int?> = Film.FILM.RELEASE_YEAR
-    public override fun field5(): Field<Long?> = Film.FILM.LANGUAGE_ID
-    public override fun field6(): Field<Long?> = Film.FILM.ORIGINAL_LANGUAGE_ID
-    public override fun field7(): Field<Short?> = Film.FILM.RENTAL_DURATION
-    public override fun field8(): Field<BigDecimal?> = Film.FILM.RENTAL_RATE
-    public override fun field9(): Field<Short?> = Film.FILM.LENGTH
-    public override fun field10(): Field<BigDecimal?> = Film.FILM.REPLACEMENT_COST
-    public override fun field11(): Field<MpaaRating?> = Film.FILM.RATING
-    public override fun field12(): Field<LocalDateTime?> = Film.FILM.LAST_UPDATE
-    public override fun field13(): Field<Array<String?>?> = Film.FILM.SPECIAL_FEATURES
+    override fun fieldsRow(): Row14<Long?, String?, String?, Int?, Long?, Long?, Short?, BigDecimal?, Short?, BigDecimal?, MpaaRating?, LocalDateTime?, Array<String?>?, Any?> = super.fieldsRow() as Row14<Long?, String?, String?, Int?, Long?, Long?, Short?, BigDecimal?, Short?, BigDecimal?, MpaaRating?, LocalDateTime?, Array<String?>?, Any?>
+    override fun valuesRow(): Row14<Long?, String?, String?, Int?, Long?, Long?, Short?, BigDecimal?, Short?, BigDecimal?, MpaaRating?, LocalDateTime?, Array<String?>?, Any?> = super.valuesRow() as Row14<Long?, String?, String?, Int?, Long?, Long?, Short?, BigDecimal?, Short?, BigDecimal?, MpaaRating?, LocalDateTime?, Array<String?>?, Any?>
+    override fun field1(): Field<Long?> = Film.FILM.FILM_ID
+    override fun field2(): Field<String?> = Film.FILM.TITLE
+    override fun field3(): Field<String?> = Film.FILM.DESCRIPTION
+    override fun field4(): Field<Int?> = Film.FILM.RELEASE_YEAR
+    override fun field5(): Field<Long?> = Film.FILM.LANGUAGE_ID
+    override fun field6(): Field<Long?> = Film.FILM.ORIGINAL_LANGUAGE_ID
+    override fun field7(): Field<Short?> = Film.FILM.RENTAL_DURATION
+    override fun field8(): Field<BigDecimal?> = Film.FILM.RENTAL_RATE
+    override fun field9(): Field<Short?> = Film.FILM.LENGTH
+    override fun field10(): Field<BigDecimal?> = Film.FILM.REPLACEMENT_COST
+    override fun field11(): Field<MpaaRating?> = Film.FILM.RATING
+    override fun field12(): Field<LocalDateTime?> = Film.FILM.LAST_UPDATE
+    override fun field13(): Field<Array<String?>?> = Film.FILM.SPECIAL_FEATURES
     @Deprecated(message = "Unknown data type. If this is a qualified, user-defined type, it may have been excluded from code generation. If this is a built-in type, you can define an explicit org.jooq.Binding to specify how this type should be handled. Deprecation can be turned off using <deprecationOnUnknownTypes/> in your code generator configuration.")
-    public override fun field14(): Field<Any?> = Film.FILM.FULLTEXT
-    public override fun component1(): Long? = filmId
-    public override fun component2(): String? = title
-    public override fun component3(): String? = description
-    public override fun component4(): Int? = releaseYear
-    public override fun component5(): Long? = languageId
-    public override fun component6(): Long? = originalLanguageId
-    public override fun component7(): Short? = rentalDuration
-    public override fun component8(): BigDecimal? = rentalRate
-    public override fun component9(): Short? = length
-    public override fun component10(): BigDecimal? = replacementCost
-    public override fun component11(): MpaaRating? = rating
-    public override fun component12(): LocalDateTime? = lastUpdate
-    public override fun component13(): Array<String?>? = specialFeatures
+    override fun field14(): Field<Any?> = Film.FILM.FULLTEXT
+    override fun component1(): Long? = filmId
+    override fun component2(): String? = title
+    override fun component3(): String? = description
+    override fun component4(): Int? = releaseYear
+    override fun component5(): Long? = languageId
+    override fun component6(): Long? = originalLanguageId
+    override fun component7(): Short? = rentalDuration
+    override fun component8(): BigDecimal? = rentalRate
+    override fun component9(): Short? = length
+    override fun component10(): BigDecimal? = replacementCost
+    override fun component11(): MpaaRating? = rating
+    override fun component12(): LocalDateTime? = lastUpdate
+    override fun component13(): Array<String?>? = specialFeatures
     @Deprecated(message = "Unknown data type. If this is a qualified, user-defined type, it may have been excluded from code generation. If this is a built-in type, you can define an explicit org.jooq.Binding to specify how this type should be handled. Deprecation can be turned off using <deprecationOnUnknownTypes/> in your code generator configuration.")
-    public override fun component14(): Any? = fulltext
-    public override fun value1(): Long? = filmId
-    public override fun value2(): String? = title
-    public override fun value3(): String? = description
-    public override fun value4(): Int? = releaseYear
-    public override fun value5(): Long? = languageId
-    public override fun value6(): Long? = originalLanguageId
-    public override fun value7(): Short? = rentalDuration
-    public override fun value8(): BigDecimal? = rentalRate
-    public override fun value9(): Short? = length
-    public override fun value10(): BigDecimal? = replacementCost
-    public override fun value11(): MpaaRating? = rating
-    public override fun value12(): LocalDateTime? = lastUpdate
-    public override fun value13(): Array<String?>? = specialFeatures
+    override fun component14(): Any? = fulltext
+    override fun value1(): Long? = filmId
+    override fun value2(): String? = title
+    override fun value3(): String? = description
+    override fun value4(): Int? = releaseYear
+    override fun value5(): Long? = languageId
+    override fun value6(): Long? = originalLanguageId
+    override fun value7(): Short? = rentalDuration
+    override fun value8(): BigDecimal? = rentalRate
+    override fun value9(): Short? = length
+    override fun value10(): BigDecimal? = replacementCost
+    override fun value11(): MpaaRating? = rating
+    override fun value12(): LocalDateTime? = lastUpdate
+    override fun value13(): Array<String?>? = specialFeatures
     @Deprecated(message = "Unknown data type. If this is a qualified, user-defined type, it may have been excluded from code generation. If this is a built-in type, you can define an explicit org.jooq.Binding to specify how this type should be handled. Deprecation can be turned off using <deprecationOnUnknownTypes/> in your code generator configuration.")
-    public override fun value14(): Any? = fulltext
+    override fun value14(): Any? = fulltext
 
-    public override fun value1(value: Long?): FilmRecord {
+    override fun value1(value: Long?): FilmRecord {
         set(0, value)
         return this
     }
 
-    public override fun value2(value: String?): FilmRecord {
+    override fun value2(value: String?): FilmRecord {
         set(1, value)
         return this
     }
 
-    public override fun value3(value: String?): FilmRecord {
+    override fun value3(value: String?): FilmRecord {
         set(2, value)
         return this
     }
 
-    public override fun value4(value: Int?): FilmRecord {
+    override fun value4(value: Int?): FilmRecord {
         set(3, value)
         return this
     }
 
-    public override fun value5(value: Long?): FilmRecord {
+    override fun value5(value: Long?): FilmRecord {
         set(4, value)
         return this
     }
 
-    public override fun value6(value: Long?): FilmRecord {
+    override fun value6(value: Long?): FilmRecord {
         set(5, value)
         return this
     }
 
-    public override fun value7(value: Short?): FilmRecord {
+    override fun value7(value: Short?): FilmRecord {
         set(6, value)
         return this
     }
 
-    public override fun value8(value: BigDecimal?): FilmRecord {
+    override fun value8(value: BigDecimal?): FilmRecord {
         set(7, value)
         return this
     }
 
-    public override fun value9(value: Short?): FilmRecord {
+    override fun value9(value: Short?): FilmRecord {
         set(8, value)
         return this
     }
 
-    public override fun value10(value: BigDecimal?): FilmRecord {
+    override fun value10(value: BigDecimal?): FilmRecord {
         set(9, value)
         return this
     }
 
-    public override fun value11(value: MpaaRating?): FilmRecord {
+    override fun value11(value: MpaaRating?): FilmRecord {
         set(10, value)
         return this
     }
 
-    public override fun value12(value: LocalDateTime?): FilmRecord {
+    override fun value12(value: LocalDateTime?): FilmRecord {
         set(11, value)
         return this
     }
 
-    public override fun value13(value: Array<String?>?): FilmRecord {
+    override fun value13(value: Array<String?>?): FilmRecord {
         set(12, value)
         return this
     }
 
     @Deprecated(message = "Unknown data type. If this is a qualified, user-defined type, it may have been excluded from code generation. If this is a built-in type, you can define an explicit org.jooq.Binding to specify how this type should be handled. Deprecation can be turned off using <deprecationOnUnknownTypes/> in your code generator configuration.")
-    public override fun value14(value: Any?): FilmRecord {
+    override fun value14(value: Any?): FilmRecord {
         set(13, value)
         return this
     }
 
-    public override fun values(value1: Long?, value2: String?, value3: String?, value4: Int?, value5: Long?, value6: Long?, value7: Short?, value8: BigDecimal?, value9: Short?, value10: BigDecimal?, value11: MpaaRating?, value12: LocalDateTime?, value13: Array<String?>?, value14: Any?): FilmRecord {
+    override fun values(value1: Long?, value2: String?, value3: String?, value4: Int?, value5: Long?, value6: Long?, value7: Short?, value8: BigDecimal?, value9: Short?, value10: BigDecimal?, value11: MpaaRating?, value12: LocalDateTime?, value13: Array<String?>?, value14: Any?): FilmRecord {
         this.value1(value1)
         this.value2(value2)
         this.value3(value3)

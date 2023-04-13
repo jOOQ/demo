@@ -25,7 +25,7 @@ open class ActorDao(configuration: Configuration?) : DAOImpl<ActorRecord, org.jo
      */
     constructor(): this(null)
 
-    public override fun getId(o: org.jooq.demo.kotlin.db.tables.pojos.Actor): Long? = o.actorId
+    override fun getId(o: org.jooq.demo.kotlin.db.tables.pojos.Actor): Long? = o.actorId
 
     /**
      * Fetch records that have <code>actor_id BETWEEN lowerInclusive AND

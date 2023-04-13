@@ -71,7 +71,7 @@ open class Film(
     /**
      * The class holding records for this type
      */
-    public override fun getRecordType(): Class<FilmRecord> = FilmRecord::class.java
+    override fun getRecordType(): Class<FilmRecord> = FilmRecord::class.java
 
     /**
      * The column <code>public.film.film_id</code>.
@@ -159,11 +159,11 @@ open class Film(
     constructor(): this(DSL.name("film"), null)
 
     constructor(child: Table<out Record>, key: ForeignKey<out Record, FilmRecord>): this(Internal.createPathAlias(child, key), child, key, FILM, null)
-    public override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
-    public override fun getIndexes(): List<Index> = listOf(FILM_FULLTEXT_IDX, IDX_FK_LANGUAGE_ID, IDX_FK_ORIGINAL_LANGUAGE_ID, IDX_TITLE)
-    public override fun getIdentity(): Identity<FilmRecord, Long?> = super.getIdentity() as Identity<FilmRecord, Long?>
-    public override fun getPrimaryKey(): UniqueKey<FilmRecord> = FILM_PKEY
-    public override fun getReferences(): List<ForeignKey<FilmRecord, *>> = listOf(FILM__FILM_LANGUAGE_ID_FKEY, FILM__FILM_ORIGINAL_LANGUAGE_ID_FKEY)
+    override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
+    override fun getIndexes(): List<Index> = listOf(FILM_FULLTEXT_IDX, IDX_FK_LANGUAGE_ID, IDX_FK_ORIGINAL_LANGUAGE_ID, IDX_TITLE)
+    override fun getIdentity(): Identity<FilmRecord, Long?> = super.getIdentity() as Identity<FilmRecord, Long?>
+    override fun getPrimaryKey(): UniqueKey<FilmRecord> = FILM_PKEY
+    override fun getReferences(): List<ForeignKey<FilmRecord, *>> = listOf(FILM__FILM_LANGUAGE_ID_FKEY, FILM__FILM_ORIGINAL_LANGUAGE_ID_FKEY)
 
     private lateinit var _filmLanguageIdFkey: Language
     private lateinit var _filmOriginalLanguageIdFkey: Language
@@ -195,29 +195,29 @@ open class Film(
 
     val filmOriginalLanguageIdFkey: Language
         get(): Language = filmOriginalLanguageIdFkey()
-    public override fun `as`(alias: String): Film = Film(DSL.name(alias), this)
-    public override fun `as`(alias: Name): Film = Film(alias, this)
-    public override fun `as`(alias: Table<*>): Film = Film(alias.getQualifiedName(), this)
+    override fun `as`(alias: String): Film = Film(DSL.name(alias), this)
+    override fun `as`(alias: Name): Film = Film(alias, this)
+    override fun `as`(alias: Table<*>): Film = Film(alias.getQualifiedName(), this)
 
     /**
      * Rename this table
      */
-    public override fun rename(name: String): Film = Film(DSL.name(name), null)
+    override fun rename(name: String): Film = Film(DSL.name(name), null)
 
     /**
      * Rename this table
      */
-    public override fun rename(name: Name): Film = Film(name, null)
+    override fun rename(name: Name): Film = Film(name, null)
 
     /**
      * Rename this table
      */
-    public override fun rename(name: Table<*>): Film = Film(name.getQualifiedName(), null)
+    override fun rename(name: Table<*>): Film = Film(name.getQualifiedName(), null)
 
     // -------------------------------------------------------------------------
     // Row14 type methods
     // -------------------------------------------------------------------------
-    public override fun fieldsRow(): Row14<Long?, String?, String?, Int?, Long?, Long?, Short?, BigDecimal?, Short?, BigDecimal?, MpaaRating?, LocalDateTime?, Array<String?>?, Any?> = super.fieldsRow() as Row14<Long?, String?, String?, Int?, Long?, Long?, Short?, BigDecimal?, Short?, BigDecimal?, MpaaRating?, LocalDateTime?, Array<String?>?, Any?>
+    override fun fieldsRow(): Row14<Long?, String?, String?, Int?, Long?, Long?, Short?, BigDecimal?, Short?, BigDecimal?, MpaaRating?, LocalDateTime?, Array<String?>?, Any?> = super.fieldsRow() as Row14<Long?, String?, String?, Int?, Long?, Long?, Short?, BigDecimal?, Short?, BigDecimal?, MpaaRating?, LocalDateTime?, Array<String?>?, Any?>
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.

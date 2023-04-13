@@ -25,7 +25,7 @@ open class AddressDao(configuration: Configuration?) : DAOImpl<AddressRecord, or
      */
     constructor(): this(null)
 
-    public override fun getId(o: org.jooq.demo.kotlin.db.tables.pojos.Address): Long? = o.addressId
+    override fun getId(o: org.jooq.demo.kotlin.db.tables.pojos.Address): Long? = o.addressId
 
     /**
      * Fetch records that have <code>address_id BETWEEN lowerInclusive AND

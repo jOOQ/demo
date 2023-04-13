@@ -64,7 +64,7 @@ open class Staff(
     /**
      * The class holding records for this type
      */
-    public override fun getRecordType(): Class<StaffRecord> = StaffRecord::class.java
+    override fun getRecordType(): Class<StaffRecord> = StaffRecord::class.java
 
     /**
      * The column <code>public.staff.staff_id</code>.
@@ -140,10 +140,10 @@ open class Staff(
     constructor(): this(DSL.name("staff"), null)
 
     constructor(child: Table<out Record>, key: ForeignKey<out Record, StaffRecord>): this(Internal.createPathAlias(child, key), child, key, STAFF, null)
-    public override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
-    public override fun getIdentity(): Identity<StaffRecord, Long?> = super.getIdentity() as Identity<StaffRecord, Long?>
-    public override fun getPrimaryKey(): UniqueKey<StaffRecord> = STAFF_PKEY
-    public override fun getReferences(): List<ForeignKey<StaffRecord, *>> = listOf(STAFF__STAFF_ADDRESS_ID_FKEY, STAFF__STAFF_STORE_ID_FKEY)
+    override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
+    override fun getIdentity(): Identity<StaffRecord, Long?> = super.getIdentity() as Identity<StaffRecord, Long?>
+    override fun getPrimaryKey(): UniqueKey<StaffRecord> = STAFF_PKEY
+    override fun getReferences(): List<ForeignKey<StaffRecord, *>> = listOf(STAFF__STAFF_ADDRESS_ID_FKEY, STAFF__STAFF_STORE_ID_FKEY)
 
     private lateinit var _address: Address
     private lateinit var _store: Store
@@ -173,29 +173,29 @@ open class Staff(
 
     val store: Store
         get(): Store = store()
-    public override fun `as`(alias: String): Staff = Staff(DSL.name(alias), this)
-    public override fun `as`(alias: Name): Staff = Staff(alias, this)
-    public override fun `as`(alias: Table<*>): Staff = Staff(alias.getQualifiedName(), this)
+    override fun `as`(alias: String): Staff = Staff(DSL.name(alias), this)
+    override fun `as`(alias: Name): Staff = Staff(alias, this)
+    override fun `as`(alias: Table<*>): Staff = Staff(alias.getQualifiedName(), this)
 
     /**
      * Rename this table
      */
-    public override fun rename(name: String): Staff = Staff(DSL.name(name), null)
+    override fun rename(name: String): Staff = Staff(DSL.name(name), null)
 
     /**
      * Rename this table
      */
-    public override fun rename(name: Name): Staff = Staff(name, null)
+    override fun rename(name: Name): Staff = Staff(name, null)
 
     /**
      * Rename this table
      */
-    public override fun rename(name: Table<*>): Staff = Staff(name.getQualifiedName(), null)
+    override fun rename(name: Table<*>): Staff = Staff(name.getQualifiedName(), null)
 
     // -------------------------------------------------------------------------
     // Row11 type methods
     // -------------------------------------------------------------------------
-    public override fun fieldsRow(): Row11<Long?, String?, String?, Long?, String?, Long?, Boolean?, String?, String?, LocalDateTime?, ByteArray?> = super.fieldsRow() as Row11<Long?, String?, String?, Long?, String?, Long?, Boolean?, String?, String?, LocalDateTime?, ByteArray?>
+    override fun fieldsRow(): Row11<Long?, String?, String?, Long?, String?, Long?, Boolean?, String?, String?, LocalDateTime?, ByteArray?> = super.fieldsRow() as Row11<Long?, String?, String?, Long?, String?, Long?, Boolean?, String?, String?, LocalDateTime?, ByteArray?>
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.

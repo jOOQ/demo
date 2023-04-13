@@ -65,7 +65,7 @@ open class City(
     /**
      * The class holding records for this type
      */
-    public override fun getRecordType(): Class<CityRecord> = CityRecord::class.java
+    override fun getRecordType(): Class<CityRecord> = CityRecord::class.java
 
     /**
      * The column <code>public.city.city_id</code>.
@@ -106,11 +106,11 @@ open class City(
     constructor(): this(DSL.name("city"), null)
 
     constructor(child: Table<out Record>, key: ForeignKey<out Record, CityRecord>): this(Internal.createPathAlias(child, key), child, key, CITY, null)
-    public override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
-    public override fun getIndexes(): List<Index> = listOf(IDX_FK_COUNTRY_ID)
-    public override fun getIdentity(): Identity<CityRecord, Long?> = super.getIdentity() as Identity<CityRecord, Long?>
-    public override fun getPrimaryKey(): UniqueKey<CityRecord> = CITY_PKEY
-    public override fun getReferences(): List<ForeignKey<CityRecord, *>> = listOf(CITY__CITY_COUNTRY_ID_FKEY)
+    override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
+    override fun getIndexes(): List<Index> = listOf(IDX_FK_COUNTRY_ID)
+    override fun getIdentity(): Identity<CityRecord, Long?> = super.getIdentity() as Identity<CityRecord, Long?>
+    override fun getPrimaryKey(): UniqueKey<CityRecord> = CITY_PKEY
+    override fun getReferences(): List<ForeignKey<CityRecord, *>> = listOf(CITY__CITY_COUNTRY_ID_FKEY)
 
     private lateinit var _country: Country
 
@@ -126,29 +126,29 @@ open class City(
 
     val country: Country
         get(): Country = country()
-    public override fun `as`(alias: String): City = City(DSL.name(alias), this)
-    public override fun `as`(alias: Name): City = City(alias, this)
-    public override fun `as`(alias: Table<*>): City = City(alias.getQualifiedName(), this)
+    override fun `as`(alias: String): City = City(DSL.name(alias), this)
+    override fun `as`(alias: Name): City = City(alias, this)
+    override fun `as`(alias: Table<*>): City = City(alias.getQualifiedName(), this)
 
     /**
      * Rename this table
      */
-    public override fun rename(name: String): City = City(DSL.name(name), null)
+    override fun rename(name: String): City = City(DSL.name(name), null)
 
     /**
      * Rename this table
      */
-    public override fun rename(name: Name): City = City(name, null)
+    override fun rename(name: Name): City = City(name, null)
 
     /**
      * Rename this table
      */
-    public override fun rename(name: Table<*>): City = City(name.getQualifiedName(), null)
+    override fun rename(name: Table<*>): City = City(name.getQualifiedName(), null)
 
     // -------------------------------------------------------------------------
     // Row4 type methods
     // -------------------------------------------------------------------------
-    public override fun fieldsRow(): Row4<Long?, String?, Long?, LocalDateTime?> = super.fieldsRow() as Row4<Long?, String?, Long?, LocalDateTime?>
+    override fun fieldsRow(): Row4<Long?, String?, Long?, LocalDateTime?> = super.fieldsRow() as Row4<Long?, String?, Long?, LocalDateTime?>
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.

@@ -25,7 +25,7 @@ open class InventoryDao(configuration: Configuration?) : DAOImpl<InventoryRecord
      */
     constructor(): this(null)
 
-    public override fun getId(o: org.jooq.demo.kotlin.db.tables.pojos.Inventory): Long? = o.inventoryId
+    override fun getId(o: org.jooq.demo.kotlin.db.tables.pojos.Inventory): Long? = o.inventoryId
 
     /**
      * Fetch records that have <code>inventory_id BETWEEN lowerInclusive AND

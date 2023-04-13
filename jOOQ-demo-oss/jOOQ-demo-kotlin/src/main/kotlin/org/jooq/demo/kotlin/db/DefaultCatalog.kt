@@ -29,7 +29,7 @@ open class DefaultCatalog : CatalogImpl("") {
      */
     val PUBLIC: Public get(): Public = Public.PUBLIC
 
-    public override fun getSchemas(): List<Schema> = listOf(
+    override fun getSchemas(): List<Schema> = listOf(
         Public.PUBLIC
     )
 

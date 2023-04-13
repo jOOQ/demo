@@ -36,40 +36,40 @@ open class CountryRecord() : UpdatableRecordImpl<CountryRecord>(Country.COUNTRY)
     // Primary key information
     // -------------------------------------------------------------------------
 
-    public override fun key(): Record1<Long?> = super.key() as Record1<Long?>
+    override fun key(): Record1<Long?> = super.key() as Record1<Long?>
 
     // -------------------------------------------------------------------------
     // Record3 type implementation
     // -------------------------------------------------------------------------
 
-    public override fun fieldsRow(): Row3<Long?, String?, LocalDateTime?> = super.fieldsRow() as Row3<Long?, String?, LocalDateTime?>
-    public override fun valuesRow(): Row3<Long?, String?, LocalDateTime?> = super.valuesRow() as Row3<Long?, String?, LocalDateTime?>
-    public override fun field1(): Field<Long?> = Country.COUNTRY.COUNTRY_ID
-    public override fun field2(): Field<String?> = Country.COUNTRY.COUNTRY_
-    public override fun field3(): Field<LocalDateTime?> = Country.COUNTRY.LAST_UPDATE
-    public override fun component1(): Long? = countryId
-    public override fun component2(): String? = country
-    public override fun component3(): LocalDateTime? = lastUpdate
-    public override fun value1(): Long? = countryId
-    public override fun value2(): String? = country
-    public override fun value3(): LocalDateTime? = lastUpdate
+    override fun fieldsRow(): Row3<Long?, String?, LocalDateTime?> = super.fieldsRow() as Row3<Long?, String?, LocalDateTime?>
+    override fun valuesRow(): Row3<Long?, String?, LocalDateTime?> = super.valuesRow() as Row3<Long?, String?, LocalDateTime?>
+    override fun field1(): Field<Long?> = Country.COUNTRY.COUNTRY_ID
+    override fun field2(): Field<String?> = Country.COUNTRY.COUNTRY_
+    override fun field3(): Field<LocalDateTime?> = Country.COUNTRY.LAST_UPDATE
+    override fun component1(): Long? = countryId
+    override fun component2(): String? = country
+    override fun component3(): LocalDateTime? = lastUpdate
+    override fun value1(): Long? = countryId
+    override fun value2(): String? = country
+    override fun value3(): LocalDateTime? = lastUpdate
 
-    public override fun value1(value: Long?): CountryRecord {
+    override fun value1(value: Long?): CountryRecord {
         set(0, value)
         return this
     }
 
-    public override fun value2(value: String?): CountryRecord {
+    override fun value2(value: String?): CountryRecord {
         set(1, value)
         return this
     }
 
-    public override fun value3(value: LocalDateTime?): CountryRecord {
+    override fun value3(value: LocalDateTime?): CountryRecord {
         set(2, value)
         return this
     }
 
-    public override fun values(value1: Long?, value2: String?, value3: LocalDateTime?): CountryRecord {
+    override fun values(value1: Long?, value2: String?, value3: LocalDateTime?): CountryRecord {
         this.value1(value1)
         this.value2(value2)
         this.value3(value3)

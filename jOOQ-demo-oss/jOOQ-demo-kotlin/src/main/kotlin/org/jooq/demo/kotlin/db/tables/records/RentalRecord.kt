@@ -52,72 +52,72 @@ open class RentalRecord() : UpdatableRecordImpl<RentalRecord>(Rental.RENTAL), Re
     // Primary key information
     // -------------------------------------------------------------------------
 
-    public override fun key(): Record1<Long?> = super.key() as Record1<Long?>
+    override fun key(): Record1<Long?> = super.key() as Record1<Long?>
 
     // -------------------------------------------------------------------------
     // Record7 type implementation
     // -------------------------------------------------------------------------
 
-    public override fun fieldsRow(): Row7<Long?, LocalDateTime?, Long?, Long?, LocalDateTime?, Long?, LocalDateTime?> = super.fieldsRow() as Row7<Long?, LocalDateTime?, Long?, Long?, LocalDateTime?, Long?, LocalDateTime?>
-    public override fun valuesRow(): Row7<Long?, LocalDateTime?, Long?, Long?, LocalDateTime?, Long?, LocalDateTime?> = super.valuesRow() as Row7<Long?, LocalDateTime?, Long?, Long?, LocalDateTime?, Long?, LocalDateTime?>
-    public override fun field1(): Field<Long?> = Rental.RENTAL.RENTAL_ID
-    public override fun field2(): Field<LocalDateTime?> = Rental.RENTAL.RENTAL_DATE
-    public override fun field3(): Field<Long?> = Rental.RENTAL.INVENTORY_ID
-    public override fun field4(): Field<Long?> = Rental.RENTAL.CUSTOMER_ID
-    public override fun field5(): Field<LocalDateTime?> = Rental.RENTAL.RETURN_DATE
-    public override fun field6(): Field<Long?> = Rental.RENTAL.STAFF_ID
-    public override fun field7(): Field<LocalDateTime?> = Rental.RENTAL.LAST_UPDATE
-    public override fun component1(): Long? = rentalId
-    public override fun component2(): LocalDateTime? = rentalDate
-    public override fun component3(): Long? = inventoryId
-    public override fun component4(): Long? = customerId
-    public override fun component5(): LocalDateTime? = returnDate
-    public override fun component6(): Long? = staffId
-    public override fun component7(): LocalDateTime? = lastUpdate
-    public override fun value1(): Long? = rentalId
-    public override fun value2(): LocalDateTime? = rentalDate
-    public override fun value3(): Long? = inventoryId
-    public override fun value4(): Long? = customerId
-    public override fun value5(): LocalDateTime? = returnDate
-    public override fun value6(): Long? = staffId
-    public override fun value7(): LocalDateTime? = lastUpdate
+    override fun fieldsRow(): Row7<Long?, LocalDateTime?, Long?, Long?, LocalDateTime?, Long?, LocalDateTime?> = super.fieldsRow() as Row7<Long?, LocalDateTime?, Long?, Long?, LocalDateTime?, Long?, LocalDateTime?>
+    override fun valuesRow(): Row7<Long?, LocalDateTime?, Long?, Long?, LocalDateTime?, Long?, LocalDateTime?> = super.valuesRow() as Row7<Long?, LocalDateTime?, Long?, Long?, LocalDateTime?, Long?, LocalDateTime?>
+    override fun field1(): Field<Long?> = Rental.RENTAL.RENTAL_ID
+    override fun field2(): Field<LocalDateTime?> = Rental.RENTAL.RENTAL_DATE
+    override fun field3(): Field<Long?> = Rental.RENTAL.INVENTORY_ID
+    override fun field4(): Field<Long?> = Rental.RENTAL.CUSTOMER_ID
+    override fun field5(): Field<LocalDateTime?> = Rental.RENTAL.RETURN_DATE
+    override fun field6(): Field<Long?> = Rental.RENTAL.STAFF_ID
+    override fun field7(): Field<LocalDateTime?> = Rental.RENTAL.LAST_UPDATE
+    override fun component1(): Long? = rentalId
+    override fun component2(): LocalDateTime? = rentalDate
+    override fun component3(): Long? = inventoryId
+    override fun component4(): Long? = customerId
+    override fun component5(): LocalDateTime? = returnDate
+    override fun component6(): Long? = staffId
+    override fun component7(): LocalDateTime? = lastUpdate
+    override fun value1(): Long? = rentalId
+    override fun value2(): LocalDateTime? = rentalDate
+    override fun value3(): Long? = inventoryId
+    override fun value4(): Long? = customerId
+    override fun value5(): LocalDateTime? = returnDate
+    override fun value6(): Long? = staffId
+    override fun value7(): LocalDateTime? = lastUpdate
 
-    public override fun value1(value: Long?): RentalRecord {
+    override fun value1(value: Long?): RentalRecord {
         set(0, value)
         return this
     }
 
-    public override fun value2(value: LocalDateTime?): RentalRecord {
+    override fun value2(value: LocalDateTime?): RentalRecord {
         set(1, value)
         return this
     }
 
-    public override fun value3(value: Long?): RentalRecord {
+    override fun value3(value: Long?): RentalRecord {
         set(2, value)
         return this
     }
 
-    public override fun value4(value: Long?): RentalRecord {
+    override fun value4(value: Long?): RentalRecord {
         set(3, value)
         return this
     }
 
-    public override fun value5(value: LocalDateTime?): RentalRecord {
+    override fun value5(value: LocalDateTime?): RentalRecord {
         set(4, value)
         return this
     }
 
-    public override fun value6(value: Long?): RentalRecord {
+    override fun value6(value: Long?): RentalRecord {
         set(5, value)
         return this
     }
 
-    public override fun value7(value: LocalDateTime?): RentalRecord {
+    override fun value7(value: LocalDateTime?): RentalRecord {
         set(6, value)
         return this
     }
 
-    public override fun values(value1: Long?, value2: LocalDateTime?, value3: Long?, value4: Long?, value5: LocalDateTime?, value6: Long?, value7: LocalDateTime?): RentalRecord {
+    override fun values(value1: Long?, value2: LocalDateTime?, value3: Long?, value4: Long?, value5: LocalDateTime?, value6: Long?, value7: LocalDateTime?): RentalRecord {
         this.value1(value1)
         this.value2(value2)
         this.value3(value3)

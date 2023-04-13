@@ -40,48 +40,48 @@ open class ActorRecord() : UpdatableRecordImpl<ActorRecord>(Actor.ACTOR), Record
     // Primary key information
     // -------------------------------------------------------------------------
 
-    public override fun key(): Record1<Long?> = super.key() as Record1<Long?>
+    override fun key(): Record1<Long?> = super.key() as Record1<Long?>
 
     // -------------------------------------------------------------------------
     // Record4 type implementation
     // -------------------------------------------------------------------------
 
-    public override fun fieldsRow(): Row4<Long?, String?, String?, LocalDateTime?> = super.fieldsRow() as Row4<Long?, String?, String?, LocalDateTime?>
-    public override fun valuesRow(): Row4<Long?, String?, String?, LocalDateTime?> = super.valuesRow() as Row4<Long?, String?, String?, LocalDateTime?>
-    public override fun field1(): Field<Long?> = Actor.ACTOR.ACTOR_ID
-    public override fun field2(): Field<String?> = Actor.ACTOR.FIRST_NAME
-    public override fun field3(): Field<String?> = Actor.ACTOR.LAST_NAME
-    public override fun field4(): Field<LocalDateTime?> = Actor.ACTOR.LAST_UPDATE
-    public override fun component1(): Long? = actorId
-    public override fun component2(): String? = firstName
-    public override fun component3(): String? = lastName
-    public override fun component4(): LocalDateTime? = lastUpdate
-    public override fun value1(): Long? = actorId
-    public override fun value2(): String? = firstName
-    public override fun value3(): String? = lastName
-    public override fun value4(): LocalDateTime? = lastUpdate
+    override fun fieldsRow(): Row4<Long?, String?, String?, LocalDateTime?> = super.fieldsRow() as Row4<Long?, String?, String?, LocalDateTime?>
+    override fun valuesRow(): Row4<Long?, String?, String?, LocalDateTime?> = super.valuesRow() as Row4<Long?, String?, String?, LocalDateTime?>
+    override fun field1(): Field<Long?> = Actor.ACTOR.ACTOR_ID
+    override fun field2(): Field<String?> = Actor.ACTOR.FIRST_NAME
+    override fun field3(): Field<String?> = Actor.ACTOR.LAST_NAME
+    override fun field4(): Field<LocalDateTime?> = Actor.ACTOR.LAST_UPDATE
+    override fun component1(): Long? = actorId
+    override fun component2(): String? = firstName
+    override fun component3(): String? = lastName
+    override fun component4(): LocalDateTime? = lastUpdate
+    override fun value1(): Long? = actorId
+    override fun value2(): String? = firstName
+    override fun value3(): String? = lastName
+    override fun value4(): LocalDateTime? = lastUpdate
 
-    public override fun value1(value: Long?): ActorRecord {
+    override fun value1(value: Long?): ActorRecord {
         set(0, value)
         return this
     }
 
-    public override fun value2(value: String?): ActorRecord {
+    override fun value2(value: String?): ActorRecord {
         set(1, value)
         return this
     }
 
-    public override fun value3(value: String?): ActorRecord {
+    override fun value3(value: String?): ActorRecord {
         set(2, value)
         return this
     }
 
-    public override fun value4(value: LocalDateTime?): ActorRecord {
+    override fun value4(value: LocalDateTime?): ActorRecord {
         set(3, value)
         return this
     }
 
-    public override fun values(value1: Long?, value2: String?, value3: String?, value4: LocalDateTime?): ActorRecord {
+    override fun values(value1: Long?, value2: String?, value3: String?, value4: LocalDateTime?): ActorRecord {
         this.value1(value1)
         this.value2(value2)
         this.value3(value3)

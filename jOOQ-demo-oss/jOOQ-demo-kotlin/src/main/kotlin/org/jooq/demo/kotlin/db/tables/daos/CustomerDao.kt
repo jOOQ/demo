@@ -26,7 +26,7 @@ open class CustomerDao(configuration: Configuration?) : DAOImpl<CustomerRecord, 
      */
     constructor(): this(null)
 
-    public override fun getId(o: org.jooq.demo.kotlin.db.tables.pojos.Customer): Long? = o.customerId
+    override fun getId(o: org.jooq.demo.kotlin.db.tables.pojos.Customer): Long? = o.customerId
 
     /**
      * Fetch records that have <code>customer_id BETWEEN lowerInclusive AND

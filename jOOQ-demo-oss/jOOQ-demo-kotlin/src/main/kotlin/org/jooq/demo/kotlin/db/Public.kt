@@ -322,13 +322,13 @@ open class Public : SchemaImpl("public", DefaultCatalog.DEFAULT_CATALOG) {
      */
     val STORE: Store get() = Store.STORE
 
-    public override fun getCatalog(): Catalog = DefaultCatalog.DEFAULT_CATALOG
+    override fun getCatalog(): Catalog = DefaultCatalog.DEFAULT_CATALOG
 
-    public override fun getDomains(): List<Domain<*>> = listOf(
+    override fun getDomains(): List<Domain<*>> = listOf(
         YEAR
     )
 
-    public override fun getTables(): List<Table<*>> = listOf(
+    override fun getTables(): List<Table<*>> = listOf(
         Actor.ACTOR,
         ActorInfo.ACTOR_INFO,
         Address.ADDRESS,

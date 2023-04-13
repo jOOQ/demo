@@ -35,34 +35,34 @@ open class SalesByStoreRecord() : TableRecordImpl<SalesByStoreRecord>(SalesBySto
     // Record3 type implementation
     // -------------------------------------------------------------------------
 
-    public override fun fieldsRow(): Row3<String?, String?, BigDecimal?> = super.fieldsRow() as Row3<String?, String?, BigDecimal?>
-    public override fun valuesRow(): Row3<String?, String?, BigDecimal?> = super.valuesRow() as Row3<String?, String?, BigDecimal?>
-    public override fun field1(): Field<String?> = SalesByStore.SALES_BY_STORE.STORE
-    public override fun field2(): Field<String?> = SalesByStore.SALES_BY_STORE.MANAGER
-    public override fun field3(): Field<BigDecimal?> = SalesByStore.SALES_BY_STORE.TOTAL_SALES
-    public override fun component1(): String? = store
-    public override fun component2(): String? = manager
-    public override fun component3(): BigDecimal? = totalSales
-    public override fun value1(): String? = store
-    public override fun value2(): String? = manager
-    public override fun value3(): BigDecimal? = totalSales
+    override fun fieldsRow(): Row3<String?, String?, BigDecimal?> = super.fieldsRow() as Row3<String?, String?, BigDecimal?>
+    override fun valuesRow(): Row3<String?, String?, BigDecimal?> = super.valuesRow() as Row3<String?, String?, BigDecimal?>
+    override fun field1(): Field<String?> = SalesByStore.SALES_BY_STORE.STORE
+    override fun field2(): Field<String?> = SalesByStore.SALES_BY_STORE.MANAGER
+    override fun field3(): Field<BigDecimal?> = SalesByStore.SALES_BY_STORE.TOTAL_SALES
+    override fun component1(): String? = store
+    override fun component2(): String? = manager
+    override fun component3(): BigDecimal? = totalSales
+    override fun value1(): String? = store
+    override fun value2(): String? = manager
+    override fun value3(): BigDecimal? = totalSales
 
-    public override fun value1(value: String?): SalesByStoreRecord {
+    override fun value1(value: String?): SalesByStoreRecord {
         set(0, value)
         return this
     }
 
-    public override fun value2(value: String?): SalesByStoreRecord {
+    override fun value2(value: String?): SalesByStoreRecord {
         set(1, value)
         return this
     }
 
-    public override fun value3(value: BigDecimal?): SalesByStoreRecord {
+    override fun value3(value: BigDecimal?): SalesByStoreRecord {
         set(2, value)
         return this
     }
 
-    public override fun values(value1: String?, value2: String?, value3: BigDecimal?): SalesByStoreRecord {
+    override fun values(value1: String?, value2: String?, value3: BigDecimal?): SalesByStoreRecord {
         this.value1(value1)
         this.value2(value2)
         this.value3(value3)

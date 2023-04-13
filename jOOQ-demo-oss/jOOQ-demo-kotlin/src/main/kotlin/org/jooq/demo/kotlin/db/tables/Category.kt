@@ -60,7 +60,7 @@ open class Category(
     /**
      * The class holding records for this type
      */
-    public override fun getRecordType(): Class<CategoryRecord> = CategoryRecord::class.java
+    override fun getRecordType(): Class<CategoryRecord> = CategoryRecord::class.java
 
     /**
      * The column <code>public.category.category_id</code>.
@@ -96,32 +96,32 @@ open class Category(
     constructor(): this(DSL.name("category"), null)
 
     constructor(child: Table<out Record>, key: ForeignKey<out Record, CategoryRecord>): this(Internal.createPathAlias(child, key), child, key, CATEGORY, null)
-    public override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
-    public override fun getIdentity(): Identity<CategoryRecord, Long?> = super.getIdentity() as Identity<CategoryRecord, Long?>
-    public override fun getPrimaryKey(): UniqueKey<CategoryRecord> = CATEGORY_PKEY
-    public override fun `as`(alias: String): Category = Category(DSL.name(alias), this)
-    public override fun `as`(alias: Name): Category = Category(alias, this)
-    public override fun `as`(alias: Table<*>): Category = Category(alias.getQualifiedName(), this)
+    override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
+    override fun getIdentity(): Identity<CategoryRecord, Long?> = super.getIdentity() as Identity<CategoryRecord, Long?>
+    override fun getPrimaryKey(): UniqueKey<CategoryRecord> = CATEGORY_PKEY
+    override fun `as`(alias: String): Category = Category(DSL.name(alias), this)
+    override fun `as`(alias: Name): Category = Category(alias, this)
+    override fun `as`(alias: Table<*>): Category = Category(alias.getQualifiedName(), this)
 
     /**
      * Rename this table
      */
-    public override fun rename(name: String): Category = Category(DSL.name(name), null)
+    override fun rename(name: String): Category = Category(DSL.name(name), null)
 
     /**
      * Rename this table
      */
-    public override fun rename(name: Name): Category = Category(name, null)
+    override fun rename(name: Name): Category = Category(name, null)
 
     /**
      * Rename this table
      */
-    public override fun rename(name: Table<*>): Category = Category(name.getQualifiedName(), null)
+    override fun rename(name: Table<*>): Category = Category(name.getQualifiedName(), null)
 
     // -------------------------------------------------------------------------
     // Row3 type methods
     // -------------------------------------------------------------------------
-    public override fun fieldsRow(): Row3<Long?, String?, LocalDateTime?> = super.fieldsRow() as Row3<Long?, String?, LocalDateTime?>
+    override fun fieldsRow(): Row3<Long?, String?, LocalDateTime?> = super.fieldsRow() as Row3<Long?, String?, LocalDateTime?>
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.

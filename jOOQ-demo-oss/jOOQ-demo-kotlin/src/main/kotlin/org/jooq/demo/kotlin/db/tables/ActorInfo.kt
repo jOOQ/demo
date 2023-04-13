@@ -71,7 +71,7 @@ open class ActorInfo(
     /**
      * The class holding records for this type
      */
-    public override fun getRecordType(): Class<ActorInfoRecord> = ActorInfoRecord::class.java
+    override fun getRecordType(): Class<ActorInfoRecord> = ActorInfoRecord::class.java
 
     /**
      * The column <code>public.actor_info.actor_id</code>.
@@ -112,30 +112,30 @@ open class ActorInfo(
     constructor(): this(DSL.name("actor_info"), null)
 
     constructor(child: Table<out Record>, key: ForeignKey<out Record, ActorInfoRecord>): this(Internal.createPathAlias(child, key), child, key, ACTOR_INFO, null)
-    public override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
-    public override fun `as`(alias: String): ActorInfo = ActorInfo(DSL.name(alias), this)
-    public override fun `as`(alias: Name): ActorInfo = ActorInfo(alias, this)
-    public override fun `as`(alias: Table<*>): ActorInfo = ActorInfo(alias.getQualifiedName(), this)
+    override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
+    override fun `as`(alias: String): ActorInfo = ActorInfo(DSL.name(alias), this)
+    override fun `as`(alias: Name): ActorInfo = ActorInfo(alias, this)
+    override fun `as`(alias: Table<*>): ActorInfo = ActorInfo(alias.getQualifiedName(), this)
 
     /**
      * Rename this table
      */
-    public override fun rename(name: String): ActorInfo = ActorInfo(DSL.name(name), null)
+    override fun rename(name: String): ActorInfo = ActorInfo(DSL.name(name), null)
 
     /**
      * Rename this table
      */
-    public override fun rename(name: Name): ActorInfo = ActorInfo(name, null)
+    override fun rename(name: Name): ActorInfo = ActorInfo(name, null)
 
     /**
      * Rename this table
      */
-    public override fun rename(name: Table<*>): ActorInfo = ActorInfo(name.getQualifiedName(), null)
+    override fun rename(name: Table<*>): ActorInfo = ActorInfo(name.getQualifiedName(), null)
 
     // -------------------------------------------------------------------------
     // Row4 type methods
     // -------------------------------------------------------------------------
-    public override fun fieldsRow(): Row4<Long?, String?, String?, String?> = super.fieldsRow() as Row4<Long?, String?, String?, String?>
+    override fun fieldsRow(): Row4<Long?, String?, String?, String?> = super.fieldsRow() as Row4<Long?, String?, String?, String?>
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.

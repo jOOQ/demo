@@ -65,7 +65,7 @@ open class Address(
     /**
      * The class holding records for this type
      */
-    public override fun getRecordType(): Class<AddressRecord> = AddressRecord::class.java
+    override fun getRecordType(): Class<AddressRecord> = AddressRecord::class.java
 
     /**
      * The column <code>public.address.address_id</code>.
@@ -126,11 +126,11 @@ open class Address(
     constructor(): this(DSL.name("address"), null)
 
     constructor(child: Table<out Record>, key: ForeignKey<out Record, AddressRecord>): this(Internal.createPathAlias(child, key), child, key, ADDRESS, null)
-    public override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
-    public override fun getIndexes(): List<Index> = listOf(IDX_FK_CITY_ID)
-    public override fun getIdentity(): Identity<AddressRecord, Long?> = super.getIdentity() as Identity<AddressRecord, Long?>
-    public override fun getPrimaryKey(): UniqueKey<AddressRecord> = ADDRESS_PKEY
-    public override fun getReferences(): List<ForeignKey<AddressRecord, *>> = listOf(ADDRESS__ADDRESS_CITY_ID_FKEY)
+    override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
+    override fun getIndexes(): List<Index> = listOf(IDX_FK_CITY_ID)
+    override fun getIdentity(): Identity<AddressRecord, Long?> = super.getIdentity() as Identity<AddressRecord, Long?>
+    override fun getPrimaryKey(): UniqueKey<AddressRecord> = ADDRESS_PKEY
+    override fun getReferences(): List<ForeignKey<AddressRecord, *>> = listOf(ADDRESS__ADDRESS_CITY_ID_FKEY)
 
     private lateinit var _city: City
 
@@ -146,29 +146,29 @@ open class Address(
 
     val city: City
         get(): City = city()
-    public override fun `as`(alias: String): Address = Address(DSL.name(alias), this)
-    public override fun `as`(alias: Name): Address = Address(alias, this)
-    public override fun `as`(alias: Table<*>): Address = Address(alias.getQualifiedName(), this)
+    override fun `as`(alias: String): Address = Address(DSL.name(alias), this)
+    override fun `as`(alias: Name): Address = Address(alias, this)
+    override fun `as`(alias: Table<*>): Address = Address(alias.getQualifiedName(), this)
 
     /**
      * Rename this table
      */
-    public override fun rename(name: String): Address = Address(DSL.name(name), null)
+    override fun rename(name: String): Address = Address(DSL.name(name), null)
 
     /**
      * Rename this table
      */
-    public override fun rename(name: Name): Address = Address(name, null)
+    override fun rename(name: Name): Address = Address(name, null)
 
     /**
      * Rename this table
      */
-    public override fun rename(name: Table<*>): Address = Address(name.getQualifiedName(), null)
+    override fun rename(name: Table<*>): Address = Address(name.getQualifiedName(), null)
 
     // -------------------------------------------------------------------------
     // Row8 type methods
     // -------------------------------------------------------------------------
-    public override fun fieldsRow(): Row8<Long?, String?, String?, String?, Long?, String?, String?, LocalDateTime?> = super.fieldsRow() as Row8<Long?, String?, String?, String?, Long?, String?, String?, LocalDateTime?>
+    override fun fieldsRow(): Row8<Long?, String?, String?, String?, Long?, String?, String?, LocalDateTime?> = super.fieldsRow() as Row8<Long?, String?, String?, String?, Long?, String?, String?, LocalDateTime?>
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.

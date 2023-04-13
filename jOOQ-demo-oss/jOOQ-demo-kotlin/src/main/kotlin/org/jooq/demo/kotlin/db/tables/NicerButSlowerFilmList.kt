@@ -74,7 +74,7 @@ open class NicerButSlowerFilmList(
     /**
      * The class holding records for this type
      */
-    public override fun getRecordType(): Class<NicerButSlowerFilmListRecord> = NicerButSlowerFilmListRecord::class.java
+    override fun getRecordType(): Class<NicerButSlowerFilmListRecord> = NicerButSlowerFilmListRecord::class.java
 
     /**
      * The column <code>public.nicer_but_slower_film_list.fid</code>.
@@ -137,30 +137,30 @@ open class NicerButSlowerFilmList(
     constructor(): this(DSL.name("nicer_but_slower_film_list"), null)
 
     constructor(child: Table<out Record>, key: ForeignKey<out Record, NicerButSlowerFilmListRecord>): this(Internal.createPathAlias(child, key), child, key, NICER_BUT_SLOWER_FILM_LIST, null)
-    public override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
-    public override fun `as`(alias: String): NicerButSlowerFilmList = NicerButSlowerFilmList(DSL.name(alias), this)
-    public override fun `as`(alias: Name): NicerButSlowerFilmList = NicerButSlowerFilmList(alias, this)
-    public override fun `as`(alias: Table<*>): NicerButSlowerFilmList = NicerButSlowerFilmList(alias.getQualifiedName(), this)
+    override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
+    override fun `as`(alias: String): NicerButSlowerFilmList = NicerButSlowerFilmList(DSL.name(alias), this)
+    override fun `as`(alias: Name): NicerButSlowerFilmList = NicerButSlowerFilmList(alias, this)
+    override fun `as`(alias: Table<*>): NicerButSlowerFilmList = NicerButSlowerFilmList(alias.getQualifiedName(), this)
 
     /**
      * Rename this table
      */
-    public override fun rename(name: String): NicerButSlowerFilmList = NicerButSlowerFilmList(DSL.name(name), null)
+    override fun rename(name: String): NicerButSlowerFilmList = NicerButSlowerFilmList(DSL.name(name), null)
 
     /**
      * Rename this table
      */
-    public override fun rename(name: Name): NicerButSlowerFilmList = NicerButSlowerFilmList(name, null)
+    override fun rename(name: Name): NicerButSlowerFilmList = NicerButSlowerFilmList(name, null)
 
     /**
      * Rename this table
      */
-    public override fun rename(name: Table<*>): NicerButSlowerFilmList = NicerButSlowerFilmList(name.getQualifiedName(), null)
+    override fun rename(name: Table<*>): NicerButSlowerFilmList = NicerButSlowerFilmList(name.getQualifiedName(), null)
 
     // -------------------------------------------------------------------------
     // Row8 type methods
     // -------------------------------------------------------------------------
-    public override fun fieldsRow(): Row8<Long?, String?, String?, String?, BigDecimal?, Short?, MpaaRating?, String?> = super.fieldsRow() as Row8<Long?, String?, String?, String?, BigDecimal?, Short?, MpaaRating?, String?>
+    override fun fieldsRow(): Row8<Long?, String?, String?, String?, BigDecimal?, Short?, MpaaRating?, String?> = super.fieldsRow() as Row8<Long?, String?, String?, String?, BigDecimal?, Short?, MpaaRating?, String?>
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.

@@ -27,7 +27,7 @@ open class FilmDao(configuration: Configuration?) : DAOImpl<FilmRecord, org.jooq
      */
     constructor(): this(null)
 
-    public override fun getId(o: org.jooq.demo.kotlin.db.tables.pojos.Film): Long? = o.filmId
+    override fun getId(o: org.jooq.demo.kotlin.db.tables.pojos.Film): Long? = o.filmId
 
     /**
      * Fetch records that have <code>film_id BETWEEN lowerInclusive AND

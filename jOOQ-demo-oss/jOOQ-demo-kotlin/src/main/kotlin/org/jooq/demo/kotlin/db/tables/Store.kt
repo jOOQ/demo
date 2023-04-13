@@ -66,7 +66,7 @@ open class Store(
     /**
      * The class holding records for this type
      */
-    public override fun getRecordType(): Class<StoreRecord> = StoreRecord::class.java
+    override fun getRecordType(): Class<StoreRecord> = StoreRecord::class.java
 
     /**
      * The column <code>public.store.store_id</code>.
@@ -107,11 +107,11 @@ open class Store(
     constructor(): this(DSL.name("store"), null)
 
     constructor(child: Table<out Record>, key: ForeignKey<out Record, StoreRecord>): this(Internal.createPathAlias(child, key), child, key, STORE, null)
-    public override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
-    public override fun getIndexes(): List<Index> = listOf(IDX_UNQ_MANAGER_STAFF_ID)
-    public override fun getIdentity(): Identity<StoreRecord, Long?> = super.getIdentity() as Identity<StoreRecord, Long?>
-    public override fun getPrimaryKey(): UniqueKey<StoreRecord> = STORE_PKEY
-    public override fun getReferences(): List<ForeignKey<StoreRecord, *>> = listOf(STORE__STORE_MANAGER_STAFF_ID_FKEY, STORE__STORE_ADDRESS_ID_FKEY)
+    override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
+    override fun getIndexes(): List<Index> = listOf(IDX_UNQ_MANAGER_STAFF_ID)
+    override fun getIdentity(): Identity<StoreRecord, Long?> = super.getIdentity() as Identity<StoreRecord, Long?>
+    override fun getPrimaryKey(): UniqueKey<StoreRecord> = STORE_PKEY
+    override fun getReferences(): List<ForeignKey<StoreRecord, *>> = listOf(STORE__STORE_MANAGER_STAFF_ID_FKEY, STORE__STORE_ADDRESS_ID_FKEY)
 
     private lateinit var _staff: Staff
     private lateinit var _address: Address
@@ -141,29 +141,29 @@ open class Store(
 
     val address: Address
         get(): Address = address()
-    public override fun `as`(alias: String): Store = Store(DSL.name(alias), this)
-    public override fun `as`(alias: Name): Store = Store(alias, this)
-    public override fun `as`(alias: Table<*>): Store = Store(alias.getQualifiedName(), this)
+    override fun `as`(alias: String): Store = Store(DSL.name(alias), this)
+    override fun `as`(alias: Name): Store = Store(alias, this)
+    override fun `as`(alias: Table<*>): Store = Store(alias.getQualifiedName(), this)
 
     /**
      * Rename this table
      */
-    public override fun rename(name: String): Store = Store(DSL.name(name), null)
+    override fun rename(name: String): Store = Store(DSL.name(name), null)
 
     /**
      * Rename this table
      */
-    public override fun rename(name: Name): Store = Store(name, null)
+    override fun rename(name: Name): Store = Store(name, null)
 
     /**
      * Rename this table
      */
-    public override fun rename(name: Table<*>): Store = Store(name.getQualifiedName(), null)
+    override fun rename(name: Table<*>): Store = Store(name.getQualifiedName(), null)
 
     // -------------------------------------------------------------------------
     // Row4 type methods
     // -------------------------------------------------------------------------
-    public override fun fieldsRow(): Row4<Long?, Long?, Long?, LocalDateTime?> = super.fieldsRow() as Row4<Long?, Long?, Long?, LocalDateTime?>
+    override fun fieldsRow(): Row4<Long?, Long?, Long?, LocalDateTime?> = super.fieldsRow() as Row4<Long?, Long?, Long?, LocalDateTime?>
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
