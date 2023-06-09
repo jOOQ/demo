@@ -19,6 +19,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.utility.ResourceReaper;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -107,8 +108,10 @@ public abstract class AbstractDemo {
     }
 
     @AfterClass
-    public static void afterClass() {
-        db.close();
+    public static void end() {
+        if (db != null) {
+            ResourceReaper.instance().stopAndRemoveContainer(db.getContainerId(), db.getDockerImageName());
+        }
     }
 
     @Before
