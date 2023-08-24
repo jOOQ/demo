@@ -20,14 +20,15 @@ class Demo16Diagnostics extends AbstractDemo {
     // Look for diagnostics log output for:
     // - https://www.jooq.org/doc/latest/manual/sql-execution/diagnostics/diagnostics-repeated-statements/
     // - https://www.jooq.org/doc/latest/manual/sql-execution/diagnostics/diagnostics-consecutive-aggregation/ (commercial only feature)
-    for (actor <- c
-      .select(ACTOR.ACTOR_ID, ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
+    c.select(ACTOR.ACTOR_ID, ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
       .from(ACTOR)
       .orderBy(ACTOR.ACTOR_ID)
       .limit(10)
-    ) {
-      val (actorId: Long, firstName, lastName) = actor
-      val count = c
+      .forEach { actor =>
+        val actorId = actor.get(ACTOR.ACTOR_ID)
+        val firstName = actor.get(ACTOR.FIRST_NAME)
+        val lastName = actor.get(ACTOR.LAST_NAME)
+        val count = c
         .selectCount()
         .from(FILM_ACTOR)
         .where(FILM_ACTOR.ACTOR_ID.equal(actorId))
