@@ -2,6 +2,8 @@ package org.jooq.demo.kotlin
 
 import org.jooq.*
 import org.jooq.Records.mapping
+import org.jooq.conf.RenderImplicitJoinType
+import org.jooq.conf.Settings
 import org.jooq.demo.AbstractDemo
 import org.jooq.demo.kotlin.db.tables.references.*
 import org.jooq.impl.DSL.*
@@ -183,7 +185,7 @@ class Demo01Querying : AbstractDemo() {
     }
 
     @Test
-    fun implicitJoins() {
+    fun implicitToOneJoins() {
         title("No need to spell out trivial to-one joins")
         ctx.select(
             CUSTOMER.FIRST_NAME,
@@ -192,6 +194,43 @@ class Demo01Querying : AbstractDemo() {
         )
             .from(CUSTOMER)
             .orderBy(1, 2)
+            .limit(5)
+            .fetch()
+    }
+
+    @Test
+    fun implicitToManyJoins() {
+        title("No need to spell out to-many joins either. Either use explicit to-many joins...")
+        ctx.select(
+            CUSTOMER.FIRST_NAME,
+            CUSTOMER.LAST_NAME,
+            countDistinct(CUSTOMER.rental().inventory().FILM_ID).`as`("distinct film rentals")
+        )
+            .from(CUSTOMER)
+
+            // Add an explicit path join for the to-many path
+            .leftJoin(CUSTOMER.rental().inventory())
+            .groupBy(CUSTOMER.CUSTOMER_ID)
+            .orderBy(inline(3).desc())
+            .limit(5)
+            .fetch()
+
+        title("... or enable implicit to-many joins if you are OK with the 'interesting' semantics.")
+        ctx.configuration()
+            .deriveSettings { s -> s.withRenderImplicitJoinToManyType(RenderImplicitJoinType.LEFT_JOIN) }
+            .dsl()
+            .select(
+                CUSTOMER.FIRST_NAME,
+                CUSTOMER.LAST_NAME,
+
+                // Now, the to-many path can be implicitly joined. Beware that this may produce very unexpected
+                // cartesian products (just like any JOIN, of course), which may be hard to debug because of the
+                // implicitness!
+                countDistinct(CUSTOMER.rental().inventory().FILM_ID).`as`("distinct film rentals")
+            )
+            .from(CUSTOMER)
+            .groupBy(CUSTOMER.CUSTOMER_ID)
+            .orderBy(inline(3).desc())
             .limit(5)
             .fetch()
     }
@@ -258,17 +297,15 @@ class Demo01Querying : AbstractDemo() {
                 FILM.TITLE,
                 multiset(
                     select(
-                        FILM_ACTOR.actor.FIRST_NAME,
-                        FILM_ACTOR.actor.LAST_UPDATE
+                        FILM.actor.FIRST_NAME,
+                        FILM.actor.LAST_UPDATE
                     )
-                    .from(FILM_ACTOR)
-                    .where(FILM_ACTOR.FILM_ID.eq(FILM.FILM_ID))
+
+                    // Implicit path correlation is very powerful!
+                    // https://www.jooq.org/doc/latest/manual/sql-building/sql-statements/select-statement/implicit-path-correlation/
+                    .from(FILM.actor)
                 ),
-                multiset(
-                    select(FILM_CATEGORY.category().NAME)
-                    .from(FILM_CATEGORY)
-                    .where(FILM_CATEGORY.FILM_ID.eq(FILM.FILM_ID))
-                )
+                multiset(select(FILM.category.NAME).from(FILM.category))
             )
             .from(FILM)
             .orderBy(FILM.TITLE)

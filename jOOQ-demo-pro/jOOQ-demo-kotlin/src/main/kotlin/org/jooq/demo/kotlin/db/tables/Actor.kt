@@ -102,7 +102,7 @@ open class Actor(
 
     private constructor(alias: Name, aliased: Table<ActorRecord>?): this(alias, null, null, null, aliased, null, null)
     private constructor(alias: Name, aliased: Table<ActorRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, null, aliased, parameters, null)
-    private constructor(alias: Name, aliased: Table<ActorRecord>?, where: Condition): this(alias, null, null, null, aliased, null, where)
+    private constructor(alias: Name, aliased: Table<ActorRecord>?, where: Condition?): this(alias, null, null, null, aliased, null, where)
 
     /**
      * Create an aliased <code>public.actor</code> table reference
@@ -181,7 +181,7 @@ open class Actor(
     /**
      * Create an inline derived table from this table
      */
-    override fun where(condition: Condition): Actor = Actor(qualifiedName, if (aliased()) this else null, condition)
+    override fun where(condition: Condition?): Actor = Actor(qualifiedName, if (aliased()) this else null, condition)
 
     /**
      * Create an inline derived table from this table
@@ -191,12 +191,12 @@ open class Actor(
     /**
      * Create an inline derived table from this table
      */
-    override fun where(vararg conditions: Condition): Actor = where(DSL.and(*conditions))
+    override fun where(vararg conditions: Condition?): Actor = where(DSL.and(*conditions))
 
     /**
      * Create an inline derived table from this table
      */
-    override fun where(condition: Field<Boolean?>): Actor = where(DSL.condition(condition))
+    override fun where(condition: Field<Boolean?>?): Actor = where(DSL.condition(condition))
 
     /**
      * Create an inline derived table from this table

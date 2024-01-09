@@ -150,7 +150,7 @@ open class Customer(
 
     private constructor(alias: Name, aliased: Table<CustomerRecord>?): this(alias, null, null, null, aliased, null, null)
     private constructor(alias: Name, aliased: Table<CustomerRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, null, aliased, parameters, null)
-    private constructor(alias: Name, aliased: Table<CustomerRecord>?, where: Condition): this(alias, null, null, null, aliased, null, where)
+    private constructor(alias: Name, aliased: Table<CustomerRecord>?, where: Condition?): this(alias, null, null, null, aliased, null, where)
 
     /**
      * Create an aliased <code>public.customer</code> table reference
@@ -364,7 +364,7 @@ open class Customer(
     /**
      * Create an inline derived table from this table
      */
-    override fun where(condition: Condition): Customer = Customer(qualifiedName, if (aliased()) this else null, condition)
+    override fun where(condition: Condition?): Customer = Customer(qualifiedName, if (aliased()) this else null, condition)
 
     /**
      * Create an inline derived table from this table
@@ -374,12 +374,12 @@ open class Customer(
     /**
      * Create an inline derived table from this table
      */
-    override fun where(vararg conditions: Condition): Customer = where(DSL.and(*conditions))
+    override fun where(vararg conditions: Condition?): Customer = where(DSL.and(*conditions))
 
     /**
      * Create an inline derived table from this table
      */
-    override fun where(condition: Field<Boolean?>): Customer = where(DSL.condition(condition))
+    override fun where(condition: Field<Boolean?>?): Customer = where(DSL.condition(condition))
 
     /**
      * Create an inline derived table from this table

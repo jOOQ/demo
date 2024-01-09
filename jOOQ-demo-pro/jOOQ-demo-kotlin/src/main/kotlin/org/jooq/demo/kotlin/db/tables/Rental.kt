@@ -133,7 +133,7 @@ open class Rental(
 
     private constructor(alias: Name, aliased: Table<RentalRecord>?): this(alias, null, null, null, aliased, null, null)
     private constructor(alias: Name, aliased: Table<RentalRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, null, aliased, parameters, null)
-    private constructor(alias: Name, aliased: Table<RentalRecord>?, where: Condition): this(alias, null, null, null, aliased, null, where)
+    private constructor(alias: Name, aliased: Table<RentalRecord>?, where: Condition?): this(alias, null, null, null, aliased, null, where)
 
     /**
      * Create an aliased <code>public.rental</code> table reference
@@ -346,7 +346,7 @@ open class Rental(
     /**
      * Create an inline derived table from this table
      */
-    override fun where(condition: Condition): Rental = Rental(qualifiedName, if (aliased()) this else null, condition)
+    override fun where(condition: Condition?): Rental = Rental(qualifiedName, if (aliased()) this else null, condition)
 
     /**
      * Create an inline derived table from this table
@@ -356,12 +356,12 @@ open class Rental(
     /**
      * Create an inline derived table from this table
      */
-    override fun where(vararg conditions: Condition): Rental = where(DSL.and(*conditions))
+    override fun where(vararg conditions: Condition?): Rental = where(DSL.and(*conditions))
 
     /**
      * Create an inline derived table from this table
      */
-    override fun where(condition: Field<Boolean?>): Rental = where(DSL.condition(condition))
+    override fun where(condition: Field<Boolean?>?): Rental = where(DSL.condition(condition))
 
     /**
      * Create an inline derived table from this table

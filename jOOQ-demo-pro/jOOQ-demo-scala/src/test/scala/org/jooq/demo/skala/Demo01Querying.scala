@@ -160,7 +160,7 @@ class Demo01Querying extends AbstractDemo {
   }
 
   @Test
-  def implicitJoins(): Unit = {
+  def implicitToOneJoins(): Unit = {
     title("No need to spell out trivial to-one joins")
     ctx.select(
         CUSTOMER.FIRST_NAME,

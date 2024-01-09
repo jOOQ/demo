@@ -114,7 +114,7 @@ open class PaymentP2007_02(
 
     private constructor(alias: Name, aliased: Table<PaymentP2007_02Record>?): this(alias, null, null, null, aliased, null, null)
     private constructor(alias: Name, aliased: Table<PaymentP2007_02Record>?, parameters: Array<Field<*>?>?): this(alias, null, null, null, aliased, parameters, null)
-    private constructor(alias: Name, aliased: Table<PaymentP2007_02Record>?, where: Condition): this(alias, null, null, null, aliased, null, where)
+    private constructor(alias: Name, aliased: Table<PaymentP2007_02Record>?, where: Condition?): this(alias, null, null, null, aliased, null, where)
 
     /**
      * Create an aliased <code>public.payment_p2007_02</code> table reference
@@ -217,7 +217,7 @@ open class PaymentP2007_02(
     /**
      * Create an inline derived table from this table
      */
-    override fun where(condition: Condition): PaymentP2007_02 = PaymentP2007_02(qualifiedName, if (aliased()) this else null, condition)
+    override fun where(condition: Condition?): PaymentP2007_02 = PaymentP2007_02(qualifiedName, if (aliased()) this else null, condition)
 
     /**
      * Create an inline derived table from this table
@@ -227,12 +227,12 @@ open class PaymentP2007_02(
     /**
      * Create an inline derived table from this table
      */
-    override fun where(vararg conditions: Condition): PaymentP2007_02 = where(DSL.and(*conditions))
+    override fun where(vararg conditions: Condition?): PaymentP2007_02 = where(DSL.and(*conditions))
 
     /**
      * Create an inline derived table from this table
      */
-    override fun where(condition: Field<Boolean?>): PaymentP2007_02 = where(DSL.condition(condition))
+    override fun where(condition: Field<Boolean?>?): PaymentP2007_02 = where(DSL.condition(condition))
 
     /**
      * Create an inline derived table from this table
