@@ -92,7 +92,7 @@ open class Language(
 
     private constructor(alias: Name, aliased: Table<LanguageRecord>?): this(alias, null, null, null, aliased, null, null)
     private constructor(alias: Name, aliased: Table<LanguageRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, null, aliased, parameters, null)
-    private constructor(alias: Name, aliased: Table<LanguageRecord>?, where: Condition?): this(alias, null, null, null, aliased, null, where)
+    private constructor(alias: Name, aliased: Table<LanguageRecord>?, where: Condition): this(alias, null, null, null, aliased, null, where)
 
     /**
      * Create an aliased <code>public.language</code> table reference
@@ -178,7 +178,7 @@ open class Language(
     /**
      * Create an inline derived table from this table
      */
-    override fun where(condition: Condition?): Language = Language(qualifiedName, if (aliased()) this else null, condition)
+    override fun where(condition: Condition): Language = Language(qualifiedName, if (aliased()) this else null, condition)
 
     /**
      * Create an inline derived table from this table
@@ -188,12 +188,12 @@ open class Language(
     /**
      * Create an inline derived table from this table
      */
-    override fun where(vararg conditions: Condition?): Language = where(DSL.and(*conditions))
+    override fun where(vararg conditions: Condition): Language = where(DSL.and(*conditions))
 
     /**
      * Create an inline derived table from this table
      */
-    override fun where(condition: Field<Boolean?>?): Language = where(DSL.condition(condition))
+    override fun where(condition: Field<Boolean?>): Language = where(DSL.condition(condition))
 
     /**
      * Create an inline derived table from this table

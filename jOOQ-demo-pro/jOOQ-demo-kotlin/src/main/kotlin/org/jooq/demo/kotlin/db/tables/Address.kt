@@ -125,7 +125,7 @@ open class Address(
 
     private constructor(alias: Name, aliased: Table<AddressRecord>?): this(alias, null, null, null, aliased, null, null)
     private constructor(alias: Name, aliased: Table<AddressRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, null, aliased, parameters, null)
-    private constructor(alias: Name, aliased: Table<AddressRecord>?, where: Condition?): this(alias, null, null, null, aliased, null, where)
+    private constructor(alias: Name, aliased: Table<AddressRecord>?, where: Condition): this(alias, null, null, null, aliased, null, where)
 
     /**
      * Create an aliased <code>public.address</code> table reference
@@ -242,7 +242,7 @@ open class Address(
     /**
      * Create an inline derived table from this table
      */
-    override fun where(condition: Condition?): Address = Address(qualifiedName, if (aliased()) this else null, condition)
+    override fun where(condition: Condition): Address = Address(qualifiedName, if (aliased()) this else null, condition)
 
     /**
      * Create an inline derived table from this table
@@ -252,12 +252,12 @@ open class Address(
     /**
      * Create an inline derived table from this table
      */
-    override fun where(vararg conditions: Condition?): Address = where(DSL.and(*conditions))
+    override fun where(vararg conditions: Condition): Address = where(DSL.and(*conditions))
 
     /**
      * Create an inline derived table from this table
      */
-    override fun where(condition: Field<Boolean?>?): Address = where(DSL.condition(condition))
+    override fun where(condition: Field<Boolean?>): Address = where(DSL.condition(condition))
 
     /**
      * Create an inline derived table from this table

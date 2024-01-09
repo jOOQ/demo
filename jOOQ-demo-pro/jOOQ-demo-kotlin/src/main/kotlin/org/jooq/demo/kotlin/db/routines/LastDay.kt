@@ -34,20 +34,20 @@ open class LastDay : AbstractRoutine<LocalDate>("last_day", Public.PUBLIC, SQLDa
     }
 
     init {
-        returnParameter = LastDay.RETURN_VALUE
-        addInParameter(LastDay._1)
+        returnParameter = RETURN_VALUE
+        addInParameter(_1)
     }
 
     /**
      * Set the <code>_1</code> parameter IN value to the routine
      */
-    fun set__1(value: LocalDateTime?): Unit = setValue(LastDay._1, value)
+    fun set__1(value: LocalDateTime?): Unit = setValue(_1, value)
 
     /**
      * Set the <code>_1</code> parameter to the function to be used with a
      * {@link org.jooq.Select} statement
      */
     fun set__1(field: Field<LocalDateTime?>): Unit {
-        setField(LastDay._1, field)
+        setField(_1, field)
     }
 }

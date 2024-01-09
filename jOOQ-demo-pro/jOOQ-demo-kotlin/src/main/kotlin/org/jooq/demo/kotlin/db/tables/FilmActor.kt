@@ -95,7 +95,7 @@ open class FilmActor(
 
     private constructor(alias: Name, aliased: Table<FilmActorRecord>?): this(alias, null, null, null, aliased, null, null)
     private constructor(alias: Name, aliased: Table<FilmActorRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, null, aliased, parameters, null)
-    private constructor(alias: Name, aliased: Table<FilmActorRecord>?, where: Condition?): this(alias, null, null, null, aliased, null, where)
+    private constructor(alias: Name, aliased: Table<FilmActorRecord>?, where: Condition): this(alias, null, null, null, aliased, null, where)
 
     /**
      * Create an aliased <code>public.film_actor</code> table reference
@@ -180,7 +180,7 @@ open class FilmActor(
     /**
      * Create an inline derived table from this table
      */
-    override fun where(condition: Condition?): FilmActor = FilmActor(qualifiedName, if (aliased()) this else null, condition)
+    override fun where(condition: Condition): FilmActor = FilmActor(qualifiedName, if (aliased()) this else null, condition)
 
     /**
      * Create an inline derived table from this table
@@ -190,12 +190,12 @@ open class FilmActor(
     /**
      * Create an inline derived table from this table
      */
-    override fun where(vararg conditions: Condition?): FilmActor = where(DSL.and(*conditions))
+    override fun where(vararg conditions: Condition): FilmActor = where(DSL.and(*conditions))
 
     /**
      * Create an inline derived table from this table
      */
-    override fun where(condition: Field<Boolean?>?): FilmActor = where(DSL.condition(condition))
+    override fun where(condition: Field<Boolean?>): FilmActor = where(DSL.condition(condition))
 
     /**
      * Create an inline derived table from this table

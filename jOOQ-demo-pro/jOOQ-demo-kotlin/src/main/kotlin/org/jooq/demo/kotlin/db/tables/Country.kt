@@ -91,7 +91,7 @@ open class Country(
 
     private constructor(alias: Name, aliased: Table<CountryRecord>?): this(alias, null, null, null, aliased, null, null)
     private constructor(alias: Name, aliased: Table<CountryRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, null, aliased, parameters, null)
-    private constructor(alias: Name, aliased: Table<CountryRecord>?, where: Condition?): this(alias, null, null, null, aliased, null, where)
+    private constructor(alias: Name, aliased: Table<CountryRecord>?, where: Condition): this(alias, null, null, null, aliased, null, where)
 
     /**
      * Create an aliased <code>public.country</code> table reference
@@ -160,7 +160,7 @@ open class Country(
     /**
      * Create an inline derived table from this table
      */
-    override fun where(condition: Condition?): Country = Country(qualifiedName, if (aliased()) this else null, condition)
+    override fun where(condition: Condition): Country = Country(qualifiedName, if (aliased()) this else null, condition)
 
     /**
      * Create an inline derived table from this table
@@ -170,12 +170,12 @@ open class Country(
     /**
      * Create an inline derived table from this table
      */
-    override fun where(vararg conditions: Condition?): Country = where(DSL.and(*conditions))
+    override fun where(vararg conditions: Condition): Country = where(DSL.and(*conditions))
 
     /**
      * Create an inline derived table from this table
      */
-    override fun where(condition: Field<Boolean?>?): Country = where(DSL.condition(condition))
+    override fun where(condition: Field<Boolean?>): Country = where(DSL.condition(condition))
 
     /**
      * Create an inline derived table from this table

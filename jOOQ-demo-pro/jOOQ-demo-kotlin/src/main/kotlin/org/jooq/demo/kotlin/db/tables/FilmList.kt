@@ -125,7 +125,7 @@ open class FilmList(
 
     private constructor(alias: Name, aliased: Table<FilmListRecord>?): this(alias, null, null, null, aliased, null, null)
     private constructor(alias: Name, aliased: Table<FilmListRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, null, aliased, parameters, null)
-    private constructor(alias: Name, aliased: Table<FilmListRecord>?, where: Condition?): this(alias, null, null, null, aliased, null, where)
+    private constructor(alias: Name, aliased: Table<FilmListRecord>?, where: Condition): this(alias, null, null, null, aliased, null, where)
 
     /**
      * Create an aliased <code>public.film_list</code> table reference
@@ -164,7 +164,7 @@ open class FilmList(
     /**
      * Create an inline derived table from this table
      */
-    override fun where(condition: Condition?): FilmList = FilmList(qualifiedName, if (aliased()) this else null, condition)
+    override fun where(condition: Condition): FilmList = FilmList(qualifiedName, if (aliased()) this else null, condition)
 
     /**
      * Create an inline derived table from this table
@@ -174,12 +174,12 @@ open class FilmList(
     /**
      * Create an inline derived table from this table
      */
-    override fun where(vararg conditions: Condition?): FilmList = where(DSL.and(*conditions))
+    override fun where(vararg conditions: Condition): FilmList = where(DSL.and(*conditions))
 
     /**
      * Create an inline derived table from this table
      */
-    override fun where(condition: Field<Boolean?>?): FilmList = where(DSL.condition(condition))
+    override fun where(condition: Field<Boolean?>): FilmList = where(DSL.condition(condition))
 
     /**
      * Create an inline derived table from this table

@@ -101,7 +101,7 @@ open class City(
 
     private constructor(alias: Name, aliased: Table<CityRecord>?): this(alias, null, null, null, aliased, null, null)
     private constructor(alias: Name, aliased: Table<CityRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, null, aliased, parameters, null)
-    private constructor(alias: Name, aliased: Table<CityRecord>?, where: Condition?): this(alias, null, null, null, aliased, null, where)
+    private constructor(alias: Name, aliased: Table<CityRecord>?, where: Condition): this(alias, null, null, null, aliased, null, where)
 
     /**
      * Create an aliased <code>public.city</code> table reference
@@ -188,7 +188,7 @@ open class City(
     /**
      * Create an inline derived table from this table
      */
-    override fun where(condition: Condition?): City = City(qualifiedName, if (aliased()) this else null, condition)
+    override fun where(condition: Condition): City = City(qualifiedName, if (aliased()) this else null, condition)
 
     /**
      * Create an inline derived table from this table
@@ -198,12 +198,12 @@ open class City(
     /**
      * Create an inline derived table from this table
      */
-    override fun where(vararg conditions: Condition?): City = where(DSL.and(*conditions))
+    override fun where(vararg conditions: Condition): City = where(DSL.and(*conditions))
 
     /**
      * Create an inline derived table from this table
      */
-    override fun where(condition: Field<Boolean?>?): City = where(DSL.condition(condition))
+    override fun where(condition: Field<Boolean?>): City = where(DSL.condition(condition))
 
     /**
      * Create an inline derived table from this table

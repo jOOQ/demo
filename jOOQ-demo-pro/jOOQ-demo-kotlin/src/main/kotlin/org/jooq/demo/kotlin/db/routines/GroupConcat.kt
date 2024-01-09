@@ -31,20 +31,20 @@ open class GroupConcat : AbstractRoutine<String>("group_concat", Public.PUBLIC, 
     }
 
     init {
-        returnParameter = GroupConcat.RETURN_VALUE
-        addInParameter(GroupConcat._1)
+        returnParameter = RETURN_VALUE
+        addInParameter(_1)
     }
 
     /**
      * Set the <code>_1</code> parameter IN value to the routine
      */
-    fun set__1(value: String?): Unit = setValue(GroupConcat._1, value)
+    fun set__1(value: String?): Unit = setValue(_1, value)
 
     /**
      * Set the <code>_1</code> parameter to the function to be used with a
      * {@link org.jooq.Select} statement
      */
     fun set__1(field: Field<String?>): Unit {
-        setField(GroupConcat._1, field)
+        setField(_1, field)
     }
 }
