@@ -19,6 +19,19 @@ public class Demo03Functions extends AbstractDemo {
             .orderBy(ACTOR.FIRST_NAME)
             .limit(5)
             .fetch();
+
+        // More information:
+        // - https://www.jooq.org/doc/latest/manual/sql-building/column-expressions/string-functions/
+        // - https://www.jooq.org/doc/latest/manual/sql-building/column-expressions/bitwise-functions/
+        // - https://www.jooq.org/doc/latest/manual/sql-building/column-expressions/numeric-functions/
+        // - https://www.jooq.org/doc/latest/manual/sql-building/column-expressions/general-functions/
+        // - https://www.jooq.org/doc/latest/manual/sql-building/column-expressions/datetime-functions/
+        // - https://www.jooq.org/doc/latest/manual/sql-building/column-expressions/array-functions/
+        // - https://www.jooq.org/doc/latest/manual/sql-building/column-expressions/json-functions/
+        // - https://www.jooq.org/doc/latest/manual/sql-building/column-expressions/xml-functions/
+        // - https://www.jooq.org/doc/latest/manual/sql-building/column-expressions/system-functions/
+        // - https://www.jooq.org/doc/latest/manual/sql-building/column-expressions/spatial-functions/
+        // - And much more
     }
 
     @Test
@@ -29,6 +42,10 @@ public class Demo03Functions extends AbstractDemo {
             .orderBy(ACTOR.FIRST_NAME)
             .limit(5)
             .fetch();
+
+        // More information:
+        // - https://www.jooq.org/doc/latest/manual/sql-building/plain-sql/
+        // - https://www.jooq.org/doc/latest/manual/sql-building/plain-sql-templating/
     }
 
     private Field<String> difference(Field<String> f1, String f2) {
@@ -56,6 +73,9 @@ public class Demo03Functions extends AbstractDemo {
            .orderBy(ACTOR.FIRST_NAME)
            .limit(5)
            .fetch();
+
+        // More information:
+        // - https://www.jooq.org/doc/latest/manual/sql-building/column-expressions/aggregate-functions/
     }
 
     @Test
@@ -79,5 +99,8 @@ public class Demo03Functions extends AbstractDemo {
            .orderBy(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
            .limit(5)
            .fetch();
+
+        // More information:
+        // https://www.jooq.org/doc/latest/manual/sql-building/column-expressions/window-functions/
     }
 }
