@@ -23,6 +23,9 @@ class Demo05Batch : AbstractDemo() {
         a2.lastName = "Smith"
 
         ctx.batchStore(a1, a2).execute()
+
+        // More information here:
+        // - https://www.jooq.org/doc/latest/manual/sql-execution/crud-with-updatablerecords/batch-execution-for-crud/
     }
 
     @Test
@@ -57,6 +60,9 @@ class Demo05Batch : AbstractDemo() {
                 .where(ACTOR.ACTOR_ID.gt(200L))
                 .fetch()
         }
+
+        // More information here:
+        // - https://www.jooq.org/doc/latest/manual/sql-execution/batched-connection/
     }
 
     @Test
@@ -74,6 +80,9 @@ class Demo05Batch : AbstractDemo() {
             .bind(201L, "Jon", "Doe")
             .bind(202L, "Jane", "Smith")
             .execute()
+
+        // More information here:
+        // - https://www.jooq.org/doc/latest/manual/sql-execution/batch-execution/
     }
 
     @After

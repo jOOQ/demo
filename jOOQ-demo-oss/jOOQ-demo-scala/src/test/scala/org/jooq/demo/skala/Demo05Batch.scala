@@ -20,13 +20,19 @@ class Demo05Batch extends AbstractDemo {
     title("A set of updatable records can be conveniently batch stored, inserted, updated")
     val a1 = ctx.newRecord(ACTOR)
     val a2 = ctx.newRecord(ACTOR)
+
     a1.setActorId(201L)
     a1.setFirstName("John")
     a1.setLastName("Doe")
+
     a2.setActorId(202L)
     a2.setFirstName("Jane")
     a2.setLastName("Smith")
+
     ctx.batchStore(a1, a2).execute
+
+    // More information here:
+    // - https://www.jooq.org/doc/latest/manual/sql-execution/crud-with-updatablerecords/batch-execution-for-crud/
   }
 
   @Test
@@ -53,11 +59,27 @@ class Demo05Batch extends AbstractDemo {
         .where(ACTOR.ACTOR_ID > 200L)
         .fetch
     })
+
+    // More information here:
+    // - https://www.jooq.org/doc/latest/manual/sql-execution/batched-connection/
   }
 
-  @Test def batchManually(): Unit = {
-    ctx.batch(ctx.insertInto(ACTOR).columns(ACTOR.ACTOR_ID, ACTOR.FIRST_NAME, ACTOR.LAST_NAME).values // Pass a few dummy values here
-    (null.asInstanceOf[Long], null, null)).bind(201L, "Jon", "Doe").bind(202L, "Jane", "Smith").execute
+  @Test
+  def batchManually(): Unit = {
+    ctx.batch(
+      ctx
+        .insertInto(ACTOR)
+        .columns(ACTOR.ACTOR_ID, ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
+        // Pass a few dummy values here
+        .values
+        (null.asInstanceOf[Long], null, null)
+    )
+      .bind(201L, "Jon", "Doe")
+      .bind(202L, "Jane", "Smith")
+      .execute
+
+    // More information here:
+    // - https://www.jooq.org/doc/latest/manual/sql-execution/batch-execution/
   }
 
   @After
