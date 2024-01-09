@@ -4,23 +4,26 @@
 package org.jooq.demo.kotlin.db.tables
 
 
-import java.util.function.Function
+import kotlin.collections.Collection
 
+import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
+import org.jooq.InverseForeignKey
 import org.jooq.Name
+import org.jooq.PlainSQL
+import org.jooq.QueryPart
 import org.jooq.Record
-import org.jooq.Records
-import org.jooq.Row4
+import org.jooq.SQL
 import org.jooq.Schema
-import org.jooq.SelectField
+import org.jooq.Select
+import org.jooq.Stringly
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
 import org.jooq.demo.kotlin.db.Public
 import org.jooq.demo.kotlin.db.tables.records.ActorInfoRecord
 import org.jooq.impl.DSL
-import org.jooq.impl.Internal
 import org.jooq.impl.SQLDataType
 import org.jooq.impl.TableImpl
 
@@ -31,15 +34,18 @@ import org.jooq.impl.TableImpl
 @Suppress("UNCHECKED_CAST")
 open class ActorInfo(
     alias: Name,
-    child: Table<out Record>?,
-    path: ForeignKey<out Record, ActorInfoRecord>?,
+    path: Table<out Record>?,
+    childPath: ForeignKey<out Record, ActorInfoRecord>?,
+    parentPath: InverseForeignKey<out Record, ActorInfoRecord>?,
     aliased: Table<ActorInfoRecord>?,
-    parameters: Array<Field<*>?>?
+    parameters: Array<Field<*>?>?,
+    where: Condition?
 ): TableImpl<ActorInfoRecord>(
     alias,
     Public.PUBLIC,
-    child,
     path,
+    childPath,
+    parentPath,
     aliased,
     parameters,
     DSL.comment(""),
@@ -58,7 +64,8 @@ open class ActorInfo(
        LEFT JOIN film_category fc ON ((fa.film_id = fc.film_id)))
        LEFT JOIN category c ON ((fc.category_id = c.category_id)))
     GROUP BY a.actor_id, a.first_name, a.last_name;
-    """)
+    """),
+    where,
 ) {
     companion object {
 
@@ -93,8 +100,9 @@ open class ActorInfo(
      */
     val FILM_INFO: TableField<ActorInfoRecord, String?> = createField(DSL.name("film_info"), SQLDataType.CLOB, this, "")
 
-    private constructor(alias: Name, aliased: Table<ActorInfoRecord>?): this(alias, null, null, aliased, null)
-    private constructor(alias: Name, aliased: Table<ActorInfoRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, aliased, parameters)
+    private constructor(alias: Name, aliased: Table<ActorInfoRecord>?): this(alias, null, null, null, aliased, null, null)
+    private constructor(alias: Name, aliased: Table<ActorInfoRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, null, aliased, parameters, null)
+    private constructor(alias: Name, aliased: Table<ActorInfoRecord>?, where: Condition): this(alias, null, null, null, aliased, null, where)
 
     /**
      * Create an aliased <code>public.actor_info</code> table reference
@@ -110,12 +118,10 @@ open class ActorInfo(
      * Create a <code>public.actor_info</code> table reference
      */
     constructor(): this(DSL.name("actor_info"), null)
-
-    constructor(child: Table<out Record>, key: ForeignKey<out Record, ActorInfoRecord>): this(Internal.createPathAlias(child, key), child, key, ACTOR_INFO, null)
     override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
     override fun `as`(alias: String): ActorInfo = ActorInfo(DSL.name(alias), this)
     override fun `as`(alias: Name): ActorInfo = ActorInfo(alias, this)
-    override fun `as`(alias: Table<*>): ActorInfo = ActorInfo(alias.getQualifiedName(), this)
+    override fun `as`(alias: Table<*>): ActorInfo = ActorInfo(alias.qualifiedName, this)
 
     /**
      * Rename this table
@@ -130,21 +136,55 @@ open class ActorInfo(
     /**
      * Rename this table
      */
-    override fun rename(name: Table<*>): ActorInfo = ActorInfo(name.getQualifiedName(), null)
-
-    // -------------------------------------------------------------------------
-    // Row4 type methods
-    // -------------------------------------------------------------------------
-    override fun fieldsRow(): Row4<Long?, String?, String?, String?> = super.fieldsRow() as Row4<Long?, String?, String?, String?>
+    override fun rename(name: Table<*>): ActorInfo = ActorInfo(name.qualifiedName, null)
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     * Create an inline derived table from this table
      */
-    fun <U> mapping(from: (Long?, String?, String?, String?) -> U): SelectField<U> = convertFrom(Records.mapping(from))
+    override fun where(condition: Condition): ActorInfo = ActorInfo(qualifiedName, if (aliased()) this else null, condition)
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Class,
-     * Function)}.
+     * Create an inline derived table from this table
      */
-    fun <U> mapping(toType: Class<U>, from: (Long?, String?, String?, String?) -> U): SelectField<U> = convertFrom(toType, Records.mapping(from))
+    override fun where(conditions: Collection<Condition>): ActorInfo = where(DSL.and(conditions))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun where(vararg conditions: Condition): ActorInfo = where(DSL.and(*conditions))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun where(condition: Field<Boolean?>): ActorInfo = where(DSL.condition(condition))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(condition: SQL): ActorInfo = where(DSL.condition(condition))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(@Stringly.SQL condition: String): ActorInfo = where(DSL.condition(condition))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(@Stringly.SQL condition: String, vararg binds: Any?): ActorInfo = where(DSL.condition(condition, *binds))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(@Stringly.SQL condition: String, vararg parts: QueryPart): ActorInfo = where(DSL.condition(condition, *parts))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun whereExists(select: Select<*>): ActorInfo = where(DSL.exists(select))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun whereNotExists(select: Select<*>): ActorInfo = where(DSL.notExists(select))
 }

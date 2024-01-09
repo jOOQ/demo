@@ -34,7 +34,10 @@ public class Demo14Mocking extends AbstractDemo {
         // A MockDataProvider is a database simulation that can intercept all database calls at the JDBC level
         MockDataProvider p = c -> new MockResult[] {
             c.sql().contains("select")
-                ? new MockResult(ctx.newRecord(ACTOR).values(1L, "A", "A", null))
+                ? new MockResult(ctx.newRecord(ACTOR)
+                                    .with(ACTOR.ACTOR_ID, 1L)
+                                    .with(ACTOR.FIRST_NAME, "A")
+                                    .with(ACTOR.LAST_NAME, "A"))
                 : new MockResult(0)
         };
 

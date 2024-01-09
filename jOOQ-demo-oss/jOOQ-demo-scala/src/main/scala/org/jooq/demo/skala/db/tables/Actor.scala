@@ -4,23 +4,29 @@
 package org.jooq.demo.skala.db.tables
 
 
+import java.lang.Boolean
 import java.lang.Class
 import java.lang.Long
 import java.lang.String
 import java.time.LocalDateTime
 import java.util.Arrays
+import java.util.Collection
 import java.util.List
-import java.util.function.Function
 
+import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
 import org.jooq.Identity
 import org.jooq.Index
+import org.jooq.InverseForeignKey
 import org.jooq.Name
+import org.jooq.Path
+import org.jooq.PlainSQL
 import org.jooq.Record
-import org.jooq.Row4
+import org.jooq.SQL
 import org.jooq.Schema
-import org.jooq.SelectField
+import org.jooq.Select
+import org.jooq.Stringly
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
@@ -43,6 +49,11 @@ object Actor {
    * The reference instance of <code>public.actor</code>
    */
   val ACTOR = new Actor
+
+  /**
+   * A subtype implementing {@link Path} for simplified path-based joins.
+   */
+  class ActorPath(path: Table[_ <: Record], childPath: ForeignKey[_ <: Record, ActorRecord], parentPath: InverseForeignKey[_ <: Record, ActorRecord]) extends Actor(path, childPath, parentPath) with Path[ActorRecord]
 }
 
 /**
@@ -50,20 +61,24 @@ object Actor {
  */
 class Actor(
   alias: Name,
-  child: Table[_ <: Record],
-  path: ForeignKey[_ <: Record, ActorRecord],
+  path: Table[_ <: Record],
+  childPath: ForeignKey[_ <: Record, ActorRecord],
+  parentPath: InverseForeignKey[_ <: Record, ActorRecord],
   aliased: Table[ActorRecord],
-  parameters: Array[ Field[_] ]
+  parameters: Array[ Field[_] ],
+  where: Condition
 )
 extends TableImpl[ActorRecord](
   alias,
   Public.PUBLIC,
-  child,
   path,
+  childPath,
+  parentPath,
   aliased,
   parameters,
   DSL.comment(""),
-  TableOptions.table
+  TableOptions.table,
+  where
 ) {
 
   /**
@@ -91,7 +106,8 @@ extends TableImpl[ActorRecord](
    */
   val LAST_UPDATE: TableField[ActorRecord, LocalDateTime] = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).defaultValue(DSL.field(DSL.raw("now()"), SQLDataType.LOCALDATETIME)), "")
 
-  private def this(alias: Name, aliased: Table[ActorRecord]) = this(alias, null, null, aliased, null)
+  private def this(alias: Name, aliased: Table[ActorRecord]) = this(alias, null, null, null, aliased, null, null)
+  private def this(alias: Name, aliased: Table[ActorRecord], where: Condition) = this(alias, null, null, null, aliased, null, where)
 
   /**
    * Create an aliased <code>public.actor</code> table reference
@@ -108,9 +124,9 @@ extends TableImpl[ActorRecord](
    */
   def this() = this(DSL.name("actor"), null)
 
-  def this(child: Table[_ <: Record], key: ForeignKey[_ <: Record, ActorRecord]) = this(Internal.createPathAlias(child, key), child, key, org.jooq.demo.skala.db.tables.Actor.ACTOR, null)
+  def this(path: Table[_ <: Record], childPath: ForeignKey[_ <: Record, ActorRecord], parentPath: InverseForeignKey[_ <: Record, ActorRecord]) = this(Internal.createPathAlias(path, childPath, parentPath), path, childPath, parentPath, org.jooq.demo.skala.db.tables.Actor.ACTOR, null, null)
 
-  override def getSchema: Schema = if (aliased()) null else Public.PUBLIC
+  override def getSchema: Schema = if (super.aliased()) null else Public.PUBLIC
 
   override def getIndexes: List[Index] = Arrays.asList[ Index ](Indexes.IDX_ACTOR_LAST_NAME)
 
@@ -136,19 +152,48 @@ extends TableImpl[ActorRecord](
    */
   override def rename(name: Table[_]): Actor = new Actor(name.getQualifiedName(), null)
 
-  // -------------------------------------------------------------------------
-  // Row4 type methods
-  // -------------------------------------------------------------------------
-  override def fieldsRow: Row4[Long, String, String, LocalDateTime] = super.fieldsRow.asInstanceOf[ Row4[Long, String, String, LocalDateTime] ]
+  /**
+   * Create an inline derived table from this table
+   */
+  override def where(condition: Condition): Actor = new Actor(getQualifiedName(), if (super.aliased()) this else null, condition)
 
   /**
-   * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+   * Create an inline derived table from this table
    */
-  def mapping[U](from: (Long, String, String, LocalDateTime) => U): SelectField[U] = convertFrom(r => from.apply(r.value1(), r.value2(), r.value3(), r.value4()))
+  override def where(conditions: Collection[_ <: Condition]): Actor = where(DSL.and(conditions))
 
   /**
-   * Convenience mapping calling {@link SelectField#convertFrom(Class,
-   * Function)}.
+   * Create an inline derived table from this table
    */
-  def mapping[U](toType: Class[U], from: (Long, String, String, LocalDateTime) => U): SelectField[U] = convertFrom(toType,r => from.apply(r.value1(), r.value2(), r.value3(), r.value4()))
+  override def where(conditions: Condition*): Actor = where(DSL.and(conditions:_*))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  override def where(condition: Field[Boolean]): Actor = where(DSL.condition(condition))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  @PlainSQL override def where(condition: SQL): Actor = where(DSL.condition(condition))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  @PlainSQL override def where(@Stringly.SQL condition: String): Actor = where(DSL.condition(condition))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): Actor = where(DSL.condition(condition, binds:_*))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  override def whereExists(select: Select[_]): Actor = where(DSL.exists(select))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  override def whereNotExists(select: Select[_]): Actor = where(DSL.notExists(select))
 }

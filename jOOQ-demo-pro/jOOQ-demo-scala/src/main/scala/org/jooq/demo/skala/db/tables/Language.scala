@@ -4,20 +4,26 @@
 package org.jooq.demo.skala.db.tables
 
 
+import java.lang.Boolean
 import java.lang.Class
 import java.lang.Long
 import java.lang.String
 import java.time.LocalDateTime
-import java.util.function.Function
+import java.util.Collection
 
+import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
 import org.jooq.Identity
+import org.jooq.InverseForeignKey
 import org.jooq.Name
+import org.jooq.Path
+import org.jooq.PlainSQL
 import org.jooq.Record
-import org.jooq.Row3
+import org.jooq.SQL
 import org.jooq.Schema
-import org.jooq.SelectField
+import org.jooq.Select
+import org.jooq.Stringly
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
@@ -39,6 +45,11 @@ object Language {
    * The reference instance of <code>public.language</code>
    */
   val LANGUAGE = new Language
+
+  /**
+   * A subtype implementing {@link Path} for simplified path-based joins.
+   */
+  class LanguagePath(path: Table[_ <: Record], childPath: ForeignKey[_ <: Record, LanguageRecord], parentPath: InverseForeignKey[_ <: Record, LanguageRecord]) extends Language(path, childPath, parentPath) with Path[LanguageRecord]
 }
 
 /**
@@ -46,20 +57,24 @@ object Language {
  */
 class Language(
   alias: Name,
-  child: Table[_ <: Record],
-  path: ForeignKey[_ <: Record, LanguageRecord],
+  path: Table[_ <: Record],
+  childPath: ForeignKey[_ <: Record, LanguageRecord],
+  parentPath: InverseForeignKey[_ <: Record, LanguageRecord],
   aliased: Table[LanguageRecord],
-  parameters: Array[ Field[_] ]
+  parameters: Array[ Field[_] ],
+  where: Condition
 )
 extends TableImpl[LanguageRecord](
   alias,
   Public.PUBLIC,
-  child,
   path,
+  childPath,
+  parentPath,
   aliased,
   parameters,
   DSL.comment(""),
-  TableOptions.table
+  TableOptions.table,
+  where
 ) {
 
   /**
@@ -82,7 +97,8 @@ extends TableImpl[LanguageRecord](
    */
   val LAST_UPDATE: TableField[LanguageRecord, LocalDateTime] = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).readonly(true).defaultValue(DSL.field(DSL.raw("now()"), SQLDataType.LOCALDATETIME)), "")
 
-  private def this(alias: Name, aliased: Table[LanguageRecord]) = this(alias, null, null, aliased, null)
+  private def this(alias: Name, aliased: Table[LanguageRecord]) = this(alias, null, null, null, aliased, null, null)
+  private def this(alias: Name, aliased: Table[LanguageRecord], where: Condition) = this(alias, null, null, null, aliased, null, where)
 
   /**
    * Create an aliased <code>public.language</code> table reference
@@ -99,9 +115,9 @@ extends TableImpl[LanguageRecord](
    */
   def this() = this(DSL.name("language"), null)
 
-  def this(child: Table[_ <: Record], key: ForeignKey[_ <: Record, LanguageRecord]) = this(Internal.createPathAlias(child, key), child, key, org.jooq.demo.skala.db.tables.Language.LANGUAGE, null)
+  def this(path: Table[_ <: Record], childPath: ForeignKey[_ <: Record, LanguageRecord], parentPath: InverseForeignKey[_ <: Record, LanguageRecord]) = this(Internal.createPathAlias(path, childPath, parentPath), path, childPath, parentPath, org.jooq.demo.skala.db.tables.Language.LANGUAGE, null, null)
 
-  override def getSchema: Schema = if (aliased()) null else Public.PUBLIC
+  override def getSchema: Schema = if (super.aliased()) null else Public.PUBLIC
 
   override def getIdentity: Identity[LanguageRecord, Long] = super.getIdentity.asInstanceOf[ Identity[LanguageRecord, Long] ]
 
@@ -125,19 +141,48 @@ extends TableImpl[LanguageRecord](
    */
   override def rename(name: Table[_]): Language = new Language(name.getQualifiedName(), null)
 
-  // -------------------------------------------------------------------------
-  // Row3 type methods
-  // -------------------------------------------------------------------------
-  override def fieldsRow: Row3[Long, String, LocalDateTime] = super.fieldsRow.asInstanceOf[ Row3[Long, String, LocalDateTime] ]
+  /**
+   * Create an inline derived table from this table
+   */
+  override def where(condition: Condition): Language = new Language(getQualifiedName(), if (super.aliased()) this else null, condition)
 
   /**
-   * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+   * Create an inline derived table from this table
    */
-  def mapping[U](from: (Long, String, LocalDateTime) => U): SelectField[U] = convertFrom(r => from.apply(r.value1(), r.value2(), r.value3()))
+  override def where(conditions: Collection[_ <: Condition]): Language = where(DSL.and(conditions))
 
   /**
-   * Convenience mapping calling {@link SelectField#convertFrom(Class,
-   * Function)}.
+   * Create an inline derived table from this table
    */
-  def mapping[U](toType: Class[U], from: (Long, String, LocalDateTime) => U): SelectField[U] = convertFrom(toType,r => from.apply(r.value1(), r.value2(), r.value3()))
+  override def where(conditions: Condition*): Language = where(DSL.and(conditions:_*))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  override def where(condition: Field[Boolean]): Language = where(DSL.condition(condition))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  @PlainSQL override def where(condition: SQL): Language = where(DSL.condition(condition))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  @PlainSQL override def where(@Stringly.SQL condition: String): Language = where(DSL.condition(condition))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): Language = where(DSL.condition(condition, binds:_*))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  override def whereExists(select: Select[_]): Language = where(DSL.exists(select))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  override def whereNotExists(select: Select[_]): Language = where(DSL.notExists(select))
 }

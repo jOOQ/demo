@@ -6,21 +6,26 @@ package org.jooq.demo.kotlin.db.tables
 
 import java.math.BigDecimal
 import java.time.LocalDateTime
-import java.util.function.Function
 
+import kotlin.collections.Collection
 import kotlin.collections.List
 
 import org.jooq.Check
+import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
 import org.jooq.Identity
 import org.jooq.Index
+import org.jooq.InverseForeignKey
 import org.jooq.Name
+import org.jooq.Path
+import org.jooq.PlainSQL
+import org.jooq.QueryPart
 import org.jooq.Record
-import org.jooq.Records
-import org.jooq.Row6
+import org.jooq.SQL
 import org.jooq.Schema
-import org.jooq.SelectField
+import org.jooq.Select
+import org.jooq.Stringly
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
@@ -30,6 +35,9 @@ import org.jooq.demo.kotlin.db.indexes.IDX_FK_PAYMENT_P2007_02_STAFF_ID
 import org.jooq.demo.kotlin.db.keys.PAYMENT_P2007_02__PAYMENT_P2007_02_CUSTOMER_ID_FKEY
 import org.jooq.demo.kotlin.db.keys.PAYMENT_P2007_02__PAYMENT_P2007_02_RENTAL_ID_FKEY
 import org.jooq.demo.kotlin.db.keys.PAYMENT_P2007_02__PAYMENT_P2007_02_STAFF_ID_FKEY
+import org.jooq.demo.kotlin.db.tables.Customer.CustomerPath
+import org.jooq.demo.kotlin.db.tables.Rental.RentalPath
+import org.jooq.demo.kotlin.db.tables.Staff.StaffPath
 import org.jooq.demo.kotlin.db.tables.records.PaymentP2007_02Record
 import org.jooq.impl.DSL
 import org.jooq.impl.Internal
@@ -43,19 +51,23 @@ import org.jooq.impl.TableImpl
 @Suppress("UNCHECKED_CAST")
 open class PaymentP2007_02(
     alias: Name,
-    child: Table<out Record>?,
-    path: ForeignKey<out Record, PaymentP2007_02Record>?,
+    path: Table<out Record>?,
+    childPath: ForeignKey<out Record, PaymentP2007_02Record>?,
+    parentPath: InverseForeignKey<out Record, PaymentP2007_02Record>?,
     aliased: Table<PaymentP2007_02Record>?,
-    parameters: Array<Field<*>?>?
+    parameters: Array<Field<*>?>?,
+    where: Condition?
 ): TableImpl<PaymentP2007_02Record>(
     alias,
     Public.PUBLIC,
-    child,
     path,
+    childPath,
+    parentPath,
     aliased,
     parameters,
     DSL.comment(""),
-    TableOptions.table()
+    TableOptions.table(),
+    where,
 ) {
     companion object {
 
@@ -100,8 +112,9 @@ open class PaymentP2007_02(
      */
     val PAYMENT_DATE: TableField<PaymentP2007_02Record, LocalDateTime?> = createField(DSL.name("payment_date"), SQLDataType.LOCALDATETIME(6).nullable(false), this, "")
 
-    private constructor(alias: Name, aliased: Table<PaymentP2007_02Record>?): this(alias, null, null, aliased, null)
-    private constructor(alias: Name, aliased: Table<PaymentP2007_02Record>?, parameters: Array<Field<*>?>?): this(alias, null, null, aliased, parameters)
+    private constructor(alias: Name, aliased: Table<PaymentP2007_02Record>?): this(alias, null, null, null, aliased, null, null)
+    private constructor(alias: Name, aliased: Table<PaymentP2007_02Record>?, parameters: Array<Field<*>?>?): this(alias, null, null, null, aliased, parameters, null)
+    private constructor(alias: Name, aliased: Table<PaymentP2007_02Record>?, where: Condition): this(alias, null, null, null, aliased, null, where)
 
     /**
      * Create an aliased <code>public.payment_p2007_02</code> table reference
@@ -118,60 +131,73 @@ open class PaymentP2007_02(
      */
     constructor(): this(DSL.name("payment_p2007_02"), null)
 
-    constructor(child: Table<out Record>, key: ForeignKey<out Record, PaymentP2007_02Record>): this(Internal.createPathAlias(child, key), child, key, PAYMENT_P2007_02, null)
+    constructor(path: Table<out Record>, childPath: ForeignKey<out Record, PaymentP2007_02Record>?, parentPath: InverseForeignKey<out Record, PaymentP2007_02Record>?): this(Internal.createPathAlias(path, childPath, parentPath), path, childPath, parentPath, PAYMENT_P2007_02, null, null)
+
+    /**
+     * A subtype implementing {@link Path} for simplified path-based joins.
+     */
+    open class PaymentP2007_02Path : PaymentP2007_02, Path<PaymentP2007_02Record> {
+        constructor(path: Table<out Record>, childPath: ForeignKey<out Record, PaymentP2007_02Record>?, parentPath: InverseForeignKey<out Record, PaymentP2007_02Record>?): super(path, childPath, parentPath)
+        private constructor(alias: Name, aliased: Table<PaymentP2007_02Record>): super(alias, aliased)
+        override fun `as`(alias: String): PaymentP2007_02Path = PaymentP2007_02Path(DSL.name(alias), this)
+        override fun `as`(alias: Name): PaymentP2007_02Path = PaymentP2007_02Path(alias, this)
+        override fun `as`(alias: Table<*>): PaymentP2007_02Path = PaymentP2007_02Path(alias.qualifiedName, this)
+    }
     override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
     override fun getIndexes(): List<Index> = listOf(IDX_FK_PAYMENT_P2007_02_CUSTOMER_ID, IDX_FK_PAYMENT_P2007_02_STAFF_ID)
     override fun getIdentity(): Identity<PaymentP2007_02Record, Long?> = super.getIdentity() as Identity<PaymentP2007_02Record, Long?>
     override fun getReferences(): List<ForeignKey<PaymentP2007_02Record, *>> = listOf(PAYMENT_P2007_02__PAYMENT_P2007_02_CUSTOMER_ID_FKEY, PAYMENT_P2007_02__PAYMENT_P2007_02_STAFF_ID_FKEY, PAYMENT_P2007_02__PAYMENT_P2007_02_RENTAL_ID_FKEY)
 
-    private lateinit var _customer: Customer
-    private lateinit var _staff: Staff
-    private lateinit var _rental: Rental
+    private lateinit var _customer: CustomerPath
 
     /**
      * Get the implicit join path to the <code>public.customer</code> table.
      */
-    fun customer(): Customer {
+    fun customer(): CustomerPath {
         if (!this::_customer.isInitialized)
-            _customer = Customer(this, PAYMENT_P2007_02__PAYMENT_P2007_02_CUSTOMER_ID_FKEY)
+            _customer = CustomerPath(this, PAYMENT_P2007_02__PAYMENT_P2007_02_CUSTOMER_ID_FKEY, null)
 
         return _customer;
     }
 
-    val customer: Customer
-        get(): Customer = customer()
+    val customer: CustomerPath
+        get(): CustomerPath = customer()
+
+    private lateinit var _staff: StaffPath
 
     /**
      * Get the implicit join path to the <code>public.staff</code> table.
      */
-    fun staff(): Staff {
+    fun staff(): StaffPath {
         if (!this::_staff.isInitialized)
-            _staff = Staff(this, PAYMENT_P2007_02__PAYMENT_P2007_02_STAFF_ID_FKEY)
+            _staff = StaffPath(this, PAYMENT_P2007_02__PAYMENT_P2007_02_STAFF_ID_FKEY, null)
 
         return _staff;
     }
 
-    val staff: Staff
-        get(): Staff = staff()
+    val staff: StaffPath
+        get(): StaffPath = staff()
+
+    private lateinit var _rental: RentalPath
 
     /**
      * Get the implicit join path to the <code>public.rental</code> table.
      */
-    fun rental(): Rental {
+    fun rental(): RentalPath {
         if (!this::_rental.isInitialized)
-            _rental = Rental(this, PAYMENT_P2007_02__PAYMENT_P2007_02_RENTAL_ID_FKEY)
+            _rental = RentalPath(this, PAYMENT_P2007_02__PAYMENT_P2007_02_RENTAL_ID_FKEY, null)
 
         return _rental;
     }
 
-    val rental: Rental
-        get(): Rental = rental()
+    val rental: RentalPath
+        get(): RentalPath = rental()
     override fun getChecks(): List<Check<PaymentP2007_02Record>> = listOf(
         Internal.createCheck(this, DSL.name("payment_p2007_02_payment_date_check"), "(((payment_date >= '2007-02-01 00:00:00'::timestamp without time zone) AND (payment_date < '2007-03-01 00:00:00'::timestamp without time zone)))", true)
     )
     override fun `as`(alias: String): PaymentP2007_02 = PaymentP2007_02(DSL.name(alias), this)
     override fun `as`(alias: Name): PaymentP2007_02 = PaymentP2007_02(alias, this)
-    override fun `as`(alias: Table<*>): PaymentP2007_02 = PaymentP2007_02(alias.getQualifiedName(), this)
+    override fun `as`(alias: Table<*>): PaymentP2007_02 = PaymentP2007_02(alias.qualifiedName, this)
 
     /**
      * Rename this table
@@ -186,21 +212,55 @@ open class PaymentP2007_02(
     /**
      * Rename this table
      */
-    override fun rename(name: Table<*>): PaymentP2007_02 = PaymentP2007_02(name.getQualifiedName(), null)
-
-    // -------------------------------------------------------------------------
-    // Row6 type methods
-    // -------------------------------------------------------------------------
-    override fun fieldsRow(): Row6<Long?, Long?, Long?, Long?, BigDecimal?, LocalDateTime?> = super.fieldsRow() as Row6<Long?, Long?, Long?, Long?, BigDecimal?, LocalDateTime?>
+    override fun rename(name: Table<*>): PaymentP2007_02 = PaymentP2007_02(name.qualifiedName, null)
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     * Create an inline derived table from this table
      */
-    fun <U> mapping(from: (Long?, Long?, Long?, Long?, BigDecimal?, LocalDateTime?) -> U): SelectField<U> = convertFrom(Records.mapping(from))
+    override fun where(condition: Condition): PaymentP2007_02 = PaymentP2007_02(qualifiedName, if (aliased()) this else null, condition)
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Class,
-     * Function)}.
+     * Create an inline derived table from this table
      */
-    fun <U> mapping(toType: Class<U>, from: (Long?, Long?, Long?, Long?, BigDecimal?, LocalDateTime?) -> U): SelectField<U> = convertFrom(toType, Records.mapping(from))
+    override fun where(conditions: Collection<Condition>): PaymentP2007_02 = where(DSL.and(conditions))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun where(vararg conditions: Condition): PaymentP2007_02 = where(DSL.and(*conditions))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun where(condition: Field<Boolean?>): PaymentP2007_02 = where(DSL.condition(condition))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(condition: SQL): PaymentP2007_02 = where(DSL.condition(condition))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(@Stringly.SQL condition: String): PaymentP2007_02 = where(DSL.condition(condition))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(@Stringly.SQL condition: String, vararg binds: Any?): PaymentP2007_02 = where(DSL.condition(condition, *binds))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(@Stringly.SQL condition: String, vararg parts: QueryPart): PaymentP2007_02 = where(DSL.condition(condition, *parts))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun whereExists(select: Select<*>): PaymentP2007_02 = where(DSL.exists(select))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun whereNotExists(select: Select<*>): PaymentP2007_02 = where(DSL.notExists(select))
 }

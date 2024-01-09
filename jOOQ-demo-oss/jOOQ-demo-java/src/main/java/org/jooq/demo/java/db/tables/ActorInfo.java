@@ -4,17 +4,17 @@
 package org.jooq.demo.java.db.tables;
 
 
-import java.util.function.Function;
+import java.util.Collection;
 
+import org.jooq.Condition;
 import org.jooq.Field;
-import org.jooq.ForeignKey;
-import org.jooq.Function4;
 import org.jooq.Name;
-import org.jooq.Record;
-import org.jooq.Records;
-import org.jooq.Row4;
+import org.jooq.PlainSQL;
+import org.jooq.QueryPart;
+import org.jooq.SQL;
 import org.jooq.Schema;
-import org.jooq.SelectField;
+import org.jooq.Select;
+import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -67,10 +67,10 @@ public class ActorInfo extends TableImpl<ActorInfoRecord> {
     public final TableField<ActorInfoRecord, String> FILM_INFO = createField(DSL.name("film_info"), SQLDataType.CLOB, this, "");
 
     private ActorInfo(Name alias, Table<ActorInfoRecord> aliased) {
-        this(alias, aliased, null);
+        this(alias, aliased, (Field<?>[]) null, null);
     }
 
-    private ActorInfo(Name alias, Table<ActorInfoRecord> aliased, Field<?>[] parameters) {
+    private ActorInfo(Name alias, Table<ActorInfoRecord> aliased, Field<?>[] parameters, Condition where) {
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("""
         create view "actor_info" as  SELECT a.actor_id,
           a.first_name,
@@ -86,7 +86,7 @@ public class ActorInfo extends TableImpl<ActorInfoRecord> {
            LEFT JOIN film_category fc ON ((fa.film_id = fc.film_id)))
            LEFT JOIN category c ON ((fc.category_id = c.category_id)))
         GROUP BY a.actor_id, a.first_name, a.last_name;
-        """));
+        """), where);
     }
 
     /**
@@ -108,10 +108,6 @@ public class ActorInfo extends TableImpl<ActorInfoRecord> {
      */
     public ActorInfo() {
         this(DSL.name("actor_info"), null);
-    }
-
-    public <O extends Record> ActorInfo(Table<O> child, ForeignKey<O, ActorInfoRecord> key) {
-        super(child, key, ACTOR_INFO);
     }
 
     @Override
@@ -158,27 +154,87 @@ public class ActorInfo extends TableImpl<ActorInfoRecord> {
         return new ActorInfo(name.getQualifiedName(), null);
     }
 
-    // -------------------------------------------------------------------------
-    // Row4 type methods
-    // -------------------------------------------------------------------------
-
+    /**
+     * Create an inline derived table from this table
+     */
     @Override
-    public Row4<Long, String, String, String> fieldsRow() {
-        return (Row4) super.fieldsRow();
+    public ActorInfo where(Condition condition) {
+        return new ActorInfo(getQualifiedName(), aliased() ? this : null, null, condition);
     }
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     * Create an inline derived table from this table
      */
-    public <U> SelectField<U> mapping(Function4<? super Long, ? super String, ? super String, ? super String, ? extends U> from) {
-        return convertFrom(Records.mapping(from));
+    @Override
+    public ActorInfo where(Collection<? extends Condition> conditions) {
+        return where(DSL.and(conditions));
     }
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Class,
-     * Function)}.
+     * Create an inline derived table from this table
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function4<? super Long, ? super String, ? super String, ? super String, ? extends U> from) {
-        return convertFrom(toType, Records.mapping(from));
+    @Override
+    public ActorInfo where(Condition... conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public ActorInfo where(Field<Boolean> condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public ActorInfo where(SQL condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public ActorInfo where(@Stringly.SQL String condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public ActorInfo where(@Stringly.SQL String condition, Object... binds) {
+        return where(DSL.condition(condition, binds));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public ActorInfo where(@Stringly.SQL String condition, QueryPart... parts) {
+        return where(DSL.condition(condition, parts));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public ActorInfo whereExists(Select<?> select) {
+        return where(DSL.exists(select));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public ActorInfo whereNotExists(Select<?> select) {
+        return where(DSL.notExists(select));
     }
 }

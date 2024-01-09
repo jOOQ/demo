@@ -6,20 +6,24 @@ package org.jooq.demo.java.db.tables;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
-import java.util.function.Function;
 
+import org.jooq.Condition;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Function4;
 import org.jooq.Identity;
 import org.jooq.Index;
+import org.jooq.InverseForeignKey;
 import org.jooq.Name;
+import org.jooq.Path;
+import org.jooq.PlainSQL;
+import org.jooq.QueryPart;
 import org.jooq.Record;
-import org.jooq.Records;
-import org.jooq.Row4;
+import org.jooq.SQL;
 import org.jooq.Schema;
-import org.jooq.SelectField;
+import org.jooq.Select;
+import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -27,6 +31,9 @@ import org.jooq.UniqueKey;
 import org.jooq.demo.java.db.Indexes;
 import org.jooq.demo.java.db.Keys;
 import org.jooq.demo.java.db.Public;
+import org.jooq.demo.java.db.tables.Film.FilmPath;
+import org.jooq.demo.java.db.tables.Rental.RentalPath;
+import org.jooq.demo.java.db.tables.Store.StorePath;
 import org.jooq.demo.java.db.tables.records.InventoryRecord;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
@@ -75,11 +82,11 @@ public class Inventory extends TableImpl<InventoryRecord> {
     public final TableField<InventoryRecord, LocalDateTime> LAST_UPDATE = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).defaultValue(DSL.field(DSL.raw("now()"), SQLDataType.LOCALDATETIME)), this, "");
 
     private Inventory(Name alias, Table<InventoryRecord> aliased) {
-        this(alias, aliased, null);
+        this(alias, aliased, (Field<?>[]) null, null);
     }
 
-    private Inventory(Name alias, Table<InventoryRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    private Inventory(Name alias, Table<InventoryRecord> aliased, Field<?>[] parameters, Condition where) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table(), where);
     }
 
     /**
@@ -103,8 +110,35 @@ public class Inventory extends TableImpl<InventoryRecord> {
         this(DSL.name("inventory"), null);
     }
 
-    public <O extends Record> Inventory(Table<O> child, ForeignKey<O, InventoryRecord> key) {
-        super(child, key, INVENTORY);
+    public <O extends Record> Inventory(Table<O> path, ForeignKey<O, InventoryRecord> childPath, InverseForeignKey<O, InventoryRecord> parentPath) {
+        super(path, childPath, parentPath, INVENTORY);
+    }
+
+    /**
+     * A subtype implementing {@link Path} for simplified path-based joins.
+     */
+    public static class InventoryPath extends Inventory implements Path<InventoryRecord> {
+        public <O extends Record> InventoryPath(Table<O> path, ForeignKey<O, InventoryRecord> childPath, InverseForeignKey<O, InventoryRecord> parentPath) {
+            super(path, childPath, parentPath);
+        }
+        private InventoryPath(Name alias, Table<InventoryRecord> aliased) {
+            super(alias, aliased);
+        }
+
+        @Override
+        public InventoryPath as(String alias) {
+            return new InventoryPath(DSL.name(alias), this);
+        }
+
+        @Override
+        public InventoryPath as(Name alias) {
+            return new InventoryPath(alias, this);
+        }
+
+        @Override
+        public InventoryPath as(Table<?> alias) {
+            return new InventoryPath(alias.getQualifiedName(), this);
+        }
     }
 
     @Override
@@ -132,27 +166,41 @@ public class Inventory extends TableImpl<InventoryRecord> {
         return Arrays.asList(Keys.INVENTORY__INVENTORY_FILM_ID_FKEY, Keys.INVENTORY__INVENTORY_STORE_ID_FKEY);
     }
 
-    private transient Film _film;
-    private transient Store _store;
+    private transient FilmPath _film;
 
     /**
      * Get the implicit join path to the <code>public.film</code> table.
      */
-    public Film film() {
+    public FilmPath film() {
         if (_film == null)
-            _film = new Film(this, Keys.INVENTORY__INVENTORY_FILM_ID_FKEY);
+            _film = new FilmPath(this, Keys.INVENTORY__INVENTORY_FILM_ID_FKEY, null);
 
         return _film;
     }
 
+    private transient StorePath _store;
+
     /**
      * Get the implicit join path to the <code>public.store</code> table.
      */
-    public Store store() {
+    public StorePath store() {
         if (_store == null)
-            _store = new Store(this, Keys.INVENTORY__INVENTORY_STORE_ID_FKEY);
+            _store = new StorePath(this, Keys.INVENTORY__INVENTORY_STORE_ID_FKEY, null);
 
         return _store;
+    }
+
+    private transient RentalPath _rental;
+
+    /**
+     * Get the implicit to-many join path to the <code>public.rental</code>
+     * table
+     */
+    public RentalPath rental() {
+        if (_rental == null)
+            _rental = new RentalPath(this, null, Keys.RENTAL__RENTAL_INVENTORY_ID_FKEY.getInverseKey());
+
+        return _rental;
     }
 
     @Override
@@ -194,27 +242,87 @@ public class Inventory extends TableImpl<InventoryRecord> {
         return new Inventory(name.getQualifiedName(), null);
     }
 
-    // -------------------------------------------------------------------------
-    // Row4 type methods
-    // -------------------------------------------------------------------------
-
+    /**
+     * Create an inline derived table from this table
+     */
     @Override
-    public Row4<Long, Long, Long, LocalDateTime> fieldsRow() {
-        return (Row4) super.fieldsRow();
+    public Inventory where(Condition condition) {
+        return new Inventory(getQualifiedName(), aliased() ? this : null, null, condition);
     }
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     * Create an inline derived table from this table
      */
-    public <U> SelectField<U> mapping(Function4<? super Long, ? super Long, ? super Long, ? super LocalDateTime, ? extends U> from) {
-        return convertFrom(Records.mapping(from));
+    @Override
+    public Inventory where(Collection<? extends Condition> conditions) {
+        return where(DSL.and(conditions));
     }
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Class,
-     * Function)}.
+     * Create an inline derived table from this table
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function4<? super Long, ? super Long, ? super Long, ? super LocalDateTime, ? extends U> from) {
-        return convertFrom(toType, Records.mapping(from));
+    @Override
+    public Inventory where(Condition... conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public Inventory where(Field<Boolean> condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public Inventory where(SQL condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public Inventory where(@Stringly.SQL String condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public Inventory where(@Stringly.SQL String condition, Object... binds) {
+        return where(DSL.condition(condition, binds));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public Inventory where(@Stringly.SQL String condition, QueryPart... parts) {
+        return where(DSL.condition(condition, parts));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public Inventory whereExists(Select<?> select) {
+        return where(DSL.exists(select));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public Inventory whereNotExists(Select<?> select) {
+        return where(DSL.notExists(select));
     }
 }

@@ -7,17 +7,15 @@ package org.jooq.demo.kotlin.db.tables
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.util.function.Function
 
+import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
 import org.jooq.Identity
+import org.jooq.InverseForeignKey
 import org.jooq.Name
 import org.jooq.Record
-import org.jooq.Records
-import org.jooq.Row10
 import org.jooq.Schema
-import org.jooq.SelectField
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
@@ -34,19 +32,23 @@ import org.jooq.impl.TableImpl
 @Suppress("UNCHECKED_CAST")
 open class RewardsReport(
     alias: Name,
-    child: Table<out Record>?,
-    path: ForeignKey<out Record, CustomerRecord>?,
+    path: Table<out Record>?,
+    childPath: ForeignKey<out Record, CustomerRecord>?,
+    parentPath: InverseForeignKey<out Record, CustomerRecord>?,
     aliased: Table<CustomerRecord>?,
-    parameters: Array<Field<*>?>?
+    parameters: Array<Field<*>?>?,
+    where: Condition?
 ): TableImpl<CustomerRecord>(
     alias,
     Public.PUBLIC,
-    child,
     path,
+    childPath,
+    parentPath,
     aliased,
     parameters,
     DSL.comment(""),
-    TableOptions.function()
+    TableOptions.function(),
+    where,
 ) {
     companion object {
 
@@ -111,11 +113,11 @@ open class RewardsReport(
      */
     val ACTIVE: TableField<CustomerRecord, Int?> = createField(DSL.name("active"), SQLDataType.INTEGER, this, "")
 
-    private constructor(alias: Name, aliased: Table<CustomerRecord>?): this(alias, null, null, aliased, arrayOf(
+    private constructor(alias: Name, aliased: Table<CustomerRecord>?): this(alias, null, null, null, aliased, arrayOf(
         DSL.value(null, SQLDataType.INTEGER),
         DSL.value(null, SQLDataType.NUMERIC)
-    ))
-    private constructor(alias: Name, aliased: Table<CustomerRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, aliased, parameters)
+    ), null)
+    private constructor(alias: Name, aliased: Table<CustomerRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, null, aliased, parameters, null)
 
     /**
      * Create an aliased <code>public.rewards_report</code> table reference
@@ -135,7 +137,7 @@ open class RewardsReport(
     override fun getIdentity(): Identity<CustomerRecord, Long?> = super.getIdentity() as Identity<CustomerRecord, Long?>
     override fun `as`(alias: String): RewardsReport = RewardsReport(DSL.name(alias), this, parameters)
     override fun `as`(alias: Name): RewardsReport = RewardsReport(alias, this, parameters)
-    override fun `as`(alias: Table<*>): RewardsReport = RewardsReport(alias.getQualifiedName(), this, parameters)
+    override fun `as`(alias: Table<*>): RewardsReport = RewardsReport(alias.qualifiedName, this, parameters)
 
     /**
      * Rename this table
@@ -150,12 +152,7 @@ open class RewardsReport(
     /**
      * Rename this table
      */
-    override fun rename(name: Table<*>): RewardsReport = RewardsReport(name.getQualifiedName(), null, parameters)
-
-    // -------------------------------------------------------------------------
-    // Row10 type methods
-    // -------------------------------------------------------------------------
-    override fun fieldsRow(): Row10<Long?, Long?, String?, String?, String?, Long?, Boolean?, LocalDate?, LocalDateTime?, Int?> = super.fieldsRow() as Row10<Long?, Long?, String?, String?, String?, Long?, Boolean?, LocalDate?, LocalDateTime?, Int?>
+    override fun rename(name: Table<*>): RewardsReport = RewardsReport(name.qualifiedName, null, parameters)
 
     /**
      * Call this table-valued function
@@ -178,15 +175,4 @@ open class RewardsReport(
         minMonthlyPurchases,
         minDollarAmountPurchased
     )).let { if (aliased()) it.`as`(unqualifiedName) else it }
-
-    /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
-     */
-    fun <U> mapping(from: (Long?, Long?, String?, String?, String?, Long?, Boolean?, LocalDate?, LocalDateTime?, Int?) -> U): SelectField<U> = convertFrom(Records.mapping(from))
-
-    /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Class,
-     * Function)}.
-     */
-    fun <U> mapping(toType: Class<U>, from: (Long?, Long?, String?, String?, String?, Long?, Boolean?, LocalDate?, LocalDateTime?, Int?) -> U): SelectField<U> = convertFrom(toType, Records.mapping(from))
 }

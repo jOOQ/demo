@@ -6,35 +6,53 @@ package org.jooq.demo.kotlin.db.tables
 
 import java.math.BigDecimal
 import java.time.LocalDateTime
-import java.util.function.Function
 
+import kotlin.collections.Collection
 import kotlin.collections.List
 
+import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
 import org.jooq.Identity
 import org.jooq.Index
+import org.jooq.InverseForeignKey
 import org.jooq.Name
+import org.jooq.Path
+import org.jooq.PlainSQL
+import org.jooq.QueryPart
 import org.jooq.Record
-import org.jooq.Records
-import org.jooq.Row14
+import org.jooq.SQL
 import org.jooq.Schema
-import org.jooq.SelectField
+import org.jooq.Select
+import org.jooq.Stringly
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
+import org.jooq.Trigger
 import org.jooq.UniqueKey
 import org.jooq.demo.kotlin.db.Public
+import org.jooq.demo.kotlin.db.domains.YEAR
 import org.jooq.demo.kotlin.db.enums.MpaaRating
 import org.jooq.demo.kotlin.db.indexes.FILM_FULLTEXT_IDX
 import org.jooq.demo.kotlin.db.indexes.IDX_FK_LANGUAGE_ID
 import org.jooq.demo.kotlin.db.indexes.IDX_FK_ORIGINAL_LANGUAGE_ID
 import org.jooq.demo.kotlin.db.indexes.IDX_TITLE
+import org.jooq.demo.kotlin.db.keys.FILM_ACTOR__FILM_ACTOR_FILM_ID_FKEY
+import org.jooq.demo.kotlin.db.keys.FILM_CATEGORY__FILM_CATEGORY_FILM_ID_FKEY
 import org.jooq.demo.kotlin.db.keys.FILM_PKEY
 import org.jooq.demo.kotlin.db.keys.FILM__FILM_LANGUAGE_ID_FKEY
 import org.jooq.demo.kotlin.db.keys.FILM__FILM_ORIGINAL_LANGUAGE_ID_FKEY
+import org.jooq.demo.kotlin.db.keys.INVENTORY__INVENTORY_FILM_ID_FKEY
+import org.jooq.demo.kotlin.db.tables.Actor.ActorPath
+import org.jooq.demo.kotlin.db.tables.Category.CategoryPath
+import org.jooq.demo.kotlin.db.tables.FilmActor.FilmActorPath
+import org.jooq.demo.kotlin.db.tables.FilmCategory.FilmCategoryPath
+import org.jooq.demo.kotlin.db.tables.Inventory.InventoryPath
+import org.jooq.demo.kotlin.db.tables.Language.LanguagePath
 import org.jooq.demo.kotlin.db.tables.records.FilmRecord
+import org.jooq.demo.kotlin.db.triggers.FILM_FULLTEXT_TRIGGER
 import org.jooq.impl.DSL
+import org.jooq.impl.DefaultDataType
 import org.jooq.impl.Internal
 import org.jooq.impl.SQLDataType
 import org.jooq.impl.TableImpl
@@ -46,19 +64,23 @@ import org.jooq.impl.TableImpl
 @Suppress("UNCHECKED_CAST")
 open class Film(
     alias: Name,
-    child: Table<out Record>?,
-    path: ForeignKey<out Record, FilmRecord>?,
+    path: Table<out Record>?,
+    childPath: ForeignKey<out Record, FilmRecord>?,
+    parentPath: InverseForeignKey<out Record, FilmRecord>?,
     aliased: Table<FilmRecord>?,
-    parameters: Array<Field<*>?>?
+    parameters: Array<Field<*>?>?,
+    where: Condition?
 ): TableImpl<FilmRecord>(
     alias,
     Public.PUBLIC,
-    child,
     path,
+    childPath,
+    parentPath,
     aliased,
     parameters,
     DSL.comment(""),
-    TableOptions.table()
+    TableOptions.table(),
+    where,
 ) {
     companion object {
 
@@ -91,7 +113,7 @@ open class Film(
     /**
      * The column <code>public.film.release_year</code>.
      */
-    val RELEASE_YEAR: TableField<FilmRecord, Int?> = createField(DSL.name("release_year"), org.jooq.demo.kotlin.db.domains.YEAR.getDataType(), this, "")
+    val RELEASE_YEAR: TableField<FilmRecord, Int?> = createField(DSL.name("release_year"), YEAR.getDataType(), this, "")
 
     /**
      * The column <code>public.film.language_id</code>.
@@ -126,7 +148,7 @@ open class Film(
     /**
      * The column <code>public.film.rating</code>.
      */
-    val RATING: TableField<FilmRecord, MpaaRating?> = createField(DSL.name("rating"), SQLDataType.VARCHAR.defaultValue(DSL.field(DSL.raw("'G'::mpaa_rating"), SQLDataType.VARCHAR)).asEnumDataType(org.jooq.demo.kotlin.db.enums.MpaaRating::class.java), this, "")
+    val RATING: TableField<FilmRecord, MpaaRating?> = createField(DSL.name("rating"), SQLDataType.VARCHAR.defaultValue(DSL.field(DSL.raw("'G'::mpaa_rating"), SQLDataType.VARCHAR)).asEnumDataType(MpaaRating::class.java), this, "")
 
     /**
      * The column <code>public.film.last_update</code>.
@@ -138,10 +160,11 @@ open class Film(
      */
     val SPECIAL_FEATURES: TableField<FilmRecord, Array<String?>?> = createField(DSL.name("special_features"), SQLDataType.CLOB.array(), this, "")
     @Deprecated(message = "Unknown data type. If this is a qualified, user-defined type, it may have been excluded from code generation. If this is a built-in type, you can define an explicit org.jooq.Binding to specify how this type should be handled. Deprecation can be turned off using <deprecationOnUnknownTypes/> in your code generator configuration.")
-    val FULLTEXT: TableField<FilmRecord, Any?> = createField(DSL.name("fulltext"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tsvector\"").nullable(false), this, "")
+    val FULLTEXT: TableField<FilmRecord, Any?> = createField(DSL.name("fulltext"), DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tsvector\"").nullable(false), this, "")
 
-    private constructor(alias: Name, aliased: Table<FilmRecord>?): this(alias, null, null, aliased, null)
-    private constructor(alias: Name, aliased: Table<FilmRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, aliased, parameters)
+    private constructor(alias: Name, aliased: Table<FilmRecord>?): this(alias, null, null, null, aliased, null, null)
+    private constructor(alias: Name, aliased: Table<FilmRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, null, aliased, parameters, null)
+    private constructor(alias: Name, aliased: Table<FilmRecord>?, where: Condition): this(alias, null, null, null, aliased, null, where)
 
     /**
      * Create an aliased <code>public.film</code> table reference
@@ -158,46 +181,121 @@ open class Film(
      */
     constructor(): this(DSL.name("film"), null)
 
-    constructor(child: Table<out Record>, key: ForeignKey<out Record, FilmRecord>): this(Internal.createPathAlias(child, key), child, key, FILM, null)
+    constructor(path: Table<out Record>, childPath: ForeignKey<out Record, FilmRecord>?, parentPath: InverseForeignKey<out Record, FilmRecord>?): this(Internal.createPathAlias(path, childPath, parentPath), path, childPath, parentPath, FILM, null, null)
+
+    /**
+     * A subtype implementing {@link Path} for simplified path-based joins.
+     */
+    open class FilmPath : Film, Path<FilmRecord> {
+        constructor(path: Table<out Record>, childPath: ForeignKey<out Record, FilmRecord>?, parentPath: InverseForeignKey<out Record, FilmRecord>?): super(path, childPath, parentPath)
+        private constructor(alias: Name, aliased: Table<FilmRecord>): super(alias, aliased)
+        override fun `as`(alias: String): FilmPath = FilmPath(DSL.name(alias), this)
+        override fun `as`(alias: Name): FilmPath = FilmPath(alias, this)
+        override fun `as`(alias: Table<*>): FilmPath = FilmPath(alias.qualifiedName, this)
+    }
     override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
     override fun getIndexes(): List<Index> = listOf(FILM_FULLTEXT_IDX, IDX_FK_LANGUAGE_ID, IDX_FK_ORIGINAL_LANGUAGE_ID, IDX_TITLE)
     override fun getIdentity(): Identity<FilmRecord, Long?> = super.getIdentity() as Identity<FilmRecord, Long?>
     override fun getPrimaryKey(): UniqueKey<FilmRecord> = FILM_PKEY
     override fun getReferences(): List<ForeignKey<FilmRecord, *>> = listOf(FILM__FILM_LANGUAGE_ID_FKEY, FILM__FILM_ORIGINAL_LANGUAGE_ID_FKEY)
 
-    private lateinit var _filmLanguageIdFkey: Language
-    private lateinit var _filmOriginalLanguageIdFkey: Language
+    private lateinit var _filmLanguageIdFkey: LanguagePath
 
     /**
      * Get the implicit join path to the <code>public.language</code> table, via
      * the <code>film_language_id_fkey</code> key.
      */
-    fun filmLanguageIdFkey(): Language {
+    fun filmLanguageIdFkey(): LanguagePath {
         if (!this::_filmLanguageIdFkey.isInitialized)
-            _filmLanguageIdFkey = Language(this, FILM__FILM_LANGUAGE_ID_FKEY)
+            _filmLanguageIdFkey = LanguagePath(this, FILM__FILM_LANGUAGE_ID_FKEY, null)
 
         return _filmLanguageIdFkey;
     }
 
-    val filmLanguageIdFkey: Language
-        get(): Language = filmLanguageIdFkey()
+    val filmLanguageIdFkey: LanguagePath
+        get(): LanguagePath = filmLanguageIdFkey()
+
+    private lateinit var _filmOriginalLanguageIdFkey: LanguagePath
 
     /**
      * Get the implicit join path to the <code>public.language</code> table, via
      * the <code>film_original_language_id_fkey</code> key.
      */
-    fun filmOriginalLanguageIdFkey(): Language {
+    fun filmOriginalLanguageIdFkey(): LanguagePath {
         if (!this::_filmOriginalLanguageIdFkey.isInitialized)
-            _filmOriginalLanguageIdFkey = Language(this, FILM__FILM_ORIGINAL_LANGUAGE_ID_FKEY)
+            _filmOriginalLanguageIdFkey = LanguagePath(this, FILM__FILM_ORIGINAL_LANGUAGE_ID_FKEY, null)
 
         return _filmOriginalLanguageIdFkey;
     }
 
-    val filmOriginalLanguageIdFkey: Language
-        get(): Language = filmOriginalLanguageIdFkey()
+    val filmOriginalLanguageIdFkey: LanguagePath
+        get(): LanguagePath = filmOriginalLanguageIdFkey()
+
+    private lateinit var _filmActor: FilmActorPath
+
+    /**
+     * Get the implicit to-many join path to the <code>public.film_actor</code>
+     * table
+     */
+    fun filmActor(): FilmActorPath {
+        if (!this::_filmActor.isInitialized)
+            _filmActor = FilmActorPath(this, null, FILM_ACTOR__FILM_ACTOR_FILM_ID_FKEY.inverseKey)
+
+        return _filmActor;
+    }
+
+    val filmActor: FilmActorPath
+        get(): FilmActorPath = filmActor()
+
+    private lateinit var _filmCategory: FilmCategoryPath
+
+    /**
+     * Get the implicit to-many join path to the
+     * <code>public.film_category</code> table
+     */
+    fun filmCategory(): FilmCategoryPath {
+        if (!this::_filmCategory.isInitialized)
+            _filmCategory = FilmCategoryPath(this, null, FILM_CATEGORY__FILM_CATEGORY_FILM_ID_FKEY.inverseKey)
+
+        return _filmCategory;
+    }
+
+    val filmCategory: FilmCategoryPath
+        get(): FilmCategoryPath = filmCategory()
+
+    private lateinit var _inventory: InventoryPath
+
+    /**
+     * Get the implicit to-many join path to the <code>public.inventory</code>
+     * table
+     */
+    fun inventory(): InventoryPath {
+        if (!this::_inventory.isInitialized)
+            _inventory = InventoryPath(this, null, INVENTORY__INVENTORY_FILM_ID_FKEY.inverseKey)
+
+        return _inventory;
+    }
+
+    val inventory: InventoryPath
+        get(): InventoryPath = inventory()
+
+    /**
+     * Get the implicit many-to-many join path to the <code>public.actor</code>
+     * table
+     */
+    val actor: ActorPath
+        get(): ActorPath = filmActor().actor()
+
+    /**
+     * Get the implicit many-to-many join path to the
+     * <code>public.category</code> table
+     */
+    val category: CategoryPath
+        get(): CategoryPath = filmCategory().category()
+    override fun getTriggers(): List<Trigger> = listOf(FILM_FULLTEXT_TRIGGER)
     override fun `as`(alias: String): Film = Film(DSL.name(alias), this)
     override fun `as`(alias: Name): Film = Film(alias, this)
-    override fun `as`(alias: Table<*>): Film = Film(alias.getQualifiedName(), this)
+    override fun `as`(alias: Table<*>): Film = Film(alias.qualifiedName, this)
 
     /**
      * Rename this table
@@ -212,21 +310,55 @@ open class Film(
     /**
      * Rename this table
      */
-    override fun rename(name: Table<*>): Film = Film(name.getQualifiedName(), null)
-
-    // -------------------------------------------------------------------------
-    // Row14 type methods
-    // -------------------------------------------------------------------------
-    override fun fieldsRow(): Row14<Long?, String?, String?, Int?, Long?, Long?, Short?, BigDecimal?, Short?, BigDecimal?, MpaaRating?, LocalDateTime?, Array<String?>?, Any?> = super.fieldsRow() as Row14<Long?, String?, String?, Int?, Long?, Long?, Short?, BigDecimal?, Short?, BigDecimal?, MpaaRating?, LocalDateTime?, Array<String?>?, Any?>
+    override fun rename(name: Table<*>): Film = Film(name.qualifiedName, null)
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     * Create an inline derived table from this table
      */
-    fun <U> mapping(from: (Long?, String?, String?, Int?, Long?, Long?, Short?, BigDecimal?, Short?, BigDecimal?, MpaaRating?, LocalDateTime?, Array<String?>?, Any?) -> U): SelectField<U> = convertFrom(Records.mapping(from))
+    override fun where(condition: Condition): Film = Film(qualifiedName, if (aliased()) this else null, condition)
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Class,
-     * Function)}.
+     * Create an inline derived table from this table
      */
-    fun <U> mapping(toType: Class<U>, from: (Long?, String?, String?, Int?, Long?, Long?, Short?, BigDecimal?, Short?, BigDecimal?, MpaaRating?, LocalDateTime?, Array<String?>?, Any?) -> U): SelectField<U> = convertFrom(toType, Records.mapping(from))
+    override fun where(conditions: Collection<Condition>): Film = where(DSL.and(conditions))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun where(vararg conditions: Condition): Film = where(DSL.and(*conditions))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun where(condition: Field<Boolean?>): Film = where(DSL.condition(condition))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(condition: SQL): Film = where(DSL.condition(condition))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(@Stringly.SQL condition: String): Film = where(DSL.condition(condition))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(@Stringly.SQL condition: String, vararg binds: Any?): Film = where(DSL.condition(condition, *binds))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(@Stringly.SQL condition: String, vararg parts: QueryPart): Film = where(DSL.condition(condition, *parts))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun whereExists(select: Select<*>): Film = where(DSL.exists(select))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun whereNotExists(select: Select<*>): Film = where(DSL.notExists(select))
 }

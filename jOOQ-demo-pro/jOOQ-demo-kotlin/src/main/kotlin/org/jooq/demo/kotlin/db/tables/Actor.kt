@@ -5,28 +5,38 @@ package org.jooq.demo.kotlin.db.tables
 
 
 import java.time.LocalDateTime
-import java.util.function.Function
 
+import kotlin.collections.Collection
 import kotlin.collections.List
 
+import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
 import org.jooq.Identity
 import org.jooq.Index
+import org.jooq.InverseForeignKey
 import org.jooq.Name
+import org.jooq.Path
+import org.jooq.PlainSQL
+import org.jooq.QueryPart
 import org.jooq.Record
-import org.jooq.Records
-import org.jooq.Row4
+import org.jooq.SQL
 import org.jooq.Schema
-import org.jooq.SelectField
+import org.jooq.Select
+import org.jooq.Stringly
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
+import org.jooq.Trigger
 import org.jooq.UniqueKey
 import org.jooq.demo.kotlin.db.Public
 import org.jooq.demo.kotlin.db.indexes.IDX_ACTOR_LAST_NAME
 import org.jooq.demo.kotlin.db.keys.ACTOR_PKEY
+import org.jooq.demo.kotlin.db.keys.FILM_ACTOR__FILM_ACTOR_ACTOR_ID_FKEY
+import org.jooq.demo.kotlin.db.tables.Film.FilmPath
+import org.jooq.demo.kotlin.db.tables.FilmActor.FilmActorPath
 import org.jooq.demo.kotlin.db.tables.records.ActorRecord
+import org.jooq.demo.kotlin.db.triggers.LAST_UPDATED
 import org.jooq.impl.DSL
 import org.jooq.impl.Internal
 import org.jooq.impl.SQLDataType
@@ -39,19 +49,23 @@ import org.jooq.impl.TableImpl
 @Suppress("UNCHECKED_CAST")
 open class Actor(
     alias: Name,
-    child: Table<out Record>?,
-    path: ForeignKey<out Record, ActorRecord>?,
+    path: Table<out Record>?,
+    childPath: ForeignKey<out Record, ActorRecord>?,
+    parentPath: InverseForeignKey<out Record, ActorRecord>?,
     aliased: Table<ActorRecord>?,
-    parameters: Array<Field<*>?>?
+    parameters: Array<Field<*>?>?,
+    where: Condition?
 ): TableImpl<ActorRecord>(
     alias,
     Public.PUBLIC,
-    child,
     path,
+    childPath,
+    parentPath,
     aliased,
     parameters,
     DSL.comment(""),
-    TableOptions.table()
+    TableOptions.table(),
+    where,
 ) {
     companion object {
 
@@ -86,8 +100,9 @@ open class Actor(
      */
     val LAST_UPDATE: TableField<ActorRecord, LocalDateTime?> = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).readonly(true).defaultValue(DSL.field(DSL.raw("now()"), SQLDataType.LOCALDATETIME)), this, "")
 
-    private constructor(alias: Name, aliased: Table<ActorRecord>?): this(alias, null, null, aliased, null)
-    private constructor(alias: Name, aliased: Table<ActorRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, aliased, parameters)
+    private constructor(alias: Name, aliased: Table<ActorRecord>?): this(alias, null, null, null, aliased, null, null)
+    private constructor(alias: Name, aliased: Table<ActorRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, null, aliased, parameters, null)
+    private constructor(alias: Name, aliased: Table<ActorRecord>?, where: Condition): this(alias, null, null, null, aliased, null, where)
 
     /**
      * Create an aliased <code>public.actor</code> table reference
@@ -104,14 +119,49 @@ open class Actor(
      */
     constructor(): this(DSL.name("actor"), null)
 
-    constructor(child: Table<out Record>, key: ForeignKey<out Record, ActorRecord>): this(Internal.createPathAlias(child, key), child, key, ACTOR, null)
+    constructor(path: Table<out Record>, childPath: ForeignKey<out Record, ActorRecord>?, parentPath: InverseForeignKey<out Record, ActorRecord>?): this(Internal.createPathAlias(path, childPath, parentPath), path, childPath, parentPath, ACTOR, null, null)
+
+    /**
+     * A subtype implementing {@link Path} for simplified path-based joins.
+     */
+    open class ActorPath : Actor, Path<ActorRecord> {
+        constructor(path: Table<out Record>, childPath: ForeignKey<out Record, ActorRecord>?, parentPath: InverseForeignKey<out Record, ActorRecord>?): super(path, childPath, parentPath)
+        private constructor(alias: Name, aliased: Table<ActorRecord>): super(alias, aliased)
+        override fun `as`(alias: String): ActorPath = ActorPath(DSL.name(alias), this)
+        override fun `as`(alias: Name): ActorPath = ActorPath(alias, this)
+        override fun `as`(alias: Table<*>): ActorPath = ActorPath(alias.qualifiedName, this)
+    }
     override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
     override fun getIndexes(): List<Index> = listOf(IDX_ACTOR_LAST_NAME)
     override fun getIdentity(): Identity<ActorRecord, Long?> = super.getIdentity() as Identity<ActorRecord, Long?>
     override fun getPrimaryKey(): UniqueKey<ActorRecord> = ACTOR_PKEY
+
+    private lateinit var _filmActor: FilmActorPath
+
+    /**
+     * Get the implicit to-many join path to the <code>public.film_actor</code>
+     * table
+     */
+    fun filmActor(): FilmActorPath {
+        if (!this::_filmActor.isInitialized)
+            _filmActor = FilmActorPath(this, null, FILM_ACTOR__FILM_ACTOR_ACTOR_ID_FKEY.inverseKey)
+
+        return _filmActor;
+    }
+
+    val filmActor: FilmActorPath
+        get(): FilmActorPath = filmActor()
+
+    /**
+     * Get the implicit many-to-many join path to the <code>public.film</code>
+     * table
+     */
+    val film: FilmPath
+        get(): FilmPath = filmActor().film()
+    override fun getTriggers(): List<Trigger> = listOf(LAST_UPDATED)
     override fun `as`(alias: String): Actor = Actor(DSL.name(alias), this)
     override fun `as`(alias: Name): Actor = Actor(alias, this)
-    override fun `as`(alias: Table<*>): Actor = Actor(alias.getQualifiedName(), this)
+    override fun `as`(alias: Table<*>): Actor = Actor(alias.qualifiedName, this)
 
     /**
      * Rename this table
@@ -126,21 +176,55 @@ open class Actor(
     /**
      * Rename this table
      */
-    override fun rename(name: Table<*>): Actor = Actor(name.getQualifiedName(), null)
-
-    // -------------------------------------------------------------------------
-    // Row4 type methods
-    // -------------------------------------------------------------------------
-    override fun fieldsRow(): Row4<Long?, String?, String?, LocalDateTime?> = super.fieldsRow() as Row4<Long?, String?, String?, LocalDateTime?>
+    override fun rename(name: Table<*>): Actor = Actor(name.qualifiedName, null)
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     * Create an inline derived table from this table
      */
-    fun <U> mapping(from: (Long?, String?, String?, LocalDateTime?) -> U): SelectField<U> = convertFrom(Records.mapping(from))
+    override fun where(condition: Condition): Actor = Actor(qualifiedName, if (aliased()) this else null, condition)
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Class,
-     * Function)}.
+     * Create an inline derived table from this table
      */
-    fun <U> mapping(toType: Class<U>, from: (Long?, String?, String?, LocalDateTime?) -> U): SelectField<U> = convertFrom(toType, Records.mapping(from))
+    override fun where(conditions: Collection<Condition>): Actor = where(DSL.and(conditions))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun where(vararg conditions: Condition): Actor = where(DSL.and(*conditions))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun where(condition: Field<Boolean?>): Actor = where(DSL.condition(condition))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(condition: SQL): Actor = where(DSL.condition(condition))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(@Stringly.SQL condition: String): Actor = where(DSL.condition(condition))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(@Stringly.SQL condition: String, vararg binds: Any?): Actor = where(DSL.condition(condition, *binds))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(@Stringly.SQL condition: String, vararg parts: QueryPart): Actor = where(DSL.condition(condition, *parts))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun whereExists(select: Select<*>): Actor = where(DSL.exists(select))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun whereNotExists(select: Select<*>): Actor = where(DSL.notExists(select))
 }

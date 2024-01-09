@@ -14,6 +14,7 @@ import org.jooq.Domain
 import org.jooq.Field
 import org.jooq.Result
 import org.jooq.Table
+import org.jooq.Trigger
 import org.jooq.demo.kotlin.db.domains.YEAR
 import org.jooq.demo.kotlin.db.tables.Actor
 import org.jooq.demo.kotlin.db.tables.ActorInfo
@@ -49,6 +50,8 @@ import org.jooq.demo.kotlin.db.tables.Store
 import org.jooq.demo.kotlin.db.tables.records.CustomerRecord
 import org.jooq.demo.kotlin.db.tables.records.FilmInStockRecord
 import org.jooq.demo.kotlin.db.tables.records.FilmNotInStockRecord
+import org.jooq.demo.kotlin.db.triggers.FILM_FULLTEXT_TRIGGER
+import org.jooq.demo.kotlin.db.triggers.LAST_UPDATED
 import org.jooq.impl.SchemaImpl
 
 
@@ -326,6 +329,11 @@ open class Public : SchemaImpl("public", DefaultCatalog.DEFAULT_CATALOG) {
 
     override fun getDomains(): List<Domain<*>> = listOf(
         YEAR
+    )
+
+    override fun getTriggers(): List<Trigger> = listOf(
+        FILM_FULLTEXT_TRIGGER,
+        LAST_UPDATED
     )
 
     override fun getTables(): List<Table<*>> = listOf(

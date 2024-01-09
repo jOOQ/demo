@@ -4,20 +4,26 @@
 package org.jooq.demo.skala.db.tables
 
 
+import java.lang.Boolean
 import java.lang.Class
 import java.lang.Long
 import java.lang.String
 import java.time.LocalDateTime
-import java.util.function.Function
+import java.util.Collection
 
+import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
 import org.jooq.Identity
+import org.jooq.InverseForeignKey
 import org.jooq.Name
+import org.jooq.Path
+import org.jooq.PlainSQL
 import org.jooq.Record
-import org.jooq.Row3
+import org.jooq.SQL
 import org.jooq.Schema
-import org.jooq.SelectField
+import org.jooq.Select
+import org.jooq.Stringly
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
@@ -39,6 +45,11 @@ object Category {
    * The reference instance of <code>public.category</code>
    */
   val CATEGORY = new Category
+
+  /**
+   * A subtype implementing {@link Path} for simplified path-based joins.
+   */
+  class CategoryPath(path: Table[_ <: Record], childPath: ForeignKey[_ <: Record, CategoryRecord], parentPath: InverseForeignKey[_ <: Record, CategoryRecord]) extends Category(path, childPath, parentPath) with Path[CategoryRecord]
 }
 
 /**
@@ -46,20 +57,24 @@ object Category {
  */
 class Category(
   alias: Name,
-  child: Table[_ <: Record],
-  path: ForeignKey[_ <: Record, CategoryRecord],
+  path: Table[_ <: Record],
+  childPath: ForeignKey[_ <: Record, CategoryRecord],
+  parentPath: InverseForeignKey[_ <: Record, CategoryRecord],
   aliased: Table[CategoryRecord],
-  parameters: Array[ Field[_] ]
+  parameters: Array[ Field[_] ],
+  where: Condition
 )
 extends TableImpl[CategoryRecord](
   alias,
   Public.PUBLIC,
-  child,
   path,
+  childPath,
+  parentPath,
   aliased,
   parameters,
   DSL.comment(""),
-  TableOptions.table
+  TableOptions.table,
+  where
 ) {
 
   /**
@@ -82,7 +97,8 @@ extends TableImpl[CategoryRecord](
    */
   val LAST_UPDATE: TableField[CategoryRecord, LocalDateTime] = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).defaultValue(DSL.field(DSL.raw("now()"), SQLDataType.LOCALDATETIME)), "")
 
-  private def this(alias: Name, aliased: Table[CategoryRecord]) = this(alias, null, null, aliased, null)
+  private def this(alias: Name, aliased: Table[CategoryRecord]) = this(alias, null, null, null, aliased, null, null)
+  private def this(alias: Name, aliased: Table[CategoryRecord], where: Condition) = this(alias, null, null, null, aliased, null, where)
 
   /**
    * Create an aliased <code>public.category</code> table reference
@@ -99,9 +115,9 @@ extends TableImpl[CategoryRecord](
    */
   def this() = this(DSL.name("category"), null)
 
-  def this(child: Table[_ <: Record], key: ForeignKey[_ <: Record, CategoryRecord]) = this(Internal.createPathAlias(child, key), child, key, org.jooq.demo.skala.db.tables.Category.CATEGORY, null)
+  def this(path: Table[_ <: Record], childPath: ForeignKey[_ <: Record, CategoryRecord], parentPath: InverseForeignKey[_ <: Record, CategoryRecord]) = this(Internal.createPathAlias(path, childPath, parentPath), path, childPath, parentPath, org.jooq.demo.skala.db.tables.Category.CATEGORY, null, null)
 
-  override def getSchema: Schema = if (aliased()) null else Public.PUBLIC
+  override def getSchema: Schema = if (super.aliased()) null else Public.PUBLIC
 
   override def getIdentity: Identity[CategoryRecord, Long] = super.getIdentity.asInstanceOf[ Identity[CategoryRecord, Long] ]
 
@@ -125,19 +141,48 @@ extends TableImpl[CategoryRecord](
    */
   override def rename(name: Table[_]): Category = new Category(name.getQualifiedName(), null)
 
-  // -------------------------------------------------------------------------
-  // Row3 type methods
-  // -------------------------------------------------------------------------
-  override def fieldsRow: Row3[Long, String, LocalDateTime] = super.fieldsRow.asInstanceOf[ Row3[Long, String, LocalDateTime] ]
+  /**
+   * Create an inline derived table from this table
+   */
+  override def where(condition: Condition): Category = new Category(getQualifiedName(), if (super.aliased()) this else null, condition)
 
   /**
-   * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+   * Create an inline derived table from this table
    */
-  def mapping[U](from: (Long, String, LocalDateTime) => U): SelectField[U] = convertFrom(r => from.apply(r.value1(), r.value2(), r.value3()))
+  override def where(conditions: Collection[_ <: Condition]): Category = where(DSL.and(conditions))
 
   /**
-   * Convenience mapping calling {@link SelectField#convertFrom(Class,
-   * Function)}.
+   * Create an inline derived table from this table
    */
-  def mapping[U](toType: Class[U], from: (Long, String, LocalDateTime) => U): SelectField[U] = convertFrom(toType,r => from.apply(r.value1(), r.value2(), r.value3()))
+  override def where(conditions: Condition*): Category = where(DSL.and(conditions:_*))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  override def where(condition: Field[Boolean]): Category = where(DSL.condition(condition))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  @PlainSQL override def where(condition: SQL): Category = where(DSL.condition(condition))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  @PlainSQL override def where(@Stringly.SQL condition: String): Category = where(DSL.condition(condition))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): Category = where(DSL.condition(condition, binds:_*))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  override def whereExists(select: Select[_]): Category = where(DSL.exists(select))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  override def whereNotExists(select: Select[_]): Category = where(DSL.notExists(select))
 }

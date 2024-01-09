@@ -5,23 +5,32 @@ package org.jooq.demo.kotlin.db.tables
 
 
 import java.time.LocalDateTime
-import java.util.function.Function
 
+import kotlin.collections.Collection
+
+import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
 import org.jooq.Identity
+import org.jooq.InverseForeignKey
 import org.jooq.Name
+import org.jooq.Path
+import org.jooq.PlainSQL
+import org.jooq.QueryPart
 import org.jooq.Record
-import org.jooq.Records
-import org.jooq.Row3
+import org.jooq.SQL
 import org.jooq.Schema
-import org.jooq.SelectField
+import org.jooq.Select
+import org.jooq.Stringly
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
 import org.jooq.UniqueKey
 import org.jooq.demo.kotlin.db.Public
+import org.jooq.demo.kotlin.db.keys.FILM__FILM_LANGUAGE_ID_FKEY
+import org.jooq.demo.kotlin.db.keys.FILM__FILM_ORIGINAL_LANGUAGE_ID_FKEY
 import org.jooq.demo.kotlin.db.keys.LANGUAGE_PKEY
+import org.jooq.demo.kotlin.db.tables.Film.FilmPath
 import org.jooq.demo.kotlin.db.tables.records.LanguageRecord
 import org.jooq.impl.DSL
 import org.jooq.impl.Internal
@@ -35,19 +44,23 @@ import org.jooq.impl.TableImpl
 @Suppress("UNCHECKED_CAST")
 open class Language(
     alias: Name,
-    child: Table<out Record>?,
-    path: ForeignKey<out Record, LanguageRecord>?,
+    path: Table<out Record>?,
+    childPath: ForeignKey<out Record, LanguageRecord>?,
+    parentPath: InverseForeignKey<out Record, LanguageRecord>?,
     aliased: Table<LanguageRecord>?,
-    parameters: Array<Field<*>?>?
+    parameters: Array<Field<*>?>?,
+    where: Condition?
 ): TableImpl<LanguageRecord>(
     alias,
     Public.PUBLIC,
-    child,
     path,
+    childPath,
+    parentPath,
     aliased,
     parameters,
     DSL.comment(""),
-    TableOptions.table()
+    TableOptions.table(),
+    where,
 ) {
     companion object {
 
@@ -77,8 +90,9 @@ open class Language(
      */
     val LAST_UPDATE: TableField<LanguageRecord, LocalDateTime?> = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).defaultValue(DSL.field(DSL.raw("now()"), SQLDataType.LOCALDATETIME)), this, "")
 
-    private constructor(alias: Name, aliased: Table<LanguageRecord>?): this(alias, null, null, aliased, null)
-    private constructor(alias: Name, aliased: Table<LanguageRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, aliased, parameters)
+    private constructor(alias: Name, aliased: Table<LanguageRecord>?): this(alias, null, null, null, aliased, null, null)
+    private constructor(alias: Name, aliased: Table<LanguageRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, null, aliased, parameters, null)
+    private constructor(alias: Name, aliased: Table<LanguageRecord>?, where: Condition): this(alias, null, null, null, aliased, null, where)
 
     /**
      * Create an aliased <code>public.language</code> table reference
@@ -95,13 +109,56 @@ open class Language(
      */
     constructor(): this(DSL.name("language"), null)
 
-    constructor(child: Table<out Record>, key: ForeignKey<out Record, LanguageRecord>): this(Internal.createPathAlias(child, key), child, key, LANGUAGE, null)
+    constructor(path: Table<out Record>, childPath: ForeignKey<out Record, LanguageRecord>?, parentPath: InverseForeignKey<out Record, LanguageRecord>?): this(Internal.createPathAlias(path, childPath, parentPath), path, childPath, parentPath, LANGUAGE, null, null)
+
+    /**
+     * A subtype implementing {@link Path} for simplified path-based joins.
+     */
+    open class LanguagePath : Language, Path<LanguageRecord> {
+        constructor(path: Table<out Record>, childPath: ForeignKey<out Record, LanguageRecord>?, parentPath: InverseForeignKey<out Record, LanguageRecord>?): super(path, childPath, parentPath)
+        private constructor(alias: Name, aliased: Table<LanguageRecord>): super(alias, aliased)
+        override fun `as`(alias: String): LanguagePath = LanguagePath(DSL.name(alias), this)
+        override fun `as`(alias: Name): LanguagePath = LanguagePath(alias, this)
+        override fun `as`(alias: Table<*>): LanguagePath = LanguagePath(alias.qualifiedName, this)
+    }
     override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
     override fun getIdentity(): Identity<LanguageRecord, Long?> = super.getIdentity() as Identity<LanguageRecord, Long?>
     override fun getPrimaryKey(): UniqueKey<LanguageRecord> = LANGUAGE_PKEY
+
+    private lateinit var _filmLanguageIdFkey: FilmPath
+
+    /**
+     * Get the implicit to-many join path to the <code>public.film</code> table,
+     * via the <code>film_language_id_fkey</code> key
+     */
+    fun filmLanguageIdFkey(): FilmPath {
+        if (!this::_filmLanguageIdFkey.isInitialized)
+            _filmLanguageIdFkey = FilmPath(this, null, FILM__FILM_LANGUAGE_ID_FKEY.inverseKey)
+
+        return _filmLanguageIdFkey;
+    }
+
+    val filmLanguageIdFkey: FilmPath
+        get(): FilmPath = filmLanguageIdFkey()
+
+    private lateinit var _filmOriginalLanguageIdFkey: FilmPath
+
+    /**
+     * Get the implicit to-many join path to the <code>public.film</code> table,
+     * via the <code>film_original_language_id_fkey</code> key
+     */
+    fun filmOriginalLanguageIdFkey(): FilmPath {
+        if (!this::_filmOriginalLanguageIdFkey.isInitialized)
+            _filmOriginalLanguageIdFkey = FilmPath(this, null, FILM__FILM_ORIGINAL_LANGUAGE_ID_FKEY.inverseKey)
+
+        return _filmOriginalLanguageIdFkey;
+    }
+
+    val filmOriginalLanguageIdFkey: FilmPath
+        get(): FilmPath = filmOriginalLanguageIdFkey()
     override fun `as`(alias: String): Language = Language(DSL.name(alias), this)
     override fun `as`(alias: Name): Language = Language(alias, this)
-    override fun `as`(alias: Table<*>): Language = Language(alias.getQualifiedName(), this)
+    override fun `as`(alias: Table<*>): Language = Language(alias.qualifiedName, this)
 
     /**
      * Rename this table
@@ -116,21 +173,55 @@ open class Language(
     /**
      * Rename this table
      */
-    override fun rename(name: Table<*>): Language = Language(name.getQualifiedName(), null)
-
-    // -------------------------------------------------------------------------
-    // Row3 type methods
-    // -------------------------------------------------------------------------
-    override fun fieldsRow(): Row3<Long?, String?, LocalDateTime?> = super.fieldsRow() as Row3<Long?, String?, LocalDateTime?>
+    override fun rename(name: Table<*>): Language = Language(name.qualifiedName, null)
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     * Create an inline derived table from this table
      */
-    fun <U> mapping(from: (Long?, String?, LocalDateTime?) -> U): SelectField<U> = convertFrom(Records.mapping(from))
+    override fun where(condition: Condition): Language = Language(qualifiedName, if (aliased()) this else null, condition)
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Class,
-     * Function)}.
+     * Create an inline derived table from this table
      */
-    fun <U> mapping(toType: Class<U>, from: (Long?, String?, LocalDateTime?) -> U): SelectField<U> = convertFrom(toType, Records.mapping(from))
+    override fun where(conditions: Collection<Condition>): Language = where(DSL.and(conditions))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun where(vararg conditions: Condition): Language = where(DSL.and(*conditions))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun where(condition: Field<Boolean?>): Language = where(DSL.condition(condition))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(condition: SQL): Language = where(DSL.condition(condition))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(@Stringly.SQL condition: String): Language = where(DSL.condition(condition))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(@Stringly.SQL condition: String, vararg binds: Any?): Language = where(DSL.condition(condition, *binds))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(@Stringly.SQL condition: String, vararg parts: QueryPart): Language = where(DSL.condition(condition, *parts))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun whereExists(select: Select<*>): Language = where(DSL.exists(select))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun whereNotExists(select: Select<*>): Language = where(DSL.notExists(select))
 }

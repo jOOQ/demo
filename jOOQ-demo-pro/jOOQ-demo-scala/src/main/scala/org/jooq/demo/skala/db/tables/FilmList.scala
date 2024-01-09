@@ -4,20 +4,25 @@
 package org.jooq.demo.skala.db.tables
 
 
+import java.lang.Boolean
 import java.lang.Class
 import java.lang.Long
 import java.lang.Short
 import java.lang.String
 import java.math.BigDecimal
-import java.util.function.Function
+import java.util.Collection
 
+import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
+import org.jooq.InverseForeignKey
 import org.jooq.Name
+import org.jooq.PlainSQL
 import org.jooq.Record
-import org.jooq.Row8
+import org.jooq.SQL
 import org.jooq.Schema
-import org.jooq.SelectField
+import org.jooq.Select
+import org.jooq.Stringly
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
@@ -25,7 +30,6 @@ import org.jooq.demo.skala.db.Public
 import org.jooq.demo.skala.db.enums.MpaaRating
 import org.jooq.demo.skala.db.tables.records.FilmListRecord
 import org.jooq.impl.DSL
-import org.jooq.impl.Internal
 import org.jooq.impl.SQLDataType
 import org.jooq.impl.TableImpl
 
@@ -45,16 +49,19 @@ object FilmList {
  */
 class FilmList(
   alias: Name,
-  child: Table[_ <: Record],
-  path: ForeignKey[_ <: Record, FilmListRecord],
+  path: Table[_ <: Record],
+  childPath: ForeignKey[_ <: Record, FilmListRecord],
+  parentPath: InverseForeignKey[_ <: Record, FilmListRecord],
   aliased: Table[FilmListRecord],
-  parameters: Array[ Field[_] ]
+  parameters: Array[ Field[_] ],
+  where: Condition
 )
 extends TableImpl[FilmListRecord](
   alias,
   Public.PUBLIC,
-  child,
   path,
+  childPath,
+  parentPath,
   aliased,
   parameters,
   DSL.comment(""),
@@ -73,7 +80,8 @@ extends TableImpl[FilmListRecord](
      JOIN film_actor ON ((film.film_id = film_actor.film_id)))
      JOIN actor ON ((film_actor.actor_id = actor.actor_id)))
   GROUP BY film.film_id, film.title, film.description, category.name, film.rental_rate, film.length, film.rating;
-  """)
+  """),
+  where
 ) {
 
   /**
@@ -114,14 +122,15 @@ extends TableImpl[FilmListRecord](
   /**
    * The column <code>public.film_list.rating</code>.
    */
-  val RATING: TableField[FilmListRecord, MpaaRating] = createField(DSL.name("rating"), SQLDataType.VARCHAR.asEnumDataType(classOf[org.jooq.demo.skala.db.enums.MpaaRating]), "")
+  val RATING: TableField[FilmListRecord, MpaaRating] = createField(DSL.name("rating"), SQLDataType.VARCHAR.asEnumDataType(classOf[MpaaRating]), "")
 
   /**
    * The column <code>public.film_list.actors</code>.
    */
   val ACTORS: TableField[FilmListRecord, String] = createField(DSL.name("actors"), SQLDataType.CLOB, "")
 
-  private def this(alias: Name, aliased: Table[FilmListRecord]) = this(alias, null, null, aliased, null)
+  private def this(alias: Name, aliased: Table[FilmListRecord]) = this(alias, null, null, null, aliased, null, null)
+  private def this(alias: Name, aliased: Table[FilmListRecord], where: Condition) = this(alias, null, null, null, aliased, null, where)
 
   /**
    * Create an aliased <code>public.film_list</code> table reference
@@ -138,9 +147,7 @@ extends TableImpl[FilmListRecord](
    */
   def this() = this(DSL.name("film_list"), null)
 
-  def this(child: Table[_ <: Record], key: ForeignKey[_ <: Record, FilmListRecord]) = this(Internal.createPathAlias(child, key), child, key, org.jooq.demo.skala.db.tables.FilmList.FILM_LIST, null)
-
-  override def getSchema: Schema = if (aliased()) null else Public.PUBLIC
+  override def getSchema: Schema = if (super.aliased()) null else Public.PUBLIC
   override def as(alias: String): FilmList = new FilmList(DSL.name(alias), this)
   override def as(alias: Name): FilmList = new FilmList(alias, this)
   override def as(alias: Table[_]): FilmList = new FilmList(alias.getQualifiedName(), this)
@@ -160,19 +167,48 @@ extends TableImpl[FilmListRecord](
    */
   override def rename(name: Table[_]): FilmList = new FilmList(name.getQualifiedName(), null)
 
-  // -------------------------------------------------------------------------
-  // Row8 type methods
-  // -------------------------------------------------------------------------
-  override def fieldsRow: Row8[Long, String, String, String, BigDecimal, Short, MpaaRating, String] = super.fieldsRow.asInstanceOf[ Row8[Long, String, String, String, BigDecimal, Short, MpaaRating, String] ]
+  /**
+   * Create an inline derived table from this table
+   */
+  override def where(condition: Condition): FilmList = new FilmList(getQualifiedName(), if (super.aliased()) this else null, condition)
 
   /**
-   * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+   * Create an inline derived table from this table
    */
-  def mapping[U](from: (Long, String, String, String, BigDecimal, Short, MpaaRating, String) => U): SelectField[U] = convertFrom(r => from.apply(r.value1(), r.value2(), r.value3(), r.value4(), r.value5(), r.value6(), r.value7(), r.value8()))
+  override def where(conditions: Collection[_ <: Condition]): FilmList = where(DSL.and(conditions))
 
   /**
-   * Convenience mapping calling {@link SelectField#convertFrom(Class,
-   * Function)}.
+   * Create an inline derived table from this table
    */
-  def mapping[U](toType: Class[U], from: (Long, String, String, String, BigDecimal, Short, MpaaRating, String) => U): SelectField[U] = convertFrom(toType,r => from.apply(r.value1(), r.value2(), r.value3(), r.value4(), r.value5(), r.value6(), r.value7(), r.value8()))
+  override def where(conditions: Condition*): FilmList = where(DSL.and(conditions:_*))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  override def where(condition: Field[Boolean]): FilmList = where(DSL.condition(condition))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  @PlainSQL override def where(condition: SQL): FilmList = where(DSL.condition(condition))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  @PlainSQL override def where(@Stringly.SQL condition: String): FilmList = where(DSL.condition(condition))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): FilmList = where(DSL.condition(condition, binds:_*))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  override def whereExists(select: Select[_]): FilmList = where(DSL.exists(select))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  override def whereNotExists(select: Select[_]): FilmList = where(DSL.notExists(select))
 }

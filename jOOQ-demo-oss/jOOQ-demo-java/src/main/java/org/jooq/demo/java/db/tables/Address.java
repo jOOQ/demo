@@ -6,20 +6,24 @@ package org.jooq.demo.java.db.tables;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
-import java.util.function.Function;
 
+import org.jooq.Condition;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Function8;
 import org.jooq.Identity;
 import org.jooq.Index;
+import org.jooq.InverseForeignKey;
 import org.jooq.Name;
+import org.jooq.Path;
+import org.jooq.PlainSQL;
+import org.jooq.QueryPart;
 import org.jooq.Record;
-import org.jooq.Records;
-import org.jooq.Row8;
+import org.jooq.SQL;
 import org.jooq.Schema;
-import org.jooq.SelectField;
+import org.jooq.Select;
+import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
@@ -27,6 +31,10 @@ import org.jooq.UniqueKey;
 import org.jooq.demo.java.db.Indexes;
 import org.jooq.demo.java.db.Keys;
 import org.jooq.demo.java.db.Public;
+import org.jooq.demo.java.db.tables.City.CityPath;
+import org.jooq.demo.java.db.tables.Customer.CustomerPath;
+import org.jooq.demo.java.db.tables.Staff.StaffPath;
+import org.jooq.demo.java.db.tables.Store.StorePath;
 import org.jooq.demo.java.db.tables.records.AddressRecord;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
@@ -95,11 +103,11 @@ public class Address extends TableImpl<AddressRecord> {
     public final TableField<AddressRecord, LocalDateTime> LAST_UPDATE = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).defaultValue(DSL.field(DSL.raw("now()"), SQLDataType.LOCALDATETIME)), this, "");
 
     private Address(Name alias, Table<AddressRecord> aliased) {
-        this(alias, aliased, null);
+        this(alias, aliased, (Field<?>[]) null, null);
     }
 
-    private Address(Name alias, Table<AddressRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    private Address(Name alias, Table<AddressRecord> aliased, Field<?>[] parameters, Condition where) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table(), where);
     }
 
     /**
@@ -123,8 +131,35 @@ public class Address extends TableImpl<AddressRecord> {
         this(DSL.name("address"), null);
     }
 
-    public <O extends Record> Address(Table<O> child, ForeignKey<O, AddressRecord> key) {
-        super(child, key, ADDRESS);
+    public <O extends Record> Address(Table<O> path, ForeignKey<O, AddressRecord> childPath, InverseForeignKey<O, AddressRecord> parentPath) {
+        super(path, childPath, parentPath, ADDRESS);
+    }
+
+    /**
+     * A subtype implementing {@link Path} for simplified path-based joins.
+     */
+    public static class AddressPath extends Address implements Path<AddressRecord> {
+        public <O extends Record> AddressPath(Table<O> path, ForeignKey<O, AddressRecord> childPath, InverseForeignKey<O, AddressRecord> parentPath) {
+            super(path, childPath, parentPath);
+        }
+        private AddressPath(Name alias, Table<AddressRecord> aliased) {
+            super(alias, aliased);
+        }
+
+        @Override
+        public AddressPath as(String alias) {
+            return new AddressPath(DSL.name(alias), this);
+        }
+
+        @Override
+        public AddressPath as(Name alias) {
+            return new AddressPath(alias, this);
+        }
+
+        @Override
+        public AddressPath as(Table<?> alias) {
+            return new AddressPath(alias.getQualifiedName(), this);
+        }
     }
 
     @Override
@@ -152,16 +187,53 @@ public class Address extends TableImpl<AddressRecord> {
         return Arrays.asList(Keys.ADDRESS__ADDRESS_CITY_ID_FKEY);
     }
 
-    private transient City _city;
+    private transient CityPath _city;
 
     /**
      * Get the implicit join path to the <code>public.city</code> table.
      */
-    public City city() {
+    public CityPath city() {
         if (_city == null)
-            _city = new City(this, Keys.ADDRESS__ADDRESS_CITY_ID_FKEY);
+            _city = new CityPath(this, Keys.ADDRESS__ADDRESS_CITY_ID_FKEY, null);
 
         return _city;
+    }
+
+    private transient CustomerPath _customer;
+
+    /**
+     * Get the implicit to-many join path to the <code>public.customer</code>
+     * table
+     */
+    public CustomerPath customer() {
+        if (_customer == null)
+            _customer = new CustomerPath(this, null, Keys.CUSTOMER__CUSTOMER_ADDRESS_ID_FKEY.getInverseKey());
+
+        return _customer;
+    }
+
+    private transient StaffPath _staff;
+
+    /**
+     * Get the implicit to-many join path to the <code>public.staff</code> table
+     */
+    public StaffPath staff() {
+        if (_staff == null)
+            _staff = new StaffPath(this, null, Keys.STAFF__STAFF_ADDRESS_ID_FKEY.getInverseKey());
+
+        return _staff;
+    }
+
+    private transient StorePath _store;
+
+    /**
+     * Get the implicit to-many join path to the <code>public.store</code> table
+     */
+    public StorePath store() {
+        if (_store == null)
+            _store = new StorePath(this, null, Keys.STORE__STORE_ADDRESS_ID_FKEY.getInverseKey());
+
+        return _store;
     }
 
     @Override
@@ -203,27 +275,87 @@ public class Address extends TableImpl<AddressRecord> {
         return new Address(name.getQualifiedName(), null);
     }
 
-    // -------------------------------------------------------------------------
-    // Row8 type methods
-    // -------------------------------------------------------------------------
-
+    /**
+     * Create an inline derived table from this table
+     */
     @Override
-    public Row8<Long, String, String, String, Long, String, String, LocalDateTime> fieldsRow() {
-        return (Row8) super.fieldsRow();
+    public Address where(Condition condition) {
+        return new Address(getQualifiedName(), aliased() ? this : null, null, condition);
     }
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     * Create an inline derived table from this table
      */
-    public <U> SelectField<U> mapping(Function8<? super Long, ? super String, ? super String, ? super String, ? super Long, ? super String, ? super String, ? super LocalDateTime, ? extends U> from) {
-        return convertFrom(Records.mapping(from));
+    @Override
+    public Address where(Collection<? extends Condition> conditions) {
+        return where(DSL.and(conditions));
     }
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Class,
-     * Function)}.
+     * Create an inline derived table from this table
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function8<? super Long, ? super String, ? super String, ? super String, ? super Long, ? super String, ? super String, ? super LocalDateTime, ? extends U> from) {
-        return convertFrom(toType, Records.mapping(from));
+    @Override
+    public Address where(Condition... conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public Address where(Field<Boolean> condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public Address where(SQL condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public Address where(@Stringly.SQL String condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public Address where(@Stringly.SQL String condition, Object... binds) {
+        return where(DSL.condition(condition, binds));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public Address where(@Stringly.SQL String condition, QueryPart... parts) {
+        return where(DSL.condition(condition, parts));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public Address whereExists(Select<?> select) {
+        return where(DSL.exists(select));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public Address whereNotExists(Select<?> select) {
+        return where(DSL.notExists(select));
     }
 }

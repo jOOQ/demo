@@ -6,24 +6,30 @@ package org.jooq.demo.java.db.tables;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
-import java.util.function.Function;
 
+import org.jooq.Condition;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Function3;
+import org.jooq.InverseForeignKey;
 import org.jooq.Name;
+import org.jooq.Path;
+import org.jooq.PlainSQL;
+import org.jooq.QueryPart;
 import org.jooq.Record;
-import org.jooq.Records;
-import org.jooq.Row3;
+import org.jooq.SQL;
 import org.jooq.Schema;
-import org.jooq.SelectField;
+import org.jooq.Select;
+import org.jooq.Stringly;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.demo.java.db.Keys;
 import org.jooq.demo.java.db.Public;
+import org.jooq.demo.java.db.tables.Category.CategoryPath;
+import org.jooq.demo.java.db.tables.Film.FilmPath;
 import org.jooq.demo.java.db.tables.records.FilmCategoryRecord;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
@@ -67,11 +73,11 @@ public class FilmCategory extends TableImpl<FilmCategoryRecord> {
     public final TableField<FilmCategoryRecord, LocalDateTime> LAST_UPDATE = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).defaultValue(DSL.field(DSL.raw("now()"), SQLDataType.LOCALDATETIME)), this, "");
 
     private FilmCategory(Name alias, Table<FilmCategoryRecord> aliased) {
-        this(alias, aliased, null);
+        this(alias, aliased, (Field<?>[]) null, null);
     }
 
-    private FilmCategory(Name alias, Table<FilmCategoryRecord> aliased, Field<?>[] parameters) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table());
+    private FilmCategory(Name alias, Table<FilmCategoryRecord> aliased, Field<?>[] parameters, Condition where) {
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.table(), where);
     }
 
     /**
@@ -95,8 +101,35 @@ public class FilmCategory extends TableImpl<FilmCategoryRecord> {
         this(DSL.name("film_category"), null);
     }
 
-    public <O extends Record> FilmCategory(Table<O> child, ForeignKey<O, FilmCategoryRecord> key) {
-        super(child, key, FILM_CATEGORY);
+    public <O extends Record> FilmCategory(Table<O> path, ForeignKey<O, FilmCategoryRecord> childPath, InverseForeignKey<O, FilmCategoryRecord> parentPath) {
+        super(path, childPath, parentPath, FILM_CATEGORY);
+    }
+
+    /**
+     * A subtype implementing {@link Path} for simplified path-based joins.
+     */
+    public static class FilmCategoryPath extends FilmCategory implements Path<FilmCategoryRecord> {
+        public <O extends Record> FilmCategoryPath(Table<O> path, ForeignKey<O, FilmCategoryRecord> childPath, InverseForeignKey<O, FilmCategoryRecord> parentPath) {
+            super(path, childPath, parentPath);
+        }
+        private FilmCategoryPath(Name alias, Table<FilmCategoryRecord> aliased) {
+            super(alias, aliased);
+        }
+
+        @Override
+        public FilmCategoryPath as(String alias) {
+            return new FilmCategoryPath(DSL.name(alias), this);
+        }
+
+        @Override
+        public FilmCategoryPath as(Name alias) {
+            return new FilmCategoryPath(alias, this);
+        }
+
+        @Override
+        public FilmCategoryPath as(Table<?> alias) {
+            return new FilmCategoryPath(alias.getQualifiedName(), this);
+        }
     }
 
     @Override
@@ -114,25 +147,26 @@ public class FilmCategory extends TableImpl<FilmCategoryRecord> {
         return Arrays.asList(Keys.FILM_CATEGORY__FILM_CATEGORY_FILM_ID_FKEY, Keys.FILM_CATEGORY__FILM_CATEGORY_CATEGORY_ID_FKEY);
     }
 
-    private transient Film _film;
-    private transient Category _category;
+    private transient FilmPath _film;
 
     /**
      * Get the implicit join path to the <code>public.film</code> table.
      */
-    public Film film() {
+    public FilmPath film() {
         if (_film == null)
-            _film = new Film(this, Keys.FILM_CATEGORY__FILM_CATEGORY_FILM_ID_FKEY);
+            _film = new FilmPath(this, Keys.FILM_CATEGORY__FILM_CATEGORY_FILM_ID_FKEY, null);
 
         return _film;
     }
 
+    private transient CategoryPath _category;
+
     /**
      * Get the implicit join path to the <code>public.category</code> table.
      */
-    public Category category() {
+    public CategoryPath category() {
         if (_category == null)
-            _category = new Category(this, Keys.FILM_CATEGORY__FILM_CATEGORY_CATEGORY_ID_FKEY);
+            _category = new CategoryPath(this, Keys.FILM_CATEGORY__FILM_CATEGORY_CATEGORY_ID_FKEY, null);
 
         return _category;
     }
@@ -176,27 +210,87 @@ public class FilmCategory extends TableImpl<FilmCategoryRecord> {
         return new FilmCategory(name.getQualifiedName(), null);
     }
 
-    // -------------------------------------------------------------------------
-    // Row3 type methods
-    // -------------------------------------------------------------------------
-
+    /**
+     * Create an inline derived table from this table
+     */
     @Override
-    public Row3<Long, Long, LocalDateTime> fieldsRow() {
-        return (Row3) super.fieldsRow();
+    public FilmCategory where(Condition condition) {
+        return new FilmCategory(getQualifiedName(), aliased() ? this : null, null, condition);
     }
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     * Create an inline derived table from this table
      */
-    public <U> SelectField<U> mapping(Function3<? super Long, ? super Long, ? super LocalDateTime, ? extends U> from) {
-        return convertFrom(Records.mapping(from));
+    @Override
+    public FilmCategory where(Collection<? extends Condition> conditions) {
+        return where(DSL.and(conditions));
     }
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Class,
-     * Function)}.
+     * Create an inline derived table from this table
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function3<? super Long, ? super Long, ? super LocalDateTime, ? extends U> from) {
-        return convertFrom(toType, Records.mapping(from));
+    @Override
+    public FilmCategory where(Condition... conditions) {
+        return where(DSL.and(conditions));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public FilmCategory where(Field<Boolean> condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public FilmCategory where(SQL condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public FilmCategory where(@Stringly.SQL String condition) {
+        return where(DSL.condition(condition));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public FilmCategory where(@Stringly.SQL String condition, Object... binds) {
+        return where(DSL.condition(condition, binds));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    @PlainSQL
+    public FilmCategory where(@Stringly.SQL String condition, QueryPart... parts) {
+        return where(DSL.condition(condition, parts));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public FilmCategory whereExists(Select<?> select) {
+        return where(DSL.exists(select));
+    }
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @Override
+    public FilmCategory whereNotExists(Select<?> select) {
+        return where(DSL.notExists(select));
     }
 }

@@ -4,24 +4,29 @@
 package org.jooq.demo.skala.db.tables
 
 
+import java.lang.Boolean
 import java.lang.Class
 import java.lang.Long
 import java.lang.String
 import java.math.BigDecimal
 import java.time.LocalDateTime
 import java.util.Arrays
+import java.util.Collection
 import java.util.List
-import java.util.function.Function
 
+import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
 import org.jooq.Identity
 import org.jooq.Index
+import org.jooq.InverseForeignKey
 import org.jooq.Name
+import org.jooq.PlainSQL
 import org.jooq.Record
-import org.jooq.Row6
+import org.jooq.SQL
 import org.jooq.Schema
-import org.jooq.SelectField
+import org.jooq.Select
+import org.jooq.Stringly
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
@@ -29,9 +34,11 @@ import org.jooq.UniqueKey
 import org.jooq.demo.skala.db.Indexes
 import org.jooq.demo.skala.db.Keys
 import org.jooq.demo.skala.db.Public
+import org.jooq.demo.skala.db.tables.Customer.CustomerPath
+import org.jooq.demo.skala.db.tables.Rental.RentalPath
+import org.jooq.demo.skala.db.tables.Staff.StaffPath
 import org.jooq.demo.skala.db.tables.records.PaymentRecord
 import org.jooq.impl.DSL
-import org.jooq.impl.Internal
 import org.jooq.impl.SQLDataType
 import org.jooq.impl.TableImpl
 
@@ -51,20 +58,24 @@ object Payment {
  */
 class Payment(
   alias: Name,
-  child: Table[_ <: Record],
-  path: ForeignKey[_ <: Record, PaymentRecord],
+  path: Table[_ <: Record],
+  childPath: ForeignKey[_ <: Record, PaymentRecord],
+  parentPath: InverseForeignKey[_ <: Record, PaymentRecord],
   aliased: Table[PaymentRecord],
-  parameters: Array[ Field[_] ]
+  parameters: Array[ Field[_] ],
+  where: Condition
 )
 extends TableImpl[PaymentRecord](
   alias,
   Public.PUBLIC,
-  child,
   path,
+  childPath,
+  parentPath,
   aliased,
   parameters,
   DSL.comment(""),
-  TableOptions.table
+  TableOptions.table,
+  where
 ) {
 
   /**
@@ -102,7 +113,8 @@ extends TableImpl[PaymentRecord](
    */
   val PAYMENT_DATE: TableField[PaymentRecord, LocalDateTime] = createField(DSL.name("payment_date"), SQLDataType.LOCALDATETIME(6).nullable(false), "")
 
-  private def this(alias: Name, aliased: Table[PaymentRecord]) = this(alias, null, null, aliased, null)
+  private def this(alias: Name, aliased: Table[PaymentRecord]) = this(alias, null, null, null, aliased, null, null)
+  private def this(alias: Name, aliased: Table[PaymentRecord], where: Condition) = this(alias, null, null, null, aliased, null, where)
 
   /**
    * Create an aliased <code>public.payment</code> table reference
@@ -119,9 +131,7 @@ extends TableImpl[PaymentRecord](
    */
   def this() = this(DSL.name("payment"), null)
 
-  def this(child: Table[_ <: Record], key: ForeignKey[_ <: Record, PaymentRecord]) = this(Internal.createPathAlias(child, key), child, key, org.jooq.demo.skala.db.tables.Payment.PAYMENT, null)
-
-  override def getSchema: Schema = if (aliased()) null else Public.PUBLIC
+  override def getSchema: Schema = if (super.aliased()) null else Public.PUBLIC
 
   override def getIndexes: List[Index] = Arrays.asList[ Index ](Indexes.IDX_FK_CUSTOMER_ID, Indexes.IDX_FK_STAFF_ID)
 
@@ -134,17 +144,17 @@ extends TableImpl[PaymentRecord](
   /**
    * Get the implicit join path to the <code>public.customer</code> table.
    */
-  lazy val customer: Customer = { new Customer(this, Keys.PAYMENT__PAYMENT_CUSTOMER_ID_FKEY) }
+  lazy val customer: CustomerPath = { new CustomerPath(this, Keys.PAYMENT__PAYMENT_CUSTOMER_ID_FKEY, null) }
 
   /**
    * Get the implicit join path to the <code>public.staff</code> table.
    */
-  lazy val staff: Staff = { new Staff(this, Keys.PAYMENT__PAYMENT_STAFF_ID_FKEY) }
+  lazy val staff: StaffPath = { new StaffPath(this, Keys.PAYMENT__PAYMENT_STAFF_ID_FKEY, null) }
 
   /**
    * Get the implicit join path to the <code>public.rental</code> table.
    */
-  lazy val rental: Rental = { new Rental(this, Keys.PAYMENT__PAYMENT_RENTAL_ID_FKEY) }
+  lazy val rental: RentalPath = { new RentalPath(this, Keys.PAYMENT__PAYMENT_RENTAL_ID_FKEY, null) }
   override def as(alias: String): Payment = new Payment(DSL.name(alias), this)
   override def as(alias: Name): Payment = new Payment(alias, this)
   override def as(alias: Table[_]): Payment = new Payment(alias.getQualifiedName(), this)
@@ -164,19 +174,48 @@ extends TableImpl[PaymentRecord](
    */
   override def rename(name: Table[_]): Payment = new Payment(name.getQualifiedName(), null)
 
-  // -------------------------------------------------------------------------
-  // Row6 type methods
-  // -------------------------------------------------------------------------
-  override def fieldsRow: Row6[Long, Long, Long, Long, BigDecimal, LocalDateTime] = super.fieldsRow.asInstanceOf[ Row6[Long, Long, Long, Long, BigDecimal, LocalDateTime] ]
+  /**
+   * Create an inline derived table from this table
+   */
+  override def where(condition: Condition): Payment = new Payment(getQualifiedName(), if (super.aliased()) this else null, condition)
 
   /**
-   * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+   * Create an inline derived table from this table
    */
-  def mapping[U](from: (Long, Long, Long, Long, BigDecimal, LocalDateTime) => U): SelectField[U] = convertFrom(r => from.apply(r.value1(), r.value2(), r.value3(), r.value4(), r.value5(), r.value6()))
+  override def where(conditions: Collection[_ <: Condition]): Payment = where(DSL.and(conditions))
 
   /**
-   * Convenience mapping calling {@link SelectField#convertFrom(Class,
-   * Function)}.
+   * Create an inline derived table from this table
    */
-  def mapping[U](toType: Class[U], from: (Long, Long, Long, Long, BigDecimal, LocalDateTime) => U): SelectField[U] = convertFrom(toType,r => from.apply(r.value1(), r.value2(), r.value3(), r.value4(), r.value5(), r.value6()))
+  override def where(conditions: Condition*): Payment = where(DSL.and(conditions:_*))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  override def where(condition: Field[Boolean]): Payment = where(DSL.condition(condition))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  @PlainSQL override def where(condition: SQL): Payment = where(DSL.condition(condition))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  @PlainSQL override def where(@Stringly.SQL condition: String): Payment = where(DSL.condition(condition))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): Payment = where(DSL.condition(condition, binds:_*))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  override def whereExists(select: Select[_]): Payment = where(DSL.exists(select))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  override def whereNotExists(select: Select[_]): Payment = where(DSL.notExists(select))
 }

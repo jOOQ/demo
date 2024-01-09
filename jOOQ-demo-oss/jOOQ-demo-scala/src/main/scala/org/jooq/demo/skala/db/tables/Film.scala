@@ -4,6 +4,7 @@
 package org.jooq.demo.skala.db.tables
 
 
+import java.lang.Boolean
 import java.lang.Class
 import java.lang.Deprecated
 import java.lang.Integer
@@ -14,28 +15,36 @@ import java.lang.String
 import java.math.BigDecimal
 import java.time.LocalDateTime
 import java.util.Arrays
+import java.util.Collection
 import java.util.List
-import java.util.function.Function
 
+import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
 import org.jooq.Identity
 import org.jooq.Index
+import org.jooq.InverseForeignKey
 import org.jooq.Name
+import org.jooq.Path
+import org.jooq.PlainSQL
 import org.jooq.Record
-import org.jooq.Row14
+import org.jooq.SQL
 import org.jooq.Schema
-import org.jooq.SelectField
+import org.jooq.Select
+import org.jooq.Stringly
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
 import org.jooq.UniqueKey
+import org.jooq.demo.skala.db.Domains
 import org.jooq.demo.skala.db.Indexes
 import org.jooq.demo.skala.db.Keys
 import org.jooq.demo.skala.db.Public
 import org.jooq.demo.skala.db.enums.MpaaRating
+import org.jooq.demo.skala.db.tables.Language.LanguagePath
 import org.jooq.demo.skala.db.tables.records.FilmRecord
 import org.jooq.impl.DSL
+import org.jooq.impl.DefaultDataType
 import org.jooq.impl.Internal
 import org.jooq.impl.SQLDataType
 import org.jooq.impl.TableImpl
@@ -49,6 +58,11 @@ object Film {
    * The reference instance of <code>public.film</code>
    */
   val FILM = new Film
+
+  /**
+   * A subtype implementing {@link Path} for simplified path-based joins.
+   */
+  class FilmPath(path: Table[_ <: Record], childPath: ForeignKey[_ <: Record, FilmRecord], parentPath: InverseForeignKey[_ <: Record, FilmRecord]) extends Film(path, childPath, parentPath) with Path[FilmRecord]
 }
 
 /**
@@ -56,20 +70,24 @@ object Film {
  */
 class Film(
   alias: Name,
-  child: Table[_ <: Record],
-  path: ForeignKey[_ <: Record, FilmRecord],
+  path: Table[_ <: Record],
+  childPath: ForeignKey[_ <: Record, FilmRecord],
+  parentPath: InverseForeignKey[_ <: Record, FilmRecord],
   aliased: Table[FilmRecord],
-  parameters: Array[ Field[_] ]
+  parameters: Array[ Field[_] ],
+  where: Condition
 )
 extends TableImpl[FilmRecord](
   alias,
   Public.PUBLIC,
-  child,
   path,
+  childPath,
+  parentPath,
   aliased,
   parameters,
   DSL.comment(""),
-  TableOptions.table
+  TableOptions.table,
+  where
 ) {
 
   /**
@@ -95,7 +113,7 @@ extends TableImpl[FilmRecord](
   /**
    * The column <code>public.film.release_year</code>.
    */
-  val RELEASE_YEAR: TableField[FilmRecord, Integer] = createField(DSL.name("release_year"), org.jooq.demo.skala.db.Domains.YEAR.getDataType(), "")
+  val RELEASE_YEAR: TableField[FilmRecord, Integer] = createField(DSL.name("release_year"), Domains.YEAR.getDataType(), "")
 
   /**
    * The column <code>public.film.language_id</code>.
@@ -130,7 +148,7 @@ extends TableImpl[FilmRecord](
   /**
    * The column <code>public.film.rating</code>.
    */
-  val RATING: TableField[FilmRecord, MpaaRating] = createField(DSL.name("rating"), SQLDataType.VARCHAR.defaultValue(DSL.field(DSL.raw("'G'::mpaa_rating"), SQLDataType.VARCHAR)).asEnumDataType(classOf[org.jooq.demo.skala.db.enums.MpaaRating]), "")
+  val RATING: TableField[FilmRecord, MpaaRating] = createField(DSL.name("rating"), SQLDataType.VARCHAR.defaultValue(DSL.field(DSL.raw("'G'::mpaa_rating"), SQLDataType.VARCHAR)).asEnumDataType(classOf[MpaaRating]), "")
 
   /**
    * The column <code>public.film.last_update</code>.
@@ -150,9 +168,10 @@ extends TableImpl[FilmRecord](
    * <deprecationOnUnknownTypes/>} in your code generator configuration.
    */
   @Deprecated
-  val FULLTEXT: TableField[FilmRecord, Object] = createField(DSL.name("fulltext"), org.jooq.impl.DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tsvector\"").nullable(false), "")
+  val FULLTEXT: TableField[FilmRecord, Object] = createField(DSL.name("fulltext"), DefaultDataType.getDefaultDataType("\"pg_catalog\".\"tsvector\"").nullable(false), "")
 
-  private def this(alias: Name, aliased: Table[FilmRecord]) = this(alias, null, null, aliased, null)
+  private def this(alias: Name, aliased: Table[FilmRecord]) = this(alias, null, null, null, aliased, null, null)
+  private def this(alias: Name, aliased: Table[FilmRecord], where: Condition) = this(alias, null, null, null, aliased, null, where)
 
   /**
    * Create an aliased <code>public.film</code> table reference
@@ -169,9 +188,9 @@ extends TableImpl[FilmRecord](
    */
   def this() = this(DSL.name("film"), null)
 
-  def this(child: Table[_ <: Record], key: ForeignKey[_ <: Record, FilmRecord]) = this(Internal.createPathAlias(child, key), child, key, org.jooq.demo.skala.db.tables.Film.FILM, null)
+  def this(path: Table[_ <: Record], childPath: ForeignKey[_ <: Record, FilmRecord], parentPath: InverseForeignKey[_ <: Record, FilmRecord]) = this(Internal.createPathAlias(path, childPath, parentPath), path, childPath, parentPath, org.jooq.demo.skala.db.tables.Film.FILM, null, null)
 
-  override def getSchema: Schema = if (aliased()) null else Public.PUBLIC
+  override def getSchema: Schema = if (super.aliased()) null else Public.PUBLIC
 
   override def getIndexes: List[Index] = Arrays.asList[ Index ](Indexes.FILM_FULLTEXT_IDX, Indexes.IDX_FK_LANGUAGE_ID, Indexes.IDX_FK_ORIGINAL_LANGUAGE_ID, Indexes.IDX_TITLE)
 
@@ -185,13 +204,13 @@ extends TableImpl[FilmRecord](
    * Get the implicit join path to the <code>public.language</code> table, via
    * the <code>film_language_id_fkey</code> key.
    */
-  lazy val filmLanguageIdFkey: Language = { new Language(this, Keys.FILM__FILM_LANGUAGE_ID_FKEY) }
+  lazy val filmLanguageIdFkey: LanguagePath = { new LanguagePath(this, Keys.FILM__FILM_LANGUAGE_ID_FKEY, null) }
 
   /**
    * Get the implicit join path to the <code>public.language</code> table, via
    * the <code>film_original_language_id_fkey</code> key.
    */
-  lazy val filmOriginalLanguageIdFkey: Language = { new Language(this, Keys.FILM__FILM_ORIGINAL_LANGUAGE_ID_FKEY) }
+  lazy val filmOriginalLanguageIdFkey: LanguagePath = { new LanguagePath(this, Keys.FILM__FILM_ORIGINAL_LANGUAGE_ID_FKEY, null) }
   override def as(alias: String): Film = new Film(DSL.name(alias), this)
   override def as(alias: Name): Film = new Film(alias, this)
   override def as(alias: Table[_]): Film = new Film(alias.getQualifiedName(), this)
@@ -211,19 +230,48 @@ extends TableImpl[FilmRecord](
    */
   override def rename(name: Table[_]): Film = new Film(name.getQualifiedName(), null)
 
-  // -------------------------------------------------------------------------
-  // Row14 type methods
-  // -------------------------------------------------------------------------
-  override def fieldsRow: Row14[Long, String, String, Integer, Long, Long, Short, BigDecimal, Short, BigDecimal, MpaaRating, LocalDateTime, Array[String], Object] = super.fieldsRow.asInstanceOf[ Row14[Long, String, String, Integer, Long, Long, Short, BigDecimal, Short, BigDecimal, MpaaRating, LocalDateTime, Array[String], Object] ]
+  /**
+   * Create an inline derived table from this table
+   */
+  override def where(condition: Condition): Film = new Film(getQualifiedName(), if (super.aliased()) this else null, condition)
 
   /**
-   * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+   * Create an inline derived table from this table
    */
-  def mapping[U](from: (Long, String, String, Integer, Long, Long, Short, BigDecimal, Short, BigDecimal, MpaaRating, LocalDateTime, Array[String], Object) => U): SelectField[U] = convertFrom(r => from.apply(r.value1(), r.value2(), r.value3(), r.value4(), r.value5(), r.value6(), r.value7(), r.value8(), r.value9(), r.value10(), r.value11(), r.value12(), r.value13(), r.value14()))
+  override def where(conditions: Collection[_ <: Condition]): Film = where(DSL.and(conditions))
 
   /**
-   * Convenience mapping calling {@link SelectField#convertFrom(Class,
-   * Function)}.
+   * Create an inline derived table from this table
    */
-  def mapping[U](toType: Class[U], from: (Long, String, String, Integer, Long, Long, Short, BigDecimal, Short, BigDecimal, MpaaRating, LocalDateTime, Array[String], Object) => U): SelectField[U] = convertFrom(toType,r => from.apply(r.value1(), r.value2(), r.value3(), r.value4(), r.value5(), r.value6(), r.value7(), r.value8(), r.value9(), r.value10(), r.value11(), r.value12(), r.value13(), r.value14()))
+  override def where(conditions: Condition*): Film = where(DSL.and(conditions:_*))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  override def where(condition: Field[Boolean]): Film = where(DSL.condition(condition))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  @PlainSQL override def where(condition: SQL): Film = where(DSL.condition(condition))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  @PlainSQL override def where(@Stringly.SQL condition: String): Film = where(DSL.condition(condition))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): Film = where(DSL.condition(condition, binds:_*))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  override def whereExists(select: Select[_]): Film = where(DSL.exists(select))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  override def whereNotExists(select: Select[_]): Film = where(DSL.notExists(select))
 }

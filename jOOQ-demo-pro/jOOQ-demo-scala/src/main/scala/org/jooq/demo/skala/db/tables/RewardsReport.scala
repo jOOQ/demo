@@ -12,16 +12,15 @@ import java.lang.String
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.util.function.Function
 
+import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
 import org.jooq.Identity
+import org.jooq.InverseForeignKey
 import org.jooq.Name
 import org.jooq.Record
-import org.jooq.Row10
 import org.jooq.Schema
-import org.jooq.SelectField
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
@@ -47,20 +46,24 @@ object RewardsReport {
  */
 class RewardsReport(
   alias: Name,
-  child: Table[_ <: Record],
-  path: ForeignKey[_ <: Record, CustomerRecord],
+  path: Table[_ <: Record],
+  childPath: ForeignKey[_ <: Record, CustomerRecord],
+  parentPath: InverseForeignKey[_ <: Record, CustomerRecord],
   aliased: Table[CustomerRecord],
-  parameters: Array[ Field[_] ]
+  parameters: Array[ Field[_] ],
+  where: Condition
 )
 extends TableImpl[CustomerRecord](
   alias,
   Public.PUBLIC,
-  child,
   path,
+  childPath,
+  parentPath,
   aliased,
   parameters,
   DSL.comment(""),
-  TableOptions.function
+  TableOptions.function,
+  where
 ) {
 
   /**
@@ -118,10 +121,10 @@ extends TableImpl[CustomerRecord](
    */
   val ACTIVE: TableField[CustomerRecord, Integer] = createField(DSL.name("active"), SQLDataType.INTEGER, "")
 
-  private def this(alias: Name, aliased: Table[CustomerRecord]) = this(alias, null, null, aliased, Array(
+  private def this(alias: Name, aliased: Table[CustomerRecord]) = this(alias, null, null, null, aliased, Array(
     DSL.value(null, SQLDataType.INTEGER),
     DSL.value(null, SQLDataType.NUMERIC)
-  ))
+  ), null)
 
   /**
    * Create an aliased <code>public.rewards_report</code> table reference
@@ -138,32 +141,27 @@ extends TableImpl[CustomerRecord](
    */
   def this() = this(DSL.name("rewards_report"), null)
 
-  override def getSchema: Schema = if (aliased()) null else Public.PUBLIC
+  override def getSchema: Schema = if (super.aliased()) null else Public.PUBLIC
 
   override def getIdentity: Identity[CustomerRecord, Long] = super.getIdentity.asInstanceOf[ Identity[CustomerRecord, Long] ]
-  override def as(alias: String): RewardsReport = new RewardsReport(DSL.name(alias), null, null, this, parameters)
-  override def as(alias: Name): RewardsReport = new RewardsReport(alias, null, null, this, parameters)
-  override def as(alias: Table[_]): RewardsReport = new RewardsReport(alias.getQualifiedName(), null, null, this, parameters)
+  override def as(alias: String): RewardsReport = new RewardsReport(DSL.name(alias), null, null, null, this, parameters, null)
+  override def as(alias: Name): RewardsReport = new RewardsReport(alias, null, null, null, this, parameters, null)
+  override def as(alias: Table[_]): RewardsReport = new RewardsReport(alias.getQualifiedName(), null, null, null, this, parameters, null)
 
   /**
    * Rename this table
    */
-  override def rename(name: String): RewardsReport = new RewardsReport(DSL.name(name), null, null, null, parameters)
+  override def rename(name: String): RewardsReport = new RewardsReport(DSL.name(name), null, null, null, null, parameters, null)
 
   /**
    * Rename this table
    */
-  override def rename(name: Name): RewardsReport = new RewardsReport(name, null, null, null, parameters)
+  override def rename(name: Name): RewardsReport = new RewardsReport(name, null, null, null, null, parameters, null)
 
   /**
    * Rename this table
    */
-  override def rename(name: Table[_]): RewardsReport = new RewardsReport(name.getQualifiedName(), null, null, null, parameters)
-
-  // -------------------------------------------------------------------------
-  // Row10 type methods
-  // -------------------------------------------------------------------------
-  override def fieldsRow: Row10[Long, Long, String, String, String, Long, Boolean, LocalDate, LocalDateTime, Integer] = super.fieldsRow.asInstanceOf[ Row10[Long, Long, String, String, String, Long, Boolean, LocalDate, LocalDateTime, Integer] ]
+  override def rename(name: Table[_]): RewardsReport = new RewardsReport(name.getQualifiedName(), null, null, null, null, parameters, null)
 
   /**
    * Call this table-valued function
@@ -171,10 +169,10 @@ extends TableImpl[CustomerRecord](
   def call(
       minMonthlyPurchases: Integer
     , minDollarAmountPurchased: BigDecimal
-  ): RewardsReport = Option(new RewardsReport(DSL.name("rewards_report"), null, null, null, Array(
+  ): RewardsReport = Option(new RewardsReport(DSL.name("rewards_report"), null, null, null, null, Array(
     DSL.value(minMonthlyPurchases, SQLDataType.INTEGER),
     DSL.value(minDollarAmountPurchased, SQLDataType.NUMERIC)
-  ))).map(r => if (aliased()) r.as(getUnqualifiedName) else r).get
+  ), null)).map(r => if (super.aliased()) r.as(getUnqualifiedName) else r).get
 
   /**
    * Call this table-valued function
@@ -182,19 +180,8 @@ extends TableImpl[CustomerRecord](
   def call(
       minMonthlyPurchases: Field[Integer]
     , minDollarAmountPurchased: Field[BigDecimal]
-  ): RewardsReport = Option(new RewardsReport(DSL.name("rewards_report"), null, null, null, Array(
+  ): RewardsReport = Option(new RewardsReport(DSL.name("rewards_report"), null, null, null, null, Array(
     minMonthlyPurchases,
     minDollarAmountPurchased
-  ))).map(r => if (aliased()) r.as(getUnqualifiedName) else r).get
-
-  /**
-   * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
-   */
-  def mapping[U](from: (Long, Long, String, String, String, Long, Boolean, LocalDate, LocalDateTime, Integer) => U): SelectField[U] = convertFrom(r => from.apply(r.value1(), r.value2(), r.value3(), r.value4(), r.value5(), r.value6(), r.value7(), r.value8(), r.value9(), r.value10()))
-
-  /**
-   * Convenience mapping calling {@link SelectField#convertFrom(Class,
-   * Function)}.
-   */
-  def mapping[U](toType: Class[U], from: (Long, Long, String, String, String, Long, Boolean, LocalDate, LocalDateTime, Integer) => U): SelectField[U] = convertFrom(toType,r => from.apply(r.value1(), r.value2(), r.value3(), r.value4(), r.value5(), r.value6(), r.value7(), r.value8(), r.value9(), r.value10()))
+  ), null)).map(r => if (super.aliased()) r.as(getUnqualifiedName) else r).get
 }

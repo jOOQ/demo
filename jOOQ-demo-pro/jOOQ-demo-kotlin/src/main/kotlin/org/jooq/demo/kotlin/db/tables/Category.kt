@@ -5,23 +5,32 @@ package org.jooq.demo.kotlin.db.tables
 
 
 import java.time.LocalDateTime
-import java.util.function.Function
 
+import kotlin.collections.Collection
+
+import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
 import org.jooq.Identity
+import org.jooq.InverseForeignKey
 import org.jooq.Name
+import org.jooq.Path
+import org.jooq.PlainSQL
+import org.jooq.QueryPart
 import org.jooq.Record
-import org.jooq.Records
-import org.jooq.Row3
+import org.jooq.SQL
 import org.jooq.Schema
-import org.jooq.SelectField
+import org.jooq.Select
+import org.jooq.Stringly
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
 import org.jooq.UniqueKey
 import org.jooq.demo.kotlin.db.Public
 import org.jooq.demo.kotlin.db.keys.CATEGORY_PKEY
+import org.jooq.demo.kotlin.db.keys.FILM_CATEGORY__FILM_CATEGORY_CATEGORY_ID_FKEY
+import org.jooq.demo.kotlin.db.tables.Film.FilmPath
+import org.jooq.demo.kotlin.db.tables.FilmCategory.FilmCategoryPath
 import org.jooq.demo.kotlin.db.tables.records.CategoryRecord
 import org.jooq.impl.DSL
 import org.jooq.impl.Internal
@@ -35,19 +44,23 @@ import org.jooq.impl.TableImpl
 @Suppress("UNCHECKED_CAST")
 open class Category(
     alias: Name,
-    child: Table<out Record>?,
-    path: ForeignKey<out Record, CategoryRecord>?,
+    path: Table<out Record>?,
+    childPath: ForeignKey<out Record, CategoryRecord>?,
+    parentPath: InverseForeignKey<out Record, CategoryRecord>?,
     aliased: Table<CategoryRecord>?,
-    parameters: Array<Field<*>?>?
+    parameters: Array<Field<*>?>?,
+    where: Condition?
 ): TableImpl<CategoryRecord>(
     alias,
     Public.PUBLIC,
-    child,
     path,
+    childPath,
+    parentPath,
     aliased,
     parameters,
     DSL.comment(""),
-    TableOptions.table()
+    TableOptions.table(),
+    where,
 ) {
     companion object {
 
@@ -77,8 +90,9 @@ open class Category(
      */
     val LAST_UPDATE: TableField<CategoryRecord, LocalDateTime?> = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).readonly(true).defaultValue(DSL.field(DSL.raw("now()"), SQLDataType.LOCALDATETIME)), this, "")
 
-    private constructor(alias: Name, aliased: Table<CategoryRecord>?): this(alias, null, null, aliased, null)
-    private constructor(alias: Name, aliased: Table<CategoryRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, aliased, parameters)
+    private constructor(alias: Name, aliased: Table<CategoryRecord>?): this(alias, null, null, null, aliased, null, null)
+    private constructor(alias: Name, aliased: Table<CategoryRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, null, aliased, parameters, null)
+    private constructor(alias: Name, aliased: Table<CategoryRecord>?, where: Condition): this(alias, null, null, null, aliased, null, where)
 
     /**
      * Create an aliased <code>public.category</code> table reference
@@ -95,13 +109,47 @@ open class Category(
      */
     constructor(): this(DSL.name("category"), null)
 
-    constructor(child: Table<out Record>, key: ForeignKey<out Record, CategoryRecord>): this(Internal.createPathAlias(child, key), child, key, CATEGORY, null)
+    constructor(path: Table<out Record>, childPath: ForeignKey<out Record, CategoryRecord>?, parentPath: InverseForeignKey<out Record, CategoryRecord>?): this(Internal.createPathAlias(path, childPath, parentPath), path, childPath, parentPath, CATEGORY, null, null)
+
+    /**
+     * A subtype implementing {@link Path} for simplified path-based joins.
+     */
+    open class CategoryPath : Category, Path<CategoryRecord> {
+        constructor(path: Table<out Record>, childPath: ForeignKey<out Record, CategoryRecord>?, parentPath: InverseForeignKey<out Record, CategoryRecord>?): super(path, childPath, parentPath)
+        private constructor(alias: Name, aliased: Table<CategoryRecord>): super(alias, aliased)
+        override fun `as`(alias: String): CategoryPath = CategoryPath(DSL.name(alias), this)
+        override fun `as`(alias: Name): CategoryPath = CategoryPath(alias, this)
+        override fun `as`(alias: Table<*>): CategoryPath = CategoryPath(alias.qualifiedName, this)
+    }
     override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
     override fun getIdentity(): Identity<CategoryRecord, Long?> = super.getIdentity() as Identity<CategoryRecord, Long?>
     override fun getPrimaryKey(): UniqueKey<CategoryRecord> = CATEGORY_PKEY
+
+    private lateinit var _filmCategory: FilmCategoryPath
+
+    /**
+     * Get the implicit to-many join path to the
+     * <code>public.film_category</code> table
+     */
+    fun filmCategory(): FilmCategoryPath {
+        if (!this::_filmCategory.isInitialized)
+            _filmCategory = FilmCategoryPath(this, null, FILM_CATEGORY__FILM_CATEGORY_CATEGORY_ID_FKEY.inverseKey)
+
+        return _filmCategory;
+    }
+
+    val filmCategory: FilmCategoryPath
+        get(): FilmCategoryPath = filmCategory()
+
+    /**
+     * Get the implicit many-to-many join path to the <code>public.film</code>
+     * table
+     */
+    val film: FilmPath
+        get(): FilmPath = filmCategory().film()
     override fun `as`(alias: String): Category = Category(DSL.name(alias), this)
     override fun `as`(alias: Name): Category = Category(alias, this)
-    override fun `as`(alias: Table<*>): Category = Category(alias.getQualifiedName(), this)
+    override fun `as`(alias: Table<*>): Category = Category(alias.qualifiedName, this)
 
     /**
      * Rename this table
@@ -116,21 +164,55 @@ open class Category(
     /**
      * Rename this table
      */
-    override fun rename(name: Table<*>): Category = Category(name.getQualifiedName(), null)
-
-    // -------------------------------------------------------------------------
-    // Row3 type methods
-    // -------------------------------------------------------------------------
-    override fun fieldsRow(): Row3<Long?, String?, LocalDateTime?> = super.fieldsRow() as Row3<Long?, String?, LocalDateTime?>
+    override fun rename(name: Table<*>): Category = Category(name.qualifiedName, null)
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     * Create an inline derived table from this table
      */
-    fun <U> mapping(from: (Long?, String?, LocalDateTime?) -> U): SelectField<U> = convertFrom(Records.mapping(from))
+    override fun where(condition: Condition): Category = Category(qualifiedName, if (aliased()) this else null, condition)
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Class,
-     * Function)}.
+     * Create an inline derived table from this table
      */
-    fun <U> mapping(toType: Class<U>, from: (Long?, String?, LocalDateTime?) -> U): SelectField<U> = convertFrom(toType, Records.mapping(from))
+    override fun where(conditions: Collection<Condition>): Category = where(DSL.and(conditions))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun where(vararg conditions: Condition): Category = where(DSL.and(*conditions))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun where(condition: Field<Boolean?>): Category = where(DSL.condition(condition))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(condition: SQL): Category = where(DSL.condition(condition))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(@Stringly.SQL condition: String): Category = where(DSL.condition(condition))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(@Stringly.SQL condition: String, vararg binds: Any?): Category = where(DSL.condition(condition, *binds))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(@Stringly.SQL condition: String, vararg parts: QueryPart): Category = where(DSL.condition(condition, *parts))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun whereExists(select: Select<*>): Category = where(DSL.exists(select))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun whereNotExists(select: Select<*>): Category = where(DSL.notExists(select))
 }

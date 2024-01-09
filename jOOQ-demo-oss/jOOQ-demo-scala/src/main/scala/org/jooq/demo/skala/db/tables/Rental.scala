@@ -4,23 +4,29 @@
 package org.jooq.demo.skala.db.tables
 
 
+import java.lang.Boolean
 import java.lang.Class
 import java.lang.Long
 import java.lang.String
 import java.time.LocalDateTime
 import java.util.Arrays
+import java.util.Collection
 import java.util.List
-import java.util.function.Function
 
+import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
 import org.jooq.Identity
 import org.jooq.Index
+import org.jooq.InverseForeignKey
 import org.jooq.Name
+import org.jooq.Path
+import org.jooq.PlainSQL
 import org.jooq.Record
-import org.jooq.Row7
+import org.jooq.SQL
 import org.jooq.Schema
-import org.jooq.SelectField
+import org.jooq.Select
+import org.jooq.Stringly
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
@@ -28,6 +34,9 @@ import org.jooq.UniqueKey
 import org.jooq.demo.skala.db.Indexes
 import org.jooq.demo.skala.db.Keys
 import org.jooq.demo.skala.db.Public
+import org.jooq.demo.skala.db.tables.Customer.CustomerPath
+import org.jooq.demo.skala.db.tables.Inventory.InventoryPath
+import org.jooq.demo.skala.db.tables.Staff.StaffPath
 import org.jooq.demo.skala.db.tables.records.RentalRecord
 import org.jooq.impl.DSL
 import org.jooq.impl.Internal
@@ -43,6 +52,11 @@ object Rental {
    * The reference instance of <code>public.rental</code>
    */
   val RENTAL = new Rental
+
+  /**
+   * A subtype implementing {@link Path} for simplified path-based joins.
+   */
+  class RentalPath(path: Table[_ <: Record], childPath: ForeignKey[_ <: Record, RentalRecord], parentPath: InverseForeignKey[_ <: Record, RentalRecord]) extends Rental(path, childPath, parentPath) with Path[RentalRecord]
 }
 
 /**
@@ -50,20 +64,24 @@ object Rental {
  */
 class Rental(
   alias: Name,
-  child: Table[_ <: Record],
-  path: ForeignKey[_ <: Record, RentalRecord],
+  path: Table[_ <: Record],
+  childPath: ForeignKey[_ <: Record, RentalRecord],
+  parentPath: InverseForeignKey[_ <: Record, RentalRecord],
   aliased: Table[RentalRecord],
-  parameters: Array[ Field[_] ]
+  parameters: Array[ Field[_] ],
+  where: Condition
 )
 extends TableImpl[RentalRecord](
   alias,
   Public.PUBLIC,
-  child,
   path,
+  childPath,
+  parentPath,
   aliased,
   parameters,
   DSL.comment(""),
-  TableOptions.table
+  TableOptions.table,
+  where
 ) {
 
   /**
@@ -106,7 +124,8 @@ extends TableImpl[RentalRecord](
    */
   val LAST_UPDATE: TableField[RentalRecord, LocalDateTime] = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).defaultValue(DSL.field(DSL.raw("now()"), SQLDataType.LOCALDATETIME)), "")
 
-  private def this(alias: Name, aliased: Table[RentalRecord]) = this(alias, null, null, aliased, null)
+  private def this(alias: Name, aliased: Table[RentalRecord]) = this(alias, null, null, null, aliased, null, null)
+  private def this(alias: Name, aliased: Table[RentalRecord], where: Condition) = this(alias, null, null, null, aliased, null, where)
 
   /**
    * Create an aliased <code>public.rental</code> table reference
@@ -123,9 +142,9 @@ extends TableImpl[RentalRecord](
    */
   def this() = this(DSL.name("rental"), null)
 
-  def this(child: Table[_ <: Record], key: ForeignKey[_ <: Record, RentalRecord]) = this(Internal.createPathAlias(child, key), child, key, org.jooq.demo.skala.db.tables.Rental.RENTAL, null)
+  def this(path: Table[_ <: Record], childPath: ForeignKey[_ <: Record, RentalRecord], parentPath: InverseForeignKey[_ <: Record, RentalRecord]) = this(Internal.createPathAlias(path, childPath, parentPath), path, childPath, parentPath, org.jooq.demo.skala.db.tables.Rental.RENTAL, null, null)
 
-  override def getSchema: Schema = if (aliased()) null else Public.PUBLIC
+  override def getSchema: Schema = if (super.aliased()) null else Public.PUBLIC
 
   override def getIndexes: List[Index] = Arrays.asList[ Index ](Indexes.IDX_FK_INVENTORY_ID, Indexes.IDX_UNQ_RENTAL_RENTAL_DATE_INVENTORY_ID_CUSTOMER_ID)
 
@@ -138,17 +157,17 @@ extends TableImpl[RentalRecord](
   /**
    * Get the implicit join path to the <code>public.inventory</code> table.
    */
-  lazy val inventory: Inventory = { new Inventory(this, Keys.RENTAL__RENTAL_INVENTORY_ID_FKEY) }
+  lazy val inventory: InventoryPath = { new InventoryPath(this, Keys.RENTAL__RENTAL_INVENTORY_ID_FKEY, null) }
 
   /**
    * Get the implicit join path to the <code>public.customer</code> table.
    */
-  lazy val customer: Customer = { new Customer(this, Keys.RENTAL__RENTAL_CUSTOMER_ID_FKEY) }
+  lazy val customer: CustomerPath = { new CustomerPath(this, Keys.RENTAL__RENTAL_CUSTOMER_ID_FKEY, null) }
 
   /**
    * Get the implicit join path to the <code>public.staff</code> table.
    */
-  lazy val staff: Staff = { new Staff(this, Keys.RENTAL__RENTAL_STAFF_ID_FKEY) }
+  lazy val staff: StaffPath = { new StaffPath(this, Keys.RENTAL__RENTAL_STAFF_ID_FKEY, null) }
   override def as(alias: String): Rental = new Rental(DSL.name(alias), this)
   override def as(alias: Name): Rental = new Rental(alias, this)
   override def as(alias: Table[_]): Rental = new Rental(alias.getQualifiedName(), this)
@@ -168,19 +187,48 @@ extends TableImpl[RentalRecord](
    */
   override def rename(name: Table[_]): Rental = new Rental(name.getQualifiedName(), null)
 
-  // -------------------------------------------------------------------------
-  // Row7 type methods
-  // -------------------------------------------------------------------------
-  override def fieldsRow: Row7[Long, LocalDateTime, Long, Long, LocalDateTime, Long, LocalDateTime] = super.fieldsRow.asInstanceOf[ Row7[Long, LocalDateTime, Long, Long, LocalDateTime, Long, LocalDateTime] ]
+  /**
+   * Create an inline derived table from this table
+   */
+  override def where(condition: Condition): Rental = new Rental(getQualifiedName(), if (super.aliased()) this else null, condition)
 
   /**
-   * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+   * Create an inline derived table from this table
    */
-  def mapping[U](from: (Long, LocalDateTime, Long, Long, LocalDateTime, Long, LocalDateTime) => U): SelectField[U] = convertFrom(r => from.apply(r.value1(), r.value2(), r.value3(), r.value4(), r.value5(), r.value6(), r.value7()))
+  override def where(conditions: Collection[_ <: Condition]): Rental = where(DSL.and(conditions))
 
   /**
-   * Convenience mapping calling {@link SelectField#convertFrom(Class,
-   * Function)}.
+   * Create an inline derived table from this table
    */
-  def mapping[U](toType: Class[U], from: (Long, LocalDateTime, Long, Long, LocalDateTime, Long, LocalDateTime) => U): SelectField[U] = convertFrom(toType,r => from.apply(r.value1(), r.value2(), r.value3(), r.value4(), r.value5(), r.value6(), r.value7()))
+  override def where(conditions: Condition*): Rental = where(DSL.and(conditions:_*))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  override def where(condition: Field[Boolean]): Rental = where(DSL.condition(condition))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  @PlainSQL override def where(condition: SQL): Rental = where(DSL.condition(condition))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  @PlainSQL override def where(@Stringly.SQL condition: String): Rental = where(DSL.condition(condition))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): Rental = where(DSL.condition(condition, binds:_*))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  override def whereExists(select: Select[_]): Rental = where(DSL.exists(select))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  override def whereNotExists(select: Select[_]): Rental = where(DSL.notExists(select))
 }

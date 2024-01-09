@@ -8,7 +8,6 @@ import org.jooq.tools.jdbc.MockConnection
 import org.jooq.tools.jdbc.MockDataProvider
 import org.jooq.tools.jdbc.MockFileDatabase
 import org.jooq.tools.jdbc.MockResult
-import org.junit.After
 import org.junit.Test
 
 
@@ -27,7 +26,11 @@ class Demo14Mocking : AbstractDemo() {
         val p = MockDataProvider { c ->
             arrayOf(
                 if (c.sql().contains("select"))
-                    MockResult(ctx.newRecord(ACTOR).values(1L, "A", "A", null))
+                    MockResult(
+                        ctx.newRecord(ACTOR)
+                            .with(ACTOR.ACTOR_ID, 1L)
+                            .with(ACTOR.FIRST_NAME, "A")
+                            .with(ACTOR.LAST_NAME, "A"))
                 else
                     MockResult(0)
             )

@@ -16,6 +16,7 @@ import org.jooq.Domain
 import org.jooq.Field
 import org.jooq.Result
 import org.jooq.Table
+import org.jooq.Trigger
 import org.jooq.demo.skala.db.tables.Actor
 import org.jooq.demo.skala.db.tables.ActorInfo
 import org.jooq.demo.skala.db.tables.Address
@@ -327,6 +328,11 @@ class Public extends SchemaImpl("public", DefaultCatalog.DEFAULT_CATALOG) {
 
   override def getDomains: List[Domain[_]] = Arrays.asList[Domain[_]](
     Domains.YEAR
+  )
+
+  override def getTriggers: List[Trigger] = Arrays.asList[Trigger](
+    Triggers.FILM_FULLTEXT_TRIGGER,
+    Triggers.LAST_UPDATED
   )
 
   override def getTables: List[Table[_]] = Arrays.asList[Table[_]](

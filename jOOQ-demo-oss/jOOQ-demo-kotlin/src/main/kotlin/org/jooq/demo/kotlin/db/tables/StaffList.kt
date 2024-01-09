@@ -4,23 +4,26 @@
 package org.jooq.demo.kotlin.db.tables
 
 
-import java.util.function.Function
+import kotlin.collections.Collection
 
+import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
+import org.jooq.InverseForeignKey
 import org.jooq.Name
+import org.jooq.PlainSQL
+import org.jooq.QueryPart
 import org.jooq.Record
-import org.jooq.Records
-import org.jooq.Row8
+import org.jooq.SQL
 import org.jooq.Schema
-import org.jooq.SelectField
+import org.jooq.Select
+import org.jooq.Stringly
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
 import org.jooq.demo.kotlin.db.Public
 import org.jooq.demo.kotlin.db.tables.records.StaffListRecord
 import org.jooq.impl.DSL
-import org.jooq.impl.Internal
 import org.jooq.impl.SQLDataType
 import org.jooq.impl.TableImpl
 
@@ -31,15 +34,18 @@ import org.jooq.impl.TableImpl
 @Suppress("UNCHECKED_CAST")
 open class StaffList(
     alias: Name,
-    child: Table<out Record>?,
-    path: ForeignKey<out Record, StaffListRecord>?,
+    path: Table<out Record>?,
+    childPath: ForeignKey<out Record, StaffListRecord>?,
+    parentPath: InverseForeignKey<out Record, StaffListRecord>?,
     aliased: Table<StaffListRecord>?,
-    parameters: Array<Field<*>?>?
+    parameters: Array<Field<*>?>?,
+    where: Condition?
 ): TableImpl<StaffListRecord>(
     alias,
     Public.PUBLIC,
-    child,
     path,
+    childPath,
+    parentPath,
     aliased,
     parameters,
     DSL.comment(""),
@@ -56,7 +62,8 @@ open class StaffList(
       JOIN address a ON ((s.address_id = a.address_id)))
       JOIN city ON ((a.city_id = city.city_id)))
       JOIN country ON ((city.country_id = country.country_id)));
-    """)
+    """),
+    where,
 ) {
     companion object {
 
@@ -111,8 +118,9 @@ open class StaffList(
      */
     val SID: TableField<StaffListRecord, Long?> = createField(DSL.name("sid"), SQLDataType.BIGINT, this, "")
 
-    private constructor(alias: Name, aliased: Table<StaffListRecord>?): this(alias, null, null, aliased, null)
-    private constructor(alias: Name, aliased: Table<StaffListRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, aliased, parameters)
+    private constructor(alias: Name, aliased: Table<StaffListRecord>?): this(alias, null, null, null, aliased, null, null)
+    private constructor(alias: Name, aliased: Table<StaffListRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, null, aliased, parameters, null)
+    private constructor(alias: Name, aliased: Table<StaffListRecord>?, where: Condition): this(alias, null, null, null, aliased, null, where)
 
     /**
      * Create an aliased <code>public.staff_list</code> table reference
@@ -128,12 +136,10 @@ open class StaffList(
      * Create a <code>public.staff_list</code> table reference
      */
     constructor(): this(DSL.name("staff_list"), null)
-
-    constructor(child: Table<out Record>, key: ForeignKey<out Record, StaffListRecord>): this(Internal.createPathAlias(child, key), child, key, STAFF_LIST, null)
     override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
     override fun `as`(alias: String): StaffList = StaffList(DSL.name(alias), this)
     override fun `as`(alias: Name): StaffList = StaffList(alias, this)
-    override fun `as`(alias: Table<*>): StaffList = StaffList(alias.getQualifiedName(), this)
+    override fun `as`(alias: Table<*>): StaffList = StaffList(alias.qualifiedName, this)
 
     /**
      * Rename this table
@@ -148,21 +154,55 @@ open class StaffList(
     /**
      * Rename this table
      */
-    override fun rename(name: Table<*>): StaffList = StaffList(name.getQualifiedName(), null)
-
-    // -------------------------------------------------------------------------
-    // Row8 type methods
-    // -------------------------------------------------------------------------
-    override fun fieldsRow(): Row8<Long?, String?, String?, String?, String?, String?, String?, Long?> = super.fieldsRow() as Row8<Long?, String?, String?, String?, String?, String?, String?, Long?>
+    override fun rename(name: Table<*>): StaffList = StaffList(name.qualifiedName, null)
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     * Create an inline derived table from this table
      */
-    fun <U> mapping(from: (Long?, String?, String?, String?, String?, String?, String?, Long?) -> U): SelectField<U> = convertFrom(Records.mapping(from))
+    override fun where(condition: Condition): StaffList = StaffList(qualifiedName, if (aliased()) this else null, condition)
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Class,
-     * Function)}.
+     * Create an inline derived table from this table
      */
-    fun <U> mapping(toType: Class<U>, from: (Long?, String?, String?, String?, String?, String?, String?, Long?) -> U): SelectField<U> = convertFrom(toType, Records.mapping(from))
+    override fun where(conditions: Collection<Condition>): StaffList = where(DSL.and(conditions))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun where(vararg conditions: Condition): StaffList = where(DSL.and(*conditions))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun where(condition: Field<Boolean?>): StaffList = where(DSL.condition(condition))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(condition: SQL): StaffList = where(DSL.condition(condition))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(@Stringly.SQL condition: String): StaffList = where(DSL.condition(condition))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(@Stringly.SQL condition: String, vararg binds: Any?): StaffList = where(DSL.condition(condition, *binds))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(@Stringly.SQL condition: String, vararg parts: QueryPart): StaffList = where(DSL.condition(condition, *parts))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun whereExists(select: Select<*>): StaffList = where(DSL.exists(select))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun whereNotExists(select: Select<*>): StaffList = where(DSL.notExists(select))
 }

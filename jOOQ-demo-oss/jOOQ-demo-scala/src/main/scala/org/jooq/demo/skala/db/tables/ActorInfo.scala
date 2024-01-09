@@ -4,25 +4,29 @@
 package org.jooq.demo.skala.db.tables
 
 
+import java.lang.Boolean
 import java.lang.Class
 import java.lang.Long
 import java.lang.String
-import java.util.function.Function
+import java.util.Collection
 
+import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
+import org.jooq.InverseForeignKey
 import org.jooq.Name
+import org.jooq.PlainSQL
 import org.jooq.Record
-import org.jooq.Row4
+import org.jooq.SQL
 import org.jooq.Schema
-import org.jooq.SelectField
+import org.jooq.Select
+import org.jooq.Stringly
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
 import org.jooq.demo.skala.db.Public
 import org.jooq.demo.skala.db.tables.records.ActorInfoRecord
 import org.jooq.impl.DSL
-import org.jooq.impl.Internal
 import org.jooq.impl.SQLDataType
 import org.jooq.impl.TableImpl
 
@@ -42,16 +46,19 @@ object ActorInfo {
  */
 class ActorInfo(
   alias: Name,
-  child: Table[_ <: Record],
-  path: ForeignKey[_ <: Record, ActorInfoRecord],
+  path: Table[_ <: Record],
+  childPath: ForeignKey[_ <: Record, ActorInfoRecord],
+  parentPath: InverseForeignKey[_ <: Record, ActorInfoRecord],
   aliased: Table[ActorInfoRecord],
-  parameters: Array[ Field[_] ]
+  parameters: Array[ Field[_] ],
+  where: Condition
 )
 extends TableImpl[ActorInfoRecord](
   alias,
   Public.PUBLIC,
-  child,
   path,
+  childPath,
+  parentPath,
   aliased,
   parameters,
   DSL.comment(""),
@@ -70,7 +77,8 @@ extends TableImpl[ActorInfoRecord](
      LEFT JOIN film_category fc ON ((fa.film_id = fc.film_id)))
      LEFT JOIN category c ON ((fc.category_id = c.category_id)))
   GROUP BY a.actor_id, a.first_name, a.last_name;
-  """)
+  """),
+  where
 ) {
 
   /**
@@ -98,7 +106,8 @@ extends TableImpl[ActorInfoRecord](
    */
   val FILM_INFO: TableField[ActorInfoRecord, String] = createField(DSL.name("film_info"), SQLDataType.CLOB, "")
 
-  private def this(alias: Name, aliased: Table[ActorInfoRecord]) = this(alias, null, null, aliased, null)
+  private def this(alias: Name, aliased: Table[ActorInfoRecord]) = this(alias, null, null, null, aliased, null, null)
+  private def this(alias: Name, aliased: Table[ActorInfoRecord], where: Condition) = this(alias, null, null, null, aliased, null, where)
 
   /**
    * Create an aliased <code>public.actor_info</code> table reference
@@ -115,9 +124,7 @@ extends TableImpl[ActorInfoRecord](
    */
   def this() = this(DSL.name("actor_info"), null)
 
-  def this(child: Table[_ <: Record], key: ForeignKey[_ <: Record, ActorInfoRecord]) = this(Internal.createPathAlias(child, key), child, key, org.jooq.demo.skala.db.tables.ActorInfo.ACTOR_INFO, null)
-
-  override def getSchema: Schema = if (aliased()) null else Public.PUBLIC
+  override def getSchema: Schema = if (super.aliased()) null else Public.PUBLIC
   override def as(alias: String): ActorInfo = new ActorInfo(DSL.name(alias), this)
   override def as(alias: Name): ActorInfo = new ActorInfo(alias, this)
   override def as(alias: Table[_]): ActorInfo = new ActorInfo(alias.getQualifiedName(), this)
@@ -137,19 +144,48 @@ extends TableImpl[ActorInfoRecord](
    */
   override def rename(name: Table[_]): ActorInfo = new ActorInfo(name.getQualifiedName(), null)
 
-  // -------------------------------------------------------------------------
-  // Row4 type methods
-  // -------------------------------------------------------------------------
-  override def fieldsRow: Row4[Long, String, String, String] = super.fieldsRow.asInstanceOf[ Row4[Long, String, String, String] ]
+  /**
+   * Create an inline derived table from this table
+   */
+  override def where(condition: Condition): ActorInfo = new ActorInfo(getQualifiedName(), if (super.aliased()) this else null, condition)
 
   /**
-   * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+   * Create an inline derived table from this table
    */
-  def mapping[U](from: (Long, String, String, String) => U): SelectField[U] = convertFrom(r => from.apply(r.value1(), r.value2(), r.value3(), r.value4()))
+  override def where(conditions: Collection[_ <: Condition]): ActorInfo = where(DSL.and(conditions))
 
   /**
-   * Convenience mapping calling {@link SelectField#convertFrom(Class,
-   * Function)}.
+   * Create an inline derived table from this table
    */
-  def mapping[U](toType: Class[U], from: (Long, String, String, String) => U): SelectField[U] = convertFrom(toType,r => from.apply(r.value1(), r.value2(), r.value3(), r.value4()))
+  override def where(conditions: Condition*): ActorInfo = where(DSL.and(conditions:_*))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  override def where(condition: Field[Boolean]): ActorInfo = where(DSL.condition(condition))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  @PlainSQL override def where(condition: SQL): ActorInfo = where(DSL.condition(condition))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  @PlainSQL override def where(@Stringly.SQL condition: String): ActorInfo = where(DSL.condition(condition))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): ActorInfo = where(DSL.condition(condition, binds:_*))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  override def whereExists(select: Select[_]): ActorInfo = where(DSL.exists(select))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  override def whereNotExists(select: Select[_]): ActorInfo = where(DSL.notExists(select))
 }

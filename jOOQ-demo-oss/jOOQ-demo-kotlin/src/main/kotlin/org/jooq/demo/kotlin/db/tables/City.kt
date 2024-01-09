@@ -5,28 +5,36 @@ package org.jooq.demo.kotlin.db.tables
 
 
 import java.time.LocalDateTime
-import java.util.function.Function
 
+import kotlin.collections.Collection
 import kotlin.collections.List
 
+import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
 import org.jooq.Identity
 import org.jooq.Index
+import org.jooq.InverseForeignKey
 import org.jooq.Name
+import org.jooq.Path
+import org.jooq.PlainSQL
+import org.jooq.QueryPart
 import org.jooq.Record
-import org.jooq.Records
-import org.jooq.Row4
+import org.jooq.SQL
 import org.jooq.Schema
-import org.jooq.SelectField
+import org.jooq.Select
+import org.jooq.Stringly
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
 import org.jooq.UniqueKey
 import org.jooq.demo.kotlin.db.Public
 import org.jooq.demo.kotlin.db.indexes.IDX_FK_COUNTRY_ID
+import org.jooq.demo.kotlin.db.keys.ADDRESS__ADDRESS_CITY_ID_FKEY
 import org.jooq.demo.kotlin.db.keys.CITY_PKEY
 import org.jooq.demo.kotlin.db.keys.CITY__CITY_COUNTRY_ID_FKEY
+import org.jooq.demo.kotlin.db.tables.Address.AddressPath
+import org.jooq.demo.kotlin.db.tables.Country.CountryPath
 import org.jooq.demo.kotlin.db.tables.records.CityRecord
 import org.jooq.impl.DSL
 import org.jooq.impl.Internal
@@ -40,19 +48,23 @@ import org.jooq.impl.TableImpl
 @Suppress("UNCHECKED_CAST")
 open class City(
     alias: Name,
-    child: Table<out Record>?,
-    path: ForeignKey<out Record, CityRecord>?,
+    path: Table<out Record>?,
+    childPath: ForeignKey<out Record, CityRecord>?,
+    parentPath: InverseForeignKey<out Record, CityRecord>?,
     aliased: Table<CityRecord>?,
-    parameters: Array<Field<*>?>?
+    parameters: Array<Field<*>?>?,
+    where: Condition?
 ): TableImpl<CityRecord>(
     alias,
     Public.PUBLIC,
-    child,
     path,
+    childPath,
+    parentPath,
     aliased,
     parameters,
     DSL.comment(""),
-    TableOptions.table()
+    TableOptions.table(),
+    where,
 ) {
     companion object {
 
@@ -87,8 +99,9 @@ open class City(
      */
     val LAST_UPDATE: TableField<CityRecord, LocalDateTime?> = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).defaultValue(DSL.field(DSL.raw("now()"), SQLDataType.LOCALDATETIME)), this, "")
 
-    private constructor(alias: Name, aliased: Table<CityRecord>?): this(alias, null, null, aliased, null)
-    private constructor(alias: Name, aliased: Table<CityRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, aliased, parameters)
+    private constructor(alias: Name, aliased: Table<CityRecord>?): this(alias, null, null, null, aliased, null, null)
+    private constructor(alias: Name, aliased: Table<CityRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, null, aliased, parameters, null)
+    private constructor(alias: Name, aliased: Table<CityRecord>?, where: Condition): this(alias, null, null, null, aliased, null, where)
 
     /**
      * Create an aliased <code>public.city</code> table reference
@@ -105,30 +118,57 @@ open class City(
      */
     constructor(): this(DSL.name("city"), null)
 
-    constructor(child: Table<out Record>, key: ForeignKey<out Record, CityRecord>): this(Internal.createPathAlias(child, key), child, key, CITY, null)
+    constructor(path: Table<out Record>, childPath: ForeignKey<out Record, CityRecord>?, parentPath: InverseForeignKey<out Record, CityRecord>?): this(Internal.createPathAlias(path, childPath, parentPath), path, childPath, parentPath, CITY, null, null)
+
+    /**
+     * A subtype implementing {@link Path} for simplified path-based joins.
+     */
+    open class CityPath : City, Path<CityRecord> {
+        constructor(path: Table<out Record>, childPath: ForeignKey<out Record, CityRecord>?, parentPath: InverseForeignKey<out Record, CityRecord>?): super(path, childPath, parentPath)
+        private constructor(alias: Name, aliased: Table<CityRecord>): super(alias, aliased)
+        override fun `as`(alias: String): CityPath = CityPath(DSL.name(alias), this)
+        override fun `as`(alias: Name): CityPath = CityPath(alias, this)
+        override fun `as`(alias: Table<*>): CityPath = CityPath(alias.qualifiedName, this)
+    }
     override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
     override fun getIndexes(): List<Index> = listOf(IDX_FK_COUNTRY_ID)
     override fun getIdentity(): Identity<CityRecord, Long?> = super.getIdentity() as Identity<CityRecord, Long?>
     override fun getPrimaryKey(): UniqueKey<CityRecord> = CITY_PKEY
     override fun getReferences(): List<ForeignKey<CityRecord, *>> = listOf(CITY__CITY_COUNTRY_ID_FKEY)
 
-    private lateinit var _country: Country
+    private lateinit var _country: CountryPath
 
     /**
      * Get the implicit join path to the <code>public.country</code> table.
      */
-    fun country(): Country {
+    fun country(): CountryPath {
         if (!this::_country.isInitialized)
-            _country = Country(this, CITY__CITY_COUNTRY_ID_FKEY)
+            _country = CountryPath(this, CITY__CITY_COUNTRY_ID_FKEY, null)
 
         return _country;
     }
 
-    val country: Country
-        get(): Country = country()
+    val country: CountryPath
+        get(): CountryPath = country()
+
+    private lateinit var _address: AddressPath
+
+    /**
+     * Get the implicit to-many join path to the <code>public.address</code>
+     * table
+     */
+    fun address(): AddressPath {
+        if (!this::_address.isInitialized)
+            _address = AddressPath(this, null, ADDRESS__ADDRESS_CITY_ID_FKEY.inverseKey)
+
+        return _address;
+    }
+
+    val address: AddressPath
+        get(): AddressPath = address()
     override fun `as`(alias: String): City = City(DSL.name(alias), this)
     override fun `as`(alias: Name): City = City(alias, this)
-    override fun `as`(alias: Table<*>): City = City(alias.getQualifiedName(), this)
+    override fun `as`(alias: Table<*>): City = City(alias.qualifiedName, this)
 
     /**
      * Rename this table
@@ -143,21 +183,55 @@ open class City(
     /**
      * Rename this table
      */
-    override fun rename(name: Table<*>): City = City(name.getQualifiedName(), null)
-
-    // -------------------------------------------------------------------------
-    // Row4 type methods
-    // -------------------------------------------------------------------------
-    override fun fieldsRow(): Row4<Long?, String?, Long?, LocalDateTime?> = super.fieldsRow() as Row4<Long?, String?, Long?, LocalDateTime?>
+    override fun rename(name: Table<*>): City = City(name.qualifiedName, null)
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     * Create an inline derived table from this table
      */
-    fun <U> mapping(from: (Long?, String?, Long?, LocalDateTime?) -> U): SelectField<U> = convertFrom(Records.mapping(from))
+    override fun where(condition: Condition): City = City(qualifiedName, if (aliased()) this else null, condition)
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Class,
-     * Function)}.
+     * Create an inline derived table from this table
      */
-    fun <U> mapping(toType: Class<U>, from: (Long?, String?, Long?, LocalDateTime?) -> U): SelectField<U> = convertFrom(toType, Records.mapping(from))
+    override fun where(conditions: Collection<Condition>): City = where(DSL.and(conditions))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun where(vararg conditions: Condition): City = where(DSL.and(*conditions))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun where(condition: Field<Boolean?>): City = where(DSL.condition(condition))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(condition: SQL): City = where(DSL.condition(condition))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(@Stringly.SQL condition: String): City = where(DSL.condition(condition))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(@Stringly.SQL condition: String, vararg binds: Any?): City = where(DSL.condition(condition, *binds))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(@Stringly.SQL condition: String, vararg parts: QueryPart): City = where(DSL.condition(condition, *parts))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun whereExists(select: Select<*>): City = where(DSL.exists(select))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun whereNotExists(select: Select<*>): City = where(DSL.notExists(select))
 }

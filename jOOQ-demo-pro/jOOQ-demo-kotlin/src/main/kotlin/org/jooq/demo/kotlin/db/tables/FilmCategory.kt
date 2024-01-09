@@ -5,18 +5,23 @@ package org.jooq.demo.kotlin.db.tables
 
 
 import java.time.LocalDateTime
-import java.util.function.Function
 
+import kotlin.collections.Collection
 import kotlin.collections.List
 
+import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
+import org.jooq.InverseForeignKey
 import org.jooq.Name
+import org.jooq.Path
+import org.jooq.PlainSQL
+import org.jooq.QueryPart
 import org.jooq.Record
-import org.jooq.Records
-import org.jooq.Row3
+import org.jooq.SQL
 import org.jooq.Schema
-import org.jooq.SelectField
+import org.jooq.Select
+import org.jooq.Stringly
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
@@ -25,6 +30,8 @@ import org.jooq.demo.kotlin.db.Public
 import org.jooq.demo.kotlin.db.keys.FILM_CATEGORY_PKEY
 import org.jooq.demo.kotlin.db.keys.FILM_CATEGORY__FILM_CATEGORY_CATEGORY_ID_FKEY
 import org.jooq.demo.kotlin.db.keys.FILM_CATEGORY__FILM_CATEGORY_FILM_ID_FKEY
+import org.jooq.demo.kotlin.db.tables.Category.CategoryPath
+import org.jooq.demo.kotlin.db.tables.Film.FilmPath
 import org.jooq.demo.kotlin.db.tables.records.FilmCategoryRecord
 import org.jooq.impl.DSL
 import org.jooq.impl.Internal
@@ -38,19 +45,23 @@ import org.jooq.impl.TableImpl
 @Suppress("UNCHECKED_CAST")
 open class FilmCategory(
     alias: Name,
-    child: Table<out Record>?,
-    path: ForeignKey<out Record, FilmCategoryRecord>?,
+    path: Table<out Record>?,
+    childPath: ForeignKey<out Record, FilmCategoryRecord>?,
+    parentPath: InverseForeignKey<out Record, FilmCategoryRecord>?,
     aliased: Table<FilmCategoryRecord>?,
-    parameters: Array<Field<*>?>?
+    parameters: Array<Field<*>?>?,
+    where: Condition?
 ): TableImpl<FilmCategoryRecord>(
     alias,
     Public.PUBLIC,
-    child,
     path,
+    childPath,
+    parentPath,
     aliased,
     parameters,
     DSL.comment(""),
-    TableOptions.table()
+    TableOptions.table(),
+    where,
 ) {
     companion object {
 
@@ -80,8 +91,9 @@ open class FilmCategory(
      */
     val LAST_UPDATE: TableField<FilmCategoryRecord, LocalDateTime?> = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).readonly(true).defaultValue(DSL.field(DSL.raw("now()"), SQLDataType.LOCALDATETIME)), this, "")
 
-    private constructor(alias: Name, aliased: Table<FilmCategoryRecord>?): this(alias, null, null, aliased, null)
-    private constructor(alias: Name, aliased: Table<FilmCategoryRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, aliased, parameters)
+    private constructor(alias: Name, aliased: Table<FilmCategoryRecord>?): this(alias, null, null, null, aliased, null, null)
+    private constructor(alias: Name, aliased: Table<FilmCategoryRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, null, aliased, parameters, null)
+    private constructor(alias: Name, aliased: Table<FilmCategoryRecord>?, where: Condition): this(alias, null, null, null, aliased, null, where)
 
     /**
      * Create an aliased <code>public.film_category</code> table reference
@@ -98,42 +110,54 @@ open class FilmCategory(
      */
     constructor(): this(DSL.name("film_category"), null)
 
-    constructor(child: Table<out Record>, key: ForeignKey<out Record, FilmCategoryRecord>): this(Internal.createPathAlias(child, key), child, key, FILM_CATEGORY, null)
+    constructor(path: Table<out Record>, childPath: ForeignKey<out Record, FilmCategoryRecord>?, parentPath: InverseForeignKey<out Record, FilmCategoryRecord>?): this(Internal.createPathAlias(path, childPath, parentPath), path, childPath, parentPath, FILM_CATEGORY, null, null)
+
+    /**
+     * A subtype implementing {@link Path} for simplified path-based joins.
+     */
+    open class FilmCategoryPath : FilmCategory, Path<FilmCategoryRecord> {
+        constructor(path: Table<out Record>, childPath: ForeignKey<out Record, FilmCategoryRecord>?, parentPath: InverseForeignKey<out Record, FilmCategoryRecord>?): super(path, childPath, parentPath)
+        private constructor(alias: Name, aliased: Table<FilmCategoryRecord>): super(alias, aliased)
+        override fun `as`(alias: String): FilmCategoryPath = FilmCategoryPath(DSL.name(alias), this)
+        override fun `as`(alias: Name): FilmCategoryPath = FilmCategoryPath(alias, this)
+        override fun `as`(alias: Table<*>): FilmCategoryPath = FilmCategoryPath(alias.qualifiedName, this)
+    }
     override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
     override fun getPrimaryKey(): UniqueKey<FilmCategoryRecord> = FILM_CATEGORY_PKEY
     override fun getReferences(): List<ForeignKey<FilmCategoryRecord, *>> = listOf(FILM_CATEGORY__FILM_CATEGORY_FILM_ID_FKEY, FILM_CATEGORY__FILM_CATEGORY_CATEGORY_ID_FKEY)
 
-    private lateinit var _film: Film
-    private lateinit var _category: Category
+    private lateinit var _film: FilmPath
 
     /**
      * Get the implicit join path to the <code>public.film</code> table.
      */
-    fun film(): Film {
+    fun film(): FilmPath {
         if (!this::_film.isInitialized)
-            _film = Film(this, FILM_CATEGORY__FILM_CATEGORY_FILM_ID_FKEY)
+            _film = FilmPath(this, FILM_CATEGORY__FILM_CATEGORY_FILM_ID_FKEY, null)
 
         return _film;
     }
 
-    val film: Film
-        get(): Film = film()
+    val film: FilmPath
+        get(): FilmPath = film()
+
+    private lateinit var _category: CategoryPath
 
     /**
      * Get the implicit join path to the <code>public.category</code> table.
      */
-    fun category(): Category {
+    fun category(): CategoryPath {
         if (!this::_category.isInitialized)
-            _category = Category(this, FILM_CATEGORY__FILM_CATEGORY_CATEGORY_ID_FKEY)
+            _category = CategoryPath(this, FILM_CATEGORY__FILM_CATEGORY_CATEGORY_ID_FKEY, null)
 
         return _category;
     }
 
-    val category: Category
-        get(): Category = category()
+    val category: CategoryPath
+        get(): CategoryPath = category()
     override fun `as`(alias: String): FilmCategory = FilmCategory(DSL.name(alias), this)
     override fun `as`(alias: Name): FilmCategory = FilmCategory(alias, this)
-    override fun `as`(alias: Table<*>): FilmCategory = FilmCategory(alias.getQualifiedName(), this)
+    override fun `as`(alias: Table<*>): FilmCategory = FilmCategory(alias.qualifiedName, this)
 
     /**
      * Rename this table
@@ -148,21 +172,55 @@ open class FilmCategory(
     /**
      * Rename this table
      */
-    override fun rename(name: Table<*>): FilmCategory = FilmCategory(name.getQualifiedName(), null)
-
-    // -------------------------------------------------------------------------
-    // Row3 type methods
-    // -------------------------------------------------------------------------
-    override fun fieldsRow(): Row3<Long?, Long?, LocalDateTime?> = super.fieldsRow() as Row3<Long?, Long?, LocalDateTime?>
+    override fun rename(name: Table<*>): FilmCategory = FilmCategory(name.qualifiedName, null)
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     * Create an inline derived table from this table
      */
-    fun <U> mapping(from: (Long?, Long?, LocalDateTime?) -> U): SelectField<U> = convertFrom(Records.mapping(from))
+    override fun where(condition: Condition): FilmCategory = FilmCategory(qualifiedName, if (aliased()) this else null, condition)
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Class,
-     * Function)}.
+     * Create an inline derived table from this table
      */
-    fun <U> mapping(toType: Class<U>, from: (Long?, Long?, LocalDateTime?) -> U): SelectField<U> = convertFrom(toType, Records.mapping(from))
+    override fun where(conditions: Collection<Condition>): FilmCategory = where(DSL.and(conditions))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun where(vararg conditions: Condition): FilmCategory = where(DSL.and(*conditions))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun where(condition: Field<Boolean?>): FilmCategory = where(DSL.condition(condition))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(condition: SQL): FilmCategory = where(DSL.condition(condition))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(@Stringly.SQL condition: String): FilmCategory = where(DSL.condition(condition))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(@Stringly.SQL condition: String, vararg binds: Any?): FilmCategory = where(DSL.condition(condition, *binds))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(@Stringly.SQL condition: String, vararg parts: QueryPart): FilmCategory = where(DSL.condition(condition, *parts))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun whereExists(select: Select<*>): FilmCategory = where(DSL.exists(select))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun whereNotExists(select: Select<*>): FilmCategory = where(DSL.notExists(select))
 }

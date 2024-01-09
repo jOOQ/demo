@@ -10,23 +10,30 @@ import java.lang.Long
 import java.lang.String
 import java.time.LocalDateTime
 import java.util.Arrays
+import java.util.Collection
 import java.util.List
-import java.util.function.Function
 
+import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
 import org.jooq.Identity
+import org.jooq.InverseForeignKey
 import org.jooq.Name
+import org.jooq.Path
+import org.jooq.PlainSQL
 import org.jooq.Record
-import org.jooq.Row11
+import org.jooq.SQL
 import org.jooq.Schema
-import org.jooq.SelectField
+import org.jooq.Select
+import org.jooq.Stringly
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
 import org.jooq.UniqueKey
 import org.jooq.demo.skala.db.Keys
 import org.jooq.demo.skala.db.Public
+import org.jooq.demo.skala.db.tables.Address.AddressPath
+import org.jooq.demo.skala.db.tables.Store.StorePath
 import org.jooq.demo.skala.db.tables.records.StaffRecord
 import org.jooq.impl.DSL
 import org.jooq.impl.Internal
@@ -43,6 +50,11 @@ object Staff {
    * The reference instance of <code>public.staff</code>
    */
   val STAFF = new Staff
+
+  /**
+   * A subtype implementing {@link Path} for simplified path-based joins.
+   */
+  class StaffPath(path: Table[_ <: Record], childPath: ForeignKey[_ <: Record, StaffRecord], parentPath: InverseForeignKey[_ <: Record, StaffRecord]) extends Staff(path, childPath, parentPath) with Path[StaffRecord]
 }
 
 /**
@@ -50,20 +62,24 @@ object Staff {
  */
 class Staff(
   alias: Name,
-  child: Table[_ <: Record],
-  path: ForeignKey[_ <: Record, StaffRecord],
+  path: Table[_ <: Record],
+  childPath: ForeignKey[_ <: Record, StaffRecord],
+  parentPath: InverseForeignKey[_ <: Record, StaffRecord],
   aliased: Table[StaffRecord],
-  parameters: Array[ Field[_] ]
+  parameters: Array[ Field[_] ],
+  where: Condition
 )
 extends TableImpl[StaffRecord](
   alias,
   Public.PUBLIC,
-  child,
   path,
+  childPath,
+  parentPath,
   aliased,
   parameters,
   DSL.comment(""),
-  TableOptions.table
+  TableOptions.table,
+  where
 ) {
 
   /**
@@ -126,7 +142,8 @@ extends TableImpl[StaffRecord](
    */
   val PICTURE: TableField[StaffRecord, Array[Byte]] = createField(DSL.name("picture"), SQLDataType.BLOB, "")
 
-  private def this(alias: Name, aliased: Table[StaffRecord]) = this(alias, null, null, aliased, null)
+  private def this(alias: Name, aliased: Table[StaffRecord]) = this(alias, null, null, null, aliased, null, null)
+  private def this(alias: Name, aliased: Table[StaffRecord], where: Condition) = this(alias, null, null, null, aliased, null, where)
 
   /**
    * Create an aliased <code>public.staff</code> table reference
@@ -143,9 +160,9 @@ extends TableImpl[StaffRecord](
    */
   def this() = this(DSL.name("staff"), null)
 
-  def this(child: Table[_ <: Record], key: ForeignKey[_ <: Record, StaffRecord]) = this(Internal.createPathAlias(child, key), child, key, org.jooq.demo.skala.db.tables.Staff.STAFF, null)
+  def this(path: Table[_ <: Record], childPath: ForeignKey[_ <: Record, StaffRecord], parentPath: InverseForeignKey[_ <: Record, StaffRecord]) = this(Internal.createPathAlias(path, childPath, parentPath), path, childPath, parentPath, org.jooq.demo.skala.db.tables.Staff.STAFF, null, null)
 
-  override def getSchema: Schema = if (aliased()) null else Public.PUBLIC
+  override def getSchema: Schema = if (super.aliased()) null else Public.PUBLIC
 
   override def getIdentity: Identity[StaffRecord, Long] = super.getIdentity.asInstanceOf[ Identity[StaffRecord, Long] ]
 
@@ -156,12 +173,12 @@ extends TableImpl[StaffRecord](
   /**
    * Get the implicit join path to the <code>public.address</code> table.
    */
-  lazy val address: Address = { new Address(this, Keys.STAFF__STAFF_ADDRESS_ID_FKEY) }
+  lazy val address: AddressPath = { new AddressPath(this, Keys.STAFF__STAFF_ADDRESS_ID_FKEY, null) }
 
   /**
    * Get the implicit join path to the <code>public.store</code> table.
    */
-  lazy val store: Store = { new Store(this, Keys.STAFF__STAFF_STORE_ID_FKEY) }
+  lazy val store: StorePath = { new StorePath(this, Keys.STAFF__STAFF_STORE_ID_FKEY, null) }
   override def as(alias: String): Staff = new Staff(DSL.name(alias), this)
   override def as(alias: Name): Staff = new Staff(alias, this)
   override def as(alias: Table[_]): Staff = new Staff(alias.getQualifiedName(), this)
@@ -181,19 +198,48 @@ extends TableImpl[StaffRecord](
    */
   override def rename(name: Table[_]): Staff = new Staff(name.getQualifiedName(), null)
 
-  // -------------------------------------------------------------------------
-  // Row11 type methods
-  // -------------------------------------------------------------------------
-  override def fieldsRow: Row11[Long, String, String, Long, String, Long, Boolean, String, String, LocalDateTime, Array[Byte]] = super.fieldsRow.asInstanceOf[ Row11[Long, String, String, Long, String, Long, Boolean, String, String, LocalDateTime, Array[Byte]] ]
+  /**
+   * Create an inline derived table from this table
+   */
+  override def where(condition: Condition): Staff = new Staff(getQualifiedName(), if (super.aliased()) this else null, condition)
 
   /**
-   * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+   * Create an inline derived table from this table
    */
-  def mapping[U](from: (Long, String, String, Long, String, Long, Boolean, String, String, LocalDateTime, Array[Byte]) => U): SelectField[U] = convertFrom(r => from.apply(r.value1(), r.value2(), r.value3(), r.value4(), r.value5(), r.value6(), r.value7(), r.value8(), r.value9(), r.value10(), r.value11()))
+  override def where(conditions: Collection[_ <: Condition]): Staff = where(DSL.and(conditions))
 
   /**
-   * Convenience mapping calling {@link SelectField#convertFrom(Class,
-   * Function)}.
+   * Create an inline derived table from this table
    */
-  def mapping[U](toType: Class[U], from: (Long, String, String, Long, String, Long, Boolean, String, String, LocalDateTime, Array[Byte]) => U): SelectField[U] = convertFrom(toType,r => from.apply(r.value1(), r.value2(), r.value3(), r.value4(), r.value5(), r.value6(), r.value7(), r.value8(), r.value9(), r.value10(), r.value11()))
+  override def where(conditions: Condition*): Staff = where(DSL.and(conditions:_*))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  override def where(condition: Field[Boolean]): Staff = where(DSL.condition(condition))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  @PlainSQL override def where(condition: SQL): Staff = where(DSL.condition(condition))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  @PlainSQL override def where(@Stringly.SQL condition: String): Staff = where(DSL.condition(condition))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): Staff = where(DSL.condition(condition, binds:_*))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  override def whereExists(select: Select[_]): Staff = where(DSL.exists(select))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  override def whereNotExists(select: Select[_]): Staff = where(DSL.notExists(select))
 }

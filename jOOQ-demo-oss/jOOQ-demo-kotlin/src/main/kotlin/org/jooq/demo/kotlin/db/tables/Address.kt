@@ -5,20 +5,25 @@ package org.jooq.demo.kotlin.db.tables
 
 
 import java.time.LocalDateTime
-import java.util.function.Function
 
+import kotlin.collections.Collection
 import kotlin.collections.List
 
+import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
 import org.jooq.Identity
 import org.jooq.Index
+import org.jooq.InverseForeignKey
 import org.jooq.Name
+import org.jooq.Path
+import org.jooq.PlainSQL
+import org.jooq.QueryPart
 import org.jooq.Record
-import org.jooq.Records
-import org.jooq.Row8
+import org.jooq.SQL
 import org.jooq.Schema
-import org.jooq.SelectField
+import org.jooq.Select
+import org.jooq.Stringly
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
@@ -27,6 +32,13 @@ import org.jooq.demo.kotlin.db.Public
 import org.jooq.demo.kotlin.db.indexes.IDX_FK_CITY_ID
 import org.jooq.demo.kotlin.db.keys.ADDRESS_PKEY
 import org.jooq.demo.kotlin.db.keys.ADDRESS__ADDRESS_CITY_ID_FKEY
+import org.jooq.demo.kotlin.db.keys.CUSTOMER__CUSTOMER_ADDRESS_ID_FKEY
+import org.jooq.demo.kotlin.db.keys.STAFF__STAFF_ADDRESS_ID_FKEY
+import org.jooq.demo.kotlin.db.keys.STORE__STORE_ADDRESS_ID_FKEY
+import org.jooq.demo.kotlin.db.tables.City.CityPath
+import org.jooq.demo.kotlin.db.tables.Customer.CustomerPath
+import org.jooq.demo.kotlin.db.tables.Staff.StaffPath
+import org.jooq.demo.kotlin.db.tables.Store.StorePath
 import org.jooq.demo.kotlin.db.tables.records.AddressRecord
 import org.jooq.impl.DSL
 import org.jooq.impl.Internal
@@ -40,19 +52,23 @@ import org.jooq.impl.TableImpl
 @Suppress("UNCHECKED_CAST")
 open class Address(
     alias: Name,
-    child: Table<out Record>?,
-    path: ForeignKey<out Record, AddressRecord>?,
+    path: Table<out Record>?,
+    childPath: ForeignKey<out Record, AddressRecord>?,
+    parentPath: InverseForeignKey<out Record, AddressRecord>?,
     aliased: Table<AddressRecord>?,
-    parameters: Array<Field<*>?>?
+    parameters: Array<Field<*>?>?,
+    where: Condition?
 ): TableImpl<AddressRecord>(
     alias,
     Public.PUBLIC,
-    child,
     path,
+    childPath,
+    parentPath,
     aliased,
     parameters,
     DSL.comment(""),
-    TableOptions.table()
+    TableOptions.table(),
+    where,
 ) {
     companion object {
 
@@ -107,8 +123,9 @@ open class Address(
      */
     val LAST_UPDATE: TableField<AddressRecord, LocalDateTime?> = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).defaultValue(DSL.field(DSL.raw("now()"), SQLDataType.LOCALDATETIME)), this, "")
 
-    private constructor(alias: Name, aliased: Table<AddressRecord>?): this(alias, null, null, aliased, null)
-    private constructor(alias: Name, aliased: Table<AddressRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, aliased, parameters)
+    private constructor(alias: Name, aliased: Table<AddressRecord>?): this(alias, null, null, null, aliased, null, null)
+    private constructor(alias: Name, aliased: Table<AddressRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, null, aliased, parameters, null)
+    private constructor(alias: Name, aliased: Table<AddressRecord>?, where: Condition): this(alias, null, null, null, aliased, null, where)
 
     /**
      * Create an aliased <code>public.address</code> table reference
@@ -125,30 +142,87 @@ open class Address(
      */
     constructor(): this(DSL.name("address"), null)
 
-    constructor(child: Table<out Record>, key: ForeignKey<out Record, AddressRecord>): this(Internal.createPathAlias(child, key), child, key, ADDRESS, null)
+    constructor(path: Table<out Record>, childPath: ForeignKey<out Record, AddressRecord>?, parentPath: InverseForeignKey<out Record, AddressRecord>?): this(Internal.createPathAlias(path, childPath, parentPath), path, childPath, parentPath, ADDRESS, null, null)
+
+    /**
+     * A subtype implementing {@link Path} for simplified path-based joins.
+     */
+    open class AddressPath : Address, Path<AddressRecord> {
+        constructor(path: Table<out Record>, childPath: ForeignKey<out Record, AddressRecord>?, parentPath: InverseForeignKey<out Record, AddressRecord>?): super(path, childPath, parentPath)
+        private constructor(alias: Name, aliased: Table<AddressRecord>): super(alias, aliased)
+        override fun `as`(alias: String): AddressPath = AddressPath(DSL.name(alias), this)
+        override fun `as`(alias: Name): AddressPath = AddressPath(alias, this)
+        override fun `as`(alias: Table<*>): AddressPath = AddressPath(alias.qualifiedName, this)
+    }
     override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
     override fun getIndexes(): List<Index> = listOf(IDX_FK_CITY_ID)
     override fun getIdentity(): Identity<AddressRecord, Long?> = super.getIdentity() as Identity<AddressRecord, Long?>
     override fun getPrimaryKey(): UniqueKey<AddressRecord> = ADDRESS_PKEY
     override fun getReferences(): List<ForeignKey<AddressRecord, *>> = listOf(ADDRESS__ADDRESS_CITY_ID_FKEY)
 
-    private lateinit var _city: City
+    private lateinit var _city: CityPath
 
     /**
      * Get the implicit join path to the <code>public.city</code> table.
      */
-    fun city(): City {
+    fun city(): CityPath {
         if (!this::_city.isInitialized)
-            _city = City(this, ADDRESS__ADDRESS_CITY_ID_FKEY)
+            _city = CityPath(this, ADDRESS__ADDRESS_CITY_ID_FKEY, null)
 
         return _city;
     }
 
-    val city: City
-        get(): City = city()
+    val city: CityPath
+        get(): CityPath = city()
+
+    private lateinit var _customer: CustomerPath
+
+    /**
+     * Get the implicit to-many join path to the <code>public.customer</code>
+     * table
+     */
+    fun customer(): CustomerPath {
+        if (!this::_customer.isInitialized)
+            _customer = CustomerPath(this, null, CUSTOMER__CUSTOMER_ADDRESS_ID_FKEY.inverseKey)
+
+        return _customer;
+    }
+
+    val customer: CustomerPath
+        get(): CustomerPath = customer()
+
+    private lateinit var _staff: StaffPath
+
+    /**
+     * Get the implicit to-many join path to the <code>public.staff</code> table
+     */
+    fun staff(): StaffPath {
+        if (!this::_staff.isInitialized)
+            _staff = StaffPath(this, null, STAFF__STAFF_ADDRESS_ID_FKEY.inverseKey)
+
+        return _staff;
+    }
+
+    val staff: StaffPath
+        get(): StaffPath = staff()
+
+    private lateinit var _store: StorePath
+
+    /**
+     * Get the implicit to-many join path to the <code>public.store</code> table
+     */
+    fun store(): StorePath {
+        if (!this::_store.isInitialized)
+            _store = StorePath(this, null, STORE__STORE_ADDRESS_ID_FKEY.inverseKey)
+
+        return _store;
+    }
+
+    val store: StorePath
+        get(): StorePath = store()
     override fun `as`(alias: String): Address = Address(DSL.name(alias), this)
     override fun `as`(alias: Name): Address = Address(alias, this)
-    override fun `as`(alias: Table<*>): Address = Address(alias.getQualifiedName(), this)
+    override fun `as`(alias: Table<*>): Address = Address(alias.qualifiedName, this)
 
     /**
      * Rename this table
@@ -163,21 +237,55 @@ open class Address(
     /**
      * Rename this table
      */
-    override fun rename(name: Table<*>): Address = Address(name.getQualifiedName(), null)
-
-    // -------------------------------------------------------------------------
-    // Row8 type methods
-    // -------------------------------------------------------------------------
-    override fun fieldsRow(): Row8<Long?, String?, String?, String?, Long?, String?, String?, LocalDateTime?> = super.fieldsRow() as Row8<Long?, String?, String?, String?, Long?, String?, String?, LocalDateTime?>
+    override fun rename(name: Table<*>): Address = Address(name.qualifiedName, null)
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     * Create an inline derived table from this table
      */
-    fun <U> mapping(from: (Long?, String?, String?, String?, Long?, String?, String?, LocalDateTime?) -> U): SelectField<U> = convertFrom(Records.mapping(from))
+    override fun where(condition: Condition): Address = Address(qualifiedName, if (aliased()) this else null, condition)
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Class,
-     * Function)}.
+     * Create an inline derived table from this table
      */
-    fun <U> mapping(toType: Class<U>, from: (Long?, String?, String?, String?, Long?, String?, String?, LocalDateTime?) -> U): SelectField<U> = convertFrom(toType, Records.mapping(from))
+    override fun where(conditions: Collection<Condition>): Address = where(DSL.and(conditions))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun where(vararg conditions: Condition): Address = where(DSL.and(*conditions))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun where(condition: Field<Boolean?>): Address = where(DSL.condition(condition))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(condition: SQL): Address = where(DSL.condition(condition))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(@Stringly.SQL condition: String): Address = where(DSL.condition(condition))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(@Stringly.SQL condition: String, vararg binds: Any?): Address = where(DSL.condition(condition, *binds))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(@Stringly.SQL condition: String, vararg parts: QueryPart): Address = where(DSL.condition(condition, *parts))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun whereExists(select: Select<*>): Address = where(DSL.exists(select))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun whereNotExists(select: Select<*>): Address = where(DSL.notExists(select))
 }

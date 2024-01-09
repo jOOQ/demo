@@ -5,23 +5,27 @@ package org.jooq.demo.kotlin.db.tables
 
 
 import java.math.BigDecimal
-import java.util.function.Function
 
+import kotlin.collections.Collection
+
+import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
+import org.jooq.InverseForeignKey
 import org.jooq.Name
+import org.jooq.PlainSQL
+import org.jooq.QueryPart
 import org.jooq.Record
-import org.jooq.Records
-import org.jooq.Row2
+import org.jooq.SQL
 import org.jooq.Schema
-import org.jooq.SelectField
+import org.jooq.Select
+import org.jooq.Stringly
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
 import org.jooq.demo.kotlin.db.Public
 import org.jooq.demo.kotlin.db.tables.records.SalesByFilmCategoryRecord
 import org.jooq.impl.DSL
-import org.jooq.impl.Internal
 import org.jooq.impl.SQLDataType
 import org.jooq.impl.TableImpl
 
@@ -32,15 +36,18 @@ import org.jooq.impl.TableImpl
 @Suppress("UNCHECKED_CAST")
 open class SalesByFilmCategory(
     alias: Name,
-    child: Table<out Record>?,
-    path: ForeignKey<out Record, SalesByFilmCategoryRecord>?,
+    path: Table<out Record>?,
+    childPath: ForeignKey<out Record, SalesByFilmCategoryRecord>?,
+    parentPath: InverseForeignKey<out Record, SalesByFilmCategoryRecord>?,
     aliased: Table<SalesByFilmCategoryRecord>?,
-    parameters: Array<Field<*>?>?
+    parameters: Array<Field<*>?>?,
+    where: Condition?
 ): TableImpl<SalesByFilmCategoryRecord>(
     alias,
     Public.PUBLIC,
-    child,
     path,
+    childPath,
+    parentPath,
     aliased,
     parameters,
     DSL.comment(""),
@@ -55,7 +62,8 @@ open class SalesByFilmCategory(
        JOIN category c ON ((fc.category_id = c.category_id)))
     GROUP BY c.name
     ORDER BY (sum(p.amount)) DESC;
-    """)
+    """),
+    where,
 ) {
     companion object {
 
@@ -80,8 +88,9 @@ open class SalesByFilmCategory(
      */
     val TOTAL_SALES: TableField<SalesByFilmCategoryRecord, BigDecimal?> = createField(DSL.name("total_sales"), SQLDataType.NUMERIC, this, "")
 
-    private constructor(alias: Name, aliased: Table<SalesByFilmCategoryRecord>?): this(alias, null, null, aliased, null)
-    private constructor(alias: Name, aliased: Table<SalesByFilmCategoryRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, aliased, parameters)
+    private constructor(alias: Name, aliased: Table<SalesByFilmCategoryRecord>?): this(alias, null, null, null, aliased, null, null)
+    private constructor(alias: Name, aliased: Table<SalesByFilmCategoryRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, null, aliased, parameters, null)
+    private constructor(alias: Name, aliased: Table<SalesByFilmCategoryRecord>?, where: Condition): this(alias, null, null, null, aliased, null, where)
 
     /**
      * Create an aliased <code>public.sales_by_film_category</code> table
@@ -99,12 +108,10 @@ open class SalesByFilmCategory(
      * Create a <code>public.sales_by_film_category</code> table reference
      */
     constructor(): this(DSL.name("sales_by_film_category"), null)
-
-    constructor(child: Table<out Record>, key: ForeignKey<out Record, SalesByFilmCategoryRecord>): this(Internal.createPathAlias(child, key), child, key, SALES_BY_FILM_CATEGORY, null)
     override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
     override fun `as`(alias: String): SalesByFilmCategory = SalesByFilmCategory(DSL.name(alias), this)
     override fun `as`(alias: Name): SalesByFilmCategory = SalesByFilmCategory(alias, this)
-    override fun `as`(alias: Table<*>): SalesByFilmCategory = SalesByFilmCategory(alias.getQualifiedName(), this)
+    override fun `as`(alias: Table<*>): SalesByFilmCategory = SalesByFilmCategory(alias.qualifiedName, this)
 
     /**
      * Rename this table
@@ -119,21 +126,55 @@ open class SalesByFilmCategory(
     /**
      * Rename this table
      */
-    override fun rename(name: Table<*>): SalesByFilmCategory = SalesByFilmCategory(name.getQualifiedName(), null)
-
-    // -------------------------------------------------------------------------
-    // Row2 type methods
-    // -------------------------------------------------------------------------
-    override fun fieldsRow(): Row2<String?, BigDecimal?> = super.fieldsRow() as Row2<String?, BigDecimal?>
+    override fun rename(name: Table<*>): SalesByFilmCategory = SalesByFilmCategory(name.qualifiedName, null)
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     * Create an inline derived table from this table
      */
-    fun <U> mapping(from: (String?, BigDecimal?) -> U): SelectField<U> = convertFrom(Records.mapping(from))
+    override fun where(condition: Condition): SalesByFilmCategory = SalesByFilmCategory(qualifiedName, if (aliased()) this else null, condition)
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Class,
-     * Function)}.
+     * Create an inline derived table from this table
      */
-    fun <U> mapping(toType: Class<U>, from: (String?, BigDecimal?) -> U): SelectField<U> = convertFrom(toType, Records.mapping(from))
+    override fun where(conditions: Collection<Condition>): SalesByFilmCategory = where(DSL.and(conditions))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun where(vararg conditions: Condition): SalesByFilmCategory = where(DSL.and(*conditions))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun where(condition: Field<Boolean?>): SalesByFilmCategory = where(DSL.condition(condition))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(condition: SQL): SalesByFilmCategory = where(DSL.condition(condition))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(@Stringly.SQL condition: String): SalesByFilmCategory = where(DSL.condition(condition))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(@Stringly.SQL condition: String, vararg binds: Any?): SalesByFilmCategory = where(DSL.condition(condition, *binds))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(@Stringly.SQL condition: String, vararg parts: QueryPart): SalesByFilmCategory = where(DSL.condition(condition, *parts))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun whereExists(select: Select<*>): SalesByFilmCategory = where(DSL.exists(select))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun whereNotExists(select: Select<*>): SalesByFilmCategory = where(DSL.notExists(select))
 }

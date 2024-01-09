@@ -4,23 +4,26 @@
 package org.jooq.demo.kotlin.db.tables
 
 
-import java.util.function.Function
+import kotlin.collections.Collection
 
+import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
+import org.jooq.InverseForeignKey
 import org.jooq.Name
+import org.jooq.PlainSQL
+import org.jooq.QueryPart
 import org.jooq.Record
-import org.jooq.Records
-import org.jooq.Row9
+import org.jooq.SQL
 import org.jooq.Schema
-import org.jooq.SelectField
+import org.jooq.Select
+import org.jooq.Stringly
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
 import org.jooq.demo.kotlin.db.Public
 import org.jooq.demo.kotlin.db.tables.records.CustomerListRecord
 import org.jooq.impl.DSL
-import org.jooq.impl.Internal
 import org.jooq.impl.SQLDataType
 import org.jooq.impl.TableImpl
 
@@ -31,15 +34,18 @@ import org.jooq.impl.TableImpl
 @Suppress("UNCHECKED_CAST")
 open class CustomerList(
     alias: Name,
-    child: Table<out Record>?,
-    path: ForeignKey<out Record, CustomerListRecord>?,
+    path: Table<out Record>?,
+    childPath: ForeignKey<out Record, CustomerListRecord>?,
+    parentPath: InverseForeignKey<out Record, CustomerListRecord>?,
     aliased: Table<CustomerListRecord>?,
-    parameters: Array<Field<*>?>?
+    parameters: Array<Field<*>?>?,
+    where: Condition?
 ): TableImpl<CustomerListRecord>(
     alias,
     Public.PUBLIC,
-    child,
     path,
+    childPath,
+    parentPath,
     aliased,
     parameters,
     DSL.comment(""),
@@ -60,7 +66,8 @@ open class CustomerList(
       JOIN address a ON ((cu.address_id = a.address_id)))
       JOIN city ON ((a.city_id = city.city_id)))
       JOIN country ON ((city.country_id = country.country_id)));
-    """)
+    """),
+    where,
 ) {
     companion object {
 
@@ -120,8 +127,9 @@ open class CustomerList(
      */
     val SID: TableField<CustomerListRecord, Long?> = createField(DSL.name("sid"), SQLDataType.BIGINT, this, "")
 
-    private constructor(alias: Name, aliased: Table<CustomerListRecord>?): this(alias, null, null, aliased, null)
-    private constructor(alias: Name, aliased: Table<CustomerListRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, aliased, parameters)
+    private constructor(alias: Name, aliased: Table<CustomerListRecord>?): this(alias, null, null, null, aliased, null, null)
+    private constructor(alias: Name, aliased: Table<CustomerListRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, null, aliased, parameters, null)
+    private constructor(alias: Name, aliased: Table<CustomerListRecord>?, where: Condition): this(alias, null, null, null, aliased, null, where)
 
     /**
      * Create an aliased <code>public.customer_list</code> table reference
@@ -137,12 +145,10 @@ open class CustomerList(
      * Create a <code>public.customer_list</code> table reference
      */
     constructor(): this(DSL.name("customer_list"), null)
-
-    constructor(child: Table<out Record>, key: ForeignKey<out Record, CustomerListRecord>): this(Internal.createPathAlias(child, key), child, key, CUSTOMER_LIST, null)
     override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
     override fun `as`(alias: String): CustomerList = CustomerList(DSL.name(alias), this)
     override fun `as`(alias: Name): CustomerList = CustomerList(alias, this)
-    override fun `as`(alias: Table<*>): CustomerList = CustomerList(alias.getQualifiedName(), this)
+    override fun `as`(alias: Table<*>): CustomerList = CustomerList(alias.qualifiedName, this)
 
     /**
      * Rename this table
@@ -157,21 +163,55 @@ open class CustomerList(
     /**
      * Rename this table
      */
-    override fun rename(name: Table<*>): CustomerList = CustomerList(name.getQualifiedName(), null)
-
-    // -------------------------------------------------------------------------
-    // Row9 type methods
-    // -------------------------------------------------------------------------
-    override fun fieldsRow(): Row9<Long?, String?, String?, String?, String?, String?, String?, String?, Long?> = super.fieldsRow() as Row9<Long?, String?, String?, String?, String?, String?, String?, String?, Long?>
+    override fun rename(name: Table<*>): CustomerList = CustomerList(name.qualifiedName, null)
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     * Create an inline derived table from this table
      */
-    fun <U> mapping(from: (Long?, String?, String?, String?, String?, String?, String?, String?, Long?) -> U): SelectField<U> = convertFrom(Records.mapping(from))
+    override fun where(condition: Condition): CustomerList = CustomerList(qualifiedName, if (aliased()) this else null, condition)
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Class,
-     * Function)}.
+     * Create an inline derived table from this table
      */
-    fun <U> mapping(toType: Class<U>, from: (Long?, String?, String?, String?, String?, String?, String?, String?, Long?) -> U): SelectField<U> = convertFrom(toType, Records.mapping(from))
+    override fun where(conditions: Collection<Condition>): CustomerList = where(DSL.and(conditions))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun where(vararg conditions: Condition): CustomerList = where(DSL.and(*conditions))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun where(condition: Field<Boolean?>): CustomerList = where(DSL.condition(condition))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(condition: SQL): CustomerList = where(DSL.condition(condition))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(@Stringly.SQL condition: String): CustomerList = where(DSL.condition(condition))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(@Stringly.SQL condition: String, vararg binds: Any?): CustomerList = where(DSL.condition(condition, *binds))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(@Stringly.SQL condition: String, vararg parts: QueryPart): CustomerList = where(DSL.condition(condition, *parts))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun whereExists(select: Select<*>): CustomerList = where(DSL.exists(select))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun whereNotExists(select: Select<*>): CustomerList = where(DSL.notExists(select))
 }

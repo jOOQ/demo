@@ -8,15 +8,14 @@ import java.lang.Class
 import java.lang.Integer
 import java.lang.Long
 import java.lang.String
-import java.util.function.Function
 
+import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
+import org.jooq.InverseForeignKey
 import org.jooq.Name
 import org.jooq.Record
-import org.jooq.Row1
 import org.jooq.Schema
-import org.jooq.SelectField
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
@@ -42,20 +41,24 @@ object FilmNotInStock {
  */
 class FilmNotInStock(
   alias: Name,
-  child: Table[_ <: Record],
-  path: ForeignKey[_ <: Record, FilmNotInStockRecord],
+  path: Table[_ <: Record],
+  childPath: ForeignKey[_ <: Record, FilmNotInStockRecord],
+  parentPath: InverseForeignKey[_ <: Record, FilmNotInStockRecord],
   aliased: Table[FilmNotInStockRecord],
-  parameters: Array[ Field[_] ]
+  parameters: Array[ Field[_] ],
+  where: Condition
 )
 extends TableImpl[FilmNotInStockRecord](
   alias,
   Public.PUBLIC,
-  child,
   path,
+  childPath,
+  parentPath,
   aliased,
   parameters,
   DSL.comment(""),
-  TableOptions.function
+  TableOptions.function,
+  where
 ) {
 
   /**
@@ -68,10 +71,10 @@ extends TableImpl[FilmNotInStockRecord](
    */
   val P_FILM_COUNT: TableField[FilmNotInStockRecord, Integer] = createField(DSL.name("p_film_count"), SQLDataType.INTEGER, "")
 
-  private def this(alias: Name, aliased: Table[FilmNotInStockRecord]) = this(alias, null, null, aliased, Array(
+  private def this(alias: Name, aliased: Table[FilmNotInStockRecord]) = this(alias, null, null, null, aliased, Array(
     DSL.value(null, SQLDataType.BIGINT),
     DSL.value(null, SQLDataType.BIGINT)
-  ))
+  ), null)
 
   /**
    * Create an aliased <code>public.film_not_in_stock</code> table reference
@@ -88,30 +91,25 @@ extends TableImpl[FilmNotInStockRecord](
    */
   def this() = this(DSL.name("film_not_in_stock"), null)
 
-  override def getSchema: Schema = if (aliased()) null else Public.PUBLIC
-  override def as(alias: String): FilmNotInStock = new FilmNotInStock(DSL.name(alias), null, null, this, parameters)
-  override def as(alias: Name): FilmNotInStock = new FilmNotInStock(alias, null, null, this, parameters)
-  override def as(alias: Table[_]): FilmNotInStock = new FilmNotInStock(alias.getQualifiedName(), null, null, this, parameters)
+  override def getSchema: Schema = if (super.aliased()) null else Public.PUBLIC
+  override def as(alias: String): FilmNotInStock = new FilmNotInStock(DSL.name(alias), null, null, null, this, parameters, null)
+  override def as(alias: Name): FilmNotInStock = new FilmNotInStock(alias, null, null, null, this, parameters, null)
+  override def as(alias: Table[_]): FilmNotInStock = new FilmNotInStock(alias.getQualifiedName(), null, null, null, this, parameters, null)
 
   /**
    * Rename this table
    */
-  override def rename(name: String): FilmNotInStock = new FilmNotInStock(DSL.name(name), null, null, null, parameters)
+  override def rename(name: String): FilmNotInStock = new FilmNotInStock(DSL.name(name), null, null, null, null, parameters, null)
 
   /**
    * Rename this table
    */
-  override def rename(name: Name): FilmNotInStock = new FilmNotInStock(name, null, null, null, parameters)
+  override def rename(name: Name): FilmNotInStock = new FilmNotInStock(name, null, null, null, null, parameters, null)
 
   /**
    * Rename this table
    */
-  override def rename(name: Table[_]): FilmNotInStock = new FilmNotInStock(name.getQualifiedName(), null, null, null, parameters)
-
-  // -------------------------------------------------------------------------
-  // Row1 type methods
-  // -------------------------------------------------------------------------
-  override def fieldsRow: Row1[Integer] = super.fieldsRow.asInstanceOf[ Row1[Integer] ]
+  override def rename(name: Table[_]): FilmNotInStock = new FilmNotInStock(name.getQualifiedName(), null, null, null, null, parameters, null)
 
   /**
    * Call this table-valued function
@@ -119,10 +117,10 @@ extends TableImpl[FilmNotInStockRecord](
   def call(
       pFilmId: Long
     , pStoreId: Long
-  ): FilmNotInStock = Option(new FilmNotInStock(DSL.name("film_not_in_stock"), null, null, null, Array(
+  ): FilmNotInStock = Option(new FilmNotInStock(DSL.name("film_not_in_stock"), null, null, null, null, Array(
     DSL.value(pFilmId, SQLDataType.BIGINT),
     DSL.value(pStoreId, SQLDataType.BIGINT)
-  ))).map(r => if (aliased()) r.as(getUnqualifiedName) else r).get
+  ), null)).map(r => if (super.aliased()) r.as(getUnqualifiedName) else r).get
 
   /**
    * Call this table-valued function
@@ -130,19 +128,8 @@ extends TableImpl[FilmNotInStockRecord](
   def call(
       pFilmId: Field[Long]
     , pStoreId: Field[Long]
-  ): FilmNotInStock = Option(new FilmNotInStock(DSL.name("film_not_in_stock"), null, null, null, Array(
+  ): FilmNotInStock = Option(new FilmNotInStock(DSL.name("film_not_in_stock"), null, null, null, null, Array(
     pFilmId,
     pStoreId
-  ))).map(r => if (aliased()) r.as(getUnqualifiedName) else r).get
-
-  /**
-   * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
-   */
-  def mapping[U](from: (Integer) => U): SelectField[U] = convertFrom(r => from.apply(r.value1()))
-
-  /**
-   * Convenience mapping calling {@link SelectField#convertFrom(Class,
-   * Function)}.
-   */
-  def mapping[U](toType: Class[U], from: (Integer) => U): SelectField[U] = convertFrom(toType,r => from.apply(r.value1()))
+  ), null)).map(r => if (super.aliased()) r.as(getUnqualifiedName) else r).get
 }

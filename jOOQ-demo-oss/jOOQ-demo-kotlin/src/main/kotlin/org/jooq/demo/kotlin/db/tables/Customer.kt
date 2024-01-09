@@ -6,20 +6,25 @@ package org.jooq.demo.kotlin.db.tables
 
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.util.function.Function
 
+import kotlin.collections.Collection
 import kotlin.collections.List
 
+import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
 import org.jooq.Identity
 import org.jooq.Index
+import org.jooq.InverseForeignKey
 import org.jooq.Name
+import org.jooq.Path
+import org.jooq.PlainSQL
+import org.jooq.QueryPart
 import org.jooq.Record
-import org.jooq.Records
-import org.jooq.Row10
+import org.jooq.SQL
 import org.jooq.Schema
-import org.jooq.SelectField
+import org.jooq.Select
+import org.jooq.Stringly
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
@@ -31,6 +36,24 @@ import org.jooq.demo.kotlin.db.indexes.IDX_LAST_NAME
 import org.jooq.demo.kotlin.db.keys.CUSTOMER_PKEY
 import org.jooq.demo.kotlin.db.keys.CUSTOMER__CUSTOMER_ADDRESS_ID_FKEY
 import org.jooq.demo.kotlin.db.keys.CUSTOMER__CUSTOMER_STORE_ID_FKEY
+import org.jooq.demo.kotlin.db.keys.PAYMENT_P2007_01__PAYMENT_P2007_01_CUSTOMER_ID_FKEY
+import org.jooq.demo.kotlin.db.keys.PAYMENT_P2007_02__PAYMENT_P2007_02_CUSTOMER_ID_FKEY
+import org.jooq.demo.kotlin.db.keys.PAYMENT_P2007_03__PAYMENT_P2007_03_CUSTOMER_ID_FKEY
+import org.jooq.demo.kotlin.db.keys.PAYMENT_P2007_04__PAYMENT_P2007_04_CUSTOMER_ID_FKEY
+import org.jooq.demo.kotlin.db.keys.PAYMENT_P2007_05__PAYMENT_P2007_05_CUSTOMER_ID_FKEY
+import org.jooq.demo.kotlin.db.keys.PAYMENT_P2007_06__PAYMENT_P2007_06_CUSTOMER_ID_FKEY
+import org.jooq.demo.kotlin.db.keys.PAYMENT__PAYMENT_CUSTOMER_ID_FKEY
+import org.jooq.demo.kotlin.db.keys.RENTAL__RENTAL_CUSTOMER_ID_FKEY
+import org.jooq.demo.kotlin.db.tables.Address.AddressPath
+import org.jooq.demo.kotlin.db.tables.Payment.PaymentPath
+import org.jooq.demo.kotlin.db.tables.PaymentP2007_01.PaymentP2007_01Path
+import org.jooq.demo.kotlin.db.tables.PaymentP2007_02.PaymentP2007_02Path
+import org.jooq.demo.kotlin.db.tables.PaymentP2007_03.PaymentP2007_03Path
+import org.jooq.demo.kotlin.db.tables.PaymentP2007_04.PaymentP2007_04Path
+import org.jooq.demo.kotlin.db.tables.PaymentP2007_05.PaymentP2007_05Path
+import org.jooq.demo.kotlin.db.tables.PaymentP2007_06.PaymentP2007_06Path
+import org.jooq.demo.kotlin.db.tables.Rental.RentalPath
+import org.jooq.demo.kotlin.db.tables.Store.StorePath
 import org.jooq.demo.kotlin.db.tables.records.CustomerRecord
 import org.jooq.impl.DSL
 import org.jooq.impl.Internal
@@ -44,19 +67,23 @@ import org.jooq.impl.TableImpl
 @Suppress("UNCHECKED_CAST")
 open class Customer(
     alias: Name,
-    child: Table<out Record>?,
-    path: ForeignKey<out Record, CustomerRecord>?,
+    path: Table<out Record>?,
+    childPath: ForeignKey<out Record, CustomerRecord>?,
+    parentPath: InverseForeignKey<out Record, CustomerRecord>?,
     aliased: Table<CustomerRecord>?,
-    parameters: Array<Field<*>?>?
+    parameters: Array<Field<*>?>?,
+    where: Condition?
 ): TableImpl<CustomerRecord>(
     alias,
     Public.PUBLIC,
-    child,
     path,
+    childPath,
+    parentPath,
     aliased,
     parameters,
     DSL.comment(""),
-    TableOptions.table()
+    TableOptions.table(),
+    where,
 ) {
     companion object {
 
@@ -121,8 +148,9 @@ open class Customer(
      */
     val ACTIVE: TableField<CustomerRecord, Int?> = createField(DSL.name("active"), SQLDataType.INTEGER, this, "")
 
-    private constructor(alias: Name, aliased: Table<CustomerRecord>?): this(alias, null, null, aliased, null)
-    private constructor(alias: Name, aliased: Table<CustomerRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, aliased, parameters)
+    private constructor(alias: Name, aliased: Table<CustomerRecord>?): this(alias, null, null, null, aliased, null, null)
+    private constructor(alias: Name, aliased: Table<CustomerRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, null, aliased, parameters, null)
+    private constructor(alias: Name, aliased: Table<CustomerRecord>?, where: Condition): this(alias, null, null, null, aliased, null, where)
 
     /**
      * Create an aliased <code>public.customer</code> table reference
@@ -139,44 +167,184 @@ open class Customer(
      */
     constructor(): this(DSL.name("customer"), null)
 
-    constructor(child: Table<out Record>, key: ForeignKey<out Record, CustomerRecord>): this(Internal.createPathAlias(child, key), child, key, CUSTOMER, null)
+    constructor(path: Table<out Record>, childPath: ForeignKey<out Record, CustomerRecord>?, parentPath: InverseForeignKey<out Record, CustomerRecord>?): this(Internal.createPathAlias(path, childPath, parentPath), path, childPath, parentPath, CUSTOMER, null, null)
+
+    /**
+     * A subtype implementing {@link Path} for simplified path-based joins.
+     */
+    open class CustomerPath : Customer, Path<CustomerRecord> {
+        constructor(path: Table<out Record>, childPath: ForeignKey<out Record, CustomerRecord>?, parentPath: InverseForeignKey<out Record, CustomerRecord>?): super(path, childPath, parentPath)
+        private constructor(alias: Name, aliased: Table<CustomerRecord>): super(alias, aliased)
+        override fun `as`(alias: String): CustomerPath = CustomerPath(DSL.name(alias), this)
+        override fun `as`(alias: Name): CustomerPath = CustomerPath(alias, this)
+        override fun `as`(alias: Table<*>): CustomerPath = CustomerPath(alias.qualifiedName, this)
+    }
     override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
     override fun getIndexes(): List<Index> = listOf(IDX_FK_ADDRESS_ID, IDX_FK_STORE_ID, IDX_LAST_NAME)
     override fun getIdentity(): Identity<CustomerRecord, Long?> = super.getIdentity() as Identity<CustomerRecord, Long?>
     override fun getPrimaryKey(): UniqueKey<CustomerRecord> = CUSTOMER_PKEY
     override fun getReferences(): List<ForeignKey<CustomerRecord, *>> = listOf(CUSTOMER__CUSTOMER_STORE_ID_FKEY, CUSTOMER__CUSTOMER_ADDRESS_ID_FKEY)
 
-    private lateinit var _store: Store
-    private lateinit var _address: Address
+    private lateinit var _store: StorePath
 
     /**
      * Get the implicit join path to the <code>public.store</code> table.
      */
-    fun store(): Store {
+    fun store(): StorePath {
         if (!this::_store.isInitialized)
-            _store = Store(this, CUSTOMER__CUSTOMER_STORE_ID_FKEY)
+            _store = StorePath(this, CUSTOMER__CUSTOMER_STORE_ID_FKEY, null)
 
         return _store;
     }
 
-    val store: Store
-        get(): Store = store()
+    val store: StorePath
+        get(): StorePath = store()
+
+    private lateinit var _address: AddressPath
 
     /**
      * Get the implicit join path to the <code>public.address</code> table.
      */
-    fun address(): Address {
+    fun address(): AddressPath {
         if (!this::_address.isInitialized)
-            _address = Address(this, CUSTOMER__CUSTOMER_ADDRESS_ID_FKEY)
+            _address = AddressPath(this, CUSTOMER__CUSTOMER_ADDRESS_ID_FKEY, null)
 
         return _address;
     }
 
-    val address: Address
-        get(): Address = address()
+    val address: AddressPath
+        get(): AddressPath = address()
+
+    private lateinit var _payment: PaymentPath
+
+    /**
+     * Get the implicit to-many join path to the <code>public.payment</code>
+     * table
+     */
+    fun payment(): PaymentPath {
+        if (!this::_payment.isInitialized)
+            _payment = PaymentPath(this, null, PAYMENT__PAYMENT_CUSTOMER_ID_FKEY.inverseKey)
+
+        return _payment;
+    }
+
+    val payment: PaymentPath
+        get(): PaymentPath = payment()
+
+    private lateinit var _paymentP2007_01: PaymentP2007_01Path
+
+    /**
+     * Get the implicit to-many join path to the
+     * <code>public.payment_p2007_01</code> table
+     */
+    fun paymentP2007_01(): PaymentP2007_01Path {
+        if (!this::_paymentP2007_01.isInitialized)
+            _paymentP2007_01 = PaymentP2007_01Path(this, null, PAYMENT_P2007_01__PAYMENT_P2007_01_CUSTOMER_ID_FKEY.inverseKey)
+
+        return _paymentP2007_01;
+    }
+
+    val paymentP2007_01: PaymentP2007_01Path
+        get(): PaymentP2007_01Path = paymentP2007_01()
+
+    private lateinit var _paymentP2007_02: PaymentP2007_02Path
+
+    /**
+     * Get the implicit to-many join path to the
+     * <code>public.payment_p2007_02</code> table
+     */
+    fun paymentP2007_02(): PaymentP2007_02Path {
+        if (!this::_paymentP2007_02.isInitialized)
+            _paymentP2007_02 = PaymentP2007_02Path(this, null, PAYMENT_P2007_02__PAYMENT_P2007_02_CUSTOMER_ID_FKEY.inverseKey)
+
+        return _paymentP2007_02;
+    }
+
+    val paymentP2007_02: PaymentP2007_02Path
+        get(): PaymentP2007_02Path = paymentP2007_02()
+
+    private lateinit var _paymentP2007_03: PaymentP2007_03Path
+
+    /**
+     * Get the implicit to-many join path to the
+     * <code>public.payment_p2007_03</code> table
+     */
+    fun paymentP2007_03(): PaymentP2007_03Path {
+        if (!this::_paymentP2007_03.isInitialized)
+            _paymentP2007_03 = PaymentP2007_03Path(this, null, PAYMENT_P2007_03__PAYMENT_P2007_03_CUSTOMER_ID_FKEY.inverseKey)
+
+        return _paymentP2007_03;
+    }
+
+    val paymentP2007_03: PaymentP2007_03Path
+        get(): PaymentP2007_03Path = paymentP2007_03()
+
+    private lateinit var _paymentP2007_04: PaymentP2007_04Path
+
+    /**
+     * Get the implicit to-many join path to the
+     * <code>public.payment_p2007_04</code> table
+     */
+    fun paymentP2007_04(): PaymentP2007_04Path {
+        if (!this::_paymentP2007_04.isInitialized)
+            _paymentP2007_04 = PaymentP2007_04Path(this, null, PAYMENT_P2007_04__PAYMENT_P2007_04_CUSTOMER_ID_FKEY.inverseKey)
+
+        return _paymentP2007_04;
+    }
+
+    val paymentP2007_04: PaymentP2007_04Path
+        get(): PaymentP2007_04Path = paymentP2007_04()
+
+    private lateinit var _paymentP2007_05: PaymentP2007_05Path
+
+    /**
+     * Get the implicit to-many join path to the
+     * <code>public.payment_p2007_05</code> table
+     */
+    fun paymentP2007_05(): PaymentP2007_05Path {
+        if (!this::_paymentP2007_05.isInitialized)
+            _paymentP2007_05 = PaymentP2007_05Path(this, null, PAYMENT_P2007_05__PAYMENT_P2007_05_CUSTOMER_ID_FKEY.inverseKey)
+
+        return _paymentP2007_05;
+    }
+
+    val paymentP2007_05: PaymentP2007_05Path
+        get(): PaymentP2007_05Path = paymentP2007_05()
+
+    private lateinit var _paymentP2007_06: PaymentP2007_06Path
+
+    /**
+     * Get the implicit to-many join path to the
+     * <code>public.payment_p2007_06</code> table
+     */
+    fun paymentP2007_06(): PaymentP2007_06Path {
+        if (!this::_paymentP2007_06.isInitialized)
+            _paymentP2007_06 = PaymentP2007_06Path(this, null, PAYMENT_P2007_06__PAYMENT_P2007_06_CUSTOMER_ID_FKEY.inverseKey)
+
+        return _paymentP2007_06;
+    }
+
+    val paymentP2007_06: PaymentP2007_06Path
+        get(): PaymentP2007_06Path = paymentP2007_06()
+
+    private lateinit var _rental: RentalPath
+
+    /**
+     * Get the implicit to-many join path to the <code>public.rental</code>
+     * table
+     */
+    fun rental(): RentalPath {
+        if (!this::_rental.isInitialized)
+            _rental = RentalPath(this, null, RENTAL__RENTAL_CUSTOMER_ID_FKEY.inverseKey)
+
+        return _rental;
+    }
+
+    val rental: RentalPath
+        get(): RentalPath = rental()
     override fun `as`(alias: String): Customer = Customer(DSL.name(alias), this)
     override fun `as`(alias: Name): Customer = Customer(alias, this)
-    override fun `as`(alias: Table<*>): Customer = Customer(alias.getQualifiedName(), this)
+    override fun `as`(alias: Table<*>): Customer = Customer(alias.qualifiedName, this)
 
     /**
      * Rename this table
@@ -191,21 +359,55 @@ open class Customer(
     /**
      * Rename this table
      */
-    override fun rename(name: Table<*>): Customer = Customer(name.getQualifiedName(), null)
-
-    // -------------------------------------------------------------------------
-    // Row10 type methods
-    // -------------------------------------------------------------------------
-    override fun fieldsRow(): Row10<Long?, Long?, String?, String?, String?, Long?, Boolean?, LocalDate?, LocalDateTime?, Int?> = super.fieldsRow() as Row10<Long?, Long?, String?, String?, String?, Long?, Boolean?, LocalDate?, LocalDateTime?, Int?>
+    override fun rename(name: Table<*>): Customer = Customer(name.qualifiedName, null)
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+     * Create an inline derived table from this table
      */
-    fun <U> mapping(from: (Long?, Long?, String?, String?, String?, Long?, Boolean?, LocalDate?, LocalDateTime?, Int?) -> U): SelectField<U> = convertFrom(Records.mapping(from))
+    override fun where(condition: Condition): Customer = Customer(qualifiedName, if (aliased()) this else null, condition)
 
     /**
-     * Convenience mapping calling {@link SelectField#convertFrom(Class,
-     * Function)}.
+     * Create an inline derived table from this table
      */
-    fun <U> mapping(toType: Class<U>, from: (Long?, Long?, String?, String?, String?, Long?, Boolean?, LocalDate?, LocalDateTime?, Int?) -> U): SelectField<U> = convertFrom(toType, Records.mapping(from))
+    override fun where(conditions: Collection<Condition>): Customer = where(DSL.and(conditions))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun where(vararg conditions: Condition): Customer = where(DSL.and(*conditions))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun where(condition: Field<Boolean?>): Customer = where(DSL.condition(condition))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(condition: SQL): Customer = where(DSL.condition(condition))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(@Stringly.SQL condition: String): Customer = where(DSL.condition(condition))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(@Stringly.SQL condition: String, vararg binds: Any?): Customer = where(DSL.condition(condition, *binds))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    @PlainSQL override fun where(@Stringly.SQL condition: String, vararg parts: QueryPart): Customer = where(DSL.condition(condition, *parts))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun whereExists(select: Select<*>): Customer = where(DSL.exists(select))
+
+    /**
+     * Create an inline derived table from this table
+     */
+    override fun whereNotExists(select: Select<*>): Customer = where(DSL.notExists(select))
 }

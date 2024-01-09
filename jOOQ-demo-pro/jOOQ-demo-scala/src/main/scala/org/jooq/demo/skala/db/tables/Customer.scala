@@ -12,18 +12,23 @@ import java.lang.String
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.Arrays
+import java.util.Collection
 import java.util.List
-import java.util.function.Function
 
+import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
 import org.jooq.Identity
 import org.jooq.Index
+import org.jooq.InverseForeignKey
 import org.jooq.Name
+import org.jooq.Path
+import org.jooq.PlainSQL
 import org.jooq.Record
-import org.jooq.Row10
+import org.jooq.SQL
 import org.jooq.Schema
-import org.jooq.SelectField
+import org.jooq.Select
+import org.jooq.Stringly
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
@@ -31,6 +36,8 @@ import org.jooq.UniqueKey
 import org.jooq.demo.skala.db.Indexes
 import org.jooq.demo.skala.db.Keys
 import org.jooq.demo.skala.db.Public
+import org.jooq.demo.skala.db.tables.Address.AddressPath
+import org.jooq.demo.skala.db.tables.Store.StorePath
 import org.jooq.demo.skala.db.tables.records.CustomerRecord
 import org.jooq.impl.DSL
 import org.jooq.impl.Internal
@@ -46,6 +53,11 @@ object Customer {
    * The reference instance of <code>public.customer</code>
    */
   val CUSTOMER = new Customer
+
+  /**
+   * A subtype implementing {@link Path} for simplified path-based joins.
+   */
+  class CustomerPath(path: Table[_ <: Record], childPath: ForeignKey[_ <: Record, CustomerRecord], parentPath: InverseForeignKey[_ <: Record, CustomerRecord]) extends Customer(path, childPath, parentPath) with Path[CustomerRecord]
 }
 
 /**
@@ -53,20 +65,24 @@ object Customer {
  */
 class Customer(
   alias: Name,
-  child: Table[_ <: Record],
-  path: ForeignKey[_ <: Record, CustomerRecord],
+  path: Table[_ <: Record],
+  childPath: ForeignKey[_ <: Record, CustomerRecord],
+  parentPath: InverseForeignKey[_ <: Record, CustomerRecord],
   aliased: Table[CustomerRecord],
-  parameters: Array[ Field[_] ]
+  parameters: Array[ Field[_] ],
+  where: Condition
 )
 extends TableImpl[CustomerRecord](
   alias,
   Public.PUBLIC,
-  child,
   path,
+  childPath,
+  parentPath,
   aliased,
   parameters,
   DSL.comment(""),
-  TableOptions.table
+  TableOptions.table,
+  where
 ) {
 
   /**
@@ -124,7 +140,8 @@ extends TableImpl[CustomerRecord](
    */
   val ACTIVE: TableField[CustomerRecord, Integer] = createField(DSL.name("active"), SQLDataType.INTEGER, "")
 
-  private def this(alias: Name, aliased: Table[CustomerRecord]) = this(alias, null, null, aliased, null)
+  private def this(alias: Name, aliased: Table[CustomerRecord]) = this(alias, null, null, null, aliased, null, null)
+  private def this(alias: Name, aliased: Table[CustomerRecord], where: Condition) = this(alias, null, null, null, aliased, null, where)
 
   /**
    * Create an aliased <code>public.customer</code> table reference
@@ -141,9 +158,9 @@ extends TableImpl[CustomerRecord](
    */
   def this() = this(DSL.name("customer"), null)
 
-  def this(child: Table[_ <: Record], key: ForeignKey[_ <: Record, CustomerRecord]) = this(Internal.createPathAlias(child, key), child, key, org.jooq.demo.skala.db.tables.Customer.CUSTOMER, null)
+  def this(path: Table[_ <: Record], childPath: ForeignKey[_ <: Record, CustomerRecord], parentPath: InverseForeignKey[_ <: Record, CustomerRecord]) = this(Internal.createPathAlias(path, childPath, parentPath), path, childPath, parentPath, org.jooq.demo.skala.db.tables.Customer.CUSTOMER, null, null)
 
-  override def getSchema: Schema = if (aliased()) null else Public.PUBLIC
+  override def getSchema: Schema = if (super.aliased()) null else Public.PUBLIC
 
   override def getIndexes: List[Index] = Arrays.asList[ Index ](Indexes.IDX_FK_ADDRESS_ID, Indexes.IDX_FK_STORE_ID, Indexes.IDX_LAST_NAME)
 
@@ -156,12 +173,12 @@ extends TableImpl[CustomerRecord](
   /**
    * Get the implicit join path to the <code>public.store</code> table.
    */
-  lazy val store: Store = { new Store(this, Keys.CUSTOMER__CUSTOMER_STORE_ID_FKEY) }
+  lazy val store: StorePath = { new StorePath(this, Keys.CUSTOMER__CUSTOMER_STORE_ID_FKEY, null) }
 
   /**
    * Get the implicit join path to the <code>public.address</code> table.
    */
-  lazy val address: Address = { new Address(this, Keys.CUSTOMER__CUSTOMER_ADDRESS_ID_FKEY) }
+  lazy val address: AddressPath = { new AddressPath(this, Keys.CUSTOMER__CUSTOMER_ADDRESS_ID_FKEY, null) }
   override def as(alias: String): Customer = new Customer(DSL.name(alias), this)
   override def as(alias: Name): Customer = new Customer(alias, this)
   override def as(alias: Table[_]): Customer = new Customer(alias.getQualifiedName(), this)
@@ -181,19 +198,48 @@ extends TableImpl[CustomerRecord](
    */
   override def rename(name: Table[_]): Customer = new Customer(name.getQualifiedName(), null)
 
-  // -------------------------------------------------------------------------
-  // Row10 type methods
-  // -------------------------------------------------------------------------
-  override def fieldsRow: Row10[Long, Long, String, String, String, Long, Boolean, LocalDate, LocalDateTime, Integer] = super.fieldsRow.asInstanceOf[ Row10[Long, Long, String, String, String, Long, Boolean, LocalDate, LocalDateTime, Integer] ]
+  /**
+   * Create an inline derived table from this table
+   */
+  override def where(condition: Condition): Customer = new Customer(getQualifiedName(), if (super.aliased()) this else null, condition)
 
   /**
-   * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+   * Create an inline derived table from this table
    */
-  def mapping[U](from: (Long, Long, String, String, String, Long, Boolean, LocalDate, LocalDateTime, Integer) => U): SelectField[U] = convertFrom(r => from.apply(r.value1(), r.value2(), r.value3(), r.value4(), r.value5(), r.value6(), r.value7(), r.value8(), r.value9(), r.value10()))
+  override def where(conditions: Collection[_ <: Condition]): Customer = where(DSL.and(conditions))
 
   /**
-   * Convenience mapping calling {@link SelectField#convertFrom(Class,
-   * Function)}.
+   * Create an inline derived table from this table
    */
-  def mapping[U](toType: Class[U], from: (Long, Long, String, String, String, Long, Boolean, LocalDate, LocalDateTime, Integer) => U): SelectField[U] = convertFrom(toType,r => from.apply(r.value1(), r.value2(), r.value3(), r.value4(), r.value5(), r.value6(), r.value7(), r.value8(), r.value9(), r.value10()))
+  override def where(conditions: Condition*): Customer = where(DSL.and(conditions:_*))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  override def where(condition: Field[Boolean]): Customer = where(DSL.condition(condition))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  @PlainSQL override def where(condition: SQL): Customer = where(DSL.condition(condition))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  @PlainSQL override def where(@Stringly.SQL condition: String): Customer = where(DSL.condition(condition))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): Customer = where(DSL.condition(condition, binds:_*))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  override def whereExists(select: Select[_]): Customer = where(DSL.exists(select))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  override def whereNotExists(select: Select[_]): Customer = where(DSL.notExists(select))
 }

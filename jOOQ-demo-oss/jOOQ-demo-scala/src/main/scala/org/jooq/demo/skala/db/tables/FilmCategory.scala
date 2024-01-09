@@ -4,30 +4,36 @@
 package org.jooq.demo.skala.db.tables
 
 
+import java.lang.Boolean
 import java.lang.Class
 import java.lang.Long
 import java.lang.String
 import java.time.LocalDateTime
 import java.util.Arrays
+import java.util.Collection
 import java.util.List
-import java.util.function.Function
 
+import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
+import org.jooq.InverseForeignKey
 import org.jooq.Name
+import org.jooq.PlainSQL
 import org.jooq.Record
-import org.jooq.Row3
+import org.jooq.SQL
 import org.jooq.Schema
-import org.jooq.SelectField
+import org.jooq.Select
+import org.jooq.Stringly
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
 import org.jooq.UniqueKey
 import org.jooq.demo.skala.db.Keys
 import org.jooq.demo.skala.db.Public
+import org.jooq.demo.skala.db.tables.Category.CategoryPath
+import org.jooq.demo.skala.db.tables.Film.FilmPath
 import org.jooq.demo.skala.db.tables.records.FilmCategoryRecord
 import org.jooq.impl.DSL
-import org.jooq.impl.Internal
 import org.jooq.impl.SQLDataType
 import org.jooq.impl.TableImpl
 
@@ -47,20 +53,24 @@ object FilmCategory {
  */
 class FilmCategory(
   alias: Name,
-  child: Table[_ <: Record],
-  path: ForeignKey[_ <: Record, FilmCategoryRecord],
+  path: Table[_ <: Record],
+  childPath: ForeignKey[_ <: Record, FilmCategoryRecord],
+  parentPath: InverseForeignKey[_ <: Record, FilmCategoryRecord],
   aliased: Table[FilmCategoryRecord],
-  parameters: Array[ Field[_] ]
+  parameters: Array[ Field[_] ],
+  where: Condition
 )
 extends TableImpl[FilmCategoryRecord](
   alias,
   Public.PUBLIC,
-  child,
   path,
+  childPath,
+  parentPath,
   aliased,
   parameters,
   DSL.comment(""),
-  TableOptions.table
+  TableOptions.table,
+  where
 ) {
 
   /**
@@ -83,7 +93,8 @@ extends TableImpl[FilmCategoryRecord](
    */
   val LAST_UPDATE: TableField[FilmCategoryRecord, LocalDateTime] = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).defaultValue(DSL.field(DSL.raw("now()"), SQLDataType.LOCALDATETIME)), "")
 
-  private def this(alias: Name, aliased: Table[FilmCategoryRecord]) = this(alias, null, null, aliased, null)
+  private def this(alias: Name, aliased: Table[FilmCategoryRecord]) = this(alias, null, null, null, aliased, null, null)
+  private def this(alias: Name, aliased: Table[FilmCategoryRecord], where: Condition) = this(alias, null, null, null, aliased, null, where)
 
   /**
    * Create an aliased <code>public.film_category</code> table reference
@@ -100,9 +111,7 @@ extends TableImpl[FilmCategoryRecord](
    */
   def this() = this(DSL.name("film_category"), null)
 
-  def this(child: Table[_ <: Record], key: ForeignKey[_ <: Record, FilmCategoryRecord]) = this(Internal.createPathAlias(child, key), child, key, org.jooq.demo.skala.db.tables.FilmCategory.FILM_CATEGORY, null)
-
-  override def getSchema: Schema = if (aliased()) null else Public.PUBLIC
+  override def getSchema: Schema = if (super.aliased()) null else Public.PUBLIC
 
   override def getPrimaryKey: UniqueKey[FilmCategoryRecord] = Keys.FILM_CATEGORY_PKEY
 
@@ -111,12 +120,12 @@ extends TableImpl[FilmCategoryRecord](
   /**
    * Get the implicit join path to the <code>public.film</code> table.
    */
-  lazy val film: Film = { new Film(this, Keys.FILM_CATEGORY__FILM_CATEGORY_FILM_ID_FKEY) }
+  lazy val film: FilmPath = { new FilmPath(this, Keys.FILM_CATEGORY__FILM_CATEGORY_FILM_ID_FKEY, null) }
 
   /**
    * Get the implicit join path to the <code>public.category</code> table.
    */
-  lazy val category: Category = { new Category(this, Keys.FILM_CATEGORY__FILM_CATEGORY_CATEGORY_ID_FKEY) }
+  lazy val category: CategoryPath = { new CategoryPath(this, Keys.FILM_CATEGORY__FILM_CATEGORY_CATEGORY_ID_FKEY, null) }
   override def as(alias: String): FilmCategory = new FilmCategory(DSL.name(alias), this)
   override def as(alias: Name): FilmCategory = new FilmCategory(alias, this)
   override def as(alias: Table[_]): FilmCategory = new FilmCategory(alias.getQualifiedName(), this)
@@ -136,19 +145,48 @@ extends TableImpl[FilmCategoryRecord](
    */
   override def rename(name: Table[_]): FilmCategory = new FilmCategory(name.getQualifiedName(), null)
 
-  // -------------------------------------------------------------------------
-  // Row3 type methods
-  // -------------------------------------------------------------------------
-  override def fieldsRow: Row3[Long, Long, LocalDateTime] = super.fieldsRow.asInstanceOf[ Row3[Long, Long, LocalDateTime] ]
+  /**
+   * Create an inline derived table from this table
+   */
+  override def where(condition: Condition): FilmCategory = new FilmCategory(getQualifiedName(), if (super.aliased()) this else null, condition)
 
   /**
-   * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+   * Create an inline derived table from this table
    */
-  def mapping[U](from: (Long, Long, LocalDateTime) => U): SelectField[U] = convertFrom(r => from.apply(r.value1(), r.value2(), r.value3()))
+  override def where(conditions: Collection[_ <: Condition]): FilmCategory = where(DSL.and(conditions))
 
   /**
-   * Convenience mapping calling {@link SelectField#convertFrom(Class,
-   * Function)}.
+   * Create an inline derived table from this table
    */
-  def mapping[U](toType: Class[U], from: (Long, Long, LocalDateTime) => U): SelectField[U] = convertFrom(toType,r => from.apply(r.value1(), r.value2(), r.value3()))
+  override def where(conditions: Condition*): FilmCategory = where(DSL.and(conditions:_*))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  override def where(condition: Field[Boolean]): FilmCategory = where(DSL.condition(condition))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  @PlainSQL override def where(condition: SQL): FilmCategory = where(DSL.condition(condition))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  @PlainSQL override def where(@Stringly.SQL condition: String): FilmCategory = where(DSL.condition(condition))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): FilmCategory = where(DSL.condition(condition, binds:_*))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  override def whereExists(select: Select[_]): FilmCategory = where(DSL.exists(select))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  override def whereNotExists(select: Select[_]): FilmCategory = where(DSL.notExists(select))
 }

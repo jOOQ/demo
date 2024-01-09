@@ -4,25 +4,29 @@
 package org.jooq.demo.skala.db.tables
 
 
+import java.lang.Boolean
 import java.lang.Class
 import java.lang.String
 import java.math.BigDecimal
-import java.util.function.Function
+import java.util.Collection
 
+import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
+import org.jooq.InverseForeignKey
 import org.jooq.Name
+import org.jooq.PlainSQL
 import org.jooq.Record
-import org.jooq.Row3
+import org.jooq.SQL
 import org.jooq.Schema
-import org.jooq.SelectField
+import org.jooq.Select
+import org.jooq.Stringly
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
 import org.jooq.demo.skala.db.Public
 import org.jooq.demo.skala.db.tables.records.SalesByStoreRecord
 import org.jooq.impl.DSL
-import org.jooq.impl.Internal
 import org.jooq.impl.SQLDataType
 import org.jooq.impl.TableImpl
 
@@ -42,16 +46,19 @@ object SalesByStore {
  */
 class SalesByStore(
   alias: Name,
-  child: Table[_ <: Record],
-  path: ForeignKey[_ <: Record, SalesByStoreRecord],
+  path: Table[_ <: Record],
+  childPath: ForeignKey[_ <: Record, SalesByStoreRecord],
+  parentPath: InverseForeignKey[_ <: Record, SalesByStoreRecord],
   aliased: Table[SalesByStoreRecord],
-  parameters: Array[ Field[_] ]
+  parameters: Array[ Field[_] ],
+  where: Condition
 )
 extends TableImpl[SalesByStoreRecord](
   alias,
   Public.PUBLIC,
-  child,
   path,
+  childPath,
+  parentPath,
   aliased,
   parameters,
   DSL.comment(""),
@@ -69,7 +76,8 @@ extends TableImpl[SalesByStoreRecord](
      JOIN staff m ON ((s.manager_staff_id = m.staff_id)))
   GROUP BY cy.country, c.city, s.store_id, m.first_name, m.last_name
   ORDER BY cy.country, c.city;
-  """)
+  """),
+  where
 ) {
 
   /**
@@ -92,7 +100,8 @@ extends TableImpl[SalesByStoreRecord](
    */
   val TOTAL_SALES: TableField[SalesByStoreRecord, BigDecimal] = createField(DSL.name("total_sales"), SQLDataType.NUMERIC, "")
 
-  private def this(alias: Name, aliased: Table[SalesByStoreRecord]) = this(alias, null, null, aliased, null)
+  private def this(alias: Name, aliased: Table[SalesByStoreRecord]) = this(alias, null, null, null, aliased, null, null)
+  private def this(alias: Name, aliased: Table[SalesByStoreRecord], where: Condition) = this(alias, null, null, null, aliased, null, where)
 
   /**
    * Create an aliased <code>public.sales_by_store</code> table reference
@@ -109,9 +118,7 @@ extends TableImpl[SalesByStoreRecord](
    */
   def this() = this(DSL.name("sales_by_store"), null)
 
-  def this(child: Table[_ <: Record], key: ForeignKey[_ <: Record, SalesByStoreRecord]) = this(Internal.createPathAlias(child, key), child, key, org.jooq.demo.skala.db.tables.SalesByStore.SALES_BY_STORE, null)
-
-  override def getSchema: Schema = if (aliased()) null else Public.PUBLIC
+  override def getSchema: Schema = if (super.aliased()) null else Public.PUBLIC
   override def as(alias: String): SalesByStore = new SalesByStore(DSL.name(alias), this)
   override def as(alias: Name): SalesByStore = new SalesByStore(alias, this)
   override def as(alias: Table[_]): SalesByStore = new SalesByStore(alias.getQualifiedName(), this)
@@ -131,19 +138,48 @@ extends TableImpl[SalesByStoreRecord](
    */
   override def rename(name: Table[_]): SalesByStore = new SalesByStore(name.getQualifiedName(), null)
 
-  // -------------------------------------------------------------------------
-  // Row3 type methods
-  // -------------------------------------------------------------------------
-  override def fieldsRow: Row3[String, String, BigDecimal] = super.fieldsRow.asInstanceOf[ Row3[String, String, BigDecimal] ]
+  /**
+   * Create an inline derived table from this table
+   */
+  override def where(condition: Condition): SalesByStore = new SalesByStore(getQualifiedName(), if (super.aliased()) this else null, condition)
 
   /**
-   * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+   * Create an inline derived table from this table
    */
-  def mapping[U](from: (String, String, BigDecimal) => U): SelectField[U] = convertFrom(r => from.apply(r.value1(), r.value2(), r.value3()))
+  override def where(conditions: Collection[_ <: Condition]): SalesByStore = where(DSL.and(conditions))
 
   /**
-   * Convenience mapping calling {@link SelectField#convertFrom(Class,
-   * Function)}.
+   * Create an inline derived table from this table
    */
-  def mapping[U](toType: Class[U], from: (String, String, BigDecimal) => U): SelectField[U] = convertFrom(toType,r => from.apply(r.value1(), r.value2(), r.value3()))
+  override def where(conditions: Condition*): SalesByStore = where(DSL.and(conditions:_*))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  override def where(condition: Field[Boolean]): SalesByStore = where(DSL.condition(condition))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  @PlainSQL override def where(condition: SQL): SalesByStore = where(DSL.condition(condition))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  @PlainSQL override def where(@Stringly.SQL condition: String): SalesByStore = where(DSL.condition(condition))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): SalesByStore = where(DSL.condition(condition, binds:_*))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  override def whereExists(select: Select[_]): SalesByStore = where(DSL.exists(select))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  override def whereNotExists(select: Select[_]): SalesByStore = where(DSL.notExists(select))
 }

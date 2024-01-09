@@ -4,23 +4,29 @@
 package org.jooq.demo.skala.db.tables
 
 
+import java.lang.Boolean
 import java.lang.Class
 import java.lang.Long
 import java.lang.String
 import java.time.LocalDateTime
 import java.util.Arrays
+import java.util.Collection
 import java.util.List
-import java.util.function.Function
 
+import org.jooq.Condition
 import org.jooq.Field
 import org.jooq.ForeignKey
 import org.jooq.Identity
 import org.jooq.Index
+import org.jooq.InverseForeignKey
 import org.jooq.Name
+import org.jooq.Path
+import org.jooq.PlainSQL
 import org.jooq.Record
-import org.jooq.Row4
+import org.jooq.SQL
 import org.jooq.Schema
-import org.jooq.SelectField
+import org.jooq.Select
+import org.jooq.Stringly
 import org.jooq.Table
 import org.jooq.TableField
 import org.jooq.TableOptions
@@ -28,6 +34,8 @@ import org.jooq.UniqueKey
 import org.jooq.demo.skala.db.Indexes
 import org.jooq.demo.skala.db.Keys
 import org.jooq.demo.skala.db.Public
+import org.jooq.demo.skala.db.tables.Film.FilmPath
+import org.jooq.demo.skala.db.tables.Store.StorePath
 import org.jooq.demo.skala.db.tables.records.InventoryRecord
 import org.jooq.impl.DSL
 import org.jooq.impl.Internal
@@ -43,6 +51,11 @@ object Inventory {
    * The reference instance of <code>public.inventory</code>
    */
   val INVENTORY = new Inventory
+
+  /**
+   * A subtype implementing {@link Path} for simplified path-based joins.
+   */
+  class InventoryPath(path: Table[_ <: Record], childPath: ForeignKey[_ <: Record, InventoryRecord], parentPath: InverseForeignKey[_ <: Record, InventoryRecord]) extends Inventory(path, childPath, parentPath) with Path[InventoryRecord]
 }
 
 /**
@@ -50,20 +63,24 @@ object Inventory {
  */
 class Inventory(
   alias: Name,
-  child: Table[_ <: Record],
-  path: ForeignKey[_ <: Record, InventoryRecord],
+  path: Table[_ <: Record],
+  childPath: ForeignKey[_ <: Record, InventoryRecord],
+  parentPath: InverseForeignKey[_ <: Record, InventoryRecord],
   aliased: Table[InventoryRecord],
-  parameters: Array[ Field[_] ]
+  parameters: Array[ Field[_] ],
+  where: Condition
 )
 extends TableImpl[InventoryRecord](
   alias,
   Public.PUBLIC,
-  child,
   path,
+  childPath,
+  parentPath,
   aliased,
   parameters,
   DSL.comment(""),
-  TableOptions.table
+  TableOptions.table,
+  where
 ) {
 
   /**
@@ -91,7 +108,8 @@ extends TableImpl[InventoryRecord](
    */
   val LAST_UPDATE: TableField[InventoryRecord, LocalDateTime] = createField(DSL.name("last_update"), SQLDataType.LOCALDATETIME(6).nullable(false).readonly(true).defaultValue(DSL.field(DSL.raw("now()"), SQLDataType.LOCALDATETIME)), "")
 
-  private def this(alias: Name, aliased: Table[InventoryRecord]) = this(alias, null, null, aliased, null)
+  private def this(alias: Name, aliased: Table[InventoryRecord]) = this(alias, null, null, null, aliased, null, null)
+  private def this(alias: Name, aliased: Table[InventoryRecord], where: Condition) = this(alias, null, null, null, aliased, null, where)
 
   /**
    * Create an aliased <code>public.inventory</code> table reference
@@ -108,9 +126,9 @@ extends TableImpl[InventoryRecord](
    */
   def this() = this(DSL.name("inventory"), null)
 
-  def this(child: Table[_ <: Record], key: ForeignKey[_ <: Record, InventoryRecord]) = this(Internal.createPathAlias(child, key), child, key, org.jooq.demo.skala.db.tables.Inventory.INVENTORY, null)
+  def this(path: Table[_ <: Record], childPath: ForeignKey[_ <: Record, InventoryRecord], parentPath: InverseForeignKey[_ <: Record, InventoryRecord]) = this(Internal.createPathAlias(path, childPath, parentPath), path, childPath, parentPath, org.jooq.demo.skala.db.tables.Inventory.INVENTORY, null, null)
 
-  override def getSchema: Schema = if (aliased()) null else Public.PUBLIC
+  override def getSchema: Schema = if (super.aliased()) null else Public.PUBLIC
 
   override def getIndexes: List[Index] = Arrays.asList[ Index ](Indexes.IDX_STORE_ID_FILM_ID)
 
@@ -123,12 +141,12 @@ extends TableImpl[InventoryRecord](
   /**
    * Get the implicit join path to the <code>public.film</code> table.
    */
-  lazy val film: Film = { new Film(this, Keys.INVENTORY__INVENTORY_FILM_ID_FKEY) }
+  lazy val film: FilmPath = { new FilmPath(this, Keys.INVENTORY__INVENTORY_FILM_ID_FKEY, null) }
 
   /**
    * Get the implicit join path to the <code>public.store</code> table.
    */
-  lazy val store: Store = { new Store(this, Keys.INVENTORY__INVENTORY_STORE_ID_FKEY) }
+  lazy val store: StorePath = { new StorePath(this, Keys.INVENTORY__INVENTORY_STORE_ID_FKEY, null) }
   override def as(alias: String): Inventory = new Inventory(DSL.name(alias), this)
   override def as(alias: Name): Inventory = new Inventory(alias, this)
   override def as(alias: Table[_]): Inventory = new Inventory(alias.getQualifiedName(), this)
@@ -148,19 +166,48 @@ extends TableImpl[InventoryRecord](
    */
   override def rename(name: Table[_]): Inventory = new Inventory(name.getQualifiedName(), null)
 
-  // -------------------------------------------------------------------------
-  // Row4 type methods
-  // -------------------------------------------------------------------------
-  override def fieldsRow: Row4[Long, Long, Long, LocalDateTime] = super.fieldsRow.asInstanceOf[ Row4[Long, Long, Long, LocalDateTime] ]
+  /**
+   * Create an inline derived table from this table
+   */
+  override def where(condition: Condition): Inventory = new Inventory(getQualifiedName(), if (super.aliased()) this else null, condition)
 
   /**
-   * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
+   * Create an inline derived table from this table
    */
-  def mapping[U](from: (Long, Long, Long, LocalDateTime) => U): SelectField[U] = convertFrom(r => from.apply(r.value1(), r.value2(), r.value3(), r.value4()))
+  override def where(conditions: Collection[_ <: Condition]): Inventory = where(DSL.and(conditions))
 
   /**
-   * Convenience mapping calling {@link SelectField#convertFrom(Class,
-   * Function)}.
+   * Create an inline derived table from this table
    */
-  def mapping[U](toType: Class[U], from: (Long, Long, Long, LocalDateTime) => U): SelectField[U] = convertFrom(toType,r => from.apply(r.value1(), r.value2(), r.value3(), r.value4()))
+  override def where(conditions: Condition*): Inventory = where(DSL.and(conditions:_*))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  override def where(condition: Field[Boolean]): Inventory = where(DSL.condition(condition))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  @PlainSQL override def where(condition: SQL): Inventory = where(DSL.condition(condition))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  @PlainSQL override def where(@Stringly.SQL condition: String): Inventory = where(DSL.condition(condition))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): Inventory = where(DSL.condition(condition, binds:_*))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  override def whereExists(select: Select[_]): Inventory = where(DSL.exists(select))
+
+  /**
+   * Create an inline derived table from this table
+   */
+  override def whereNotExists(select: Select[_]): Inventory = where(DSL.notExists(select))
 }
