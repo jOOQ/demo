@@ -7,8 +7,18 @@ import org.junit.Test
 import java.sql.SQLException
 
 class Demo04DML : AbstractDemo() {
+
     @Test
     fun updatableRecords() {
+        // As seen previous in the querying demo, UpdatableRecords can be fetched using the special selectFrom() method,
+        // which projects an entire table. It's also possible to nest a table to get multiple nested UpdatableRecords
+        // in a single query.
+
+        // Such records can be modified for an update, or new records can be created for an insert.
+
+        // The goal of these UpdatableRecords isn't to implement a full fledged ORM with object graph persistence
+        // capabilities. They only offer simple 1:1 table mappings with a few useful CRUD features.
+
         title("By default, every table has a corresponding TableRecord or UpdatableRecord, which work like active records")
         with(ctx.newRecord(ACTOR)) {
             actorId = 201L
@@ -28,10 +38,15 @@ class Demo04DML : AbstractDemo() {
             lastName = "Smith"
             store()
         }
+
+        // More information here:
+        // - https://www.jooq.org/doc/latest/manual/sql-execution/crud-with-updatablerecords/
     }
 
     @Test
     fun dml() {
+        // In addition to simple CRUD, any bulk DML statement can be executed with jOOQ as well
+
         title("All sorts of classic bulk DML statements are available")
         ctx.insertInto(ACTOR)
             .columns(ACTOR.ACTOR_ID, ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
@@ -42,6 +57,13 @@ class Demo04DML : AbstractDemo() {
             .set(ACTOR.LAST_NAME, "X")
             .where(ACTOR.ACTOR_ID.gt(200L))
             .execute()
+
+        // More information here:
+        // - https://www.jooq.org/doc/latest/manual/sql-building/sql-statements/
+        // - https://www.jooq.org/doc/latest/manual/sql-building/sql-statements/insert-statement/
+        // - https://www.jooq.org/doc/latest/manual/sql-building/sql-statements/update-statement/
+        // - https://www.jooq.org/doc/latest/manual/sql-building/sql-statements/delete-statement/
+        // - https://www.jooq.org/doc/latest/manual/sql-building/sql-statements/merge-statement/
     }
 
     @After
