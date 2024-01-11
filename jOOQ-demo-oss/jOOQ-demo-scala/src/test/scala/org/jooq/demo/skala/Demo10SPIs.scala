@@ -25,9 +25,14 @@ class Demo10SPIs extends AbstractDemo {
       .from(ACTOR)
       .where(ACTOR.ACTOR_ID < 4L)
       .fetch
+
+    // More information here:
+    // https://www.jooq.org/doc/latest/manual/sql-building/dsl-context/custom-execute-listeners/
+    // https://www.jooq.org/doc/latest/manual/sql-execution/execute-listeners/
   }
 
-  @Test def visitListener(): Unit = {
+  @Test
+  def visitListener(): Unit = {
     title("The VisitListener SPI allows for intercepting the SQL rendering process")
     val c = ctx.configuration
       .derive(VisitListener.onVisitStart(vc => println("Visiting: " + using(ctx.family).render(vc.queryPart))))
@@ -37,6 +42,9 @@ class Demo10SPIs extends AbstractDemo {
       .from(ACTOR)
       .where(ACTOR.ACTOR_ID < 4L)
       .fetch
+
+    // More information here:
+    // https://www.jooq.org/doc/latest/manual/sql-building/queryparts/custom-sql-transformation/
   }
   // There are many more SPIs, check out Configuration::derive methods!
 }

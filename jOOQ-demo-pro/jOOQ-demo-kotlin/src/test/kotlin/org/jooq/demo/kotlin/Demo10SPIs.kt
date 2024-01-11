@@ -23,6 +23,10 @@ class Demo10SPIs : AbstractDemo() {
             .from(ACTOR)
             .where(ACTOR.ACTOR_ID.lt(4L))
             .fetch()
+
+        // More information here:
+        // https://www.jooq.org/doc/latest/manual/sql-building/dsl-context/custom-execute-listeners/
+        // https://www.jooq.org/doc/latest/manual/sql-execution/execute-listeners/
     }
 
     @Test
@@ -36,6 +40,9 @@ class Demo10SPIs : AbstractDemo() {
             .from(ACTOR)
             .where(ACTOR.ACTOR_ID.lt(4L))
             .fetch()
+
+        // More information here:
+        // https://www.jooq.org/doc/latest/manual/sql-building/queryparts/custom-sql-transformation/
     }
 
     // There are many more SPIs, check out Configuration::derive methods!
