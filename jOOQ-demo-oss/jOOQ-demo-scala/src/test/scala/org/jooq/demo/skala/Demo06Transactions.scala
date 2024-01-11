@@ -12,6 +12,9 @@ import java.sql.Connection
 
 class Demo06Transactions extends AbstractDemo {
 
+  // More information here:
+  // https://www.jooq.org/doc/latest/manual/sql-execution/transaction-management/
+
   @Test
   def transactionCommit(): Unit = {
     title("jOOQ transactions are explicit using lambdas")

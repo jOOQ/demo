@@ -8,6 +8,9 @@ import org.junit.Test
 
 class Demo06Transactions : AbstractDemo() {
 
+    // More information here:
+    // https://www.jooq.org/doc/latest/manual/sql-execution/transaction-management/
+
     @Test
     fun transactionCommit() {
         title("jOOQ transactions are explicit using lambdas")

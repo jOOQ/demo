@@ -11,6 +11,9 @@ import static org.jooq.demo.java.db.Tables.ACTOR;
 
 public class Demo06Transactions extends AbstractDemo {
 
+    // More information here:
+    // https://www.jooq.org/doc/latest/manual/sql-execution/transaction-management/
+
     @Test
     public void transactionCommit() {
         title("jOOQ transactions are explicit using lambdas");
