@@ -32,79 +32,102 @@ class Demo11QueryObjectModel : AbstractDemo() {
 
         title("The old query is untouched:")
         println(select)
-    }
 
+        // More information here:
+        // - https://www.jooq.org/doc/latest/manual/sql-building/model-api/
+    }
 
     @Test
     fun traversal() {
         title("The query object model (QOM) can be traversed easily")
-        val select = ctx
-            .select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
-            .from(ACTOR)
-            .where(ACTOR.ACTOR_ID.lt(4L))
 
-        println("All column expressions: " + select.`$traverse`(Traversers.findingAll { p -> p is Field<*> }))
-        println("All bind values: " + select.`$traverse`(Traversers.findingAll { p -> p is Param<*> }))
+        // This is a commercial only feature. Check out the commercial demo for details
 
-        title("Any JDK Collector can be turned into a Traverser, too, e.g. collecting to a list")
-        select.`$traverse`(Traversers.collecting(toList())).forEach { println(it) }
+//
+//        val select = ctx
+//            .select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
+//            .from(ACTOR)
+//            .where(ACTOR.ACTOR_ID.lt(4L))
+//
+//        println("All column expressions: " + select.`$traverse`(Traversers.findingAll { p -> p is Field<*> }))
+//        println("All bind values: " + select.`$traverse`(Traversers.findingAll { p -> p is Param<*> }))
+//
+//        title("Any JDK Collector can be turned into a Traverser, too, e.g. collecting to a list")
+//        select.`$traverse`(Traversers.collecting(toList())).forEach { println(it) }
+//
+//        title("Or grouping query parts by type")
+//        select.`$traverse`(Traversers.collecting(groupingBy( { it.javaClass }, toList()))).forEach { (type, parts) ->
+//            println("")
+//            println("Type: $type")
+//            println("Parts:")
+//            parts.forEach { println("  $it") }
+//        }
+//
+//
 
-        title("Or grouping query parts by type")
-        select.`$traverse`(Traversers.collecting(groupingBy( { it.javaClass }, toList()))).forEach { (type, parts) ->
-            println("")
-            println("Type: $type")
-            println("Parts:")
-            parts.forEach { println("  $it") }
-        }
+        // More information here:
+        // - https://www.jooq.org/doc/latest/manual/sql-building/model-api/model-api-traversal/
     }
 
     @Test
     fun replacement() {
         title("The query object model (QOM) can be transformed easily");
-        var select1 = ctx
-            .select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
-            .from(ACTOR)
-            .where(ACTOR.ACTOR_ID.lt(4L))
 
-        title("Replacing bind values")
-        println(select1.`$replace` { p -> if (p is Param<*>) value(5) else p })
+        // This is a commercial only feature. Check out the commercial demo for details
 
-        title("Inverting the < predicate")
-        println(select1.`$replace`{ p -> if (p is QOM.Lt<*>) p.`$converse`() else p })
+//
+//        var select1 = ctx
+//            .select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
+//            .from(ACTOR)
+//            .where(ACTOR.ACTOR_ID.lt(4L))
+//
+//        title("Replacing bind values")
+//        println(select1.`$replace` { p -> if (p is Param<*>) value(5) else p })
+//
+//        title("Inverting the < predicate")
+//        println(select1.`$replace`{ p -> if (p is QOM.Lt<*>) p.`$converse`() else p })
+//
+//        title("Appending a predicate");
+//        println(select1.`$replace`(appendSecurityCheck()))
+//
+//        title("Appending a predicate even to subqueries")
+//        var select2 = ctx
+//            .select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
+//            .from(ACTOR)
+//            .where(ACTOR.ACTOR_ID.lt(
+//                select(max(ACTOR.ACTOR_ID)).from(ACTOR))
+//            )
+//        println(select2.`$replace`(appendSecurityCheck()))
+//
+//
 
-        title("Appending a predicate");
-        println(select1.`$replace`(appendSecurityCheck()))
-
-        title("Appending a predicate even to subqueries")
-        var select2 = ctx
-            .select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
-            .from(ACTOR)
-            .where(ACTOR.ACTOR_ID.lt(
-                select(max(ACTOR.ACTOR_ID)).from(ACTOR))
-            )
-        println(select2.`$replace`(appendSecurityCheck()))
+        // More information here:
+        // https://www.jooq.org/doc/latest/manual/sql-building/model-api/model-api-replacement/
     }
 
-    private fun appendSecurityCheck(): (p: QueryPart) -> QueryPart {
-        return { p ->
-            val c = condition("security_check()")
 
-            // Beware of performance and infinite recursions, though!
-            if (p is Select<*>)
-
-                // Append the predicate if there is no predicate
-                if (p.`$where`() == null)
-                    p.`$where`(c)
-
-                // If there's already a predicate, check if the predicate contains the predicate already (don't recurse into subqueries)
-                else if (!p.`$where`()!!.`$traverse`(Traversers.recursing({ q -> !(q is Select<*>)}, Traversers.containing(c)) ))
-                    p.`$where`(and(p.`$where`(), c))
-
-                else
-                    p
-            else
-                p
-        }
-    }
-
+//
+//    private fun appendSecurityCheck(): (p: QueryPart) -> QueryPart {
+//        return { p ->
+//            val c = condition("security_check()")
+//
+//            // Beware of performance and infinite recursions, though!
+//            if (p is Select<*>)
+//
+//                // Append the predicate if there is no predicate
+//                if (p.`$where`() == null)
+//                    p.`$where`(c)
+//
+//                // If there's already a predicate, check if the predicate contains the predicate already (don't recurse into subqueries)
+//                else if (!p.`$where`()!!.`$traverse`(Traversers.recursing({ q -> !(q is Select<*>)}, Traversers.containing(c)) ))
+//                    p.`$where`(and(p.`$where`(), c))
+//
+//                else
+//                    p
+//            else
+//                p
+//        }
+//    }
+//
+//
 }

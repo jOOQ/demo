@@ -37,6 +37,9 @@ class Demo11QueryObjectModel extends AbstractDemo {
 
     title("The old query is untouched:")
     println(select)
+
+    // More information here:
+    // - https://www.jooq.org/doc/latest/manual/sql-building/model-api/
   }
 
   @Test
@@ -68,6 +71,9 @@ class Demo11QueryObjectModel extends AbstractDemo {
 //        parts.forEach(part => println("  " + part))
 //      })
 //
+
+    // More information here:
+    // - https://www.jooq.org/doc/latest/manual/sql-building/model-api/model-api-traversal/
   }
 
   @Test 
@@ -107,6 +113,9 @@ class Demo11QueryObjectModel extends AbstractDemo {
 //      ))
 //    println(select2.$replace(appendSecurityCheck))
 //
+
+    // More information here:
+    // https://www.jooq.org/doc/latest/manual/sql-building/model-api/model-api-replacement/
   }
 
 

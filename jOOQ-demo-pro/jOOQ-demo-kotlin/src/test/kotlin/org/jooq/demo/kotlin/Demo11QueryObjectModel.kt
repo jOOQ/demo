@@ -32,12 +32,18 @@ class Demo11QueryObjectModel : AbstractDemo() {
 
         title("The old query is untouched:")
         println(select)
-    }
 
+        // More information here:
+        // - https://www.jooq.org/doc/latest/manual/sql-building/model-api/
+    }
 
     @Test
     fun traversal() {
         title("The query object model (QOM) can be traversed easily")
+
+        // This is a commercial only feature. Check out the commercial demo for details
+        /* [pro] */
+
         val select = ctx
             .select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
             .from(ACTOR)
@@ -56,11 +62,20 @@ class Demo11QueryObjectModel : AbstractDemo() {
             println("Parts:")
             parts.forEach { println("  $it") }
         }
+
+        /* [/pro] */
+
+        // More information here:
+        // - https://www.jooq.org/doc/latest/manual/sql-building/model-api/model-api-traversal/
     }
 
     @Test
     fun replacement() {
         title("The query object model (QOM) can be transformed easily");
+
+        // This is a commercial only feature. Check out the commercial demo for details
+        /* [pro] */
+
         var select1 = ctx
             .select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
             .from(ACTOR)
@@ -83,7 +98,14 @@ class Demo11QueryObjectModel : AbstractDemo() {
                 select(max(ACTOR.ACTOR_ID)).from(ACTOR))
             )
         println(select2.`$replace`(appendSecurityCheck()))
+
+        /* [/pro] */
+
+        // More information here:
+        // https://www.jooq.org/doc/latest/manual/sql-building/model-api/model-api-replacement/
     }
+
+    /* [pro] */
 
     private fun appendSecurityCheck(): (p: QueryPart) -> QueryPart {
         return { p ->
@@ -107,4 +129,5 @@ class Demo11QueryObjectModel : AbstractDemo() {
         }
     }
 
+    /* [/pro] */
 }
