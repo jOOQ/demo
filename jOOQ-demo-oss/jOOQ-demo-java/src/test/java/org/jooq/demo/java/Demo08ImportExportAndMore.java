@@ -52,6 +52,11 @@ public class Demo08ImportExportAndMore extends AbstractDemo {
 
         title("Exporting data to CSV content");
         println(ctx.fetch(ACTOR, ACTOR.ACTOR_ID.gt(200L)).formatCSV());
+
+        // More information here:
+        // https://www.jooq.org/doc/latest/manual/sql-execution/exporting/exporting-csv/
+        // https://www.jooq.org/doc/latest/manual/sql-execution/importing/
+        // https://www.jooq.org/doc/latest/manual/sql-execution/importing/importing-sources/importing-source-csv/
     }
 
     @Test
@@ -78,6 +83,11 @@ public class Demo08ImportExportAndMore extends AbstractDemo {
            .execute();
 
         println(ctx.fetch(ACTOR, ACTOR.ACTOR_ID.gt(200L)).formatJSON(JSONFormat.DEFAULT_FOR_RESULTS.header(false).format(true)));
+
+        // More information here:
+        // https://www.jooq.org/doc/latest/manual/sql-execution/exporting/exporting-json/
+        // https://www.jooq.org/doc/latest/manual/sql-execution/importing/
+        // https://www.jooq.org/doc/latest/manual/sql-execution/importing/importing-sources/importing-source-json/
     }
 
     @Test
@@ -100,6 +110,11 @@ public class Demo08ImportExportAndMore extends AbstractDemo {
            .fields(ACTOR.ACTOR_ID, ACTOR.LAST_NAME, ACTOR.FIRST_NAME)
            .execute();
         println(ctx.fetch(ACTOR, ACTOR.ACTOR_ID.gt(200L)));
+
+        // More information here:
+        // https://www.jooq.org/doc/latest/manual/sql-execution/importing/
+        // https://www.jooq.org/doc/latest/manual/sql-execution/importing/importing-sources/importing-source-records/
+        // https://www.jooq.org/doc/latest/manual/sql-execution/importing/importing-sources/importing-source-arrays/
     }
 
     @Test
@@ -116,6 +131,9 @@ public class Demo08ImportExportAndMore extends AbstractDemo {
 
         title("VALUE_ELEMENTS record format");
         println(result.formatXML(xmlformat.recordFormat(XMLFormat.RecordFormat.VALUE_ELEMENTS)));
+
+        // More information here:
+        // https://www.jooq.org/doc/latest/manual/sql-execution/exporting/exporting-xml/
     }
 
     @Test
@@ -133,12 +151,18 @@ public class Demo08ImportExportAndMore extends AbstractDemo {
             .verticalTableBorder(false)
             .minColWidth(20)
         ));
+
+        // More information here:
+        // https://www.jooq.org/doc/latest/manual/sql-execution/exporting/exporting-text/
     }
 
     @Test
     public void exportHTML() {
         title("Could be good enough");
         println(ctx.fetch(ACTOR, ACTOR.ACTOR_ID.lt(4L)).formatHTML());
+
+        // More information here:
+        // https://www.jooq.org/doc/latest/manual/sql-execution/exporting/exporting-html/
     }
 
     @Test
@@ -167,6 +191,9 @@ public class Demo08ImportExportAndMore extends AbstractDemo {
             .fetch()
             .formatChart(ChartFormat.DEFAULT.values(1, 2).display(ChartFormat.Display.STACKED))
         );
+
+        // More information here:
+        // https://www.jooq.org/doc/latest/manual/sql-execution/exporting/exporting-charts/
     }
 
     @After
