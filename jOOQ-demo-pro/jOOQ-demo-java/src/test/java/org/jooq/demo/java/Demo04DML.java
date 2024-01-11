@@ -59,14 +59,14 @@ public class Demo04DML extends AbstractDemo {
         ctx.update(ACTOR)
            .set(ACTOR.LAST_NAME, "X")
            .where(ACTOR.ACTOR_ID.gt(200L))
-           .execute();
+               .execute();
 
-        // More information here:
-        // - https://www.jooq.org/doc/latest/manual/sql-building/sql-statements/
-        // - https://www.jooq.org/doc/latest/manual/sql-building/sql-statements/insert-statement/
-        // - https://www.jooq.org/doc/latest/manual/sql-building/sql-statements/update-statement/
-        // - https://www.jooq.org/doc/latest/manual/sql-building/sql-statements/delete-statement/
-        // - https://www.jooq.org/doc/latest/manual/sql-building/sql-statements/merge-statement/
+            // More information here:
+            // - https://www.jooq.org/doc/latest/manual/sql-building/sql-statements/
+            // - https://www.jooq.org/doc/latest/manual/sql-building/sql-statements/insert-statement/
+            // - https://www.jooq.org/doc/latest/manual/sql-building/sql-statements/update-statement/
+            // - https://www.jooq.org/doc/latest/manual/sql-building/sql-statements/delete-statement/
+            // - https://www.jooq.org/doc/latest/manual/sql-building/sql-statements/merge-statement/
     }
 
     @After
