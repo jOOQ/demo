@@ -15,6 +15,10 @@ public class Demo13Reactive extends AbstractDemo {
 
     @Test
     public void reactiveQuerying() {
+        // If you configure jOOQ with an R2DBC connection as in this demo, then you can use jOOQ's reactive APIs via
+        // its various Publisher implementations. For example, a ResultQuery<R> is a Publisher<R>, and can be used with
+        // any RS compliant streaming library, such as Reactor, below:
+
         record Actor(String firstName, String lastName) {}
 
         Flux.from(ctx
@@ -26,6 +30,9 @@ public class Demo13Reactive extends AbstractDemo {
             .collectList()
             .block()
             .forEach(System.out::println);
+
+        // More information here:
+        // https://www.jooq.org/doc/latest/manual/sql-execution/fetching/reactive-fetching/
     }
 
     @Test
@@ -64,6 +71,9 @@ public class Demo13Reactive extends AbstractDemo {
             .collectList()
             .block()
             .forEach(System.out::println);
+
+        // More information here:
+        // https://www.jooq.org/doc/latest/manual/sql-execution/transaction-management/
     }
 
     @After

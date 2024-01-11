@@ -18,6 +18,10 @@ class Demo13Reactive : AbstractDemo() {
 
     @Test
     fun reactiveQuerying() {
+        // If you configure jOOQ with an R2DBC connection as in this demo, then you can use jOOQ's reactive APIs via
+        // its various Publisher implementations. For example, a ResultQuery<R> is a Publisher<R>, and can be used with
+        // any RS compliant streaming library, such as Reactor, below:
+
         data class Actor(val firstName: String?, val lastName: String?)
 
         Flux.from(ctx
@@ -28,6 +32,9 @@ class Demo13Reactive : AbstractDemo() {
             .map(mapping(::Actor))
             .toIterable()
             .forEach { println(it) }
+
+        // More information here:
+        // https://www.jooq.org/doc/latest/manual/sql-execution/fetching/reactive-fetching/
     }
 
     @Test
@@ -69,6 +76,9 @@ class Demo13Reactive : AbstractDemo() {
                 .where(ACTOR.ACTOR_ID.eq(201L)))
             .toIterable()
             .forEach { println(it) }
+
+        // More information here:
+        // https://www.jooq.org/doc/latest/manual/sql-execution/transaction-management/
     }
 
     @Test
