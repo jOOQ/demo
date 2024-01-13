@@ -90,7 +90,7 @@ open class SalesByFilmCategory(
 
     private constructor(alias: Name, aliased: Table<SalesByFilmCategoryRecord>?): this(alias, null, null, null, aliased, null, null)
     private constructor(alias: Name, aliased: Table<SalesByFilmCategoryRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, null, aliased, parameters, null)
-    private constructor(alias: Name, aliased: Table<SalesByFilmCategoryRecord>?, where: Condition): this(alias, null, null, null, aliased, null, where)
+    private constructor(alias: Name, aliased: Table<SalesByFilmCategoryRecord>?, where: Condition?): this(alias, null, null, null, aliased, null, where)
 
     /**
      * Create an aliased <code>public.sales_by_film_category</code> table
@@ -131,7 +131,7 @@ open class SalesByFilmCategory(
     /**
      * Create an inline derived table from this table
      */
-    override fun where(condition: Condition): SalesByFilmCategory = SalesByFilmCategory(qualifiedName, if (aliased()) this else null, condition)
+    override fun where(condition: Condition?): SalesByFilmCategory = SalesByFilmCategory(qualifiedName, if (aliased()) this else null, condition)
 
     /**
      * Create an inline derived table from this table
@@ -141,12 +141,12 @@ open class SalesByFilmCategory(
     /**
      * Create an inline derived table from this table
      */
-    override fun where(vararg conditions: Condition): SalesByFilmCategory = where(DSL.and(*conditions))
+    override fun where(vararg conditions: Condition?): SalesByFilmCategory = where(DSL.and(*conditions))
 
     /**
      * Create an inline derived table from this table
      */
-    override fun where(condition: Field<Boolean?>): SalesByFilmCategory = where(DSL.condition(condition))
+    override fun where(condition: Field<Boolean?>?): SalesByFilmCategory = where(DSL.condition(condition))
 
     /**
      * Create an inline derived table from this table

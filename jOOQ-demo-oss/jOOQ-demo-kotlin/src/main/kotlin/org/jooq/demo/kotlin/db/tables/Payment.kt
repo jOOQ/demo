@@ -115,7 +115,7 @@ open class Payment(
 
     private constructor(alias: Name, aliased: Table<PaymentRecord>?): this(alias, null, null, null, aliased, null, null)
     private constructor(alias: Name, aliased: Table<PaymentRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, null, aliased, parameters, null)
-    private constructor(alias: Name, aliased: Table<PaymentRecord>?, where: Condition): this(alias, null, null, null, aliased, null, where)
+    private constructor(alias: Name, aliased: Table<PaymentRecord>?, where: Condition?): this(alias, null, null, null, aliased, null, where)
 
     /**
      * Create an aliased <code>public.payment</code> table reference
@@ -216,7 +216,7 @@ open class Payment(
     /**
      * Create an inline derived table from this table
      */
-    override fun where(condition: Condition): Payment = Payment(qualifiedName, if (aliased()) this else null, condition)
+    override fun where(condition: Condition?): Payment = Payment(qualifiedName, if (aliased()) this else null, condition)
 
     /**
      * Create an inline derived table from this table
@@ -226,12 +226,12 @@ open class Payment(
     /**
      * Create an inline derived table from this table
      */
-    override fun where(vararg conditions: Condition): Payment = where(DSL.and(*conditions))
+    override fun where(vararg conditions: Condition?): Payment = where(DSL.and(*conditions))
 
     /**
      * Create an inline derived table from this table
      */
-    override fun where(condition: Field<Boolean?>): Payment = where(DSL.condition(condition))
+    override fun where(condition: Field<Boolean?>?): Payment = where(DSL.condition(condition))
 
     /**
      * Create an inline derived table from this table

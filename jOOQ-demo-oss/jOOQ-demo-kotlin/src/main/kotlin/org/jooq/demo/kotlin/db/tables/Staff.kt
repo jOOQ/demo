@@ -150,7 +150,7 @@ open class Staff(
 
     private constructor(alias: Name, aliased: Table<StaffRecord>?): this(alias, null, null, null, aliased, null, null)
     private constructor(alias: Name, aliased: Table<StaffRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, null, aliased, parameters, null)
-    private constructor(alias: Name, aliased: Table<StaffRecord>?, where: Condition): this(alias, null, null, null, aliased, null, where)
+    private constructor(alias: Name, aliased: Table<StaffRecord>?, where: Condition?): this(alias, null, null, null, aliased, null, where)
 
     /**
      * Create an aliased <code>public.staff</code> table reference
@@ -363,7 +363,7 @@ open class Staff(
     /**
      * Create an inline derived table from this table
      */
-    override fun where(condition: Condition): Staff = Staff(qualifiedName, if (aliased()) this else null, condition)
+    override fun where(condition: Condition?): Staff = Staff(qualifiedName, if (aliased()) this else null, condition)
 
     /**
      * Create an inline derived table from this table
@@ -373,12 +373,12 @@ open class Staff(
     /**
      * Create an inline derived table from this table
      */
-    override fun where(vararg conditions: Condition): Staff = where(DSL.and(*conditions))
+    override fun where(vararg conditions: Condition?): Staff = where(DSL.and(*conditions))
 
     /**
      * Create an inline derived table from this table
      */
-    override fun where(condition: Field<Boolean?>): Staff = where(DSL.condition(condition))
+    override fun where(condition: Field<Boolean?>?): Staff = where(DSL.condition(condition))
 
     /**
      * Create an inline derived table from this table

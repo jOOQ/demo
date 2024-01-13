@@ -31,20 +31,20 @@ open class InventoryInStock : AbstractRoutine<Boolean>("inventory_in_stock", Pub
     }
 
     init {
-        returnParameter = RETURN_VALUE
-        addInParameter(P_INVENTORY_ID)
+        returnParameter = InventoryInStock.RETURN_VALUE
+        addInParameter(InventoryInStock.P_INVENTORY_ID)
     }
 
     /**
      * Set the <code>p_inventory_id</code> parameter IN value to the routine
      */
-    fun setPInventoryId(value: Long?): Unit = setValue(P_INVENTORY_ID, value)
+    fun setPInventoryId(value: Long?): Unit = setValue(InventoryInStock.P_INVENTORY_ID, value)
 
     /**
      * Set the <code>p_inventory_id</code> parameter to the function to be used
      * with a {@link org.jooq.Select} statement
      */
     fun setPInventoryId(field: Field<Long?>): Unit {
-        setField(P_INVENTORY_ID, field)
+        setField(InventoryInStock.P_INVENTORY_ID, field)
     }
 }

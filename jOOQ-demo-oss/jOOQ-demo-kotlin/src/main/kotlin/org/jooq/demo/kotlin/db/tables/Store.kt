@@ -105,7 +105,7 @@ open class Store(
 
     private constructor(alias: Name, aliased: Table<StoreRecord>?): this(alias, null, null, null, aliased, null, null)
     private constructor(alias: Name, aliased: Table<StoreRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, null, aliased, parameters, null)
-    private constructor(alias: Name, aliased: Table<StoreRecord>?, where: Condition): this(alias, null, null, null, aliased, null, where)
+    private constructor(alias: Name, aliased: Table<StoreRecord>?, where: Condition?): this(alias, null, null, null, aliased, null, where)
 
     /**
      * Create an aliased <code>public.store</code> table reference
@@ -223,7 +223,7 @@ open class Store(
     /**
      * Create an inline derived table from this table
      */
-    override fun where(condition: Condition): Store = Store(qualifiedName, if (aliased()) this else null, condition)
+    override fun where(condition: Condition?): Store = Store(qualifiedName, if (aliased()) this else null, condition)
 
     /**
      * Create an inline derived table from this table
@@ -233,12 +233,12 @@ open class Store(
     /**
      * Create an inline derived table from this table
      */
-    override fun where(vararg conditions: Condition): Store = where(DSL.and(*conditions))
+    override fun where(vararg conditions: Condition?): Store = where(DSL.and(*conditions))
 
     /**
      * Create an inline derived table from this table
      */
-    override fun where(condition: Field<Boolean?>): Store = where(DSL.condition(condition))
+    override fun where(condition: Field<Boolean?>?): Store = where(DSL.condition(condition))
 
     /**
      * Create an inline derived table from this table
