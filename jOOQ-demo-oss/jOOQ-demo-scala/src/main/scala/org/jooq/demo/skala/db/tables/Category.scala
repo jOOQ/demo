@@ -30,6 +30,8 @@ import org.jooq.TableOptions
 import org.jooq.UniqueKey
 import org.jooq.demo.skala.db.Keys
 import org.jooq.demo.skala.db.Public
+import org.jooq.demo.skala.db.tables.Film.FilmPath
+import org.jooq.demo.skala.db.tables.FilmCategory.FilmCategoryPath
 import org.jooq.demo.skala.db.tables.records.CategoryRecord
 import org.jooq.impl.DSL
 import org.jooq.impl.Internal
@@ -122,6 +124,18 @@ extends TableImpl[CategoryRecord](
   override def getIdentity: Identity[CategoryRecord, Long] = super.getIdentity.asInstanceOf[ Identity[CategoryRecord, Long] ]
 
   override def getPrimaryKey: UniqueKey[CategoryRecord] = Keys.CATEGORY_PKEY
+
+  /**
+   * Get the implicit to-many join path to the <code>public.film_category</code>
+   * table
+   */
+  lazy val filmCategory: FilmCategoryPath = { new FilmCategoryPath(this, null, Keys.FILM_CATEGORY__FILM_CATEGORY_CATEGORY_ID_FKEY.getInverseKey()) }
+
+  /**
+   * Get the implicit many-to-many join path to the <code>public.film</code>
+   * table
+   */
+  def film: FilmPath = filmCategory.film
   override def as(alias: String): Category = new Category(DSL.name(alias), this)
   override def as(alias: Name): Category = new Category(alias, this)
   override def as(alias: Table[_]): Category = new Category(alias.getQualifiedName(), this)

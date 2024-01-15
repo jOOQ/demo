@@ -30,6 +30,7 @@ import org.jooq.TableOptions
 import org.jooq.UniqueKey
 import org.jooq.demo.skala.db.Keys
 import org.jooq.demo.skala.db.Public
+import org.jooq.demo.skala.db.tables.Film.FilmPath
 import org.jooq.demo.skala.db.tables.records.LanguageRecord
 import org.jooq.impl.DSL
 import org.jooq.impl.Internal
@@ -122,6 +123,18 @@ extends TableImpl[LanguageRecord](
   override def getIdentity: Identity[LanguageRecord, Long] = super.getIdentity.asInstanceOf[ Identity[LanguageRecord, Long] ]
 
   override def getPrimaryKey: UniqueKey[LanguageRecord] = Keys.LANGUAGE_PKEY
+
+  /**
+   * Get the implicit to-many join path to the <code>public.film</code> table,
+   * via the <code>film_language_id_fkey</code> key
+   */
+  lazy val filmLanguageIdFkey: FilmPath = { new FilmPath(this, null, Keys.FILM__FILM_LANGUAGE_ID_FKEY.getInverseKey()) }
+
+  /**
+   * Get the implicit to-many join path to the <code>public.film</code> table,
+   * via the <code>film_original_language_id_fkey</code> key
+   */
+  lazy val filmOriginalLanguageIdFkey: FilmPath = { new FilmPath(this, null, Keys.FILM__FILM_ORIGINAL_LANGUAGE_ID_FKEY.getInverseKey()) }
   override def as(alias: String): Language = new Language(DSL.name(alias), this)
   override def as(alias: Name): Language = new Language(alias, this)
   override def as(alias: Table[_]): Language = new Language(alias.getQualifiedName(), this)

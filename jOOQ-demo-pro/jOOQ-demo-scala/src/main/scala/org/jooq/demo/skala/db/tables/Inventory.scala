@@ -35,6 +35,7 @@ import org.jooq.demo.skala.db.Indexes
 import org.jooq.demo.skala.db.Keys
 import org.jooq.demo.skala.db.Public
 import org.jooq.demo.skala.db.tables.Film.FilmPath
+import org.jooq.demo.skala.db.tables.Rental.RentalPath
 import org.jooq.demo.skala.db.tables.Store.StorePath
 import org.jooq.demo.skala.db.tables.records.InventoryRecord
 import org.jooq.impl.DSL
@@ -147,6 +148,11 @@ extends TableImpl[InventoryRecord](
    * Get the implicit join path to the <code>public.store</code> table.
    */
   lazy val store: StorePath = { new StorePath(this, Keys.INVENTORY__INVENTORY_STORE_ID_FKEY, null) }
+
+  /**
+   * Get the implicit to-many join path to the <code>public.rental</code> table
+   */
+  lazy val rental: RentalPath = { new RentalPath(this, null, Keys.RENTAL__RENTAL_INVENTORY_ID_FKEY.getInverseKey()) }
   override def as(alias: String): Inventory = new Inventory(DSL.name(alias), this)
   override def as(alias: Name): Inventory = new Inventory(alias, this)
   override def as(alias: Table[_]): Inventory = new Inventory(alias.getQualifiedName(), this)

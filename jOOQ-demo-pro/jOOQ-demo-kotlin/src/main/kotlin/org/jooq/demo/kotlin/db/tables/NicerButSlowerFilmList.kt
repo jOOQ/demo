@@ -126,7 +126,7 @@ open class NicerButSlowerFilmList(
 
     private constructor(alias: Name, aliased: Table<NicerButSlowerFilmListRecord>?): this(alias, null, null, null, aliased, null, null)
     private constructor(alias: Name, aliased: Table<NicerButSlowerFilmListRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, null, aliased, parameters, null)
-    private constructor(alias: Name, aliased: Table<NicerButSlowerFilmListRecord>?, where: Condition): this(alias, null, null, null, aliased, null, where)
+    private constructor(alias: Name, aliased: Table<NicerButSlowerFilmListRecord>?, where: Condition?): this(alias, null, null, null, aliased, null, where)
 
     /**
      * Create an aliased <code>public.nicer_but_slower_film_list</code> table
@@ -167,7 +167,7 @@ open class NicerButSlowerFilmList(
     /**
      * Create an inline derived table from this table
      */
-    override fun where(condition: Condition): NicerButSlowerFilmList = NicerButSlowerFilmList(qualifiedName, if (aliased()) this else null, condition)
+    override fun where(condition: Condition?): NicerButSlowerFilmList = NicerButSlowerFilmList(qualifiedName, if (aliased()) this else null, condition)
 
     /**
      * Create an inline derived table from this table
@@ -177,12 +177,12 @@ open class NicerButSlowerFilmList(
     /**
      * Create an inline derived table from this table
      */
-    override fun where(vararg conditions: Condition): NicerButSlowerFilmList = where(DSL.and(*conditions))
+    override fun where(vararg conditions: Condition?): NicerButSlowerFilmList = where(DSL.and(*conditions))
 
     /**
      * Create an inline derived table from this table
      */
-    override fun where(condition: Field<Boolean?>): NicerButSlowerFilmList = where(DSL.condition(condition))
+    override fun where(condition: Field<Boolean?>?): NicerButSlowerFilmList = where(DSL.condition(condition))
 
     /**
      * Create an inline derived table from this table

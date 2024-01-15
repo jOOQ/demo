@@ -40,34 +40,34 @@ open class GetCustomerBalance : AbstractRoutine<BigDecimal>("get_customer_balanc
     }
 
     init {
-        returnParameter = RETURN_VALUE
-        addInParameter(P_CUSTOMER_ID)
-        addInParameter(P_EFFECTIVE_DATE)
+        returnParameter = GetCustomerBalance.RETURN_VALUE
+        addInParameter(GetCustomerBalance.P_CUSTOMER_ID)
+        addInParameter(GetCustomerBalance.P_EFFECTIVE_DATE)
     }
 
     /**
      * Set the <code>p_customer_id</code> parameter IN value to the routine
      */
-    fun setPCustomerId(value: Long?): Unit = setValue(P_CUSTOMER_ID, value)
+    fun setPCustomerId(value: Long?): Unit = setValue(GetCustomerBalance.P_CUSTOMER_ID, value)
 
     /**
      * Set the <code>p_customer_id</code> parameter to the function to be used
      * with a {@link org.jooq.Select} statement
      */
     fun setPCustomerId(field: Field<Long?>): Unit {
-        setField(P_CUSTOMER_ID, field)
+        setField(GetCustomerBalance.P_CUSTOMER_ID, field)
     }
 
     /**
      * Set the <code>p_effective_date</code> parameter IN value to the routine
      */
-    fun setPEffectiveDate(value: LocalDateTime?): Unit = setValue(P_EFFECTIVE_DATE, value)
+    fun setPEffectiveDate(value: LocalDateTime?): Unit = setValue(GetCustomerBalance.P_EFFECTIVE_DATE, value)
 
     /**
      * Set the <code>p_effective_date</code> parameter to the function to be
      * used with a {@link org.jooq.Select} statement
      */
     fun setPEffectiveDate(field: Field<LocalDateTime?>): Unit {
-        setField(P_EFFECTIVE_DATE, field)
+        setField(GetCustomerBalance.P_EFFECTIVE_DATE, field)
     }
 }

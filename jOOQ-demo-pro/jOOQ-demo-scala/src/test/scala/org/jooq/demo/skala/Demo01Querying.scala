@@ -1,6 +1,7 @@
 package org.jooq.demo.skala
 
 import org.jooq.Records.intoMap
+import org.jooq.conf.RenderImplicitJoinType
 import org.jooq.demo.AbstractDemo
 import org.jooq.demo.AbstractDemo._
 import org.jooq.demo.skala.db.Tables._
@@ -239,6 +240,79 @@ class Demo01Querying extends AbstractDemo {
   }
 
   @Test
+  def implicitToManyJoins(): Unit = {
+    // Navigating foreign keys from parent to children is possible as well. By default, all such paths must be
+    // declared explicitly in the FROM clause:
+
+    title("No need to spell out to-many joins either. Either use explicit to-many joins...")
+    ctx.select(
+        CUSTOMER.FIRST_NAME,
+        CUSTOMER.LAST_NAME,
+        countDistinct(CUSTOMER.rental.inventory.FILM_ID).as("distinct film rentals"))
+      .from(CUSTOMER)
+      .leftJoin(CUSTOMER.rental.inventory)
+      .groupBy(CUSTOMER.CUSTOMER_ID)
+      .orderBy(inline(3).desc)
+      .limit(5)
+      .fetch
+
+    // If you can live with the quirkiness of implicit to-many join paths, then this feature can be enabled with
+    // a Settings. Now, implicit to-many join paths work just like implicit to-one join paths, with the exception
+    // that now, a seemingly scalar expression can produce cartesian products in your query!
+    // This may be hard to debug because of the implicitness, so use this only sparingly!
+    title("... or enable implicit to-many joins if you are OK with the 'interesting' semantics.")
+    ctx.configuration
+      .deriveSettings(s => s.withRenderImplicitJoinToManyType(RenderImplicitJoinType.LEFT_JOIN))
+      .dsl
+      .select(
+        CUSTOMER.FIRST_NAME,
+        CUSTOMER.LAST_NAME,
+        // Now, the to-many path can be implicitly joined. Beware that this may produce very unexpected
+        // cartesian products (just like any JOIN, of course), which may be hard to debug because of the
+        // implicitness!
+        countDistinct(CUSTOMER.rental.inventory.FILM_ID).as("distinct film rentals"))
+      .from(CUSTOMER)
+      .groupBy(CUSTOMER.CUSTOMER_ID)
+      .orderBy(inline(3).desc)
+      .limit(5)
+      .fetch
+
+    // More information here:
+    // - https://www.jooq.org/doc/latest/manual/sql-building/sql-statements/select-statement/implicit-to-many-join/
+    // - https://blog.jooq.org/why-you-should-use-jooq-with-code-generation/
+  }
+
+  @Test
+  def implicitPathCorrelation(): Unit = {
+    // Correlated subqueries are frequent in SQL. For example, find all actors without any films:
+
+    title("Ordinary correlated subquery")
+    ctx.select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
+      .from(ACTOR)
+      .where(notExists(
+        selectOne
+          .from(FILM_ACTOR)
+          .where(FILM_ACTOR.ACTOR_ID.eq(ACTOR.ACTOR_ID))))
+      .fetch
+
+    // Spelling out the correlation predicate FILM_ACTOR.ACTOR_ID.eq(ACTOR.ACTOR_ID) is equally tedious (and error
+    // prone) as spelling out a JOIN predicate. After all, this is an ANTI JOIN, so it works in a similar way. With
+    // jOOQ, you can use paths again to implicitly correlate a subquery as follows, by starting declaring a path
+    // in the subquery's FROM clause, starting again from ACTOR, which is declared in the outer scope:
+
+    title("Implicitly path-correlated subquery")
+    ctx
+      .select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
+      .from(ACTOR)
+      .where(notExists(
+        selectOne.from(ACTOR.filmActor)))
+      .fetch
+
+    // More information:
+    // - https://www.jooq.org/doc/latest/manual/sql-building/sql-statements/select-statement/implicit-path-correlation/
+  }
+
+  @Test
   def nestedRecords(): Unit = {
     // In jOOQ, a Table expression is also a SelectField, meaning that you can project any table and retrieve the
     // corresponding UpdatableRecord (including the getters, setters, etc.) from it. Beware that while this is
@@ -336,14 +410,10 @@ class Demo01Querying extends AbstractDemo {
     val r = ctx
       .select(
         FILM.TITLE,
-        multiset(
-          select(FILM_ACTOR.actor.FIRST_NAME, FILM_ACTOR.actor.LAST_NAME)
-            .from(FILM_ACTOR)
-            .where(FILM_ACTOR.FILM_ID.eq(FILM.FILM_ID))),
-        multiset(
-          select(FILM_CATEGORY.category.NAME)
-            .from(FILM_CATEGORY)
-            .where(FILM_CATEGORY.FILM_ID.eq(FILM.FILM_ID)))
+
+        // Implicit path correlation is again very powerful!
+        multiset(select(FILM.actor.FIRST_NAME, FILM.actor.LAST_NAME).from(FILM.actor)),
+        multiset(select(FILM.category.NAME).from(FILM.category))
       )
       .from(FILM)
       .orderBy(FILM.TITLE)
@@ -380,13 +450,11 @@ class Demo01Querying extends AbstractDemo {
       .select(
         FILM.TITLE,
         multiset(
-          select(row(FILM_ACTOR.actor.FIRST_NAME, FILM_ACTOR.actor.LAST_NAME).mapping(Name(_, _)))
-            .from(FILM_ACTOR)
-            .where(FILM_ACTOR.FILM_ID.eq(FILM.FILM_ID))).mapping(Actor),
+          select(row(FILM.actor.FIRST_NAME, FILM.actor.LAST_NAME).mapping(Name(_, _)))
+            .from(FILM.actor)).mapping(Actor),
         multiset(
-          select(FILM_CATEGORY.category.NAME)
-            .from(FILM_CATEGORY)
-            .where(FILM_CATEGORY.FILM_ID.eq(FILM.FILM_ID))).mapping(Category))
+          select(FILM.category.NAME)
+            .from(FILM.category)).mapping(Category))
       .from(FILM)
       .orderBy(FILM.TITLE)
       .limit(5)

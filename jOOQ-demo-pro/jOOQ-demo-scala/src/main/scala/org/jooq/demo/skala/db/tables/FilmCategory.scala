@@ -18,6 +18,7 @@ import org.jooq.Field
 import org.jooq.ForeignKey
 import org.jooq.InverseForeignKey
 import org.jooq.Name
+import org.jooq.Path
 import org.jooq.PlainSQL
 import org.jooq.Record
 import org.jooq.SQL
@@ -34,6 +35,7 @@ import org.jooq.demo.skala.db.tables.Category.CategoryPath
 import org.jooq.demo.skala.db.tables.Film.FilmPath
 import org.jooq.demo.skala.db.tables.records.FilmCategoryRecord
 import org.jooq.impl.DSL
+import org.jooq.impl.Internal
 import org.jooq.impl.SQLDataType
 import org.jooq.impl.TableImpl
 
@@ -46,6 +48,11 @@ object FilmCategory {
    * The reference instance of <code>public.film_category</code>
    */
   val FILM_CATEGORY = new FilmCategory
+
+  /**
+   * A subtype implementing {@link Path} for simplified path-based joins.
+   */
+  class FilmCategoryPath(path: Table[_ <: Record], childPath: ForeignKey[_ <: Record, FilmCategoryRecord], parentPath: InverseForeignKey[_ <: Record, FilmCategoryRecord]) extends FilmCategory(path, childPath, parentPath) with Path[FilmCategoryRecord]
 }
 
 /**
@@ -110,6 +117,8 @@ extends TableImpl[FilmCategoryRecord](
    * Create a <code>public.film_category</code> table reference
    */
   def this() = this(DSL.name("film_category"), null)
+
+  def this(path: Table[_ <: Record], childPath: ForeignKey[_ <: Record, FilmCategoryRecord], parentPath: InverseForeignKey[_ <: Record, FilmCategoryRecord]) = this(Internal.createPathAlias(path, childPath, parentPath), path, childPath, parentPath, org.jooq.demo.skala.db.tables.FilmCategory.FILM_CATEGORY, null, null)
 
   override def getSchema: Schema = if (super.aliased()) null else Public.PUBLIC
 

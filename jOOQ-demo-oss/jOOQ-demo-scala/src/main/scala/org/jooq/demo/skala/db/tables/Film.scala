@@ -41,6 +41,11 @@ import org.jooq.demo.skala.db.Indexes
 import org.jooq.demo.skala.db.Keys
 import org.jooq.demo.skala.db.Public
 import org.jooq.demo.skala.db.enums.MpaaRating
+import org.jooq.demo.skala.db.tables.Actor.ActorPath
+import org.jooq.demo.skala.db.tables.Category.CategoryPath
+import org.jooq.demo.skala.db.tables.FilmActor.FilmActorPath
+import org.jooq.demo.skala.db.tables.FilmCategory.FilmCategoryPath
+import org.jooq.demo.skala.db.tables.Inventory.InventoryPath
 import org.jooq.demo.skala.db.tables.Language.LanguagePath
 import org.jooq.demo.skala.db.tables.records.FilmRecord
 import org.jooq.impl.DSL
@@ -211,6 +216,36 @@ extends TableImpl[FilmRecord](
    * the <code>film_original_language_id_fkey</code> key.
    */
   lazy val filmOriginalLanguageIdFkey: LanguagePath = { new LanguagePath(this, Keys.FILM__FILM_ORIGINAL_LANGUAGE_ID_FKEY, null) }
+
+  /**
+   * Get the implicit to-many join path to the <code>public.film_actor</code>
+   * table
+   */
+  lazy val filmActor: FilmActorPath = { new FilmActorPath(this, null, Keys.FILM_ACTOR__FILM_ACTOR_FILM_ID_FKEY.getInverseKey()) }
+
+  /**
+   * Get the implicit to-many join path to the <code>public.film_category</code>
+   * table
+   */
+  lazy val filmCategory: FilmCategoryPath = { new FilmCategoryPath(this, null, Keys.FILM_CATEGORY__FILM_CATEGORY_FILM_ID_FKEY.getInverseKey()) }
+
+  /**
+   * Get the implicit to-many join path to the <code>public.inventory</code>
+   * table
+   */
+  lazy val inventory: InventoryPath = { new InventoryPath(this, null, Keys.INVENTORY__INVENTORY_FILM_ID_FKEY.getInverseKey()) }
+
+  /**
+   * Get the implicit many-to-many join path to the <code>public.actor</code>
+   * table
+   */
+  def actor: ActorPath = filmActor.actor
+
+  /**
+   * Get the implicit many-to-many join path to the <code>public.category</code>
+   * table
+   */
+  def category: CategoryPath = filmCategory.category
   override def as(alias: String): Film = new Film(DSL.name(alias), this)
   override def as(alias: Name): Film = new Film(alias, this)
   override def as(alias: Table[_]): Film = new Film(alias.getQualifiedName(), this)

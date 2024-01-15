@@ -30,6 +30,7 @@ import org.jooq.TableOptions
 import org.jooq.UniqueKey
 import org.jooq.demo.skala.db.Keys
 import org.jooq.demo.skala.db.Public
+import org.jooq.demo.skala.db.tables.City.CityPath
 import org.jooq.demo.skala.db.tables.records.CountryRecord
 import org.jooq.impl.DSL
 import org.jooq.impl.Internal
@@ -122,6 +123,11 @@ extends TableImpl[CountryRecord](
   override def getIdentity: Identity[CountryRecord, Long] = super.getIdentity.asInstanceOf[ Identity[CountryRecord, Long] ]
 
   override def getPrimaryKey: UniqueKey[CountryRecord] = Keys.COUNTRY_PKEY
+
+  /**
+   * Get the implicit to-many join path to the <code>public.city</code> table
+   */
+  lazy val city: CityPath = { new CityPath(this, null, Keys.CITY__CITY_COUNTRY_ID_FKEY.getInverseKey()) }
   override def as(alias: String): Country = new Country(DSL.name(alias), this)
   override def as(alias: Name): Country = new Country(alias, this)
   override def as(alias: Table[_]): Country = new Country(alias.getQualifiedName(), this)

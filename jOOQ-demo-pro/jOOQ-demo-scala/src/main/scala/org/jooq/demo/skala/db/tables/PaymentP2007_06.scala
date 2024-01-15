@@ -22,6 +22,7 @@ import org.jooq.Identity
 import org.jooq.Index
 import org.jooq.InverseForeignKey
 import org.jooq.Name
+import org.jooq.Path
 import org.jooq.PlainSQL
 import org.jooq.Record
 import org.jooq.SQL
@@ -52,6 +53,11 @@ object PaymentP2007_06 {
    * The reference instance of <code>public.payment_p2007_06</code>
    */
   val PAYMENT_P2007_06 = new PaymentP2007_06
+
+  /**
+   * A subtype implementing {@link Path} for simplified path-based joins.
+   */
+  class PaymentP2007_06Path(path: Table[_ <: Record], childPath: ForeignKey[_ <: Record, PaymentP2007_06Record], parentPath: InverseForeignKey[_ <: Record, PaymentP2007_06Record]) extends PaymentP2007_06(path, childPath, parentPath) with Path[PaymentP2007_06Record]
 }
 
 /**
@@ -131,6 +137,8 @@ extends TableImpl[PaymentP2007_06Record](
    * Create a <code>public.payment_p2007_06</code> table reference
    */
   def this() = this(DSL.name("payment_p2007_06"), null)
+
+  def this(path: Table[_ <: Record], childPath: ForeignKey[_ <: Record, PaymentP2007_06Record], parentPath: InverseForeignKey[_ <: Record, PaymentP2007_06Record]) = this(Internal.createPathAlias(path, childPath, parentPath), path, childPath, parentPath, org.jooq.demo.skala.db.tables.PaymentP2007_06.PAYMENT_P2007_06, null, null)
 
   override def getSchema: Schema = if (super.aliased()) null else Public.PUBLIC
 

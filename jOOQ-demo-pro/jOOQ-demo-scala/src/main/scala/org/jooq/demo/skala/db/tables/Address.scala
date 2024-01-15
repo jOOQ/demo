@@ -35,6 +35,9 @@ import org.jooq.demo.skala.db.Indexes
 import org.jooq.demo.skala.db.Keys
 import org.jooq.demo.skala.db.Public
 import org.jooq.demo.skala.db.tables.City.CityPath
+import org.jooq.demo.skala.db.tables.Customer.CustomerPath
+import org.jooq.demo.skala.db.tables.Staff.StaffPath
+import org.jooq.demo.skala.db.tables.Store.StorePath
 import org.jooq.demo.skala.db.tables.records.AddressRecord
 import org.jooq.impl.DSL
 import org.jooq.impl.Internal
@@ -161,6 +164,22 @@ extends TableImpl[AddressRecord](
    * Get the implicit join path to the <code>public.city</code> table.
    */
   lazy val city: CityPath = { new CityPath(this, Keys.ADDRESS__ADDRESS_CITY_ID_FKEY, null) }
+
+  /**
+   * Get the implicit to-many join path to the <code>public.customer</code>
+   * table
+   */
+  lazy val customer: CustomerPath = { new CustomerPath(this, null, Keys.CUSTOMER__CUSTOMER_ADDRESS_ID_FKEY.getInverseKey()) }
+
+  /**
+   * Get the implicit to-many join path to the <code>public.staff</code> table
+   */
+  lazy val staff: StaffPath = { new StaffPath(this, null, Keys.STAFF__STAFF_ADDRESS_ID_FKEY.getInverseKey()) }
+
+  /**
+   * Get the implicit to-many join path to the <code>public.store</code> table
+   */
+  lazy val store: StorePath = { new StorePath(this, null, Keys.STORE__STORE_ADDRESS_ID_FKEY.getInverseKey()) }
   override def as(alias: String): Address = new Address(DSL.name(alias), this)
   override def as(alias: Name): Address = new Address(alias, this)
   override def as(alias: Table[_]): Address = new Address(alias.getQualifiedName(), this)

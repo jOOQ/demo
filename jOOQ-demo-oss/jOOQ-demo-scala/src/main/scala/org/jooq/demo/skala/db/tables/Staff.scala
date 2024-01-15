@@ -33,6 +33,14 @@ import org.jooq.UniqueKey
 import org.jooq.demo.skala.db.Keys
 import org.jooq.demo.skala.db.Public
 import org.jooq.demo.skala.db.tables.Address.AddressPath
+import org.jooq.demo.skala.db.tables.Payment.PaymentPath
+import org.jooq.demo.skala.db.tables.PaymentP2007_01.PaymentP2007_01Path
+import org.jooq.demo.skala.db.tables.PaymentP2007_02.PaymentP2007_02Path
+import org.jooq.demo.skala.db.tables.PaymentP2007_03.PaymentP2007_03Path
+import org.jooq.demo.skala.db.tables.PaymentP2007_04.PaymentP2007_04Path
+import org.jooq.demo.skala.db.tables.PaymentP2007_05.PaymentP2007_05Path
+import org.jooq.demo.skala.db.tables.PaymentP2007_06.PaymentP2007_06Path
+import org.jooq.demo.skala.db.tables.Rental.RentalPath
 import org.jooq.demo.skala.db.tables.Store.StorePath
 import org.jooq.demo.skala.db.tables.records.StaffRecord
 import org.jooq.impl.DSL
@@ -179,6 +187,52 @@ extends TableImpl[StaffRecord](
    * Get the implicit join path to the <code>public.store</code> table.
    */
   lazy val store: StorePath = { new StorePath(this, Keys.STAFF__STAFF_STORE_ID_FKEY, null) }
+
+  /**
+   * Get the implicit to-many join path to the <code>public.payment</code> table
+   */
+  lazy val payment: PaymentPath = { new PaymentPath(this, null, Keys.PAYMENT__PAYMENT_STAFF_ID_FKEY.getInverseKey()) }
+
+  /**
+   * Get the implicit to-many join path to the
+   * <code>public.payment_p2007_01</code> table
+   */
+  lazy val paymentP2007_01: PaymentP2007_01Path = { new PaymentP2007_01Path(this, null, Keys.PAYMENT_P2007_01__PAYMENT_P2007_01_STAFF_ID_FKEY.getInverseKey()) }
+
+  /**
+   * Get the implicit to-many join path to the
+   * <code>public.payment_p2007_02</code> table
+   */
+  lazy val paymentP2007_02: PaymentP2007_02Path = { new PaymentP2007_02Path(this, null, Keys.PAYMENT_P2007_02__PAYMENT_P2007_02_STAFF_ID_FKEY.getInverseKey()) }
+
+  /**
+   * Get the implicit to-many join path to the
+   * <code>public.payment_p2007_03</code> table
+   */
+  lazy val paymentP2007_03: PaymentP2007_03Path = { new PaymentP2007_03Path(this, null, Keys.PAYMENT_P2007_03__PAYMENT_P2007_03_STAFF_ID_FKEY.getInverseKey()) }
+
+  /**
+   * Get the implicit to-many join path to the
+   * <code>public.payment_p2007_04</code> table
+   */
+  lazy val paymentP2007_04: PaymentP2007_04Path = { new PaymentP2007_04Path(this, null, Keys.PAYMENT_P2007_04__PAYMENT_P2007_04_STAFF_ID_FKEY.getInverseKey()) }
+
+  /**
+   * Get the implicit to-many join path to the
+   * <code>public.payment_p2007_05</code> table
+   */
+  lazy val paymentP2007_05: PaymentP2007_05Path = { new PaymentP2007_05Path(this, null, Keys.PAYMENT_P2007_05__PAYMENT_P2007_05_STAFF_ID_FKEY.getInverseKey()) }
+
+  /**
+   * Get the implicit to-many join path to the
+   * <code>public.payment_p2007_06</code> table
+   */
+  lazy val paymentP2007_06: PaymentP2007_06Path = { new PaymentP2007_06Path(this, null, Keys.PAYMENT_P2007_06__PAYMENT_P2007_06_STAFF_ID_FKEY.getInverseKey()) }
+
+  /**
+   * Get the implicit to-many join path to the <code>public.rental</code> table
+   */
+  lazy val rental: RentalPath = { new RentalPath(this, null, Keys.RENTAL__RENTAL_STAFF_ID_FKEY.getInverseKey()) }
   override def as(alias: String): Staff = new Staff(DSL.name(alias), this)
   override def as(alias: Name): Staff = new Staff(alias, this)
   override def as(alias: Table[_]): Staff = new Staff(alias.getQualifiedName(), this)

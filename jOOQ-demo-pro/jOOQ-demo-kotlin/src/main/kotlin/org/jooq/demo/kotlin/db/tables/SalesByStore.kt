@@ -98,7 +98,7 @@ open class SalesByStore(
 
     private constructor(alias: Name, aliased: Table<SalesByStoreRecord>?): this(alias, null, null, null, aliased, null, null)
     private constructor(alias: Name, aliased: Table<SalesByStoreRecord>?, parameters: Array<Field<*>?>?): this(alias, null, null, null, aliased, parameters, null)
-    private constructor(alias: Name, aliased: Table<SalesByStoreRecord>?, where: Condition): this(alias, null, null, null, aliased, null, where)
+    private constructor(alias: Name, aliased: Table<SalesByStoreRecord>?, where: Condition?): this(alias, null, null, null, aliased, null, where)
 
     /**
      * Create an aliased <code>public.sales_by_store</code> table reference
@@ -137,7 +137,7 @@ open class SalesByStore(
     /**
      * Create an inline derived table from this table
      */
-    override fun where(condition: Condition): SalesByStore = SalesByStore(qualifiedName, if (aliased()) this else null, condition)
+    override fun where(condition: Condition?): SalesByStore = SalesByStore(qualifiedName, if (aliased()) this else null, condition)
 
     /**
      * Create an inline derived table from this table
@@ -147,12 +147,12 @@ open class SalesByStore(
     /**
      * Create an inline derived table from this table
      */
-    override fun where(vararg conditions: Condition): SalesByStore = where(DSL.and(*conditions))
+    override fun where(vararg conditions: Condition?): SalesByStore = where(DSL.and(*conditions))
 
     /**
      * Create an inline derived table from this table
      */
-    override fun where(condition: Field<Boolean?>): SalesByStore = where(DSL.condition(condition))
+    override fun where(condition: Field<Boolean?>?): SalesByStore = where(DSL.condition(condition))
 
     /**
      * Create an inline derived table from this table

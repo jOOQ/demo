@@ -36,6 +36,8 @@ import org.jooq.demo.skala.db.Indexes
 import org.jooq.demo.skala.db.Keys
 import org.jooq.demo.skala.db.Public
 import org.jooq.demo.skala.db.Triggers
+import org.jooq.demo.skala.db.tables.Film.FilmPath
+import org.jooq.demo.skala.db.tables.FilmActor.FilmActorPath
 import org.jooq.demo.skala.db.tables.records.ActorRecord
 import org.jooq.impl.DSL
 import org.jooq.impl.Internal
@@ -135,6 +137,18 @@ extends TableImpl[ActorRecord](
   override def getIdentity: Identity[ActorRecord, Long] = super.getIdentity.asInstanceOf[ Identity[ActorRecord, Long] ]
 
   override def getPrimaryKey: UniqueKey[ActorRecord] = Keys.ACTOR_PKEY
+
+  /**
+   * Get the implicit to-many join path to the <code>public.film_actor</code>
+   * table
+   */
+  lazy val filmActor: FilmActorPath = { new FilmActorPath(this, null, Keys.FILM_ACTOR__FILM_ACTOR_ACTOR_ID_FKEY.getInverseKey()) }
+
+  /**
+   * Get the implicit many-to-many join path to the <code>public.film</code>
+   * table
+   */
+  def film: FilmPath = filmActor.film
   override def getTriggers: List[Trigger] = Arrays.asList[Trigger](Triggers.LAST_UPDATED)
   override def as(alias: String): Actor = new Actor(DSL.name(alias), this)
   override def as(alias: Name): Actor = new Actor(alias, this)

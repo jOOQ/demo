@@ -134,11 +134,6 @@
                                  https://www.jooq.org/doc/latest/manual/code-generation/codegen-version-control/ -->
                             <directory>src/main/scala</directory>
                         </target>
-
-                        <generate>
-                            <!-- See: https://github.com/jOOQ/jOOQ/issues/16037 -->
-                            <implicitJoinPathsToMany>false</implicitJoinPathsToMany>
-                        </generate>
                     </generator>
                 </configuration>
 

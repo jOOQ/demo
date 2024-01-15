@@ -33,20 +33,20 @@ open class InventoryHeldByCustomer : AbstractRoutine<Int>("inventory_held_by_cus
     }
 
     init {
-        returnParameter = RETURN_VALUE
-        addInParameter(P_INVENTORY_ID)
+        returnParameter = InventoryHeldByCustomer.RETURN_VALUE
+        addInParameter(InventoryHeldByCustomer.P_INVENTORY_ID)
     }
 
     /**
      * Set the <code>p_inventory_id</code> parameter IN value to the routine
      */
-    fun setPInventoryId(value: Long?): Unit = setValue(P_INVENTORY_ID, value)
+    fun setPInventoryId(value: Long?): Unit = setValue(InventoryHeldByCustomer.P_INVENTORY_ID, value)
 
     /**
      * Set the <code>p_inventory_id</code> parameter to the function to be used
      * with a {@link org.jooq.Select} statement
      */
     fun setPInventoryId(field: Field<Long?>): Unit {
-        setField(P_INVENTORY_ID, field)
+        setField(InventoryHeldByCustomer.P_INVENTORY_ID, field)
     }
 }
