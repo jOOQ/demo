@@ -8,6 +8,7 @@ import java.lang.Boolean
 import java.lang.Long
 import java.lang.String
 import java.time.LocalDateTime
+import java.util.Collection
 import java.util.List
 
 import org.jooq.Configuration
@@ -30,6 +31,21 @@ class StaffDao(configuration: Configuration) extends DAOImpl[StaffRecord, org.jo
   def this() = this(null)
 
   override def getId(o: org.jooq.demo.skala.db.tables.pojos.Staff): Long = o.getStaffId
+  override def insert(obj: org.jooq.demo.skala.db.tables.pojos.Staff): Unit = super.insert(obj)
+  override def insert(objs: org.jooq.demo.skala.db.tables.pojos.Staff*): Unit = super.insert(objs:_*)
+  override def insert(objs: Collection[org.jooq.demo.skala.db.tables.pojos.Staff]): Unit = super.insert(objs)
+  override def update(obj: org.jooq.demo.skala.db.tables.pojos.Staff): Unit = super.update(obj)
+  override def update(objs: org.jooq.demo.skala.db.tables.pojos.Staff*): Unit = super.update(objs:_*)
+  override def update(objs: Collection[org.jooq.demo.skala.db.tables.pojos.Staff]): Unit = super.update(objs)
+  override def merge(obj: org.jooq.demo.skala.db.tables.pojos.Staff): Unit = super.merge(obj)
+  override def merge(objs: org.jooq.demo.skala.db.tables.pojos.Staff*): Unit = super.merge(objs:_*)
+  override def merge(objs: Collection[org.jooq.demo.skala.db.tables.pojos.Staff]): Unit = super.merge(objs)
+  override def delete(obj: org.jooq.demo.skala.db.tables.pojos.Staff): Unit = super.delete(obj)
+  override def delete(objs: org.jooq.demo.skala.db.tables.pojos.Staff*): Unit = super.delete(objs:_*)
+  override def delete(objs: Collection[org.jooq.demo.skala.db.tables.pojos.Staff]): Unit = super.delete(objs)
+  override def deleteById(id: Long): Unit = super.deleteById(id)
+  override def deleteById(ids: Long*): Unit = super.deleteById(ids:_*)
+  override def deleteById(ids: Collection[Long]): Unit = super.deleteById(ids)
 
   /**
    * Fetch records that have <code>staff_id BETWEEN lowerInclusive AND
