@@ -146,7 +146,7 @@ extends TableImpl[PaymentP2007_05Record](
 
   override def getIdentity: Identity[PaymentP2007_05Record, Long] = super.getIdentity.asInstanceOf[ Identity[PaymentP2007_05Record, Long] ]
 
-  override def getReferences: List[ ForeignKey[PaymentP2007_05Record, _] ] = Arrays.asList[ ForeignKey[PaymentP2007_05Record, _] ](Keys.PAYMENT_P2007_05__PAYMENT_P2007_05_CUSTOMER_ID_FKEY, Keys.PAYMENT_P2007_05__PAYMENT_P2007_05_STAFF_ID_FKEY, Keys.PAYMENT_P2007_05__PAYMENT_P2007_05_RENTAL_ID_FKEY)
+  override def getReferences: List[ ForeignKey[PaymentP2007_05Record, _] ] = Arrays.asList[ ForeignKey[PaymentP2007_05Record, _] ](Keys.PAYMENT_P2007_05__PAYMENT_P2007_05_CUSTOMER_ID_FKEY, Keys.PAYMENT_P2007_05__PAYMENT_P2007_05_RENTAL_ID_FKEY, Keys.PAYMENT_P2007_05__PAYMENT_P2007_05_STAFF_ID_FKEY)
 
   /**
    * Get the implicit join path to the <code>public.customer</code> table.
@@ -154,14 +154,14 @@ extends TableImpl[PaymentP2007_05Record](
   lazy val customer: CustomerPath = { new CustomerPath(this, Keys.PAYMENT_P2007_05__PAYMENT_P2007_05_CUSTOMER_ID_FKEY, null) }
 
   /**
-   * Get the implicit join path to the <code>public.staff</code> table.
-   */
-  lazy val staff: StaffPath = { new StaffPath(this, Keys.PAYMENT_P2007_05__PAYMENT_P2007_05_STAFF_ID_FKEY, null) }
-
-  /**
    * Get the implicit join path to the <code>public.rental</code> table.
    */
   lazy val rental: RentalPath = { new RentalPath(this, Keys.PAYMENT_P2007_05__PAYMENT_P2007_05_RENTAL_ID_FKEY, null) }
+
+  /**
+   * Get the implicit join path to the <code>public.staff</code> table.
+   */
+  lazy val staff: StaffPath = { new StaffPath(this, Keys.PAYMENT_P2007_05__PAYMENT_P2007_05_STAFF_ID_FKEY, null) }
   override def getChecks: List[ Check[PaymentP2007_05Record] ] = Arrays.asList[ Check[PaymentP2007_05Record] ](
     Internal.createCheck(this, DSL.name("payment_p2007_05_payment_date_check"), "(((payment_date >= '2007-05-01 00:00:00'::timestamp without time zone) AND (payment_date < '2007-06-01 00:00:00'::timestamp without time zone)))", true)
   )

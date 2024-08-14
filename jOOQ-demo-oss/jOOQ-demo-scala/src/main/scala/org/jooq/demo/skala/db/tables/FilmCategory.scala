@@ -124,17 +124,17 @@ extends TableImpl[FilmCategoryRecord](
 
   override def getPrimaryKey: UniqueKey[FilmCategoryRecord] = Keys.FILM_CATEGORY_PKEY
 
-  override def getReferences: List[ ForeignKey[FilmCategoryRecord, _] ] = Arrays.asList[ ForeignKey[FilmCategoryRecord, _] ](Keys.FILM_CATEGORY__FILM_CATEGORY_FILM_ID_FKEY, Keys.FILM_CATEGORY__FILM_CATEGORY_CATEGORY_ID_FKEY)
-
-  /**
-   * Get the implicit join path to the <code>public.film</code> table.
-   */
-  lazy val film: FilmPath = { new FilmPath(this, Keys.FILM_CATEGORY__FILM_CATEGORY_FILM_ID_FKEY, null) }
+  override def getReferences: List[ ForeignKey[FilmCategoryRecord, _] ] = Arrays.asList[ ForeignKey[FilmCategoryRecord, _] ](Keys.FILM_CATEGORY__FILM_CATEGORY_CATEGORY_ID_FKEY, Keys.FILM_CATEGORY__FILM_CATEGORY_FILM_ID_FKEY)
 
   /**
    * Get the implicit join path to the <code>public.category</code> table.
    */
   lazy val category: CategoryPath = { new CategoryPath(this, Keys.FILM_CATEGORY__FILM_CATEGORY_CATEGORY_ID_FKEY, null) }
+
+  /**
+   * Get the implicit join path to the <code>public.film</code> table.
+   */
+  lazy val film: FilmPath = { new FilmPath(this, Keys.FILM_CATEGORY__FILM_CATEGORY_FILM_ID_FKEY, null) }
   override def as(alias: String): FilmCategory = new FilmCategory(DSL.name(alias), this)
   override def as(alias: Name): FilmCategory = new FilmCategory(alias, this)
   override def as(alias: Table[_]): FilmCategory = new FilmCategory(alias.getQualifiedName(), this)

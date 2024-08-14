@@ -148,7 +148,7 @@ open class Payment(
     override fun getIndexes(): List<Index> = listOf(IDX_FK_CUSTOMER_ID, IDX_FK_STAFF_ID)
     override fun getIdentity(): Identity<PaymentRecord, Long?> = super.getIdentity() as Identity<PaymentRecord, Long?>
     override fun getPrimaryKey(): UniqueKey<PaymentRecord> = PAYMENT_PKEY
-    override fun getReferences(): List<ForeignKey<PaymentRecord, *>> = listOf(PAYMENT__PAYMENT_CUSTOMER_ID_FKEY, PAYMENT__PAYMENT_STAFF_ID_FKEY, PAYMENT__PAYMENT_RENTAL_ID_FKEY)
+    override fun getReferences(): List<ForeignKey<PaymentRecord, *>> = listOf(PAYMENT__PAYMENT_CUSTOMER_ID_FKEY, PAYMENT__PAYMENT_RENTAL_ID_FKEY, PAYMENT__PAYMENT_STAFF_ID_FKEY)
 
     private lateinit var _customer: CustomerPath
 
@@ -165,21 +165,6 @@ open class Payment(
     val customer: CustomerPath
         get(): CustomerPath = customer()
 
-    private lateinit var _staff: StaffPath
-
-    /**
-     * Get the implicit join path to the <code>public.staff</code> table.
-     */
-    fun staff(): StaffPath {
-        if (!this::_staff.isInitialized)
-            _staff = StaffPath(this, PAYMENT__PAYMENT_STAFF_ID_FKEY, null)
-
-        return _staff;
-    }
-
-    val staff: StaffPath
-        get(): StaffPath = staff()
-
     private lateinit var _rental: RentalPath
 
     /**
@@ -194,6 +179,21 @@ open class Payment(
 
     val rental: RentalPath
         get(): RentalPath = rental()
+
+    private lateinit var _staff: StaffPath
+
+    /**
+     * Get the implicit join path to the <code>public.staff</code> table.
+     */
+    fun staff(): StaffPath {
+        if (!this::_staff.isInitialized)
+            _staff = StaffPath(this, PAYMENT__PAYMENT_STAFF_ID_FKEY, null)
+
+        return _staff;
+    }
+
+    val staff: StaffPath
+        get(): StaffPath = staff()
     override fun `as`(alias: String): Payment = Payment(DSL.name(alias), this)
     override fun `as`(alias: Name): Payment = Payment(alias, this)
     override fun `as`(alias: Table<*>): Payment = Payment(alias.qualifiedName, this)

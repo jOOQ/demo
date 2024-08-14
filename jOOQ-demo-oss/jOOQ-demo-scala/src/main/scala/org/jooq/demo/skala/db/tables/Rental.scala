@@ -159,17 +159,17 @@ extends TableImpl[RentalRecord](
 
   override def getPrimaryKey: UniqueKey[RentalRecord] = Keys.RENTAL_PKEY
 
-  override def getReferences: List[ ForeignKey[RentalRecord, _] ] = Arrays.asList[ ForeignKey[RentalRecord, _] ](Keys.RENTAL__RENTAL_INVENTORY_ID_FKEY, Keys.RENTAL__RENTAL_CUSTOMER_ID_FKEY, Keys.RENTAL__RENTAL_STAFF_ID_FKEY)
-
-  /**
-   * Get the implicit join path to the <code>public.inventory</code> table.
-   */
-  lazy val inventory: InventoryPath = { new InventoryPath(this, Keys.RENTAL__RENTAL_INVENTORY_ID_FKEY, null) }
+  override def getReferences: List[ ForeignKey[RentalRecord, _] ] = Arrays.asList[ ForeignKey[RentalRecord, _] ](Keys.RENTAL__RENTAL_CUSTOMER_ID_FKEY, Keys.RENTAL__RENTAL_INVENTORY_ID_FKEY, Keys.RENTAL__RENTAL_STAFF_ID_FKEY)
 
   /**
    * Get the implicit join path to the <code>public.customer</code> table.
    */
   lazy val customer: CustomerPath = { new CustomerPath(this, Keys.RENTAL__RENTAL_CUSTOMER_ID_FKEY, null) }
+
+  /**
+   * Get the implicit join path to the <code>public.inventory</code> table.
+   */
+  lazy val inventory: InventoryPath = { new InventoryPath(this, Keys.RENTAL__RENTAL_INVENTORY_ID_FKEY, null) }
 
   /**
    * Get the implicit join path to the <code>public.staff</code> table.

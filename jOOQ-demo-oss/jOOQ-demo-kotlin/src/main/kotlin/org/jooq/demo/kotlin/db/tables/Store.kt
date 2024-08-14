@@ -138,22 +138,7 @@ open class Store(
     override fun getIndexes(): List<Index> = listOf(IDX_UNQ_MANAGER_STAFF_ID)
     override fun getIdentity(): Identity<StoreRecord, Long?> = super.getIdentity() as Identity<StoreRecord, Long?>
     override fun getPrimaryKey(): UniqueKey<StoreRecord> = STORE_PKEY
-    override fun getReferences(): List<ForeignKey<StoreRecord, *>> = listOf(STORE__STORE_MANAGER_STAFF_ID_FKEY, STORE__STORE_ADDRESS_ID_FKEY)
-
-    private lateinit var _staff: StaffPath
-
-    /**
-     * Get the implicit join path to the <code>public.staff</code> table.
-     */
-    fun staff(): StaffPath {
-        if (!this::_staff.isInitialized)
-            _staff = StaffPath(this, STORE__STORE_MANAGER_STAFF_ID_FKEY, null)
-
-        return _staff;
-    }
-
-    val staff: StaffPath
-        get(): StaffPath = staff()
+    override fun getReferences(): List<ForeignKey<StoreRecord, *>> = listOf(STORE__STORE_ADDRESS_ID_FKEY, STORE__STORE_MANAGER_STAFF_ID_FKEY)
 
     private lateinit var _address: AddressPath
 
@@ -169,6 +154,21 @@ open class Store(
 
     val address: AddressPath
         get(): AddressPath = address()
+
+    private lateinit var _staff: StaffPath
+
+    /**
+     * Get the implicit join path to the <code>public.staff</code> table.
+     */
+    fun staff(): StaffPath {
+        if (!this::_staff.isInitialized)
+            _staff = StaffPath(this, STORE__STORE_MANAGER_STAFF_ID_FKEY, null)
+
+        return _staff;
+    }
+
+    val staff: StaffPath
+        get(): StaffPath = staff()
 
     private lateinit var _customer: CustomerPath
 

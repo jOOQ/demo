@@ -146,19 +146,7 @@ public class FilmCategory extends TableImpl<FilmCategoryRecord> {
 
     @Override
     public List<ForeignKey<FilmCategoryRecord, ?>> getReferences() {
-        return Arrays.asList(Keys.FILM_CATEGORY__FILM_CATEGORY_FILM_ID_FKEY, Keys.FILM_CATEGORY__FILM_CATEGORY_CATEGORY_ID_FKEY);
-    }
-
-    private transient FilmPath _film;
-
-    /**
-     * Get the implicit join path to the <code>public.film</code> table.
-     */
-    public FilmPath film() {
-        if (_film == null)
-            _film = new FilmPath(this, Keys.FILM_CATEGORY__FILM_CATEGORY_FILM_ID_FKEY, null);
-
-        return _film;
+        return Arrays.asList(Keys.FILM_CATEGORY__FILM_CATEGORY_CATEGORY_ID_FKEY, Keys.FILM_CATEGORY__FILM_CATEGORY_FILM_ID_FKEY);
     }
 
     private transient CategoryPath _category;
@@ -171,6 +159,18 @@ public class FilmCategory extends TableImpl<FilmCategoryRecord> {
             _category = new CategoryPath(this, Keys.FILM_CATEGORY__FILM_CATEGORY_CATEGORY_ID_FKEY, null);
 
         return _category;
+    }
+
+    private transient FilmPath _film;
+
+    /**
+     * Get the implicit join path to the <code>public.film</code> table.
+     */
+    public FilmPath film() {
+        if (_film == null)
+            _film = new FilmPath(this, Keys.FILM_CATEGORY__FILM_CATEGORY_FILM_ID_FKEY, null);
+
+        return _film;
     }
 
     @Override

@@ -183,22 +183,7 @@ open class Customer(
     override fun getIndexes(): List<Index> = listOf(IDX_FK_ADDRESS_ID, IDX_FK_STORE_ID, IDX_LAST_NAME)
     override fun getIdentity(): Identity<CustomerRecord, Long?> = super.getIdentity() as Identity<CustomerRecord, Long?>
     override fun getPrimaryKey(): UniqueKey<CustomerRecord> = CUSTOMER_PKEY
-    override fun getReferences(): List<ForeignKey<CustomerRecord, *>> = listOf(CUSTOMER__CUSTOMER_STORE_ID_FKEY, CUSTOMER__CUSTOMER_ADDRESS_ID_FKEY)
-
-    private lateinit var _store: StorePath
-
-    /**
-     * Get the implicit join path to the <code>public.store</code> table.
-     */
-    fun store(): StorePath {
-        if (!this::_store.isInitialized)
-            _store = StorePath(this, CUSTOMER__CUSTOMER_STORE_ID_FKEY, null)
-
-        return _store;
-    }
-
-    val store: StorePath
-        get(): StorePath = store()
+    override fun getReferences(): List<ForeignKey<CustomerRecord, *>> = listOf(CUSTOMER__CUSTOMER_ADDRESS_ID_FKEY, CUSTOMER__CUSTOMER_STORE_ID_FKEY)
 
     private lateinit var _address: AddressPath
 
@@ -214,6 +199,21 @@ open class Customer(
 
     val address: AddressPath
         get(): AddressPath = address()
+
+    private lateinit var _store: StorePath
+
+    /**
+     * Get the implicit join path to the <code>public.store</code> table.
+     */
+    fun store(): StorePath {
+        if (!this::_store.isInitialized)
+            _store = StorePath(this, CUSTOMER__CUSTOMER_STORE_ID_FKEY, null)
+
+        return _store;
+    }
+
+    val store: StorePath
+        get(): StorePath = store()
 
     private lateinit var _payment: PaymentPath
 

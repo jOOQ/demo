@@ -146,7 +146,7 @@ open class PaymentP2007_05(
     override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
     override fun getIndexes(): List<Index> = listOf(IDX_FK_PAYMENT_P2007_05_CUSTOMER_ID, IDX_FK_PAYMENT_P2007_05_STAFF_ID)
     override fun getIdentity(): Identity<PaymentP2007_05Record, Long?> = super.getIdentity() as Identity<PaymentP2007_05Record, Long?>
-    override fun getReferences(): List<ForeignKey<PaymentP2007_05Record, *>> = listOf(PAYMENT_P2007_05__PAYMENT_P2007_05_CUSTOMER_ID_FKEY, PAYMENT_P2007_05__PAYMENT_P2007_05_STAFF_ID_FKEY, PAYMENT_P2007_05__PAYMENT_P2007_05_RENTAL_ID_FKEY)
+    override fun getReferences(): List<ForeignKey<PaymentP2007_05Record, *>> = listOf(PAYMENT_P2007_05__PAYMENT_P2007_05_CUSTOMER_ID_FKEY, PAYMENT_P2007_05__PAYMENT_P2007_05_RENTAL_ID_FKEY, PAYMENT_P2007_05__PAYMENT_P2007_05_STAFF_ID_FKEY)
 
     private lateinit var _customer: CustomerPath
 
@@ -163,21 +163,6 @@ open class PaymentP2007_05(
     val customer: CustomerPath
         get(): CustomerPath = customer()
 
-    private lateinit var _staff: StaffPath
-
-    /**
-     * Get the implicit join path to the <code>public.staff</code> table.
-     */
-    fun staff(): StaffPath {
-        if (!this::_staff.isInitialized)
-            _staff = StaffPath(this, PAYMENT_P2007_05__PAYMENT_P2007_05_STAFF_ID_FKEY, null)
-
-        return _staff;
-    }
-
-    val staff: StaffPath
-        get(): StaffPath = staff()
-
     private lateinit var _rental: RentalPath
 
     /**
@@ -192,6 +177,21 @@ open class PaymentP2007_05(
 
     val rental: RentalPath
         get(): RentalPath = rental()
+
+    private lateinit var _staff: StaffPath
+
+    /**
+     * Get the implicit join path to the <code>public.staff</code> table.
+     */
+    fun staff(): StaffPath {
+        if (!this::_staff.isInitialized)
+            _staff = StaffPath(this, PAYMENT_P2007_05__PAYMENT_P2007_05_STAFF_ID_FKEY, null)
+
+        return _staff;
+    }
+
+    val staff: StaffPath
+        get(): StaffPath = staff()
     override fun getChecks(): List<Check<PaymentP2007_05Record>> = listOf(
         Internal.createCheck(this, DSL.name("payment_p2007_05_payment_date_check"), "(((payment_date >= '2007-05-01 00:00:00'::timestamp without time zone) AND (payment_date < '2007-06-01 00:00:00'::timestamp without time zone)))", true)
     )

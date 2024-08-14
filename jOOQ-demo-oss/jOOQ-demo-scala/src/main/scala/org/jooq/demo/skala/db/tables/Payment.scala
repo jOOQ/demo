@@ -148,7 +148,7 @@ extends TableImpl[PaymentRecord](
 
   override def getPrimaryKey: UniqueKey[PaymentRecord] = Keys.PAYMENT_PKEY
 
-  override def getReferences: List[ ForeignKey[PaymentRecord, _] ] = Arrays.asList[ ForeignKey[PaymentRecord, _] ](Keys.PAYMENT__PAYMENT_CUSTOMER_ID_FKEY, Keys.PAYMENT__PAYMENT_STAFF_ID_FKEY, Keys.PAYMENT__PAYMENT_RENTAL_ID_FKEY)
+  override def getReferences: List[ ForeignKey[PaymentRecord, _] ] = Arrays.asList[ ForeignKey[PaymentRecord, _] ](Keys.PAYMENT__PAYMENT_CUSTOMER_ID_FKEY, Keys.PAYMENT__PAYMENT_RENTAL_ID_FKEY, Keys.PAYMENT__PAYMENT_STAFF_ID_FKEY)
 
   /**
    * Get the implicit join path to the <code>public.customer</code> table.
@@ -156,14 +156,14 @@ extends TableImpl[PaymentRecord](
   lazy val customer: CustomerPath = { new CustomerPath(this, Keys.PAYMENT__PAYMENT_CUSTOMER_ID_FKEY, null) }
 
   /**
-   * Get the implicit join path to the <code>public.staff</code> table.
-   */
-  lazy val staff: StaffPath = { new StaffPath(this, Keys.PAYMENT__PAYMENT_STAFF_ID_FKEY, null) }
-
-  /**
    * Get the implicit join path to the <code>public.rental</code> table.
    */
   lazy val rental: RentalPath = { new RentalPath(this, Keys.PAYMENT__PAYMENT_RENTAL_ID_FKEY, null) }
+
+  /**
+   * Get the implicit join path to the <code>public.staff</code> table.
+   */
+  lazy val staff: StaffPath = { new StaffPath(this, Keys.PAYMENT__PAYMENT_STAFF_ID_FKEY, null) }
   override def as(alias: String): Payment = new Payment(DSL.name(alias), this)
   override def as(alias: Name): Payment = new Payment(alias, this)
   override def as(alias: Table[_]): Payment = new Payment(alias.getQualifiedName(), this)

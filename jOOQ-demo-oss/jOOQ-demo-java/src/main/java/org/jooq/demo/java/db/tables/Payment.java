@@ -176,7 +176,7 @@ public class Payment extends TableImpl<PaymentRecord> {
 
     @Override
     public List<ForeignKey<PaymentRecord, ?>> getReferences() {
-        return Arrays.asList(Keys.PAYMENT__PAYMENT_CUSTOMER_ID_FKEY, Keys.PAYMENT__PAYMENT_STAFF_ID_FKEY, Keys.PAYMENT__PAYMENT_RENTAL_ID_FKEY);
+        return Arrays.asList(Keys.PAYMENT__PAYMENT_CUSTOMER_ID_FKEY, Keys.PAYMENT__PAYMENT_RENTAL_ID_FKEY, Keys.PAYMENT__PAYMENT_STAFF_ID_FKEY);
     }
 
     private transient CustomerPath _customer;
@@ -191,18 +191,6 @@ public class Payment extends TableImpl<PaymentRecord> {
         return _customer;
     }
 
-    private transient StaffPath _staff;
-
-    /**
-     * Get the implicit join path to the <code>public.staff</code> table.
-     */
-    public StaffPath staff() {
-        if (_staff == null)
-            _staff = new StaffPath(this, Keys.PAYMENT__PAYMENT_STAFF_ID_FKEY, null);
-
-        return _staff;
-    }
-
     private transient RentalPath _rental;
 
     /**
@@ -213,6 +201,18 @@ public class Payment extends TableImpl<PaymentRecord> {
             _rental = new RentalPath(this, Keys.PAYMENT__PAYMENT_RENTAL_ID_FKEY, null);
 
         return _rental;
+    }
+
+    private transient StaffPath _staff;
+
+    /**
+     * Get the implicit join path to the <code>public.staff</code> table.
+     */
+    public StaffPath staff() {
+        if (_staff == null)
+            _staff = new StaffPath(this, Keys.PAYMENT__PAYMENT_STAFF_ID_FKEY, null);
+
+        return _staff;
     }
 
     @Override

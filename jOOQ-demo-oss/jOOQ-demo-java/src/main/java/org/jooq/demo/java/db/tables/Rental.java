@@ -187,19 +187,7 @@ public class Rental extends TableImpl<RentalRecord> {
 
     @Override
     public List<ForeignKey<RentalRecord, ?>> getReferences() {
-        return Arrays.asList(Keys.RENTAL__RENTAL_INVENTORY_ID_FKEY, Keys.RENTAL__RENTAL_CUSTOMER_ID_FKEY, Keys.RENTAL__RENTAL_STAFF_ID_FKEY);
-    }
-
-    private transient InventoryPath _inventory;
-
-    /**
-     * Get the implicit join path to the <code>public.inventory</code> table.
-     */
-    public InventoryPath inventory() {
-        if (_inventory == null)
-            _inventory = new InventoryPath(this, Keys.RENTAL__RENTAL_INVENTORY_ID_FKEY, null);
-
-        return _inventory;
+        return Arrays.asList(Keys.RENTAL__RENTAL_CUSTOMER_ID_FKEY, Keys.RENTAL__RENTAL_INVENTORY_ID_FKEY, Keys.RENTAL__RENTAL_STAFF_ID_FKEY);
     }
 
     private transient CustomerPath _customer;
@@ -212,6 +200,18 @@ public class Rental extends TableImpl<RentalRecord> {
             _customer = new CustomerPath(this, Keys.RENTAL__RENTAL_CUSTOMER_ID_FKEY, null);
 
         return _customer;
+    }
+
+    private transient InventoryPath _inventory;
+
+    /**
+     * Get the implicit join path to the <code>public.inventory</code> table.
+     */
+    public InventoryPath inventory() {
+        if (_inventory == null)
+            _inventory = new InventoryPath(this, Keys.RENTAL__RENTAL_INVENTORY_ID_FKEY, null);
+
+        return _inventory;
     }
 
     private transient StaffPath _staff;

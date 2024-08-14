@@ -203,19 +203,7 @@ public class Customer extends TableImpl<CustomerRecord> {
 
     @Override
     public List<ForeignKey<CustomerRecord, ?>> getReferences() {
-        return Arrays.asList(Keys.CUSTOMER__CUSTOMER_STORE_ID_FKEY, Keys.CUSTOMER__CUSTOMER_ADDRESS_ID_FKEY);
-    }
-
-    private transient StorePath _store;
-
-    /**
-     * Get the implicit join path to the <code>public.store</code> table.
-     */
-    public StorePath store() {
-        if (_store == null)
-            _store = new StorePath(this, Keys.CUSTOMER__CUSTOMER_STORE_ID_FKEY, null);
-
-        return _store;
+        return Arrays.asList(Keys.CUSTOMER__CUSTOMER_ADDRESS_ID_FKEY, Keys.CUSTOMER__CUSTOMER_STORE_ID_FKEY);
     }
 
     private transient AddressPath _address;
@@ -228,6 +216,18 @@ public class Customer extends TableImpl<CustomerRecord> {
             _address = new AddressPath(this, Keys.CUSTOMER__CUSTOMER_ADDRESS_ID_FKEY, null);
 
         return _address;
+    }
+
+    private transient StorePath _store;
+
+    /**
+     * Get the implicit join path to the <code>public.store</code> table.
+     */
+    public StorePath store() {
+        if (_store == null)
+            _store = new StorePath(this, Keys.CUSTOMER__CUSTOMER_STORE_ID_FKEY, null);
+
+        return _store;
     }
 
     private transient PaymentPath _payment;

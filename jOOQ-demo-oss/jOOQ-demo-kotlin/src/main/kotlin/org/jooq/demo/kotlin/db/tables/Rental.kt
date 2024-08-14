@@ -166,22 +166,7 @@ open class Rental(
     override fun getIndexes(): List<Index> = listOf(IDX_FK_INVENTORY_ID, IDX_UNQ_RENTAL_RENTAL_DATE_INVENTORY_ID_CUSTOMER_ID)
     override fun getIdentity(): Identity<RentalRecord, Long?> = super.getIdentity() as Identity<RentalRecord, Long?>
     override fun getPrimaryKey(): UniqueKey<RentalRecord> = RENTAL_PKEY
-    override fun getReferences(): List<ForeignKey<RentalRecord, *>> = listOf(RENTAL__RENTAL_INVENTORY_ID_FKEY, RENTAL__RENTAL_CUSTOMER_ID_FKEY, RENTAL__RENTAL_STAFF_ID_FKEY)
-
-    private lateinit var _inventory: InventoryPath
-
-    /**
-     * Get the implicit join path to the <code>public.inventory</code> table.
-     */
-    fun inventory(): InventoryPath {
-        if (!this::_inventory.isInitialized)
-            _inventory = InventoryPath(this, RENTAL__RENTAL_INVENTORY_ID_FKEY, null)
-
-        return _inventory;
-    }
-
-    val inventory: InventoryPath
-        get(): InventoryPath = inventory()
+    override fun getReferences(): List<ForeignKey<RentalRecord, *>> = listOf(RENTAL__RENTAL_CUSTOMER_ID_FKEY, RENTAL__RENTAL_INVENTORY_ID_FKEY, RENTAL__RENTAL_STAFF_ID_FKEY)
 
     private lateinit var _customer: CustomerPath
 
@@ -197,6 +182,21 @@ open class Rental(
 
     val customer: CustomerPath
         get(): CustomerPath = customer()
+
+    private lateinit var _inventory: InventoryPath
+
+    /**
+     * Get the implicit join path to the <code>public.inventory</code> table.
+     */
+    fun inventory(): InventoryPath {
+        if (!this::_inventory.isInitialized)
+            _inventory = InventoryPath(this, RENTAL__RENTAL_INVENTORY_ID_FKEY, null)
+
+        return _inventory;
+    }
+
+    val inventory: InventoryPath
+        get(): InventoryPath = inventory()
 
     private lateinit var _staff: StaffPath
 

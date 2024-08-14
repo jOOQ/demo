@@ -176,17 +176,17 @@ extends TableImpl[CustomerRecord](
 
   override def getPrimaryKey: UniqueKey[CustomerRecord] = Keys.CUSTOMER_PKEY
 
-  override def getReferences: List[ ForeignKey[CustomerRecord, _] ] = Arrays.asList[ ForeignKey[CustomerRecord, _] ](Keys.CUSTOMER__CUSTOMER_STORE_ID_FKEY, Keys.CUSTOMER__CUSTOMER_ADDRESS_ID_FKEY)
-
-  /**
-   * Get the implicit join path to the <code>public.store</code> table.
-   */
-  lazy val store: StorePath = { new StorePath(this, Keys.CUSTOMER__CUSTOMER_STORE_ID_FKEY, null) }
+  override def getReferences: List[ ForeignKey[CustomerRecord, _] ] = Arrays.asList[ ForeignKey[CustomerRecord, _] ](Keys.CUSTOMER__CUSTOMER_ADDRESS_ID_FKEY, Keys.CUSTOMER__CUSTOMER_STORE_ID_FKEY)
 
   /**
    * Get the implicit join path to the <code>public.address</code> table.
    */
   lazy val address: AddressPath = { new AddressPath(this, Keys.CUSTOMER__CUSTOMER_ADDRESS_ID_FKEY, null) }
+
+  /**
+   * Get the implicit join path to the <code>public.store</code> table.
+   */
+  lazy val store: StorePath = { new StorePath(this, Keys.CUSTOMER__CUSTOMER_STORE_ID_FKEY, null) }
 
   /**
    * Get the implicit to-many join path to the <code>public.payment</code> table

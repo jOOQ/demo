@@ -124,22 +124,7 @@ open class FilmCategory(
     }
     override fun getSchema(): Schema? = if (aliased()) null else Public.PUBLIC
     override fun getPrimaryKey(): UniqueKey<FilmCategoryRecord> = FILM_CATEGORY_PKEY
-    override fun getReferences(): List<ForeignKey<FilmCategoryRecord, *>> = listOf(FILM_CATEGORY__FILM_CATEGORY_FILM_ID_FKEY, FILM_CATEGORY__FILM_CATEGORY_CATEGORY_ID_FKEY)
-
-    private lateinit var _film: FilmPath
-
-    /**
-     * Get the implicit join path to the <code>public.film</code> table.
-     */
-    fun film(): FilmPath {
-        if (!this::_film.isInitialized)
-            _film = FilmPath(this, FILM_CATEGORY__FILM_CATEGORY_FILM_ID_FKEY, null)
-
-        return _film;
-    }
-
-    val film: FilmPath
-        get(): FilmPath = film()
+    override fun getReferences(): List<ForeignKey<FilmCategoryRecord, *>> = listOf(FILM_CATEGORY__FILM_CATEGORY_CATEGORY_ID_FKEY, FILM_CATEGORY__FILM_CATEGORY_FILM_ID_FKEY)
 
     private lateinit var _category: CategoryPath
 
@@ -155,6 +140,21 @@ open class FilmCategory(
 
     val category: CategoryPath
         get(): CategoryPath = category()
+
+    private lateinit var _film: FilmPath
+
+    /**
+     * Get the implicit join path to the <code>public.film</code> table.
+     */
+    fun film(): FilmPath {
+        if (!this::_film.isInitialized)
+            _film = FilmPath(this, FILM_CATEGORY__FILM_CATEGORY_FILM_ID_FKEY, null)
+
+        return _film;
+    }
+
+    val film: FilmPath
+        get(): FilmPath = film()
     override fun `as`(alias: String): FilmCategory = FilmCategory(DSL.name(alias), this)
     override fun `as`(alias: Name): FilmCategory = FilmCategory(alias, this)
     override fun `as`(alias: Table<*>): FilmCategory = FilmCategory(alias.qualifiedName, this)
