@@ -214,22 +214,6 @@ open class Staff(
     val store: StorePath
         get(): StorePath = store()
 
-    private lateinit var _payment: PaymentPath
-
-    /**
-     * Get the implicit to-many join path to the <code>public.payment</code>
-     * table
-     */
-    fun payment(): PaymentPath {
-        if (!this::_payment.isInitialized)
-            _payment = PaymentPath(this, null, PAYMENT__PAYMENT_STAFF_ID_FKEY.inverseKey)
-
-        return _payment;
-    }
-
-    val payment: PaymentPath
-        get(): PaymentPath = payment()
-
     private lateinit var _paymentP2007_01: PaymentP2007_01Path
 
     /**
@@ -325,6 +309,22 @@ open class Staff(
 
     val paymentP2007_06: PaymentP2007_06Path
         get(): PaymentP2007_06Path = paymentP2007_06()
+
+    private lateinit var _payment: PaymentPath
+
+    /**
+     * Get the implicit to-many join path to the <code>public.payment</code>
+     * table
+     */
+    fun payment(): PaymentPath {
+        if (!this::_payment.isInitialized)
+            _payment = PaymentPath(this, null, PAYMENT__PAYMENT_STAFF_ID_FKEY.inverseKey)
+
+        return _payment;
+    }
+
+    val payment: PaymentPath
+        get(): PaymentPath = payment()
 
     private lateinit var _rental: RentalPath
 

@@ -213,22 +213,6 @@ open class Rental(
     val staff: StaffPath
         get(): StaffPath = staff()
 
-    private lateinit var _payment: PaymentPath
-
-    /**
-     * Get the implicit to-many join path to the <code>public.payment</code>
-     * table
-     */
-    fun payment(): PaymentPath {
-        if (!this::_payment.isInitialized)
-            _payment = PaymentPath(this, null, PAYMENT__PAYMENT_RENTAL_ID_FKEY.inverseKey)
-
-        return _payment;
-    }
-
-    val payment: PaymentPath
-        get(): PaymentPath = payment()
-
     private lateinit var _paymentP2007_01: PaymentP2007_01Path
 
     /**
@@ -324,6 +308,22 @@ open class Rental(
 
     val paymentP2007_06: PaymentP2007_06Path
         get(): PaymentP2007_06Path = paymentP2007_06()
+
+    private lateinit var _payment: PaymentPath
+
+    /**
+     * Get the implicit to-many join path to the <code>public.payment</code>
+     * table
+     */
+    fun payment(): PaymentPath {
+        if (!this::_payment.isInitialized)
+            _payment = PaymentPath(this, null, PAYMENT__PAYMENT_RENTAL_ID_FKEY.inverseKey)
+
+        return _payment;
+    }
+
+    val payment: PaymentPath
+        get(): PaymentPath = payment()
     override fun `as`(alias: String): Rental = Rental(DSL.name(alias), this)
     override fun `as`(alias: Name): Rental = Rental(alias, this)
     override fun `as`(alias: Table<*>): Rental = Rental(alias.qualifiedName, this)

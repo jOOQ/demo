@@ -226,19 +226,6 @@ public class Rental extends TableImpl<RentalRecord> {
         return _staff;
     }
 
-    private transient PaymentPath _payment;
-
-    /**
-     * Get the implicit to-many join path to the <code>public.payment</code>
-     * table
-     */
-    public PaymentPath payment() {
-        if (_payment == null)
-            _payment = new PaymentPath(this, null, Keys.PAYMENT__PAYMENT_RENTAL_ID_FKEY.getInverseKey());
-
-        return _payment;
-    }
-
     private transient PaymentP2007_01Path _paymentP2007_01;
 
     /**
@@ -315,6 +302,19 @@ public class Rental extends TableImpl<RentalRecord> {
             _paymentP2007_06 = new PaymentP2007_06Path(this, null, Keys.PAYMENT_P2007_06__PAYMENT_P2007_06_RENTAL_ID_FKEY.getInverseKey());
 
         return _paymentP2007_06;
+    }
+
+    private transient PaymentPath _payment;
+
+    /**
+     * Get the implicit to-many join path to the <code>public.payment</code>
+     * table
+     */
+    public PaymentPath payment() {
+        if (_payment == null)
+            _payment = new PaymentPath(this, null, Keys.PAYMENT__PAYMENT_RENTAL_ID_FKEY.getInverseKey());
+
+        return _payment;
     }
 
     @Override

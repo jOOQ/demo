@@ -177,11 +177,6 @@ extends TableImpl[RentalRecord](
   lazy val staff: StaffPath = { new StaffPath(this, Keys.RENTAL__RENTAL_STAFF_ID_FKEY, null) }
 
   /**
-   * Get the implicit to-many join path to the <code>public.payment</code> table
-   */
-  lazy val payment: PaymentPath = { new PaymentPath(this, null, Keys.PAYMENT__PAYMENT_RENTAL_ID_FKEY.getInverseKey()) }
-
-  /**
    * Get the implicit to-many join path to the
    * <code>public.payment_p2007_01</code> table
    */
@@ -216,6 +211,11 @@ extends TableImpl[RentalRecord](
    * <code>public.payment_p2007_06</code> table
    */
   lazy val paymentP2007_06: PaymentP2007_06Path = { new PaymentP2007_06Path(this, null, Keys.PAYMENT_P2007_06__PAYMENT_P2007_06_RENTAL_ID_FKEY.getInverseKey()) }
+
+  /**
+   * Get the implicit to-many join path to the <code>public.payment</code> table
+   */
+  lazy val payment: PaymentPath = { new PaymentPath(this, null, Keys.PAYMENT__PAYMENT_RENTAL_ID_FKEY.getInverseKey()) }
   override def as(alias: String): Rental = new Rental(DSL.name(alias), this)
   override def as(alias: Name): Rental = new Rental(alias, this)
   override def as(alias: Table[_]): Rental = new Rental(alias.getQualifiedName(), this)

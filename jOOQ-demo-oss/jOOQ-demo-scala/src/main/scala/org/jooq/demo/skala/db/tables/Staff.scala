@@ -189,11 +189,6 @@ extends TableImpl[StaffRecord](
   lazy val store: StorePath = { new StorePath(this, Keys.STAFF__STAFF_STORE_ID_FKEY, null) }
 
   /**
-   * Get the implicit to-many join path to the <code>public.payment</code> table
-   */
-  lazy val payment: PaymentPath = { new PaymentPath(this, null, Keys.PAYMENT__PAYMENT_STAFF_ID_FKEY.getInverseKey()) }
-
-  /**
    * Get the implicit to-many join path to the
    * <code>public.payment_p2007_01</code> table
    */
@@ -228,6 +223,11 @@ extends TableImpl[StaffRecord](
    * <code>public.payment_p2007_06</code> table
    */
   lazy val paymentP2007_06: PaymentP2007_06Path = { new PaymentP2007_06Path(this, null, Keys.PAYMENT_P2007_06__PAYMENT_P2007_06_STAFF_ID_FKEY.getInverseKey()) }
+
+  /**
+   * Get the implicit to-many join path to the <code>public.payment</code> table
+   */
+  lazy val payment: PaymentPath = { new PaymentPath(this, null, Keys.PAYMENT__PAYMENT_STAFF_ID_FKEY.getInverseKey()) }
 
   /**
    * Get the implicit to-many join path to the <code>public.rental</code> table
