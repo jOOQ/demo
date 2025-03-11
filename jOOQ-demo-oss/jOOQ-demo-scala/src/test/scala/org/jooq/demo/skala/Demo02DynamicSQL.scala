@@ -66,7 +66,7 @@ class Demo02DynamicSQL extends AbstractDemo {
     // clause by itself.
 
     title("List: " + ids)
-    ids.map(_.asInstanceOf[Long]).map(ACTOR.ACTOR_ID.eq(_)).fold(noCondition) { _ or _ }
+    ids.map(_.asInstanceOf[Long]).map(ACTOR.ACTOR_ID.eq(_)).fold(noCondition) { _.or(_) }
 
     // More information:
     // - https://www.jooq.org/doc/latest/manual/sql-building/dynamic-sql/no-condition/

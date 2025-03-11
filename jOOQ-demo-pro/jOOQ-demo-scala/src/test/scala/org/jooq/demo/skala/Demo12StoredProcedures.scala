@@ -38,7 +38,7 @@ class Demo12StoredProcedures extends AbstractDemo {
       .from(
         FILM,
         STORE,
-        lateral(FILM_IN_STOCK(FILM.FILM_ID, STORE.STORE_ID)) as FILM_IN_STOCK)
+        lateral(FILM_IN_STOCK(FILM.FILM_ID, STORE.STORE_ID)).as(FILM_IN_STOCK))
       .orderBy(FILM.FILM_ID, STORE.STORE_ID)
       .limit(10)
       .fetch

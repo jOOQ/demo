@@ -37,7 +37,7 @@ class Demo01Querying extends AbstractDemo {
     title("A simple type safe query")
     val r = ctx.select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
       .from(ACTOR)
-      .where(ACTOR.LAST_NAME like "A%")
+      .where(ACTOR.LAST_NAME.like("A%"))
       .orderBy(ACTOR.FIRST_NAME.asc).fetch
 
     // Try playing around with data types above:
@@ -117,10 +117,10 @@ class Demo01Querying extends AbstractDemo {
     title("UNION / INTERSECT / EXCEPT are also type safe")
     val result = ctx.select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
       .from(ACTOR)
-      .where(ACTOR.FIRST_NAME like "A%")
+      .where(ACTOR.FIRST_NAME.like("A%"))
       .union(select(CUSTOMER.FIRST_NAME, CUSTOMER.LAST_NAME)
         .from(CUSTOMER)
-        .where(CUSTOMER.FIRST_NAME like "A%"))
+        .where(CUSTOMER.FIRST_NAME.like("A%")))
       .fetch
 
     // Try adding / removing projected columns, or changing data types
@@ -140,7 +140,7 @@ class Demo01Querying extends AbstractDemo {
     title("A lot of predicate expressions also type safe")
     val r1 = ctx.select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
       .from(ACTOR)
-      .where(ACTOR.FIRST_NAME like "A%")
+      .where(ACTOR.FIRST_NAME.like("A%"))
       .and(ACTOR.ACTOR_ID.in(
         select(FILM_ACTOR.ACTOR_ID)
         .from(FILM_ACTOR)))
@@ -151,7 +151,7 @@ class Demo01Querying extends AbstractDemo {
     title("This also works for type safe row value expressions!")
     val r2 = ctx.select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
       .from(ACTOR)
-      .where(ACTOR.FIRST_NAME like "A%")
+      .where(ACTOR.FIRST_NAME.like("A%"))
       .and(row(ACTOR.FIRST_NAME, ACTOR.LAST_NAME).in(
         select(CUSTOMER.FIRST_NAME, CUSTOMER.LAST_NAME)
           .from(CUSTOMER)))
@@ -172,7 +172,7 @@ class Demo01Querying extends AbstractDemo {
     title("LIMIT .. OFFSET works in (almost) all dialects")
     val r1 = ctx.select(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
       .from(ACTOR)
-      .where(ACTOR.FIRST_NAME like "A%")
+      .where(ACTOR.FIRST_NAME.like("A%"))
       .orderBy(ACTOR.ACTOR_ID)
       .limit(10)
       .offset(10)
@@ -190,7 +190,7 @@ class Demo01Querying extends AbstractDemo {
       .from(ACTOR)
       .join(FILM_ACTOR)
       .on(ACTOR.ACTOR_ID.eq(FILM_ACTOR.ACTOR_ID))
-      .where(ACTOR.FIRST_NAME like "A%")
+      .where(ACTOR.FIRST_NAME.like("A%"))
       .fetch
 
     // More information here:
@@ -203,13 +203,13 @@ class Demo01Querying extends AbstractDemo {
     // as the original table, exposing the same API, including type safe column access:
 
     title("Table aliases also provide column type safety")
-    val a = ACTOR as "a"
-    val fa = FILM_ACTOR as "fa"
+    val a = ACTOR.as("a")
+    val fa = FILM_ACTOR.as("fa")
     val result = ctx.select(a.FIRST_NAME, a.LAST_NAME)
       .from(a)
       .join(fa)
       .on(a.ACTOR_ID === fa.ACTOR_ID)
-      .where(a.FIRST_NAME like "A%")
+      .where(a.FIRST_NAME.like("A%"))
       .fetch
 
     // More information here:
@@ -452,14 +452,14 @@ class Demo01Querying extends AbstractDemo {
         FILM.TITLE,
         multiset(
           select(row(FILM.actor.FIRST_NAME, FILM.actor.LAST_NAME).mapping(Name(_, _)))
-            .from(FILM.actor)).mapping(Actor),
+            .from(FILM.actor)).mapping(Actor.apply),
         multiset(
           select(FILM.category.NAME)
-            .from(FILM.category)).mapping(Category))
+            .from(FILM.category)).mapping(Category.apply))
       .from(FILM)
       .orderBy(FILM.TITLE)
       .limit(5)
-      .fetch(mapping(Film(_, _, _)))
+      .fetch(Film.apply)
 
     result.forEach { film =>
       println("Film %s with categories %s and actors %s ".formatted(film.title, film.categories, film.actors))

@@ -1,12 +1,14 @@
 package org.jooq.demo.skala
 
-import org.jooq._
+import org.jooq.*
 import org.jooq.demo.AbstractDemo
-import org.jooq.demo.AbstractDemo._
+import org.jooq.demo.AbstractDemo.*
 import org.jooq.demo.skala.db.Tables.{ACTOR, PAYMENT}
-import org.jooq.impl.DSL._
+import org.jooq.impl.DSL.*
 import org.jooq.impl.SQLDataType.DATE
 import org.junit.{After, Test}
+
+import scala.jdk.CollectionConverters.*
 
 
 class Demo08ImportExportAndMore extends AbstractDemo {
@@ -99,7 +101,7 @@ class Demo08ImportExportAndMore extends AbstractDemo {
         Array(207.asInstanceOf[Integer], "Wolf", "Gabriella"),
         Array(208.asInstanceOf[Integer], "Edie", "Drew"),
         Array(209.asInstanceOf[Integer], "Rupert", "Maeghan"),
-        Array(210.asInstanceOf[Integer], "Coleman", "Skyler")):_*)
+        Array(210.asInstanceOf[Integer], "Coleman", "Skyler"))*)
       .fields(ACTOR.ACTOR_ID, ACTOR.LAST_NAME, ACTOR.FIRST_NAME)
       .execute
 

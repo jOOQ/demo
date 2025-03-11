@@ -52,8 +52,8 @@ class Demo11QueryObjectModel extends AbstractDemo {
 //      .from(ACTOR)
 //      .where(ACTOR.ACTOR_ID.lt(4L))
 //
-//    println(s"All column expressions: ${select.$traverse(Traversers.findingAll(_.isInstanceOf[Field[_]]))}")
-//    println(s"All bind values: ${select.$traverse(Traversers.findingAll(_.isInstanceOf[Param[_]]))}")
+//    println(s"All column expressions: ${select.$traverse(Traversers.findingAll(_.isInstanceOf[Field[?]]))}")
+//    println(s"All bind values: ${select.$traverse(Traversers.findingAll(_.isInstanceOf[Param[?]]))}")
 //
 //    title("Any JDK Collector can be turned into a Traverser, too, e.g. collecting to a list")
 //    select
@@ -61,7 +61,7 @@ class Demo11QueryObjectModel extends AbstractDemo {
 //      .forEach(println(_))
 //
 //    title("Or grouping query parts by type")
-//    val f: Function[QueryPart, Class[_]] = _.getClass
+//    val f: Function[QueryPart, Class[?]] = _.getClass
 //    select
 //      .$traverse(Traversers.collecting(groupingBy(f, toList[QueryPart])))
 //      .forEach((t, parts: util.List[QueryPart]) => {
@@ -89,7 +89,7 @@ class Demo11QueryObjectModel extends AbstractDemo {
 //    
 //    title("Replacing bind values")
 //    println(select1.$replace((p: QueryPart) =>
-//      if (p.isInstanceOf[Param[_]])
+//      if (p.isInstanceOf[Param[?]])
 //        value(5)
 //      else
 //        p
@@ -97,7 +97,7 @@ class Demo11QueryObjectModel extends AbstractDemo {
 //
 //    title("Inverting the < predicate")
 //    println(select1.$replace((p: QueryPart) => p match {
-//      case lt: QOM.Lt[_] => lt.$converse
+//      case lt: QOM.Lt[?] => lt.$converse
 //      case _ => p
 //    }))
 //
@@ -130,7 +130,7 @@ class Demo11QueryObjectModel extends AbstractDemo {
 //          s.$where(c)
 //
 //        // If there's already a predicate, check if the predicate contains the predicate already (don't recurse into subqueries)
-//        else if (!s.$where.$traverse(Traversers.recursing(!_.isInstanceOf[Select[_]], Traversers.containing(c))))
+//        else if (!s.$where.$traverse(Traversers.recursing(!_.isInstanceOf[Select[?]], Traversers.containing(c))))
 //          s.$where(and(s.$where, c))
 //        else
 //          p

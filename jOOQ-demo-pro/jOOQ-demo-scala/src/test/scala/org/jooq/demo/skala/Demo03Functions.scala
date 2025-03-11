@@ -63,10 +63,10 @@ class Demo03Functions extends AbstractDemo {
       .select(
         ACTOR.FIRST_NAME,
         ACTOR.LAST_NAME,
-        count as "number of films",
-        count.filterWhere(FILM.TITLE like "%A%") as "number of films containing 'A' in the title",
-        max(FILM.LENGTH) as "longest film",
-        min(FILM.LENGTH) as "shortest film")
+        count.as("number of films"),
+        count.filterWhere(FILM.TITLE.like("%A%")).as("number of films containing 'A' in the title"),
+        max(FILM.LENGTH).as("longest film"),
+        min(FILM.LENGTH).as("shortest film"))
       .from(ACTOR)
       .join(FILM_ACTOR).on(ACTOR.ACTOR_ID.eq(FILM_ACTOR.ACTOR_ID))
       .join(FILM).on(FILM_ACTOR.FILM_ID.eq(FILM.FILM_ID))
@@ -82,17 +82,17 @@ class Demo03Functions extends AbstractDemo {
   @Test
   def windowFunctions(): Unit = {
     title("A lot of window functions are available too")
-    val w = name("w") as partitionBy(ACTOR.ACTOR_ID, ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
+    val w = name("w").as(partitionBy(ACTOR.ACTOR_ID, ACTOR.FIRST_NAME, ACTOR.LAST_NAME))
     ctx
       .select(
         rowNumber.over(w.orderBy(ACTOR.FIRST_NAME, ACTOR.LAST_NAME)),
         ACTOR.FIRST_NAME,
         ACTOR.LAST_NAME,
         FILM.TITLE,
-        count.over(w) as "number of films",
-        count.filterWhere(FILM.TITLE.like("%A%")).over(w) as "number of films containing 'A' in the title",
-        max(FILM.LENGTH).over(w) as "longest film",
-        min(FILM.LENGTH).over(w) as "shortest film")
+        count.over(w).as("number of films"),
+        count.filterWhere(FILM.TITLE.like("%A%")).over(w).as("number of films containing 'A' in the title"),
+        max(FILM.LENGTH).over(w).as("longest film"),
+        min(FILM.LENGTH).over(w).as("shortest film"))
       .from(ACTOR)
       .join(FILM_ACTOR).on(ACTOR.ACTOR_ID.eq(FILM_ACTOR.ACTOR_ID))
       .join(FILM).on(FILM_ACTOR.FILM_ID.eq(FILM.FILM_ID))
