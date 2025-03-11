@@ -61,7 +61,7 @@ class SalesByStoreRecord extends TableRecordImpl[SalesByStoreRecord](SalesByStor
     this.setStore(store)
     this.setManager(manager)
     this.setTotalSales(totalSales)
-    resetChangedOnNotNull()
+    resetTouchedOnNotNull()
   }
 
   /**
@@ -74,7 +74,7 @@ class SalesByStoreRecord extends TableRecordImpl[SalesByStoreRecord](SalesByStor
       this.setStore(value.getStore)
       this.setManager(value.getManager)
       this.setTotalSales(value.getTotalSales)
-      resetChangedOnNotNull()
+      resetTouchedOnNotNull()
     }
   }
 }

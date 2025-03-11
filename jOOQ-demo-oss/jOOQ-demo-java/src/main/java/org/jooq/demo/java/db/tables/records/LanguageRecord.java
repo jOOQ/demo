@@ -90,7 +90,7 @@ public class LanguageRecord extends UpdatableRecordImpl<LanguageRecord> {
         setLanguageId(languageId);
         setName(name);
         setLastUpdate(lastUpdate);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 
     /**
@@ -103,7 +103,7 @@ public class LanguageRecord extends UpdatableRecordImpl<LanguageRecord> {
             setLanguageId(value.languageId());
             setName(value.name());
             setLastUpdate(value.lastUpdate());
-            resetChangedOnNotNull();
+            resetTouchedOnNotNull();
         }
     }
 }

@@ -20,4 +20,12 @@ public record FilmCategory(
 
     private static final long serialVersionUID = 1L;
 
+
+    public FilmCategory(FilmCategory value) {
+        this(
+            value.filmId,
+            value.categoryId,
+            value.lastUpdate
+        );
+    }
 }

@@ -50,7 +50,7 @@ object Language {
   /**
    * A subtype implementing {@link Path} for simplified path-based joins.
    */
-  class LanguagePath(path: Table[_ <: Record], childPath: ForeignKey[_ <: Record, LanguageRecord], parentPath: InverseForeignKey[_ <: Record, LanguageRecord]) extends Language(path, childPath, parentPath) with Path[LanguageRecord]
+  class LanguagePath(path: Table[? <: Record], childPath: ForeignKey[? <: Record, LanguageRecord], parentPath: InverseForeignKey[? <: Record, LanguageRecord]) extends Language(path, childPath, parentPath) with Path[LanguageRecord]
 }
 
 /**
@@ -58,11 +58,11 @@ object Language {
  */
 class Language(
   alias: Name,
-  path: Table[_ <: Record],
-  childPath: ForeignKey[_ <: Record, LanguageRecord],
-  parentPath: InverseForeignKey[_ <: Record, LanguageRecord],
+  path: Table[? <: Record],
+  childPath: ForeignKey[? <: Record, LanguageRecord],
+  parentPath: InverseForeignKey[? <: Record, LanguageRecord],
   aliased: Table[LanguageRecord],
-  parameters: Array[ Field[_] ],
+  parameters: Array[ Field[?] ],
   where: Condition
 )
 extends TableImpl[LanguageRecord](
@@ -116,7 +116,7 @@ extends TableImpl[LanguageRecord](
    */
   def this() = this(DSL.name("language"), null)
 
-  def this(path: Table[_ <: Record], childPath: ForeignKey[_ <: Record, LanguageRecord], parentPath: InverseForeignKey[_ <: Record, LanguageRecord]) = this(Internal.createPathAlias(path, childPath, parentPath), path, childPath, parentPath, org.jooq.demo.skala.db.tables.Language.LANGUAGE, null, null)
+  def this(path: Table[? <: Record], childPath: ForeignKey[? <: Record, LanguageRecord], parentPath: InverseForeignKey[? <: Record, LanguageRecord]) = this(Internal.createPathAlias(path, childPath, parentPath), path, childPath, parentPath, org.jooq.demo.skala.db.tables.Language.LANGUAGE, null, null)
 
   override def getSchema: Schema = if (super.aliased()) null else Public.PUBLIC
 
@@ -137,7 +137,7 @@ extends TableImpl[LanguageRecord](
   lazy val filmOriginalLanguageIdFkey: FilmPath = { new FilmPath(this, null, Keys.FILM__FILM_ORIGINAL_LANGUAGE_ID_FKEY.getInverseKey()) }
   override def as(alias: String): Language = new Language(DSL.name(alias), this)
   override def as(alias: Name): Language = new Language(alias, this)
-  override def as(alias: Table[_]): Language = new Language(alias.getQualifiedName(), this)
+  override def as(alias: Table[?]): Language = new Language(alias.getQualifiedName(), this)
 
   /**
    * Rename this table
@@ -152,7 +152,7 @@ extends TableImpl[LanguageRecord](
   /**
    * Rename this table
    */
-  override def rename(name: Table[_]): Language = new Language(name.getQualifiedName(), null)
+  override def rename(name: Table[?]): Language = new Language(name.getQualifiedName(), null)
 
   /**
    * Create an inline derived table from this table
@@ -162,12 +162,12 @@ extends TableImpl[LanguageRecord](
   /**
    * Create an inline derived table from this table
    */
-  override def where(conditions: Collection[_ <: Condition]): Language = where(DSL.and(conditions))
+  override def where(conditions: Collection[? <: Condition]): Language = where(DSL.and(conditions))
 
   /**
    * Create an inline derived table from this table
    */
-  override def where(conditions: Condition*): Language = where(DSL.and(conditions:_*))
+  override def where(conditions: Condition*): Language = where(DSL.and(conditions*))
 
   /**
    * Create an inline derived table from this table
@@ -187,15 +187,15 @@ extends TableImpl[LanguageRecord](
   /**
    * Create an inline derived table from this table
    */
-  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): Language = where(DSL.condition(condition, binds:_*))
+  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): Language = where(DSL.condition(condition, binds*))
 
   /**
    * Create an inline derived table from this table
    */
-  override def whereExists(select: Select[_]): Language = where(DSL.exists(select))
+  override def whereExists(select: Select[?]): Language = where(DSL.exists(select))
 
   /**
    * Create an inline derived table from this table
    */
-  override def whereNotExists(select: Select[_]): Language = where(DSL.notExists(select))
+  override def whereNotExists(select: Select[?]): Language = where(DSL.notExists(select))
 }

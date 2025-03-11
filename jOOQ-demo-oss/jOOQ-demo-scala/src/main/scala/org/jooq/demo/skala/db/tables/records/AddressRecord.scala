@@ -134,7 +134,7 @@ class AddressRecord extends UpdatableRecordImpl[AddressRecord](Address.ADDRESS) 
     this.setPostalCode(postalCode)
     this.setPhone(phone)
     this.setLastUpdate(lastUpdate)
-    resetChangedOnNotNull()
+    resetTouchedOnNotNull()
   }
 
   /**
@@ -152,7 +152,7 @@ class AddressRecord extends UpdatableRecordImpl[AddressRecord](Address.ADDRESS) 
       this.setPostalCode(value.getPostalCode)
       this.setPhone(value.getPhone)
       this.setLastUpdate(value.getLastUpdate)
-      resetChangedOnNotNull()
+      resetTouchedOnNotNull()
     }
   }
 }

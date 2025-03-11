@@ -63,7 +63,7 @@ public class SalesByFilmCategory extends TableImpl<SalesByFilmCategoryRecord> {
 
     private SalesByFilmCategory(Name alias, Table<SalesByFilmCategoryRecord> aliased, Field<?>[] parameters, Condition where) {
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("""
-        create view "sales_by_film_category" as  SELECT c.name AS category,
+        CREATE VIEW "sales_by_film_category" AS  SELECT c.name AS category,
           sum(p.amount) AS total_sales
          FROM (((((payment p
            JOIN rental r ON ((p.rental_id = r.rental_id)))

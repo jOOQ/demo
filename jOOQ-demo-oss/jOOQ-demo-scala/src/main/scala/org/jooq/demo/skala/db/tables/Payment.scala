@@ -57,7 +57,7 @@ object Payment {
   /**
    * A subtype implementing {@link Path} for simplified path-based joins.
    */
-  class PaymentPath(path: Table[_ <: Record], childPath: ForeignKey[_ <: Record, PaymentRecord], parentPath: InverseForeignKey[_ <: Record, PaymentRecord]) extends Payment(path, childPath, parentPath) with Path[PaymentRecord]
+  class PaymentPath(path: Table[? <: Record], childPath: ForeignKey[? <: Record, PaymentRecord], parentPath: InverseForeignKey[? <: Record, PaymentRecord]) extends Payment(path, childPath, parentPath) with Path[PaymentRecord]
 }
 
 /**
@@ -65,11 +65,11 @@ object Payment {
  */
 class Payment(
   alias: Name,
-  path: Table[_ <: Record],
-  childPath: ForeignKey[_ <: Record, PaymentRecord],
-  parentPath: InverseForeignKey[_ <: Record, PaymentRecord],
+  path: Table[? <: Record],
+  childPath: ForeignKey[? <: Record, PaymentRecord],
+  parentPath: InverseForeignKey[? <: Record, PaymentRecord],
   aliased: Table[PaymentRecord],
-  parameters: Array[ Field[_] ],
+  parameters: Array[ Field[?] ],
   where: Condition
 )
 extends TableImpl[PaymentRecord](
@@ -138,7 +138,7 @@ extends TableImpl[PaymentRecord](
    */
   def this() = this(DSL.name("payment"), null)
 
-  def this(path: Table[_ <: Record], childPath: ForeignKey[_ <: Record, PaymentRecord], parentPath: InverseForeignKey[_ <: Record, PaymentRecord]) = this(Internal.createPathAlias(path, childPath, parentPath), path, childPath, parentPath, org.jooq.demo.skala.db.tables.Payment.PAYMENT, null, null)
+  def this(path: Table[? <: Record], childPath: ForeignKey[? <: Record, PaymentRecord], parentPath: InverseForeignKey[? <: Record, PaymentRecord]) = this(Internal.createPathAlias(path, childPath, parentPath), path, childPath, parentPath, org.jooq.demo.skala.db.tables.Payment.PAYMENT, null, null)
 
   override def getSchema: Schema = if (super.aliased()) null else Public.PUBLIC
 
@@ -148,7 +148,7 @@ extends TableImpl[PaymentRecord](
 
   override def getPrimaryKey: UniqueKey[PaymentRecord] = Keys.PAYMENT_PKEY
 
-  override def getReferences: List[ ForeignKey[PaymentRecord, _] ] = Arrays.asList[ ForeignKey[PaymentRecord, _] ](Keys.PAYMENT__PAYMENT_CUSTOMER_ID_FKEY, Keys.PAYMENT__PAYMENT_RENTAL_ID_FKEY, Keys.PAYMENT__PAYMENT_STAFF_ID_FKEY)
+  override def getReferences: List[ ForeignKey[PaymentRecord, ?] ] = Arrays.asList[ ForeignKey[PaymentRecord, ?] ](Keys.PAYMENT__PAYMENT_CUSTOMER_ID_FKEY, Keys.PAYMENT__PAYMENT_RENTAL_ID_FKEY, Keys.PAYMENT__PAYMENT_STAFF_ID_FKEY)
 
   /**
    * Get the implicit join path to the <code>public.customer</code> table.
@@ -166,7 +166,7 @@ extends TableImpl[PaymentRecord](
   lazy val staff: StaffPath = { new StaffPath(this, Keys.PAYMENT__PAYMENT_STAFF_ID_FKEY, null) }
   override def as(alias: String): Payment = new Payment(DSL.name(alias), this)
   override def as(alias: Name): Payment = new Payment(alias, this)
-  override def as(alias: Table[_]): Payment = new Payment(alias.getQualifiedName(), this)
+  override def as(alias: Table[?]): Payment = new Payment(alias.getQualifiedName(), this)
 
   /**
    * Rename this table
@@ -181,7 +181,7 @@ extends TableImpl[PaymentRecord](
   /**
    * Rename this table
    */
-  override def rename(name: Table[_]): Payment = new Payment(name.getQualifiedName(), null)
+  override def rename(name: Table[?]): Payment = new Payment(name.getQualifiedName(), null)
 
   /**
    * Create an inline derived table from this table
@@ -191,12 +191,12 @@ extends TableImpl[PaymentRecord](
   /**
    * Create an inline derived table from this table
    */
-  override def where(conditions: Collection[_ <: Condition]): Payment = where(DSL.and(conditions))
+  override def where(conditions: Collection[? <: Condition]): Payment = where(DSL.and(conditions))
 
   /**
    * Create an inline derived table from this table
    */
-  override def where(conditions: Condition*): Payment = where(DSL.and(conditions:_*))
+  override def where(conditions: Condition*): Payment = where(DSL.and(conditions*))
 
   /**
    * Create an inline derived table from this table
@@ -216,15 +216,15 @@ extends TableImpl[PaymentRecord](
   /**
    * Create an inline derived table from this table
    */
-  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): Payment = where(DSL.condition(condition, binds:_*))
+  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): Payment = where(DSL.condition(condition, binds*))
 
   /**
    * Create an inline derived table from this table
    */
-  override def whereExists(select: Select[_]): Payment = where(DSL.exists(select))
+  override def whereExists(select: Select[?]): Payment = where(DSL.exists(select))
 
   /**
    * Create an inline derived table from this table
    */
-  override def whereNotExists(select: Select[_]): Payment = where(DSL.notExists(select))
+  override def whereNotExists(select: Select[?]): Payment = where(DSL.notExists(select))
 }

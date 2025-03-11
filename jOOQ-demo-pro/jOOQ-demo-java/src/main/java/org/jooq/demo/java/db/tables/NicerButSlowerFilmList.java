@@ -94,7 +94,7 @@ public class NicerButSlowerFilmList extends TableImpl<NicerButSlowerFilmListReco
 
     private NicerButSlowerFilmList(Name alias, Table<NicerButSlowerFilmListRecord> aliased, Field<?>[] parameters, Condition where) {
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("""
-        create view "nicer_but_slower_film_list" as  SELECT film.film_id AS fid,
+        CREATE VIEW "nicer_but_slower_film_list" AS  SELECT film.film_id AS fid,
           film.title,
           film.description,
           category.name AS category,

@@ -19,4 +19,11 @@ public record SalesByFilmCategory(
 
     private static final long serialVersionUID = 1L;
 
+
+    public SalesByFilmCategory(SalesByFilmCategory value) {
+        this(
+            value.category,
+            value.totalSales
+        );
+    }
 }

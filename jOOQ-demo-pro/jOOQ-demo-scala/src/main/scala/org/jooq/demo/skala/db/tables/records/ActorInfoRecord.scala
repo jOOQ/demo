@@ -74,7 +74,7 @@ class ActorInfoRecord extends TableRecordImpl[ActorInfoRecord](ActorInfo.ACTOR_I
     this.setFirstName(firstName)
     this.setLastName(lastName)
     this.setFilmInfo(filmInfo)
-    resetChangedOnNotNull()
+    resetTouchedOnNotNull()
   }
 
   /**
@@ -88,7 +88,7 @@ class ActorInfoRecord extends TableRecordImpl[ActorInfoRecord](ActorInfo.ACTOR_I
       this.setFirstName(value.getFirstName)
       this.setLastName(value.getLastName)
       this.setFilmInfo(value.getFilmInfo)
-      resetChangedOnNotNull()
+      resetTouchedOnNotNull()
     }
   }
 }

@@ -20,4 +20,12 @@ public record Language(
 
     private static final long serialVersionUID = 1L;
 
+
+    public Language(Language value) {
+        this(
+            value.languageId,
+            value.name,
+            value.lastUpdate
+        );
+    }
 }

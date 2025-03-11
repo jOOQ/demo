@@ -97,7 +97,7 @@ public class CustomerList extends TableImpl<CustomerListRecord> {
 
     private CustomerList(Name alias, Table<CustomerListRecord> aliased, Field<?>[] parameters, Condition where) {
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("""
-        create view "customer_list" as  SELECT cu.customer_id AS id,
+        CREATE VIEW "customer_list" AS  SELECT cu.customer_id AS id,
          (((cu.first_name)::text || ' '::text) || (cu.last_name)::text) AS name,
          a.address,
          a.postal_code AS "zip code",

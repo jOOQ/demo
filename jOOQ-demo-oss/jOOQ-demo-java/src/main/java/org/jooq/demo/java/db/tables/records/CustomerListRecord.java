@@ -168,7 +168,7 @@ public class CustomerListRecord extends TableRecordImpl<CustomerListRecord> {
         setCountry(country);
         setNotes(notes);
         setSid(sid);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 
     /**
@@ -187,7 +187,7 @@ public class CustomerListRecord extends TableRecordImpl<CustomerListRecord> {
             setCountry(value.country());
             setNotes(value.notes());
             setSid(value.sid());
-            resetChangedOnNotNull();
+            resetTouchedOnNotNull();
         }
     }
 }

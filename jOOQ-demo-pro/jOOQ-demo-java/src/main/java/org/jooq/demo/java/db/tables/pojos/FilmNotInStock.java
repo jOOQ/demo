@@ -17,4 +17,10 @@ public record FilmNotInStock(
 
     private static final long serialVersionUID = 1L;
 
+
+    public FilmNotInStock(FilmNotInStock value) {
+        this(
+            value.pFilmCount
+        );
+    }
 }

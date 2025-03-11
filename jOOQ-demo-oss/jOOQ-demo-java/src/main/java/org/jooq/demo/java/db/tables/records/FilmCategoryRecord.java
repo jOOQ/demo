@@ -90,7 +90,7 @@ public class FilmCategoryRecord extends UpdatableRecordImpl<FilmCategoryRecord> 
         setFilmId(filmId);
         setCategoryId(categoryId);
         setLastUpdate(lastUpdate);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 
     /**
@@ -103,7 +103,7 @@ public class FilmCategoryRecord extends UpdatableRecordImpl<FilmCategoryRecord> 
             setFilmId(value.filmId());
             setCategoryId(value.categoryId());
             setLastUpdate(value.lastUpdate());
-            resetChangedOnNotNull();
+            resetTouchedOnNotNull();
         }
     }
 }

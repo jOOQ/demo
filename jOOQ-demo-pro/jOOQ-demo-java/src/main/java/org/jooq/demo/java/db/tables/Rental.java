@@ -140,6 +140,8 @@ public class Rental extends TableImpl<RentalRecord> {
      * A subtype implementing {@link Path} for simplified path-based joins.
      */
     public static class RentalPath extends Rental implements Path<RentalRecord> {
+
+        private static final long serialVersionUID = 1L;
         public <O extends Record> RentalPath(Table<O> path, ForeignKey<O, RentalRecord> childPath, InverseForeignKey<O, RentalRecord> parentPath) {
             super(path, childPath, parentPath);
         }
@@ -185,19 +187,7 @@ public class Rental extends TableImpl<RentalRecord> {
 
     @Override
     public List<ForeignKey<RentalRecord, ?>> getReferences() {
-        return Arrays.asList(Keys.RENTAL__RENTAL_INVENTORY_ID_FKEY, Keys.RENTAL__RENTAL_CUSTOMER_ID_FKEY, Keys.RENTAL__RENTAL_STAFF_ID_FKEY);
-    }
-
-    private transient InventoryPath _inventory;
-
-    /**
-     * Get the implicit join path to the <code>public.inventory</code> table.
-     */
-    public InventoryPath inventory() {
-        if (_inventory == null)
-            _inventory = new InventoryPath(this, Keys.RENTAL__RENTAL_INVENTORY_ID_FKEY, null);
-
-        return _inventory;
+        return Arrays.asList(Keys.RENTAL__RENTAL_CUSTOMER_ID_FKEY, Keys.RENTAL__RENTAL_INVENTORY_ID_FKEY, Keys.RENTAL__RENTAL_STAFF_ID_FKEY);
     }
 
     private transient CustomerPath _customer;
@@ -212,6 +202,18 @@ public class Rental extends TableImpl<RentalRecord> {
         return _customer;
     }
 
+    private transient InventoryPath _inventory;
+
+    /**
+     * Get the implicit join path to the <code>public.inventory</code> table.
+     */
+    public InventoryPath inventory() {
+        if (_inventory == null)
+            _inventory = new InventoryPath(this, Keys.RENTAL__RENTAL_INVENTORY_ID_FKEY, null);
+
+        return _inventory;
+    }
+
     private transient StaffPath _staff;
 
     /**
@@ -222,19 +224,6 @@ public class Rental extends TableImpl<RentalRecord> {
             _staff = new StaffPath(this, Keys.RENTAL__RENTAL_STAFF_ID_FKEY, null);
 
         return _staff;
-    }
-
-    private transient PaymentPath _payment;
-
-    /**
-     * Get the implicit to-many join path to the <code>public.payment</code>
-     * table
-     */
-    public PaymentPath payment() {
-        if (_payment == null)
-            _payment = new PaymentPath(this, null, Keys.PAYMENT__PAYMENT_RENTAL_ID_FKEY.getInverseKey());
-
-        return _payment;
     }
 
     private transient PaymentP2007_01Path _paymentP2007_01;
@@ -313,6 +302,19 @@ public class Rental extends TableImpl<RentalRecord> {
             _paymentP2007_06 = new PaymentP2007_06Path(this, null, Keys.PAYMENT_P2007_06__PAYMENT_P2007_06_RENTAL_ID_FKEY.getInverseKey());
 
         return _paymentP2007_06;
+    }
+
+    private transient PaymentPath _payment;
+
+    /**
+     * Get the implicit to-many join path to the <code>public.payment</code>
+     * table
+     */
+    public PaymentPath payment() {
+        if (_payment == null)
+            _payment = new PaymentPath(this, null, Keys.PAYMENT__PAYMENT_RENTAL_ID_FKEY.getInverseKey());
+
+        return _payment;
     }
 
     @Override

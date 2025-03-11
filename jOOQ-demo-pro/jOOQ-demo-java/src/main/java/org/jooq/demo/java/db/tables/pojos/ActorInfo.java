@@ -20,4 +20,13 @@ public record ActorInfo(
 
     private static final long serialVersionUID = 1L;
 
+
+    public ActorInfo(ActorInfo value) {
+        this(
+            value.actorId,
+            value.firstName,
+            value.lastName,
+            value.filmInfo
+        );
+    }
 }

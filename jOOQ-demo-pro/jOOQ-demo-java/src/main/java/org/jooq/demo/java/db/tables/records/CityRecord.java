@@ -105,7 +105,7 @@ public class CityRecord extends UpdatableRecordImpl<CityRecord> {
         setCity(city);
         setCountryId(countryId);
         setLastUpdate(lastUpdate);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 
     /**
@@ -117,7 +117,7 @@ public class CityRecord extends UpdatableRecordImpl<CityRecord> {
         setCityId(cityId);
         setCity(city);
         setCountryId(countryId);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 
     /**
@@ -131,7 +131,7 @@ public class CityRecord extends UpdatableRecordImpl<CityRecord> {
             setCity(value.city());
             setCountryId(value.countryId());
             setLastUpdate(value.lastUpdate());
-            resetChangedOnNotNull();
+            resetTouchedOnNotNull();
         }
     }
 }

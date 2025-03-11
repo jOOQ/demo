@@ -470,6 +470,7 @@ class Demo01Querying : AbstractDemo() {
         data class Category(val name: String?)
         data class Film(val title: String?, val actors: List<Actor>, val categories: List<Category>)
 
+        with(FILM) {
         val result: List<Film> = ctx
             .select(
                 FILM.TITLE,
@@ -486,6 +487,7 @@ class Demo01Querying : AbstractDemo() {
             .orderBy(FILM.TITLE)
             .limit(5)
             .fetch(mapping(::Film))
+        }
 
         for (film in result) {
             println("Film ${film.title} with categories ${film.categories} and actors ${film.actors}")

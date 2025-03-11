@@ -90,7 +90,7 @@ public class CategoryRecord extends UpdatableRecordImpl<CategoryRecord> {
         setCategoryId(categoryId);
         setName(name);
         setLastUpdate(lastUpdate);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 
     /**
@@ -101,7 +101,7 @@ public class CategoryRecord extends UpdatableRecordImpl<CategoryRecord> {
 
         setCategoryId(categoryId);
         setName(name);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 
     /**
@@ -114,7 +114,7 @@ public class CategoryRecord extends UpdatableRecordImpl<CategoryRecord> {
             setCategoryId(value.categoryId());
             setName(value.name());
             setLastUpdate(value.lastUpdate());
-            resetChangedOnNotNull();
+            resetTouchedOnNotNull();
         }
     }
 }

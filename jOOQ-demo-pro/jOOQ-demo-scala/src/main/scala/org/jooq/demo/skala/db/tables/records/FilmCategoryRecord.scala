@@ -68,7 +68,7 @@ class FilmCategoryRecord extends UpdatableRecordImpl[FilmCategoryRecord](FilmCat
     this.setFilmId(filmId)
     this.setCategoryId(categoryId)
     this.setLastUpdate(lastUpdate)
-    resetChangedOnNotNull()
+    resetTouchedOnNotNull()
   }
 
   /**
@@ -79,7 +79,7 @@ class FilmCategoryRecord extends UpdatableRecordImpl[FilmCategoryRecord](FilmCat
 
     this.setFilmId(filmId)
     this.setCategoryId(categoryId)
-    resetChangedOnNotNull()
+    resetTouchedOnNotNull()
   }
 
   /**
@@ -92,7 +92,7 @@ class FilmCategoryRecord extends UpdatableRecordImpl[FilmCategoryRecord](FilmCat
       this.setFilmId(value.getFilmId)
       this.setCategoryId(value.getCategoryId)
       this.setLastUpdate(value.getLastUpdate)
-      resetChangedOnNotNull()
+      resetTouchedOnNotNull()
     }
   }
 }

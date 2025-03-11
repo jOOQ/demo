@@ -80,7 +80,7 @@ public class SalesByStoreRecord extends TableRecordImpl<SalesByStoreRecord> {
         setStore(store);
         setManager(manager);
         setTotalSales(totalSales);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 
     /**
@@ -93,7 +93,7 @@ public class SalesByStoreRecord extends TableRecordImpl<SalesByStoreRecord> {
             setStore(value.store());
             setManager(value.manager());
             setTotalSales(value.totalSales());
-            resetChangedOnNotNull();
+            resetTouchedOnNotNull();
         }
     }
 }

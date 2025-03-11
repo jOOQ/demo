@@ -46,11 +46,11 @@ object CustomerList {
  */
 class CustomerList(
   alias: Name,
-  path: Table[_ <: Record],
-  childPath: ForeignKey[_ <: Record, CustomerListRecord],
-  parentPath: InverseForeignKey[_ <: Record, CustomerListRecord],
+  path: Table[? <: Record],
+  childPath: ForeignKey[? <: Record, CustomerListRecord],
+  parentPath: InverseForeignKey[? <: Record, CustomerListRecord],
   aliased: Table[CustomerListRecord],
-  parameters: Array[ Field[_] ],
+  parameters: Array[ Field[?] ],
   where: Condition
 )
 extends TableImpl[CustomerListRecord](
@@ -63,7 +63,7 @@ extends TableImpl[CustomerListRecord](
   parameters,
   DSL.comment(""),
   TableOptions.view("""
-  create view "customer_list" as  SELECT cu.customer_id AS id,
+  CREATE VIEW "customer_list" AS  SELECT cu.customer_id AS id,
    (((cu.first_name)::text || ' '::text) || (cu.last_name)::text) AS name,
    a.address,
    a.postal_code AS "zip code",
@@ -154,7 +154,7 @@ extends TableImpl[CustomerListRecord](
   override def getSchema: Schema = if (super.aliased()) null else Public.PUBLIC
   override def as(alias: String): CustomerList = new CustomerList(DSL.name(alias), this)
   override def as(alias: Name): CustomerList = new CustomerList(alias, this)
-  override def as(alias: Table[_]): CustomerList = new CustomerList(alias.getQualifiedName(), this)
+  override def as(alias: Table[?]): CustomerList = new CustomerList(alias.getQualifiedName(), this)
 
   /**
    * Rename this table
@@ -169,7 +169,7 @@ extends TableImpl[CustomerListRecord](
   /**
    * Rename this table
    */
-  override def rename(name: Table[_]): CustomerList = new CustomerList(name.getQualifiedName(), null)
+  override def rename(name: Table[?]): CustomerList = new CustomerList(name.getQualifiedName(), null)
 
   /**
    * Create an inline derived table from this table
@@ -179,12 +179,12 @@ extends TableImpl[CustomerListRecord](
   /**
    * Create an inline derived table from this table
    */
-  override def where(conditions: Collection[_ <: Condition]): CustomerList = where(DSL.and(conditions))
+  override def where(conditions: Collection[? <: Condition]): CustomerList = where(DSL.and(conditions))
 
   /**
    * Create an inline derived table from this table
    */
-  override def where(conditions: Condition*): CustomerList = where(DSL.and(conditions:_*))
+  override def where(conditions: Condition*): CustomerList = where(DSL.and(conditions*))
 
   /**
    * Create an inline derived table from this table
@@ -204,15 +204,15 @@ extends TableImpl[CustomerListRecord](
   /**
    * Create an inline derived table from this table
    */
-  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): CustomerList = where(DSL.condition(condition, binds:_*))
+  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): CustomerList = where(DSL.condition(condition, binds*))
 
   /**
    * Create an inline derived table from this table
    */
-  override def whereExists(select: Select[_]): CustomerList = where(DSL.exists(select))
+  override def whereExists(select: Select[?]): CustomerList = where(DSL.exists(select))
 
   /**
    * Create an inline derived table from this table
    */
-  override def whereNotExists(select: Select[_]): CustomerList = where(DSL.notExists(select))
+  override def whereNotExists(select: Select[?]): CustomerList = where(DSL.notExists(select))
 }

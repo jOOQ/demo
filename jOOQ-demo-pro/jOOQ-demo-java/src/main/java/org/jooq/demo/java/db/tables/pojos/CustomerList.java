@@ -25,4 +25,18 @@ public record CustomerList(
 
     private static final long serialVersionUID = 1L;
 
+
+    public CustomerList(CustomerList value) {
+        this(
+            value.id,
+            value.name,
+            value.address,
+            value.zipCode,
+            value.phone,
+            value.city,
+            value.country,
+            value.notes,
+            value.sid
+        );
+    }
 }

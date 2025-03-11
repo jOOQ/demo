@@ -56,7 +56,7 @@ object Inventory {
   /**
    * A subtype implementing {@link Path} for simplified path-based joins.
    */
-  class InventoryPath(path: Table[_ <: Record], childPath: ForeignKey[_ <: Record, InventoryRecord], parentPath: InverseForeignKey[_ <: Record, InventoryRecord]) extends Inventory(path, childPath, parentPath) with Path[InventoryRecord]
+  class InventoryPath(path: Table[? <: Record], childPath: ForeignKey[? <: Record, InventoryRecord], parentPath: InverseForeignKey[? <: Record, InventoryRecord]) extends Inventory(path, childPath, parentPath) with Path[InventoryRecord]
 }
 
 /**
@@ -64,11 +64,11 @@ object Inventory {
  */
 class Inventory(
   alias: Name,
-  path: Table[_ <: Record],
-  childPath: ForeignKey[_ <: Record, InventoryRecord],
-  parentPath: InverseForeignKey[_ <: Record, InventoryRecord],
+  path: Table[? <: Record],
+  childPath: ForeignKey[? <: Record, InventoryRecord],
+  parentPath: InverseForeignKey[? <: Record, InventoryRecord],
   aliased: Table[InventoryRecord],
-  parameters: Array[ Field[_] ],
+  parameters: Array[ Field[?] ],
   where: Condition
 )
 extends TableImpl[InventoryRecord](
@@ -127,7 +127,7 @@ extends TableImpl[InventoryRecord](
    */
   def this() = this(DSL.name("inventory"), null)
 
-  def this(path: Table[_ <: Record], childPath: ForeignKey[_ <: Record, InventoryRecord], parentPath: InverseForeignKey[_ <: Record, InventoryRecord]) = this(Internal.createPathAlias(path, childPath, parentPath), path, childPath, parentPath, org.jooq.demo.skala.db.tables.Inventory.INVENTORY, null, null)
+  def this(path: Table[? <: Record], childPath: ForeignKey[? <: Record, InventoryRecord], parentPath: InverseForeignKey[? <: Record, InventoryRecord]) = this(Internal.createPathAlias(path, childPath, parentPath), path, childPath, parentPath, org.jooq.demo.skala.db.tables.Inventory.INVENTORY, null, null)
 
   override def getSchema: Schema = if (super.aliased()) null else Public.PUBLIC
 
@@ -137,7 +137,7 @@ extends TableImpl[InventoryRecord](
 
   override def getPrimaryKey: UniqueKey[InventoryRecord] = Keys.INVENTORY_PKEY
 
-  override def getReferences: List[ ForeignKey[InventoryRecord, _] ] = Arrays.asList[ ForeignKey[InventoryRecord, _] ](Keys.INVENTORY__INVENTORY_FILM_ID_FKEY, Keys.INVENTORY__INVENTORY_STORE_ID_FKEY)
+  override def getReferences: List[ ForeignKey[InventoryRecord, ?] ] = Arrays.asList[ ForeignKey[InventoryRecord, ?] ](Keys.INVENTORY__INVENTORY_FILM_ID_FKEY, Keys.INVENTORY__INVENTORY_STORE_ID_FKEY)
 
   /**
    * Get the implicit join path to the <code>public.film</code> table.
@@ -155,7 +155,7 @@ extends TableImpl[InventoryRecord](
   lazy val rental: RentalPath = { new RentalPath(this, null, Keys.RENTAL__RENTAL_INVENTORY_ID_FKEY.getInverseKey()) }
   override def as(alias: String): Inventory = new Inventory(DSL.name(alias), this)
   override def as(alias: Name): Inventory = new Inventory(alias, this)
-  override def as(alias: Table[_]): Inventory = new Inventory(alias.getQualifiedName(), this)
+  override def as(alias: Table[?]): Inventory = new Inventory(alias.getQualifiedName(), this)
 
   /**
    * Rename this table
@@ -170,7 +170,7 @@ extends TableImpl[InventoryRecord](
   /**
    * Rename this table
    */
-  override def rename(name: Table[_]): Inventory = new Inventory(name.getQualifiedName(), null)
+  override def rename(name: Table[?]): Inventory = new Inventory(name.getQualifiedName(), null)
 
   /**
    * Create an inline derived table from this table
@@ -180,12 +180,12 @@ extends TableImpl[InventoryRecord](
   /**
    * Create an inline derived table from this table
    */
-  override def where(conditions: Collection[_ <: Condition]): Inventory = where(DSL.and(conditions))
+  override def where(conditions: Collection[? <: Condition]): Inventory = where(DSL.and(conditions))
 
   /**
    * Create an inline derived table from this table
    */
-  override def where(conditions: Condition*): Inventory = where(DSL.and(conditions:_*))
+  override def where(conditions: Condition*): Inventory = where(DSL.and(conditions*))
 
   /**
    * Create an inline derived table from this table
@@ -205,15 +205,15 @@ extends TableImpl[InventoryRecord](
   /**
    * Create an inline derived table from this table
    */
-  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): Inventory = where(DSL.condition(condition, binds:_*))
+  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): Inventory = where(DSL.condition(condition, binds*))
 
   /**
    * Create an inline derived table from this table
    */
-  override def whereExists(select: Select[_]): Inventory = where(DSL.exists(select))
+  override def whereExists(select: Select[?]): Inventory = where(DSL.exists(select))
 
   /**
    * Create an inline derived table from this table
    */
-  override def whereNotExists(select: Select[_]): Inventory = where(DSL.notExists(select))
+  override def whereNotExists(select: Select[?]): Inventory = where(DSL.notExists(select))
 }

@@ -130,6 +130,8 @@ public class PaymentP2007_04 extends TableImpl<PaymentP2007_04Record> {
      * A subtype implementing {@link Path} for simplified path-based joins.
      */
     public static class PaymentP2007_04Path extends PaymentP2007_04 implements Path<PaymentP2007_04Record> {
+
+        private static final long serialVersionUID = 1L;
         public <O extends Record> PaymentP2007_04Path(Table<O> path, ForeignKey<O, PaymentP2007_04Record> childPath, InverseForeignKey<O, PaymentP2007_04Record> parentPath) {
             super(path, childPath, parentPath);
         }
@@ -170,7 +172,7 @@ public class PaymentP2007_04 extends TableImpl<PaymentP2007_04Record> {
 
     @Override
     public List<ForeignKey<PaymentP2007_04Record, ?>> getReferences() {
-        return Arrays.asList(Keys.PAYMENT_P2007_04__PAYMENT_P2007_04_CUSTOMER_ID_FKEY, Keys.PAYMENT_P2007_04__PAYMENT_P2007_04_STAFF_ID_FKEY, Keys.PAYMENT_P2007_04__PAYMENT_P2007_04_RENTAL_ID_FKEY);
+        return Arrays.asList(Keys.PAYMENT_P2007_04__PAYMENT_P2007_04_CUSTOMER_ID_FKEY, Keys.PAYMENT_P2007_04__PAYMENT_P2007_04_RENTAL_ID_FKEY, Keys.PAYMENT_P2007_04__PAYMENT_P2007_04_STAFF_ID_FKEY);
     }
 
     private transient CustomerPath _customer;
@@ -185,18 +187,6 @@ public class PaymentP2007_04 extends TableImpl<PaymentP2007_04Record> {
         return _customer;
     }
 
-    private transient StaffPath _staff;
-
-    /**
-     * Get the implicit join path to the <code>public.staff</code> table.
-     */
-    public StaffPath staff() {
-        if (_staff == null)
-            _staff = new StaffPath(this, Keys.PAYMENT_P2007_04__PAYMENT_P2007_04_STAFF_ID_FKEY, null);
-
-        return _staff;
-    }
-
     private transient RentalPath _rental;
 
     /**
@@ -207,6 +197,18 @@ public class PaymentP2007_04 extends TableImpl<PaymentP2007_04Record> {
             _rental = new RentalPath(this, Keys.PAYMENT_P2007_04__PAYMENT_P2007_04_RENTAL_ID_FKEY, null);
 
         return _rental;
+    }
+
+    private transient StaffPath _staff;
+
+    /**
+     * Get the implicit join path to the <code>public.staff</code> table.
+     */
+    public StaffPath staff() {
+        if (_staff == null)
+            _staff = new StaffPath(this, Keys.PAYMENT_P2007_04__PAYMENT_P2007_04_STAFF_ID_FKEY, null);
+
+        return _staff;
     }
 
     @Override

@@ -269,7 +269,7 @@ public class FilmRecord extends UpdatableRecordImpl<FilmRecord> {
         setLastUpdate(lastUpdate);
         setSpecialFeatures(specialFeatures);
         setFulltext(fulltext);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 
     /**
@@ -293,7 +293,7 @@ public class FilmRecord extends UpdatableRecordImpl<FilmRecord> {
             setLastUpdate(value.lastUpdate());
             setSpecialFeatures(value.specialFeatures());
             setFulltext(value.fulltext());
-            resetChangedOnNotNull();
+            resetTouchedOnNotNull();
         }
     }
 }

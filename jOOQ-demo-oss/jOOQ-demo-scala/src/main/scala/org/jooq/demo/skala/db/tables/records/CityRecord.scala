@@ -82,7 +82,7 @@ class CityRecord extends UpdatableRecordImpl[CityRecord](City.CITY) {
     this.setCity(city)
     this.setCountryId(countryId)
     this.setLastUpdate(lastUpdate)
-    resetChangedOnNotNull()
+    resetTouchedOnNotNull()
   }
 
   /**
@@ -96,7 +96,7 @@ class CityRecord extends UpdatableRecordImpl[CityRecord](City.CITY) {
       this.setCity(value.getCity)
       this.setCountryId(value.getCountryId)
       this.setLastUpdate(value.getLastUpdate)
-      resetChangedOnNotNull()
+      resetTouchedOnNotNull()
     }
   }
 }

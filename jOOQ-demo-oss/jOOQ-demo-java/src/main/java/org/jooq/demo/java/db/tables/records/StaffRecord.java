@@ -210,7 +210,7 @@ public class StaffRecord extends UpdatableRecordImpl<StaffRecord> {
         setPassword(password);
         setLastUpdate(lastUpdate);
         setPicture(picture);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 
     /**
@@ -231,7 +231,7 @@ public class StaffRecord extends UpdatableRecordImpl<StaffRecord> {
             setPassword(value.password());
             setLastUpdate(value.lastUpdate());
             setPicture(value.picture());
-            resetChangedOnNotNull();
+            resetTouchedOnNotNull();
         }
     }
 }

@@ -72,7 +72,7 @@ public class ActorInfo extends TableImpl<ActorInfoRecord> {
 
     private ActorInfo(Name alias, Table<ActorInfoRecord> aliased, Field<?>[] parameters, Condition where) {
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("""
-        create view "actor_info" as  SELECT a.actor_id,
+        CREATE VIEW "actor_info" AS  SELECT a.actor_id,
           a.first_name,
           a.last_name,
           group_concat(DISTINCT (((c.name)::text || ': '::text) || ( SELECT group_concat((f.title)::text) AS group_concat

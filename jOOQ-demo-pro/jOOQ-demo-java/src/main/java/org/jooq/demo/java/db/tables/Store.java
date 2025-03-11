@@ -124,6 +124,8 @@ public class Store extends TableImpl<StoreRecord> {
      * A subtype implementing {@link Path} for simplified path-based joins.
      */
     public static class StorePath extends Store implements Path<StoreRecord> {
+
+        private static final long serialVersionUID = 1L;
         public <O extends Record> StorePath(Table<O> path, ForeignKey<O, StoreRecord> childPath, InverseForeignKey<O, StoreRecord> parentPath) {
             super(path, childPath, parentPath);
         }
@@ -169,19 +171,7 @@ public class Store extends TableImpl<StoreRecord> {
 
     @Override
     public List<ForeignKey<StoreRecord, ?>> getReferences() {
-        return Arrays.asList(Keys.STORE__STORE_MANAGER_STAFF_ID_FKEY, Keys.STORE__STORE_ADDRESS_ID_FKEY);
-    }
-
-    private transient StaffPath _staff;
-
-    /**
-     * Get the implicit join path to the <code>public.staff</code> table.
-     */
-    public StaffPath staff() {
-        if (_staff == null)
-            _staff = new StaffPath(this, Keys.STORE__STORE_MANAGER_STAFF_ID_FKEY, null);
-
-        return _staff;
+        return Arrays.asList(Keys.STORE__STORE_ADDRESS_ID_FKEY, Keys.STORE__STORE_MANAGER_STAFF_ID_FKEY);
     }
 
     private transient AddressPath _address;
@@ -194,6 +184,18 @@ public class Store extends TableImpl<StoreRecord> {
             _address = new AddressPath(this, Keys.STORE__STORE_ADDRESS_ID_FKEY, null);
 
         return _address;
+    }
+
+    private transient StaffPath _staff;
+
+    /**
+     * Get the implicit join path to the <code>public.staff</code> table.
+     */
+    public StaffPath staff() {
+        if (_staff == null)
+            _staff = new StaffPath(this, Keys.STORE__STORE_MANAGER_STAFF_ID_FKEY, null);
+
+        return _staff;
     }
 
     private transient CustomerPath _customer;

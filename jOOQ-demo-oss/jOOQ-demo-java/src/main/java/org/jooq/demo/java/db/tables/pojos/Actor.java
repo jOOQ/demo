@@ -21,4 +21,13 @@ public record Actor(
 
     private static final long serialVersionUID = 1L;
 
+
+    public Actor(Actor value) {
+        this(
+            value.actorId,
+            value.firstName,
+            value.lastName,
+            value.lastUpdate
+        );
+    }
 }

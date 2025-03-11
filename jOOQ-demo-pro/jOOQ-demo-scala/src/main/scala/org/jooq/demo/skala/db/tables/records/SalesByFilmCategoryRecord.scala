@@ -48,7 +48,7 @@ class SalesByFilmCategoryRecord extends TableRecordImpl[SalesByFilmCategoryRecor
 
     this.setCategory(category)
     this.setTotalSales(totalSales)
-    resetChangedOnNotNull()
+    resetTouchedOnNotNull()
   }
 
   /**
@@ -60,7 +60,7 @@ class SalesByFilmCategoryRecord extends TableRecordImpl[SalesByFilmCategoryRecor
     if (value != null) {
       this.setCategory(value.getCategory)
       this.setTotalSales(value.getTotalSales)
-      resetChangedOnNotNull()
+      resetTouchedOnNotNull()
     }
   }
 }

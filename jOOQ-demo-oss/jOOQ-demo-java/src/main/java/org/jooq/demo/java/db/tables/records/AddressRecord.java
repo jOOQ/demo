@@ -165,7 +165,7 @@ public class AddressRecord extends UpdatableRecordImpl<AddressRecord> {
         setPostalCode(postalCode);
         setPhone(phone);
         setLastUpdate(lastUpdate);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 
     /**
@@ -183,7 +183,7 @@ public class AddressRecord extends UpdatableRecordImpl<AddressRecord> {
             setPostalCode(value.postalCode());
             setPhone(value.phone());
             setLastUpdate(value.lastUpdate());
-            resetChangedOnNotNull();
+            resetTouchedOnNotNull();
         }
     }
 }

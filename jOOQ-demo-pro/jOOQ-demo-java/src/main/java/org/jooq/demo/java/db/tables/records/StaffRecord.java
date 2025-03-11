@@ -240,7 +240,7 @@ public class StaffRecord extends UpdatableRecordImpl<StaffRecord> {
         setPicture(picture);
         setFullAddress(fullAddress);
         setFullName(fullName);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 
     /**
@@ -261,7 +261,7 @@ public class StaffRecord extends UpdatableRecordImpl<StaffRecord> {
         setPicture(picture);
         setFullAddress(fullAddress);
         setFullName(fullName);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 
     /**
@@ -284,7 +284,7 @@ public class StaffRecord extends UpdatableRecordImpl<StaffRecord> {
             setPicture(value.picture());
             setFullAddress(value.fullAddress());
             setFullName(value.fullName());
-            resetChangedOnNotNull();
+            resetTouchedOnNotNull();
         }
     }
 }

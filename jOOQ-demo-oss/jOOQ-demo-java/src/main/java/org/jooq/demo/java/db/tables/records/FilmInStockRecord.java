@@ -48,7 +48,7 @@ public class FilmInStockRecord extends TableRecordImpl<FilmInStockRecord> {
         super(FilmInStock.FILM_IN_STOCK);
 
         setPFilmCount(pFilmCount);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 
     /**
@@ -59,7 +59,7 @@ public class FilmInStockRecord extends TableRecordImpl<FilmInStockRecord> {
 
         if (value != null) {
             setPFilmCount(value.pFilmCount());
-            resetChangedOnNotNull();
+            resetTouchedOnNotNull();
         }
     }
 }

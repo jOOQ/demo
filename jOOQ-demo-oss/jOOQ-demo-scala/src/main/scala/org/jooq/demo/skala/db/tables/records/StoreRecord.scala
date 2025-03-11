@@ -81,7 +81,7 @@ class StoreRecord extends UpdatableRecordImpl[StoreRecord](Store.STORE) {
     this.setManagerStaffId(managerStaffId)
     this.setAddressId(addressId)
     this.setLastUpdate(lastUpdate)
-    resetChangedOnNotNull()
+    resetTouchedOnNotNull()
   }
 
   /**
@@ -95,7 +95,7 @@ class StoreRecord extends UpdatableRecordImpl[StoreRecord](Store.STORE) {
       this.setManagerStaffId(value.getManagerStaffId)
       this.setAddressId(value.getAddressId)
       this.setLastUpdate(value.getLastUpdate)
-      resetChangedOnNotNull()
+      resetTouchedOnNotNull()
     }
   }
 }

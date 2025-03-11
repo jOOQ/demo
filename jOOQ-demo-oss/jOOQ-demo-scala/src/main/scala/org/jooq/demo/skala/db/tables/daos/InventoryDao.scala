@@ -27,19 +27,19 @@ class InventoryDao(configuration: Configuration) extends DAOImpl[InventoryRecord
 
   override def getId(o: org.jooq.demo.skala.db.tables.pojos.Inventory): Long = o.getInventoryId
   override def insert(obj: org.jooq.demo.skala.db.tables.pojos.Inventory): Unit = super.insert(obj)
-  override def insert(objs: org.jooq.demo.skala.db.tables.pojos.Inventory*): Unit = super.insert(objs:_*)
+  override def insert(objs: org.jooq.demo.skala.db.tables.pojos.Inventory*): Unit = super.insert(objs*)
   override def insert(objs: Collection[org.jooq.demo.skala.db.tables.pojos.Inventory]): Unit = super.insert(objs)
   override def update(obj: org.jooq.demo.skala.db.tables.pojos.Inventory): Unit = super.update(obj)
-  override def update(objs: org.jooq.demo.skala.db.tables.pojos.Inventory*): Unit = super.update(objs:_*)
+  override def update(objs: org.jooq.demo.skala.db.tables.pojos.Inventory*): Unit = super.update(objs*)
   override def update(objs: Collection[org.jooq.demo.skala.db.tables.pojos.Inventory]): Unit = super.update(objs)
   override def merge(obj: org.jooq.demo.skala.db.tables.pojos.Inventory): Unit = super.merge(obj)
-  override def merge(objs: org.jooq.demo.skala.db.tables.pojos.Inventory*): Unit = super.merge(objs:_*)
+  override def merge(objs: org.jooq.demo.skala.db.tables.pojos.Inventory*): Unit = super.merge(objs*)
   override def merge(objs: Collection[org.jooq.demo.skala.db.tables.pojos.Inventory]): Unit = super.merge(objs)
   override def delete(obj: org.jooq.demo.skala.db.tables.pojos.Inventory): Unit = super.delete(obj)
-  override def delete(objs: org.jooq.demo.skala.db.tables.pojos.Inventory*): Unit = super.delete(objs:_*)
+  override def delete(objs: org.jooq.demo.skala.db.tables.pojos.Inventory*): Unit = super.delete(objs*)
   override def delete(objs: Collection[org.jooq.demo.skala.db.tables.pojos.Inventory]): Unit = super.delete(objs)
   override def deleteById(id: Long): Unit = super.deleteById(id)
-  override def deleteById(ids: Long*): Unit = super.deleteById(ids:_*)
+  override def deleteById(ids: Long*): Unit = super.deleteById(ids*)
   override def deleteById(ids: Collection[Long]): Unit = super.deleteById(ids)
 
   /**
@@ -51,7 +51,7 @@ class InventoryDao(configuration: Configuration) extends DAOImpl[InventoryRecord
   /**
    * Fetch records that have <code>inventory_id IN (values)</code>
    */
-  def fetchByInventoryId(values: Long*): List[org.jooq.demo.skala.db.tables.pojos.Inventory] = fetch(Inventory.INVENTORY.INVENTORY_ID, values:_*)
+  def fetchByInventoryId(values: Long*): List[org.jooq.demo.skala.db.tables.pojos.Inventory] = fetch(Inventory.INVENTORY.INVENTORY_ID, values*)
 
   /**
    * Fetch a unique record that has <code>inventory_id = value</code>
@@ -67,7 +67,7 @@ class InventoryDao(configuration: Configuration) extends DAOImpl[InventoryRecord
   /**
    * Fetch records that have <code>film_id IN (values)</code>
    */
-  def fetchByFilmId(values: Long*): List[org.jooq.demo.skala.db.tables.pojos.Inventory] = fetch(Inventory.INVENTORY.FILM_ID, values:_*)
+  def fetchByFilmId(values: Long*): List[org.jooq.demo.skala.db.tables.pojos.Inventory] = fetch(Inventory.INVENTORY.FILM_ID, values*)
 
   /**
    * Fetch records that have <code>store_id BETWEEN lowerInclusive AND
@@ -78,7 +78,7 @@ class InventoryDao(configuration: Configuration) extends DAOImpl[InventoryRecord
   /**
    * Fetch records that have <code>store_id IN (values)</code>
    */
-  def fetchByStoreId(values: Long*): List[org.jooq.demo.skala.db.tables.pojos.Inventory] = fetch(Inventory.INVENTORY.STORE_ID, values:_*)
+  def fetchByStoreId(values: Long*): List[org.jooq.demo.skala.db.tables.pojos.Inventory] = fetch(Inventory.INVENTORY.STORE_ID, values*)
 
   /**
    * Fetch records that have <code>last_update BETWEEN lowerInclusive AND
@@ -89,5 +89,5 @@ class InventoryDao(configuration: Configuration) extends DAOImpl[InventoryRecord
   /**
    * Fetch records that have <code>last_update IN (values)</code>
    */
-  def fetchByLastUpdate(values: LocalDateTime*): List[org.jooq.demo.skala.db.tables.pojos.Inventory] = fetch(Inventory.INVENTORY.LAST_UPDATE, values:_*)
+  def fetchByLastUpdate(values: LocalDateTime*): List[org.jooq.demo.skala.db.tables.pojos.Inventory] = fetch(Inventory.INVENTORY.LAST_UPDATE, values*)
 }

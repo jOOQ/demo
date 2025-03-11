@@ -57,7 +57,7 @@ object PaymentP2007_01 {
   /**
    * A subtype implementing {@link Path} for simplified path-based joins.
    */
-  class PaymentP2007_01Path(path: Table[_ <: Record], childPath: ForeignKey[_ <: Record, PaymentP2007_01Record], parentPath: InverseForeignKey[_ <: Record, PaymentP2007_01Record]) extends PaymentP2007_01(path, childPath, parentPath) with Path[PaymentP2007_01Record]
+  class PaymentP2007_01Path(path: Table[? <: Record], childPath: ForeignKey[? <: Record, PaymentP2007_01Record], parentPath: InverseForeignKey[? <: Record, PaymentP2007_01Record]) extends PaymentP2007_01(path, childPath, parentPath) with Path[PaymentP2007_01Record]
 }
 
 /**
@@ -65,11 +65,11 @@ object PaymentP2007_01 {
  */
 class PaymentP2007_01(
   alias: Name,
-  path: Table[_ <: Record],
-  childPath: ForeignKey[_ <: Record, PaymentP2007_01Record],
-  parentPath: InverseForeignKey[_ <: Record, PaymentP2007_01Record],
+  path: Table[? <: Record],
+  childPath: ForeignKey[? <: Record, PaymentP2007_01Record],
+  parentPath: InverseForeignKey[? <: Record, PaymentP2007_01Record],
   aliased: Table[PaymentP2007_01Record],
-  parameters: Array[ Field[_] ],
+  parameters: Array[ Field[?] ],
   where: Condition
 )
 extends TableImpl[PaymentP2007_01Record](
@@ -138,7 +138,7 @@ extends TableImpl[PaymentP2007_01Record](
    */
   def this() = this(DSL.name("payment_p2007_01"), null)
 
-  def this(path: Table[_ <: Record], childPath: ForeignKey[_ <: Record, PaymentP2007_01Record], parentPath: InverseForeignKey[_ <: Record, PaymentP2007_01Record]) = this(Internal.createPathAlias(path, childPath, parentPath), path, childPath, parentPath, org.jooq.demo.skala.db.tables.PaymentP2007_01.PAYMENT_P2007_01, null, null)
+  def this(path: Table[? <: Record], childPath: ForeignKey[? <: Record, PaymentP2007_01Record], parentPath: InverseForeignKey[? <: Record, PaymentP2007_01Record]) = this(Internal.createPathAlias(path, childPath, parentPath), path, childPath, parentPath, org.jooq.demo.skala.db.tables.PaymentP2007_01.PAYMENT_P2007_01, null, null)
 
   override def getSchema: Schema = if (super.aliased()) null else Public.PUBLIC
 
@@ -146,7 +146,7 @@ extends TableImpl[PaymentP2007_01Record](
 
   override def getIdentity: Identity[PaymentP2007_01Record, Long] = super.getIdentity.asInstanceOf[ Identity[PaymentP2007_01Record, Long] ]
 
-  override def getReferences: List[ ForeignKey[PaymentP2007_01Record, _] ] = Arrays.asList[ ForeignKey[PaymentP2007_01Record, _] ](Keys.PAYMENT_P2007_01__PAYMENT_P2007_01_CUSTOMER_ID_FKEY, Keys.PAYMENT_P2007_01__PAYMENT_P2007_01_STAFF_ID_FKEY, Keys.PAYMENT_P2007_01__PAYMENT_P2007_01_RENTAL_ID_FKEY)
+  override def getReferences: List[ ForeignKey[PaymentP2007_01Record, ?] ] = Arrays.asList[ ForeignKey[PaymentP2007_01Record, ?] ](Keys.PAYMENT_P2007_01__PAYMENT_P2007_01_CUSTOMER_ID_FKEY, Keys.PAYMENT_P2007_01__PAYMENT_P2007_01_RENTAL_ID_FKEY, Keys.PAYMENT_P2007_01__PAYMENT_P2007_01_STAFF_ID_FKEY)
 
   /**
    * Get the implicit join path to the <code>public.customer</code> table.
@@ -154,20 +154,20 @@ extends TableImpl[PaymentP2007_01Record](
   lazy val customer: CustomerPath = { new CustomerPath(this, Keys.PAYMENT_P2007_01__PAYMENT_P2007_01_CUSTOMER_ID_FKEY, null) }
 
   /**
-   * Get the implicit join path to the <code>public.staff</code> table.
-   */
-  lazy val staff: StaffPath = { new StaffPath(this, Keys.PAYMENT_P2007_01__PAYMENT_P2007_01_STAFF_ID_FKEY, null) }
-
-  /**
    * Get the implicit join path to the <code>public.rental</code> table.
    */
   lazy val rental: RentalPath = { new RentalPath(this, Keys.PAYMENT_P2007_01__PAYMENT_P2007_01_RENTAL_ID_FKEY, null) }
+
+  /**
+   * Get the implicit join path to the <code>public.staff</code> table.
+   */
+  lazy val staff: StaffPath = { new StaffPath(this, Keys.PAYMENT_P2007_01__PAYMENT_P2007_01_STAFF_ID_FKEY, null) }
   override def getChecks: List[ Check[PaymentP2007_01Record] ] = Arrays.asList[ Check[PaymentP2007_01Record] ](
     Internal.createCheck(this, DSL.name("payment_p2007_01_payment_date_check"), "(((payment_date >= '2007-01-01 00:00:00'::timestamp without time zone) AND (payment_date < '2007-02-01 00:00:00'::timestamp without time zone)))", true)
   )
   override def as(alias: String): PaymentP2007_01 = new PaymentP2007_01(DSL.name(alias), this)
   override def as(alias: Name): PaymentP2007_01 = new PaymentP2007_01(alias, this)
-  override def as(alias: Table[_]): PaymentP2007_01 = new PaymentP2007_01(alias.getQualifiedName(), this)
+  override def as(alias: Table[?]): PaymentP2007_01 = new PaymentP2007_01(alias.getQualifiedName(), this)
 
   /**
    * Rename this table
@@ -182,7 +182,7 @@ extends TableImpl[PaymentP2007_01Record](
   /**
    * Rename this table
    */
-  override def rename(name: Table[_]): PaymentP2007_01 = new PaymentP2007_01(name.getQualifiedName(), null)
+  override def rename(name: Table[?]): PaymentP2007_01 = new PaymentP2007_01(name.getQualifiedName(), null)
 
   /**
    * Create an inline derived table from this table
@@ -192,12 +192,12 @@ extends TableImpl[PaymentP2007_01Record](
   /**
    * Create an inline derived table from this table
    */
-  override def where(conditions: Collection[_ <: Condition]): PaymentP2007_01 = where(DSL.and(conditions))
+  override def where(conditions: Collection[? <: Condition]): PaymentP2007_01 = where(DSL.and(conditions))
 
   /**
    * Create an inline derived table from this table
    */
-  override def where(conditions: Condition*): PaymentP2007_01 = where(DSL.and(conditions:_*))
+  override def where(conditions: Condition*): PaymentP2007_01 = where(DSL.and(conditions*))
 
   /**
    * Create an inline derived table from this table
@@ -217,15 +217,15 @@ extends TableImpl[PaymentP2007_01Record](
   /**
    * Create an inline derived table from this table
    */
-  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): PaymentP2007_01 = where(DSL.condition(condition, binds:_*))
+  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): PaymentP2007_01 = where(DSL.condition(condition, binds*))
 
   /**
    * Create an inline derived table from this table
    */
-  override def whereExists(select: Select[_]): PaymentP2007_01 = where(DSL.exists(select))
+  override def whereExists(select: Select[?]): PaymentP2007_01 = where(DSL.exists(select))
 
   /**
    * Create an inline derived table from this table
    */
-  override def whereNotExists(select: Select[_]): PaymentP2007_01 = where(DSL.notExists(select))
+  override def whereNotExists(select: Select[?]): PaymentP2007_01 = where(DSL.notExists(select))
 }

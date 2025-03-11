@@ -150,7 +150,7 @@ public class RentalRecord extends UpdatableRecordImpl<RentalRecord> {
         setReturnDate(returnDate);
         setStaffId(staffId);
         setLastUpdate(lastUpdate);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 
     /**
@@ -167,7 +167,7 @@ public class RentalRecord extends UpdatableRecordImpl<RentalRecord> {
             setReturnDate(value.returnDate());
             setStaffId(value.staffId());
             setLastUpdate(value.lastUpdate());
-            resetChangedOnNotNull();
+            resetTouchedOnNotNull();
         }
     }
 }

@@ -20,4 +20,12 @@ public record SalesByStore(
 
     private static final long serialVersionUID = 1L;
 
+
+    public SalesByStore(SalesByStore value) {
+        this(
+            value.store,
+            value.manager,
+            value.totalSales
+        );
+    }
 }

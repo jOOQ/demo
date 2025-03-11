@@ -120,7 +120,7 @@ class RentalRecord extends UpdatableRecordImpl[RentalRecord](Rental.RENTAL) {
     this.setReturnDate(returnDate)
     this.setStaffId(staffId)
     this.setLastUpdate(lastUpdate)
-    resetChangedOnNotNull()
+    resetTouchedOnNotNull()
   }
 
   /**
@@ -135,7 +135,7 @@ class RentalRecord extends UpdatableRecordImpl[RentalRecord](Rental.RENTAL) {
     this.setCustomerId(customerId)
     this.setReturnDate(returnDate)
     this.setStaffId(staffId)
-    resetChangedOnNotNull()
+    resetTouchedOnNotNull()
   }
 
   /**
@@ -152,7 +152,7 @@ class RentalRecord extends UpdatableRecordImpl[RentalRecord](Rental.RENTAL) {
       this.setReturnDate(value.getReturnDate)
       this.setStaffId(value.getStaffId)
       this.setLastUpdate(value.getLastUpdate)
-      resetChangedOnNotNull()
+      resetTouchedOnNotNull()
     }
   }
 }

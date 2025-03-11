@@ -12,6 +12,7 @@ import java.lang.Short
 import java.lang.String
 import java.math.BigDecimal
 import java.time.LocalDateTime
+import java.util.Collection
 import java.util.List
 
 import org.jooq.Configuration
@@ -34,6 +35,21 @@ class FilmDao(configuration: Configuration) extends DAOImpl[FilmRecord, org.jooq
   def this() = this(null)
 
   override def getId(o: org.jooq.demo.skala.db.tables.pojos.Film): Long = o.getFilmId
+  override def insert(obj: org.jooq.demo.skala.db.tables.pojos.Film): Unit = super.insert(obj)
+  override def insert(objs: org.jooq.demo.skala.db.tables.pojos.Film*): Unit = super.insert(objs*)
+  override def insert(objs: Collection[org.jooq.demo.skala.db.tables.pojos.Film]): Unit = super.insert(objs)
+  override def update(obj: org.jooq.demo.skala.db.tables.pojos.Film): Unit = super.update(obj)
+  override def update(objs: org.jooq.demo.skala.db.tables.pojos.Film*): Unit = super.update(objs*)
+  override def update(objs: Collection[org.jooq.demo.skala.db.tables.pojos.Film]): Unit = super.update(objs)
+  override def merge(obj: org.jooq.demo.skala.db.tables.pojos.Film): Unit = super.merge(obj)
+  override def merge(objs: org.jooq.demo.skala.db.tables.pojos.Film*): Unit = super.merge(objs*)
+  override def merge(objs: Collection[org.jooq.demo.skala.db.tables.pojos.Film]): Unit = super.merge(objs)
+  override def delete(obj: org.jooq.demo.skala.db.tables.pojos.Film): Unit = super.delete(obj)
+  override def delete(objs: org.jooq.demo.skala.db.tables.pojos.Film*): Unit = super.delete(objs*)
+  override def delete(objs: Collection[org.jooq.demo.skala.db.tables.pojos.Film]): Unit = super.delete(objs)
+  override def deleteById(id: Long): Unit = super.deleteById(id)
+  override def deleteById(ids: Long*): Unit = super.deleteById(ids*)
+  override def deleteById(ids: Collection[Long]): Unit = super.deleteById(ids)
 
   /**
    * Fetch records that have <code>film_id BETWEEN lowerInclusive AND
@@ -44,7 +60,7 @@ class FilmDao(configuration: Configuration) extends DAOImpl[FilmRecord, org.jooq
   /**
    * Fetch records that have <code>film_id IN (values)</code>
    */
-  def fetchByFilmId(values: Long*): List[org.jooq.demo.skala.db.tables.pojos.Film] = fetch(Film.FILM.FILM_ID, values:_*)
+  def fetchByFilmId(values: Long*): List[org.jooq.demo.skala.db.tables.pojos.Film] = fetch(Film.FILM.FILM_ID, values*)
 
   /**
    * Fetch a unique record that has <code>film_id = value</code>
@@ -60,7 +76,7 @@ class FilmDao(configuration: Configuration) extends DAOImpl[FilmRecord, org.jooq
   /**
    * Fetch records that have <code>title IN (values)</code>
    */
-  def fetchByTitle(values: String*): List[org.jooq.demo.skala.db.tables.pojos.Film] = fetch(Film.FILM.TITLE, values:_*)
+  def fetchByTitle(values: String*): List[org.jooq.demo.skala.db.tables.pojos.Film] = fetch(Film.FILM.TITLE, values*)
 
   /**
    * Fetch records that have <code>description BETWEEN lowerInclusive AND
@@ -71,7 +87,7 @@ class FilmDao(configuration: Configuration) extends DAOImpl[FilmRecord, org.jooq
   /**
    * Fetch records that have <code>description IN (values)</code>
    */
-  def fetchByDescription(values: String*): List[org.jooq.demo.skala.db.tables.pojos.Film] = fetch(Film.FILM.DESCRIPTION, values:_*)
+  def fetchByDescription(values: String*): List[org.jooq.demo.skala.db.tables.pojos.Film] = fetch(Film.FILM.DESCRIPTION, values*)
 
   /**
    * Fetch records that have <code>release_year BETWEEN lowerInclusive AND
@@ -82,7 +98,7 @@ class FilmDao(configuration: Configuration) extends DAOImpl[FilmRecord, org.jooq
   /**
    * Fetch records that have <code>release_year IN (values)</code>
    */
-  def fetchByReleaseYear(values: Integer*): List[org.jooq.demo.skala.db.tables.pojos.Film] = fetch(Film.FILM.RELEASE_YEAR, values:_*)
+  def fetchByReleaseYear(values: Integer*): List[org.jooq.demo.skala.db.tables.pojos.Film] = fetch(Film.FILM.RELEASE_YEAR, values*)
 
   /**
    * Fetch records that have <code>language_id BETWEEN lowerInclusive AND
@@ -93,7 +109,7 @@ class FilmDao(configuration: Configuration) extends DAOImpl[FilmRecord, org.jooq
   /**
    * Fetch records that have <code>language_id IN (values)</code>
    */
-  def fetchByLanguageId(values: Long*): List[org.jooq.demo.skala.db.tables.pojos.Film] = fetch(Film.FILM.LANGUAGE_ID, values:_*)
+  def fetchByLanguageId(values: Long*): List[org.jooq.demo.skala.db.tables.pojos.Film] = fetch(Film.FILM.LANGUAGE_ID, values*)
 
   /**
    * Fetch records that have <code>original_language_id BETWEEN lowerInclusive
@@ -104,7 +120,7 @@ class FilmDao(configuration: Configuration) extends DAOImpl[FilmRecord, org.jooq
   /**
    * Fetch records that have <code>original_language_id IN (values)</code>
    */
-  def fetchByOriginalLanguageId(values: Long*): List[org.jooq.demo.skala.db.tables.pojos.Film] = fetch(Film.FILM.ORIGINAL_LANGUAGE_ID, values:_*)
+  def fetchByOriginalLanguageId(values: Long*): List[org.jooq.demo.skala.db.tables.pojos.Film] = fetch(Film.FILM.ORIGINAL_LANGUAGE_ID, values*)
 
   /**
    * Fetch records that have <code>rental_duration BETWEEN lowerInclusive AND
@@ -115,7 +131,7 @@ class FilmDao(configuration: Configuration) extends DAOImpl[FilmRecord, org.jooq
   /**
    * Fetch records that have <code>rental_duration IN (values)</code>
    */
-  def fetchByRentalDuration(values: Short*): List[org.jooq.demo.skala.db.tables.pojos.Film] = fetch(Film.FILM.RENTAL_DURATION, values:_*)
+  def fetchByRentalDuration(values: Short*): List[org.jooq.demo.skala.db.tables.pojos.Film] = fetch(Film.FILM.RENTAL_DURATION, values*)
 
   /**
    * Fetch records that have <code>rental_rate BETWEEN lowerInclusive AND
@@ -126,7 +142,7 @@ class FilmDao(configuration: Configuration) extends DAOImpl[FilmRecord, org.jooq
   /**
    * Fetch records that have <code>rental_rate IN (values)</code>
    */
-  def fetchByRentalRate(values: BigDecimal*): List[org.jooq.demo.skala.db.tables.pojos.Film] = fetch(Film.FILM.RENTAL_RATE, values:_*)
+  def fetchByRentalRate(values: BigDecimal*): List[org.jooq.demo.skala.db.tables.pojos.Film] = fetch(Film.FILM.RENTAL_RATE, values*)
 
   /**
    * Fetch records that have <code>length BETWEEN lowerInclusive AND
@@ -137,7 +153,7 @@ class FilmDao(configuration: Configuration) extends DAOImpl[FilmRecord, org.jooq
   /**
    * Fetch records that have <code>length IN (values)</code>
    */
-  def fetchByLength(values: Short*): List[org.jooq.demo.skala.db.tables.pojos.Film] = fetch(Film.FILM.LENGTH, values:_*)
+  def fetchByLength(values: Short*): List[org.jooq.demo.skala.db.tables.pojos.Film] = fetch(Film.FILM.LENGTH, values*)
 
   /**
    * Fetch records that have <code>replacement_cost BETWEEN lowerInclusive AND
@@ -148,7 +164,7 @@ class FilmDao(configuration: Configuration) extends DAOImpl[FilmRecord, org.jooq
   /**
    * Fetch records that have <code>replacement_cost IN (values)</code>
    */
-  def fetchByReplacementCost(values: BigDecimal*): List[org.jooq.demo.skala.db.tables.pojos.Film] = fetch(Film.FILM.REPLACEMENT_COST, values:_*)
+  def fetchByReplacementCost(values: BigDecimal*): List[org.jooq.demo.skala.db.tables.pojos.Film] = fetch(Film.FILM.REPLACEMENT_COST, values*)
 
   /**
    * Fetch records that have <code>rating BETWEEN lowerInclusive AND
@@ -159,7 +175,7 @@ class FilmDao(configuration: Configuration) extends DAOImpl[FilmRecord, org.jooq
   /**
    * Fetch records that have <code>rating IN (values)</code>
    */
-  def fetchByRating(values: MpaaRating*): List[org.jooq.demo.skala.db.tables.pojos.Film] = fetch(Film.FILM.RATING, values:_*)
+  def fetchByRating(values: MpaaRating*): List[org.jooq.demo.skala.db.tables.pojos.Film] = fetch(Film.FILM.RATING, values*)
 
   /**
    * Fetch records that have <code>last_update BETWEEN lowerInclusive AND
@@ -170,7 +186,7 @@ class FilmDao(configuration: Configuration) extends DAOImpl[FilmRecord, org.jooq
   /**
    * Fetch records that have <code>last_update IN (values)</code>
    */
-  def fetchByLastUpdate(values: LocalDateTime*): List[org.jooq.demo.skala.db.tables.pojos.Film] = fetch(Film.FILM.LAST_UPDATE, values:_*)
+  def fetchByLastUpdate(values: LocalDateTime*): List[org.jooq.demo.skala.db.tables.pojos.Film] = fetch(Film.FILM.LAST_UPDATE, values*)
 
   /**
    * Fetch records that have <code>special_features BETWEEN lowerInclusive AND
@@ -181,7 +197,7 @@ class FilmDao(configuration: Configuration) extends DAOImpl[FilmRecord, org.jooq
   /**
    * Fetch records that have <code>special_features IN (values)</code>
    */
-  def fetchBySpecialFeatures(values: Array[String]*): List[org.jooq.demo.skala.db.tables.pojos.Film] = fetch(Film.FILM.SPECIAL_FEATURES, values:_*)
+  def fetchBySpecialFeatures(values: Array[String]*): List[org.jooq.demo.skala.db.tables.pojos.Film] = fetch(Film.FILM.SPECIAL_FEATURES, values*)
 
   /**
    * @deprecated Unknown data type. If this is a qualified, user-defined type,
@@ -201,5 +217,5 @@ class FilmDao(configuration: Configuration) extends DAOImpl[FilmRecord, org.jooq
    * <deprecationOnUnknownTypes/>} in your code generator configuration.
    */
   @Deprecated
-  def fetchByFulltext(values: Object*): List[org.jooq.demo.skala.db.tables.pojos.Film] = fetch(Film.FILM.FULLTEXT, values:_*)
+  def fetchByFulltext(values: Object*): List[org.jooq.demo.skala.db.tables.pojos.Film] = fetch(Film.FILM.FULLTEXT, values*)
 }

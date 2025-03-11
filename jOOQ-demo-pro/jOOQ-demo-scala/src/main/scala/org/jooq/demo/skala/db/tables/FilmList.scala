@@ -49,11 +49,11 @@ object FilmList {
  */
 class FilmList(
   alias: Name,
-  path: Table[_ <: Record],
-  childPath: ForeignKey[_ <: Record, FilmListRecord],
-  parentPath: InverseForeignKey[_ <: Record, FilmListRecord],
+  path: Table[? <: Record],
+  childPath: ForeignKey[? <: Record, FilmListRecord],
+  parentPath: InverseForeignKey[? <: Record, FilmListRecord],
   aliased: Table[FilmListRecord],
-  parameters: Array[ Field[_] ],
+  parameters: Array[ Field[?] ],
   where: Condition
 )
 extends TableImpl[FilmListRecord](
@@ -66,7 +66,7 @@ extends TableImpl[FilmListRecord](
   parameters,
   DSL.comment(""),
   TableOptions.view("""
-  create view "film_list" as  SELECT film.film_id AS fid,
+  CREATE VIEW "film_list" AS  SELECT film.film_id AS fid,
     film.title,
     film.description,
     category.name AS category,
@@ -150,7 +150,7 @@ extends TableImpl[FilmListRecord](
   override def getSchema: Schema = if (super.aliased()) null else Public.PUBLIC
   override def as(alias: String): FilmList = new FilmList(DSL.name(alias), this)
   override def as(alias: Name): FilmList = new FilmList(alias, this)
-  override def as(alias: Table[_]): FilmList = new FilmList(alias.getQualifiedName(), this)
+  override def as(alias: Table[?]): FilmList = new FilmList(alias.getQualifiedName(), this)
 
   /**
    * Rename this table
@@ -165,7 +165,7 @@ extends TableImpl[FilmListRecord](
   /**
    * Rename this table
    */
-  override def rename(name: Table[_]): FilmList = new FilmList(name.getQualifiedName(), null)
+  override def rename(name: Table[?]): FilmList = new FilmList(name.getQualifiedName(), null)
 
   /**
    * Create an inline derived table from this table
@@ -175,12 +175,12 @@ extends TableImpl[FilmListRecord](
   /**
    * Create an inline derived table from this table
    */
-  override def where(conditions: Collection[_ <: Condition]): FilmList = where(DSL.and(conditions))
+  override def where(conditions: Collection[? <: Condition]): FilmList = where(DSL.and(conditions))
 
   /**
    * Create an inline derived table from this table
    */
-  override def where(conditions: Condition*): FilmList = where(DSL.and(conditions:_*))
+  override def where(conditions: Condition*): FilmList = where(DSL.and(conditions*))
 
   /**
    * Create an inline derived table from this table
@@ -200,15 +200,15 @@ extends TableImpl[FilmListRecord](
   /**
    * Create an inline derived table from this table
    */
-  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): FilmList = where(DSL.condition(condition, binds:_*))
+  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): FilmList = where(DSL.condition(condition, binds*))
 
   /**
    * Create an inline derived table from this table
    */
-  override def whereExists(select: Select[_]): FilmList = where(DSL.exists(select))
+  override def whereExists(select: Select[?]): FilmList = where(DSL.exists(select))
 
   /**
    * Create an inline derived table from this table
    */
-  override def whereNotExists(select: Select[_]): FilmList = where(DSL.notExists(select))
+  override def whereNotExists(select: Select[?]): FilmList = where(DSL.notExists(select))
 }

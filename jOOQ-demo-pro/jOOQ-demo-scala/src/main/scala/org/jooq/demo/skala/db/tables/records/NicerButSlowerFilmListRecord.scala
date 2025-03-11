@@ -129,7 +129,7 @@ class NicerButSlowerFilmListRecord extends TableRecordImpl[NicerButSlowerFilmLis
     this.setLength(length)
     this.setRating(rating)
     this.setActors(actors)
-    resetChangedOnNotNull()
+    resetTouchedOnNotNull()
   }
 
   /**
@@ -147,7 +147,7 @@ class NicerButSlowerFilmListRecord extends TableRecordImpl[NicerButSlowerFilmLis
       this.setLength(value.getLength)
       this.setRating(value.getRating)
       this.setActors(value.getActors)
-      resetChangedOnNotNull()
+      resetTouchedOnNotNull()
     }
   }
 }

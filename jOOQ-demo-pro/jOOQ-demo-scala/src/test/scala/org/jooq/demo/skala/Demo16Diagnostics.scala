@@ -6,7 +6,8 @@ import org.jooq.demo.AbstractDemo._
 import org.junit.Test
 import org.jooq.demo.skala.db.Tables._
 import org.jooq.impl.DSL.count
-import org.jooq.impl.DSL.inline
+import org.jooq.impl.DSL
+import org.jooq.impl.DSL._
 
 
 class Demo16Diagnostics extends AbstractDemo {
@@ -56,7 +57,7 @@ class Demo16Diagnostics extends AbstractDemo {
     // MOD(x, 2) = 1 doesn't work for negative numbers. Use MOD(x, 2) != 0, instead
     // - https://www.jooq.org/doc/latest/manual/sql-execution/diagnostics/diagnostics-possibly-wrong-expressions/ (commercial only feature)
     c.selectFrom(ACTOR)
-      .where(ACTOR.ACTOR_ID.mod(inline(2L)).eq(inline(1L)))
+      .where(ACTOR.ACTOR_ID.mod(DSL.inline(2L)).eq(DSL.inline(1L)))
       .fetch
   }
 
@@ -69,7 +70,7 @@ class Demo16Diagnostics extends AbstractDemo {
     // - https://www.jooq.org/doc/latest/manual/sql-execution/diagnostics/diagnostics-null-condition/ (commercial only feature)
     c.selectFrom(ACTOR)
       .where(ACTOR.ACTOR_ID.eq(1L))
-      .and(ACTOR.LAST_NAME.ne(inline(null.asInstanceOf[String])))
+      .and(ACTOR.LAST_NAME.ne(DSL.inline(null.asInstanceOf[String])))
       .fetch
   }
 
@@ -98,8 +99,8 @@ class Demo16Diagnostics extends AbstractDemo {
       .from(ACTOR)
 
       // This should be ACTOR_ID >= 1
-      .where (ACTOR.ACTOR_ID.eq(inline(1L)))
-      .or(ACTOR.ACTOR_ID.gt(inline(1L)))
+      .where (ACTOR.ACTOR_ID.eq(DSL.inline(1L)))
+      .or(ACTOR.ACTOR_ID.gt(DSL.inline(1L)))
       .fetch
   }
 }

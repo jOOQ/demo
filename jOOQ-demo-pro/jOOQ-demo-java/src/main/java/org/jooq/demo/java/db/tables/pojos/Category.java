@@ -20,4 +20,12 @@ public record Category(
 
     private static final long serialVersionUID = 1L;
 
+
+    public Category(Category value) {
+        this(
+            value.categoryId,
+            value.name,
+            value.lastUpdate
+        );
+    }
 }

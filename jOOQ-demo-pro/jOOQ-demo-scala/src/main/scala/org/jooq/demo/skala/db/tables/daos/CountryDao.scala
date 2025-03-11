@@ -7,6 +7,7 @@ package org.jooq.demo.skala.db.tables.daos
 import java.lang.Long
 import java.lang.String
 import java.time.LocalDateTime
+import java.util.Collection
 import java.util.List
 
 import org.jooq.Configuration
@@ -26,6 +27,21 @@ class CountryDao(configuration: Configuration) extends DAOImpl[CountryRecord, or
   def this() = this(null)
 
   override def getId(o: org.jooq.demo.skala.db.tables.pojos.Country): Long = o.getCountryId
+  override def insert(obj: org.jooq.demo.skala.db.tables.pojos.Country): Unit = super.insert(obj)
+  override def insert(objs: org.jooq.demo.skala.db.tables.pojos.Country*): Unit = super.insert(objs*)
+  override def insert(objs: Collection[org.jooq.demo.skala.db.tables.pojos.Country]): Unit = super.insert(objs)
+  override def update(obj: org.jooq.demo.skala.db.tables.pojos.Country): Unit = super.update(obj)
+  override def update(objs: org.jooq.demo.skala.db.tables.pojos.Country*): Unit = super.update(objs*)
+  override def update(objs: Collection[org.jooq.demo.skala.db.tables.pojos.Country]): Unit = super.update(objs)
+  override def merge(obj: org.jooq.demo.skala.db.tables.pojos.Country): Unit = super.merge(obj)
+  override def merge(objs: org.jooq.demo.skala.db.tables.pojos.Country*): Unit = super.merge(objs*)
+  override def merge(objs: Collection[org.jooq.demo.skala.db.tables.pojos.Country]): Unit = super.merge(objs)
+  override def delete(obj: org.jooq.demo.skala.db.tables.pojos.Country): Unit = super.delete(obj)
+  override def delete(objs: org.jooq.demo.skala.db.tables.pojos.Country*): Unit = super.delete(objs*)
+  override def delete(objs: Collection[org.jooq.demo.skala.db.tables.pojos.Country]): Unit = super.delete(objs)
+  override def deleteById(id: Long): Unit = super.deleteById(id)
+  override def deleteById(ids: Long*): Unit = super.deleteById(ids*)
+  override def deleteById(ids: Collection[Long]): Unit = super.deleteById(ids)
 
   /**
    * Fetch records that have <code>country_id BETWEEN lowerInclusive AND
@@ -36,7 +52,7 @@ class CountryDao(configuration: Configuration) extends DAOImpl[CountryRecord, or
   /**
    * Fetch records that have <code>country_id IN (values)</code>
    */
-  def fetchByCountryId(values: Long*): List[org.jooq.demo.skala.db.tables.pojos.Country] = fetch(Country.COUNTRY.COUNTRY_ID, values:_*)
+  def fetchByCountryId(values: Long*): List[org.jooq.demo.skala.db.tables.pojos.Country] = fetch(Country.COUNTRY.COUNTRY_ID, values*)
 
   /**
    * Fetch a unique record that has <code>country_id = value</code>
@@ -52,7 +68,7 @@ class CountryDao(configuration: Configuration) extends DAOImpl[CountryRecord, or
   /**
    * Fetch records that have <code>country IN (values)</code>
    */
-  def fetchByCountry(values: String*): List[org.jooq.demo.skala.db.tables.pojos.Country] = fetch(Country.COUNTRY.COUNTRY_, values:_*)
+  def fetchByCountry(values: String*): List[org.jooq.demo.skala.db.tables.pojos.Country] = fetch(Country.COUNTRY.COUNTRY_, values*)
 
   /**
    * Fetch records that have <code>last_update BETWEEN lowerInclusive AND
@@ -63,5 +79,5 @@ class CountryDao(configuration: Configuration) extends DAOImpl[CountryRecord, or
   /**
    * Fetch records that have <code>last_update IN (values)</code>
    */
-  def fetchByLastUpdate(values: LocalDateTime*): List[org.jooq.demo.skala.db.tables.pojos.Country] = fetch(Country.COUNTRY.LAST_UPDATE, values:_*)
+  def fetchByLastUpdate(values: LocalDateTime*): List[org.jooq.demo.skala.db.tables.pojos.Country] = fetch(Country.COUNTRY.LAST_UPDATE, values*)
 }

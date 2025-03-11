@@ -24,4 +24,15 @@ public record Payment(
 
     private static final long serialVersionUID = 1L;
 
+
+    public Payment(Payment value) {
+        this(
+            value.paymentId,
+            value.customerId,
+            value.staffId,
+            value.rentalId,
+            value.amount,
+            value.paymentDate
+        );
+    }
 }

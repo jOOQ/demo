@@ -24,4 +24,16 @@ public record Rental(
 
     private static final long serialVersionUID = 1L;
 
+
+    public Rental(Rental value) {
+        this(
+            value.rentalId,
+            value.rentalDate,
+            value.inventoryId,
+            value.customerId,
+            value.returnDate,
+            value.staffId,
+            value.lastUpdate
+        );
+    }
 }

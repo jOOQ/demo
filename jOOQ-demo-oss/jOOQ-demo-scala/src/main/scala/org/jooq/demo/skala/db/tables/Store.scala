@@ -57,7 +57,7 @@ object Store {
   /**
    * A subtype implementing {@link Path} for simplified path-based joins.
    */
-  class StorePath(path: Table[_ <: Record], childPath: ForeignKey[_ <: Record, StoreRecord], parentPath: InverseForeignKey[_ <: Record, StoreRecord]) extends Store(path, childPath, parentPath) with Path[StoreRecord]
+  class StorePath(path: Table[? <: Record], childPath: ForeignKey[? <: Record, StoreRecord], parentPath: InverseForeignKey[? <: Record, StoreRecord]) extends Store(path, childPath, parentPath) with Path[StoreRecord]
 }
 
 /**
@@ -65,11 +65,11 @@ object Store {
  */
 class Store(
   alias: Name,
-  path: Table[_ <: Record],
-  childPath: ForeignKey[_ <: Record, StoreRecord],
-  parentPath: InverseForeignKey[_ <: Record, StoreRecord],
+  path: Table[? <: Record],
+  childPath: ForeignKey[? <: Record, StoreRecord],
+  parentPath: InverseForeignKey[? <: Record, StoreRecord],
   aliased: Table[StoreRecord],
-  parameters: Array[ Field[_] ],
+  parameters: Array[ Field[?] ],
   where: Condition
 )
 extends TableImpl[StoreRecord](
@@ -128,7 +128,7 @@ extends TableImpl[StoreRecord](
    */
   def this() = this(DSL.name("store"), null)
 
-  def this(path: Table[_ <: Record], childPath: ForeignKey[_ <: Record, StoreRecord], parentPath: InverseForeignKey[_ <: Record, StoreRecord]) = this(Internal.createPathAlias(path, childPath, parentPath), path, childPath, parentPath, org.jooq.demo.skala.db.tables.Store.STORE, null, null)
+  def this(path: Table[? <: Record], childPath: ForeignKey[? <: Record, StoreRecord], parentPath: InverseForeignKey[? <: Record, StoreRecord]) = this(Internal.createPathAlias(path, childPath, parentPath), path, childPath, parentPath, org.jooq.demo.skala.db.tables.Store.STORE, null, null)
 
   override def getSchema: Schema = if (super.aliased()) null else Public.PUBLIC
 
@@ -138,7 +138,7 @@ extends TableImpl[StoreRecord](
 
   override def getPrimaryKey: UniqueKey[StoreRecord] = Keys.STORE_PKEY
 
-  override def getReferences: List[ ForeignKey[StoreRecord, _] ] = Arrays.asList[ ForeignKey[StoreRecord, _] ](Keys.STORE__STORE_ADDRESS_ID_FKEY, Keys.STORE__STORE_MANAGER_STAFF_ID_FKEY)
+  override def getReferences: List[ ForeignKey[StoreRecord, ?] ] = Arrays.asList[ ForeignKey[StoreRecord, ?] ](Keys.STORE__STORE_ADDRESS_ID_FKEY, Keys.STORE__STORE_MANAGER_STAFF_ID_FKEY)
 
   /**
    * Get the implicit join path to the <code>public.address</code> table.
@@ -163,7 +163,7 @@ extends TableImpl[StoreRecord](
   lazy val inventory: InventoryPath = { new InventoryPath(this, null, Keys.INVENTORY__INVENTORY_STORE_ID_FKEY.getInverseKey()) }
   override def as(alias: String): Store = new Store(DSL.name(alias), this)
   override def as(alias: Name): Store = new Store(alias, this)
-  override def as(alias: Table[_]): Store = new Store(alias.getQualifiedName(), this)
+  override def as(alias: Table[?]): Store = new Store(alias.getQualifiedName(), this)
 
   /**
    * Rename this table
@@ -178,7 +178,7 @@ extends TableImpl[StoreRecord](
   /**
    * Rename this table
    */
-  override def rename(name: Table[_]): Store = new Store(name.getQualifiedName(), null)
+  override def rename(name: Table[?]): Store = new Store(name.getQualifiedName(), null)
 
   /**
    * Create an inline derived table from this table
@@ -188,12 +188,12 @@ extends TableImpl[StoreRecord](
   /**
    * Create an inline derived table from this table
    */
-  override def where(conditions: Collection[_ <: Condition]): Store = where(DSL.and(conditions))
+  override def where(conditions: Collection[? <: Condition]): Store = where(DSL.and(conditions))
 
   /**
    * Create an inline derived table from this table
    */
-  override def where(conditions: Condition*): Store = where(DSL.and(conditions:_*))
+  override def where(conditions: Condition*): Store = where(DSL.and(conditions*))
 
   /**
    * Create an inline derived table from this table
@@ -213,15 +213,15 @@ extends TableImpl[StoreRecord](
   /**
    * Create an inline derived table from this table
    */
-  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): Store = where(DSL.condition(condition, binds:_*))
+  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): Store = where(DSL.condition(condition, binds*))
 
   /**
    * Create an inline derived table from this table
    */
-  override def whereExists(select: Select[_]): Store = where(DSL.exists(select))
+  override def whereExists(select: Select[?]): Store = where(DSL.exists(select))
 
   /**
    * Create an inline derived table from this table
    */
-  override def whereNotExists(select: Select[_]): Store = where(DSL.notExists(select))
+  override def whereNotExists(select: Select[?]): Store = where(DSL.notExists(select))
 }

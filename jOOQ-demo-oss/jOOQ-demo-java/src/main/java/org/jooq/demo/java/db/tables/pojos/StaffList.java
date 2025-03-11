@@ -24,4 +24,17 @@ public record StaffList(
 
     private static final long serialVersionUID = 1L;
 
+
+    public StaffList(StaffList value) {
+        this(
+            value.id,
+            value.name,
+            value.address,
+            value.zipCode,
+            value.phone,
+            value.city,
+            value.country,
+            value.sid
+        );
+    }
 }

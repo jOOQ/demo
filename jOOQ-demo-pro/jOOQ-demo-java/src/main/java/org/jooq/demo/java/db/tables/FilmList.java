@@ -94,7 +94,7 @@ public class FilmList extends TableImpl<FilmListRecord> {
 
     private FilmList(Name alias, Table<FilmListRecord> aliased, Field<?>[] parameters, Condition where) {
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("""
-        create view "film_list" as  SELECT film.film_id AS fid,
+        CREATE VIEW "film_list" AS  SELECT film.film_id AS fid,
           film.title,
           film.description,
           category.name AS category,

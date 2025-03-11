@@ -7,6 +7,7 @@ package org.jooq.demo.skala.db.tables.daos
 import java.lang.Long
 import java.math.BigDecimal
 import java.time.LocalDateTime
+import java.util.Collection
 import java.util.List
 
 import org.jooq.Configuration
@@ -26,6 +27,21 @@ class PaymentDao(configuration: Configuration) extends DAOImpl[PaymentRecord, or
   def this() = this(null)
 
   override def getId(o: org.jooq.demo.skala.db.tables.pojos.Payment): Long = o.getPaymentId
+  override def insert(obj: org.jooq.demo.skala.db.tables.pojos.Payment): Unit = super.insert(obj)
+  override def insert(objs: org.jooq.demo.skala.db.tables.pojos.Payment*): Unit = super.insert(objs*)
+  override def insert(objs: Collection[org.jooq.demo.skala.db.tables.pojos.Payment]): Unit = super.insert(objs)
+  override def update(obj: org.jooq.demo.skala.db.tables.pojos.Payment): Unit = super.update(obj)
+  override def update(objs: org.jooq.demo.skala.db.tables.pojos.Payment*): Unit = super.update(objs*)
+  override def update(objs: Collection[org.jooq.demo.skala.db.tables.pojos.Payment]): Unit = super.update(objs)
+  override def merge(obj: org.jooq.demo.skala.db.tables.pojos.Payment): Unit = super.merge(obj)
+  override def merge(objs: org.jooq.demo.skala.db.tables.pojos.Payment*): Unit = super.merge(objs*)
+  override def merge(objs: Collection[org.jooq.demo.skala.db.tables.pojos.Payment]): Unit = super.merge(objs)
+  override def delete(obj: org.jooq.demo.skala.db.tables.pojos.Payment): Unit = super.delete(obj)
+  override def delete(objs: org.jooq.demo.skala.db.tables.pojos.Payment*): Unit = super.delete(objs*)
+  override def delete(objs: Collection[org.jooq.demo.skala.db.tables.pojos.Payment]): Unit = super.delete(objs)
+  override def deleteById(id: Long): Unit = super.deleteById(id)
+  override def deleteById(ids: Long*): Unit = super.deleteById(ids*)
+  override def deleteById(ids: Collection[Long]): Unit = super.deleteById(ids)
 
   /**
    * Fetch records that have <code>payment_id BETWEEN lowerInclusive AND
@@ -36,7 +52,7 @@ class PaymentDao(configuration: Configuration) extends DAOImpl[PaymentRecord, or
   /**
    * Fetch records that have <code>payment_id IN (values)</code>
    */
-  def fetchByPaymentId(values: Long*): List[org.jooq.demo.skala.db.tables.pojos.Payment] = fetch(Payment.PAYMENT.PAYMENT_ID, values:_*)
+  def fetchByPaymentId(values: Long*): List[org.jooq.demo.skala.db.tables.pojos.Payment] = fetch(Payment.PAYMENT.PAYMENT_ID, values*)
 
   /**
    * Fetch a unique record that has <code>payment_id = value</code>
@@ -52,7 +68,7 @@ class PaymentDao(configuration: Configuration) extends DAOImpl[PaymentRecord, or
   /**
    * Fetch records that have <code>customer_id IN (values)</code>
    */
-  def fetchByCustomerId(values: Long*): List[org.jooq.demo.skala.db.tables.pojos.Payment] = fetch(Payment.PAYMENT.CUSTOMER_ID, values:_*)
+  def fetchByCustomerId(values: Long*): List[org.jooq.demo.skala.db.tables.pojos.Payment] = fetch(Payment.PAYMENT.CUSTOMER_ID, values*)
 
   /**
    * Fetch records that have <code>staff_id BETWEEN lowerInclusive AND
@@ -63,7 +79,7 @@ class PaymentDao(configuration: Configuration) extends DAOImpl[PaymentRecord, or
   /**
    * Fetch records that have <code>staff_id IN (values)</code>
    */
-  def fetchByStaffId(values: Long*): List[org.jooq.demo.skala.db.tables.pojos.Payment] = fetch(Payment.PAYMENT.STAFF_ID, values:_*)
+  def fetchByStaffId(values: Long*): List[org.jooq.demo.skala.db.tables.pojos.Payment] = fetch(Payment.PAYMENT.STAFF_ID, values*)
 
   /**
    * Fetch records that have <code>rental_id BETWEEN lowerInclusive AND
@@ -74,7 +90,7 @@ class PaymentDao(configuration: Configuration) extends DAOImpl[PaymentRecord, or
   /**
    * Fetch records that have <code>rental_id IN (values)</code>
    */
-  def fetchByRentalId(values: Long*): List[org.jooq.demo.skala.db.tables.pojos.Payment] = fetch(Payment.PAYMENT.RENTAL_ID, values:_*)
+  def fetchByRentalId(values: Long*): List[org.jooq.demo.skala.db.tables.pojos.Payment] = fetch(Payment.PAYMENT.RENTAL_ID, values*)
 
   /**
    * Fetch records that have <code>amount BETWEEN lowerInclusive AND
@@ -85,7 +101,7 @@ class PaymentDao(configuration: Configuration) extends DAOImpl[PaymentRecord, or
   /**
    * Fetch records that have <code>amount IN (values)</code>
    */
-  def fetchByAmount(values: BigDecimal*): List[org.jooq.demo.skala.db.tables.pojos.Payment] = fetch(Payment.PAYMENT.AMOUNT, values:_*)
+  def fetchByAmount(values: BigDecimal*): List[org.jooq.demo.skala.db.tables.pojos.Payment] = fetch(Payment.PAYMENT.AMOUNT, values*)
 
   /**
    * Fetch records that have <code>payment_date BETWEEN lowerInclusive AND
@@ -96,5 +112,5 @@ class PaymentDao(configuration: Configuration) extends DAOImpl[PaymentRecord, or
   /**
    * Fetch records that have <code>payment_date IN (values)</code>
    */
-  def fetchByPaymentDate(values: LocalDateTime*): List[org.jooq.demo.skala.db.tables.pojos.Payment] = fetch(Payment.PAYMENT.PAYMENT_DATE, values:_*)
+  def fetchByPaymentDate(values: LocalDateTime*): List[org.jooq.demo.skala.db.tables.pojos.Payment] = fetch(Payment.PAYMENT.PAYMENT_DATE, values*)
 }

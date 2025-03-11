@@ -34,4 +34,23 @@ public record Film(
 
     private static final long serialVersionUID = 1L;
 
+
+    public Film(Film value) {
+        this(
+            value.filmId,
+            value.title,
+            value.description,
+            value.releaseYear,
+            value.languageId,
+            value.originalLanguageId,
+            value.rentalDuration,
+            value.rentalRate,
+            value.length,
+            value.replacementCost,
+            value.rating,
+            value.lastUpdate,
+            value.specialFeatures,
+            value.fulltext
+        );
+    }
 }

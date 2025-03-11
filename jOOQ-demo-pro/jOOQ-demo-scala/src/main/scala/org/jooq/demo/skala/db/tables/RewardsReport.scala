@@ -46,11 +46,11 @@ object RewardsReport {
  */
 class RewardsReport(
   alias: Name,
-  path: Table[_ <: Record],
-  childPath: ForeignKey[_ <: Record, CustomerRecord],
-  parentPath: InverseForeignKey[_ <: Record, CustomerRecord],
+  path: Table[? <: Record],
+  childPath: ForeignKey[? <: Record, CustomerRecord],
+  parentPath: InverseForeignKey[? <: Record, CustomerRecord],
   aliased: Table[CustomerRecord],
-  parameters: Array[ Field[_] ],
+  parameters: Array[ Field[?] ],
   where: Condition
 )
 extends TableImpl[CustomerRecord](
@@ -146,7 +146,7 @@ extends TableImpl[CustomerRecord](
   override def getIdentity: Identity[CustomerRecord, Long] = super.getIdentity.asInstanceOf[ Identity[CustomerRecord, Long] ]
   override def as(alias: String): RewardsReport = new RewardsReport(DSL.name(alias), null, null, null, this, parameters, null)
   override def as(alias: Name): RewardsReport = new RewardsReport(alias, null, null, null, this, parameters, null)
-  override def as(alias: Table[_]): RewardsReport = new RewardsReport(alias.getQualifiedName(), null, null, null, this, parameters, null)
+  override def as(alias: Table[?]): RewardsReport = new RewardsReport(alias.getQualifiedName(), null, null, null, this, parameters, null)
 
   /**
    * Rename this table
@@ -161,7 +161,7 @@ extends TableImpl[CustomerRecord](
   /**
    * Rename this table
    */
-  override def rename(name: Table[_]): RewardsReport = new RewardsReport(name.getQualifiedName(), null, null, null, null, parameters, null)
+  override def rename(name: Table[?]): RewardsReport = new RewardsReport(name.getQualifiedName(), null, null, null, null, parameters, null)
 
   /**
    * Call this table-valued function

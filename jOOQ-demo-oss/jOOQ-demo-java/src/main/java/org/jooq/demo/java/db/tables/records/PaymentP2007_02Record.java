@@ -126,7 +126,7 @@ public class PaymentP2007_02Record extends TableRecordImpl<PaymentP2007_02Record
         setRentalId(rentalId);
         setAmount(amount);
         setPaymentDate(paymentDate);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 
     /**
@@ -142,7 +142,7 @@ public class PaymentP2007_02Record extends TableRecordImpl<PaymentP2007_02Record
             setRentalId(value.rentalId());
             setAmount(value.amount());
             setPaymentDate(value.paymentDate());
-            resetChangedOnNotNull();
+            resetTouchedOnNotNull();
         }
     }
 }

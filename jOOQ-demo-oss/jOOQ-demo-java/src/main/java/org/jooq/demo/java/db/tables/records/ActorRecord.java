@@ -105,7 +105,7 @@ public class ActorRecord extends UpdatableRecordImpl<ActorRecord> {
         setFirstName(firstName);
         setLastName(lastName);
         setLastUpdate(lastUpdate);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 
     /**
@@ -119,7 +119,7 @@ public class ActorRecord extends UpdatableRecordImpl<ActorRecord> {
             setFirstName(value.firstName());
             setLastName(value.lastName());
             setLastUpdate(value.lastUpdate());
-            resetChangedOnNotNull();
+            resetTouchedOnNotNull();
         }
     }
 }

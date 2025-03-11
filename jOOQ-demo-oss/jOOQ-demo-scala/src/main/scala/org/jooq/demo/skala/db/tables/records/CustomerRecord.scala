@@ -163,7 +163,7 @@ class CustomerRecord extends UpdatableRecordImpl[CustomerRecord](Customer.CUSTOM
     this.setCreateDate(createDate)
     this.setLastUpdate(lastUpdate)
     this.setActive(active)
-    resetChangedOnNotNull()
+    resetTouchedOnNotNull()
   }
 
   /**
@@ -183,7 +183,7 @@ class CustomerRecord extends UpdatableRecordImpl[CustomerRecord](Customer.CUSTOM
       this.setCreateDate(value.getCreateDate)
       this.setLastUpdate(value.getLastUpdate)
       this.setActive(value.getActive)
-      resetChangedOnNotNull()
+      resetTouchedOnNotNull()
     }
   }
 }

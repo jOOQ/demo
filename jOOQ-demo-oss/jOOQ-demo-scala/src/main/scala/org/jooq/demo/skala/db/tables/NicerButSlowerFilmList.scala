@@ -49,11 +49,11 @@ object NicerButSlowerFilmList {
  */
 class NicerButSlowerFilmList(
   alias: Name,
-  path: Table[_ <: Record],
-  childPath: ForeignKey[_ <: Record, NicerButSlowerFilmListRecord],
-  parentPath: InverseForeignKey[_ <: Record, NicerButSlowerFilmListRecord],
+  path: Table[? <: Record],
+  childPath: ForeignKey[? <: Record, NicerButSlowerFilmListRecord],
+  parentPath: InverseForeignKey[? <: Record, NicerButSlowerFilmListRecord],
   aliased: Table[NicerButSlowerFilmListRecord],
-  parameters: Array[ Field[_] ],
+  parameters: Array[ Field[?] ],
   where: Condition
 )
 extends TableImpl[NicerButSlowerFilmListRecord](
@@ -66,7 +66,7 @@ extends TableImpl[NicerButSlowerFilmListRecord](
   parameters,
   DSL.comment(""),
   TableOptions.view("""
-  create view "nicer_but_slower_film_list" as  SELECT film.film_id AS fid,
+  CREATE VIEW "nicer_but_slower_film_list" AS  SELECT film.film_id AS fid,
     film.title,
     film.description,
     category.name AS category,
@@ -152,7 +152,7 @@ extends TableImpl[NicerButSlowerFilmListRecord](
   override def getSchema: Schema = if (super.aliased()) null else Public.PUBLIC
   override def as(alias: String): NicerButSlowerFilmList = new NicerButSlowerFilmList(DSL.name(alias), this)
   override def as(alias: Name): NicerButSlowerFilmList = new NicerButSlowerFilmList(alias, this)
-  override def as(alias: Table[_]): NicerButSlowerFilmList = new NicerButSlowerFilmList(alias.getQualifiedName(), this)
+  override def as(alias: Table[?]): NicerButSlowerFilmList = new NicerButSlowerFilmList(alias.getQualifiedName(), this)
 
   /**
    * Rename this table
@@ -167,7 +167,7 @@ extends TableImpl[NicerButSlowerFilmListRecord](
   /**
    * Rename this table
    */
-  override def rename(name: Table[_]): NicerButSlowerFilmList = new NicerButSlowerFilmList(name.getQualifiedName(), null)
+  override def rename(name: Table[?]): NicerButSlowerFilmList = new NicerButSlowerFilmList(name.getQualifiedName(), null)
 
   /**
    * Create an inline derived table from this table
@@ -177,12 +177,12 @@ extends TableImpl[NicerButSlowerFilmListRecord](
   /**
    * Create an inline derived table from this table
    */
-  override def where(conditions: Collection[_ <: Condition]): NicerButSlowerFilmList = where(DSL.and(conditions))
+  override def where(conditions: Collection[? <: Condition]): NicerButSlowerFilmList = where(DSL.and(conditions))
 
   /**
    * Create an inline derived table from this table
    */
-  override def where(conditions: Condition*): NicerButSlowerFilmList = where(DSL.and(conditions:_*))
+  override def where(conditions: Condition*): NicerButSlowerFilmList = where(DSL.and(conditions*))
 
   /**
    * Create an inline derived table from this table
@@ -202,15 +202,15 @@ extends TableImpl[NicerButSlowerFilmListRecord](
   /**
    * Create an inline derived table from this table
    */
-  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): NicerButSlowerFilmList = where(DSL.condition(condition, binds:_*))
+  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): NicerButSlowerFilmList = where(DSL.condition(condition, binds*))
 
   /**
    * Create an inline derived table from this table
    */
-  override def whereExists(select: Select[_]): NicerButSlowerFilmList = where(DSL.exists(select))
+  override def whereExists(select: Select[?]): NicerButSlowerFilmList = where(DSL.exists(select))
 
   /**
    * Create an inline derived table from this table
    */
-  override def whereNotExists(select: Select[_]): NicerButSlowerFilmList = where(DSL.notExists(select))
+  override def whereNotExists(select: Select[?]): NicerButSlowerFilmList = where(DSL.notExists(select))
 }

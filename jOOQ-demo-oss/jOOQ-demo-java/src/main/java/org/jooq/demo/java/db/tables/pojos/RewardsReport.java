@@ -28,4 +28,19 @@ public record RewardsReport(
 
     private static final long serialVersionUID = 1L;
 
+
+    public RewardsReport(RewardsReport value) {
+        this(
+            value.customerId,
+            value.storeId,
+            value.firstName,
+            value.lastName,
+            value.email,
+            value.addressId,
+            value.activebool,
+            value.createDate,
+            value.lastUpdate,
+            value.active
+        );
+    }
 }

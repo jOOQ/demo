@@ -51,7 +51,7 @@ object Category {
   /**
    * A subtype implementing {@link Path} for simplified path-based joins.
    */
-  class CategoryPath(path: Table[_ <: Record], childPath: ForeignKey[_ <: Record, CategoryRecord], parentPath: InverseForeignKey[_ <: Record, CategoryRecord]) extends Category(path, childPath, parentPath) with Path[CategoryRecord]
+  class CategoryPath(path: Table[? <: Record], childPath: ForeignKey[? <: Record, CategoryRecord], parentPath: InverseForeignKey[? <: Record, CategoryRecord]) extends Category(path, childPath, parentPath) with Path[CategoryRecord]
 }
 
 /**
@@ -59,11 +59,11 @@ object Category {
  */
 class Category(
   alias: Name,
-  path: Table[_ <: Record],
-  childPath: ForeignKey[_ <: Record, CategoryRecord],
-  parentPath: InverseForeignKey[_ <: Record, CategoryRecord],
+  path: Table[? <: Record],
+  childPath: ForeignKey[? <: Record, CategoryRecord],
+  parentPath: InverseForeignKey[? <: Record, CategoryRecord],
   aliased: Table[CategoryRecord],
-  parameters: Array[ Field[_] ],
+  parameters: Array[ Field[?] ],
   where: Condition
 )
 extends TableImpl[CategoryRecord](
@@ -117,7 +117,7 @@ extends TableImpl[CategoryRecord](
    */
   def this() = this(DSL.name("category"), null)
 
-  def this(path: Table[_ <: Record], childPath: ForeignKey[_ <: Record, CategoryRecord], parentPath: InverseForeignKey[_ <: Record, CategoryRecord]) = this(Internal.createPathAlias(path, childPath, parentPath), path, childPath, parentPath, org.jooq.demo.skala.db.tables.Category.CATEGORY, null, null)
+  def this(path: Table[? <: Record], childPath: ForeignKey[? <: Record, CategoryRecord], parentPath: InverseForeignKey[? <: Record, CategoryRecord]) = this(Internal.createPathAlias(path, childPath, parentPath), path, childPath, parentPath, org.jooq.demo.skala.db.tables.Category.CATEGORY, null, null)
 
   override def getSchema: Schema = if (super.aliased()) null else Public.PUBLIC
 
@@ -138,7 +138,7 @@ extends TableImpl[CategoryRecord](
   def film: FilmPath = filmCategory.film
   override def as(alias: String): Category = new Category(DSL.name(alias), this)
   override def as(alias: Name): Category = new Category(alias, this)
-  override def as(alias: Table[_]): Category = new Category(alias.getQualifiedName(), this)
+  override def as(alias: Table[?]): Category = new Category(alias.getQualifiedName(), this)
 
   /**
    * Rename this table
@@ -153,7 +153,7 @@ extends TableImpl[CategoryRecord](
   /**
    * Rename this table
    */
-  override def rename(name: Table[_]): Category = new Category(name.getQualifiedName(), null)
+  override def rename(name: Table[?]): Category = new Category(name.getQualifiedName(), null)
 
   /**
    * Create an inline derived table from this table
@@ -163,12 +163,12 @@ extends TableImpl[CategoryRecord](
   /**
    * Create an inline derived table from this table
    */
-  override def where(conditions: Collection[_ <: Condition]): Category = where(DSL.and(conditions))
+  override def where(conditions: Collection[? <: Condition]): Category = where(DSL.and(conditions))
 
   /**
    * Create an inline derived table from this table
    */
-  override def where(conditions: Condition*): Category = where(DSL.and(conditions:_*))
+  override def where(conditions: Condition*): Category = where(DSL.and(conditions*))
 
   /**
    * Create an inline derived table from this table
@@ -188,15 +188,15 @@ extends TableImpl[CategoryRecord](
   /**
    * Create an inline derived table from this table
    */
-  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): Category = where(DSL.condition(condition, binds:_*))
+  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): Category = where(DSL.condition(condition, binds*))
 
   /**
    * Create an inline derived table from this table
    */
-  override def whereExists(select: Select[_]): Category = where(DSL.exists(select))
+  override def whereExists(select: Select[?]): Category = where(DSL.exists(select))
 
   /**
    * Create an inline derived table from this table
    */
-  override def whereNotExists(select: Select[_]): Category = where(DSL.notExists(select))
+  override def whereNotExists(select: Select[?]): Category = where(DSL.notExists(select))
 }

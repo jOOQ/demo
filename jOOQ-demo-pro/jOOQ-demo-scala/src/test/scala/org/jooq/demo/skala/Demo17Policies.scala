@@ -2,11 +2,13 @@ package org.jooq.demo.scala
 
 import org.jooq.DSLContext
 import org.jooq.demo.AbstractDemo
-import org.jooq.demo.AbstractDemo._
-import org.jooq.impl._
+import org.jooq.demo.AbstractDemo.*
+import org.jooq.impl.*
 import org.junit.Test
-import org.jooq.demo.skala.db.Tables._
+import org.jooq.demo.skala.db.Tables.*
 import org.jooq.impl.DSL.sum
+
+import java.util.Collections
 
 
 class Demo17Policies extends AbstractDemo {
@@ -20,8 +22,10 @@ class Demo17Policies extends AbstractDemo {
 
     // Queries run with this configuration will only be able to access CUSTOMER_ID = 1 on the CUSTOMER and PAYMENT tables
     val c = ctx.configuration.derive(new DefaultPolicyProvider()
-      .append(CUSTOMER, CUSTOMER.CUSTOMER_ID.eq(1L))
-      .append(PAYMENT, PAYMENT.CUSTOMER_ID.eq(1L))
+
+      // Avoid bogus Scala 3.5 "Ambiguous overload." compiler error
+      .append(CUSTOMER, CUSTOMER.CUSTOMER_ID.eq(1L), Collections.emptyList())
+      .append(PAYMENT, PAYMENT.CUSTOMER_ID.eq(1L), Collections.emptyList())
     ).dsl
 
     c.select(

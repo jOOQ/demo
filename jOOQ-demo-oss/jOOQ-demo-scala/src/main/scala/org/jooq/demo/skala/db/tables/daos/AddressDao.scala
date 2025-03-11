@@ -28,19 +28,19 @@ class AddressDao(configuration: Configuration) extends DAOImpl[AddressRecord, or
 
   override def getId(o: org.jooq.demo.skala.db.tables.pojos.Address): Long = o.getAddressId
   override def insert(obj: org.jooq.demo.skala.db.tables.pojos.Address): Unit = super.insert(obj)
-  override def insert(objs: org.jooq.demo.skala.db.tables.pojos.Address*): Unit = super.insert(objs:_*)
+  override def insert(objs: org.jooq.demo.skala.db.tables.pojos.Address*): Unit = super.insert(objs*)
   override def insert(objs: Collection[org.jooq.demo.skala.db.tables.pojos.Address]): Unit = super.insert(objs)
   override def update(obj: org.jooq.demo.skala.db.tables.pojos.Address): Unit = super.update(obj)
-  override def update(objs: org.jooq.demo.skala.db.tables.pojos.Address*): Unit = super.update(objs:_*)
+  override def update(objs: org.jooq.demo.skala.db.tables.pojos.Address*): Unit = super.update(objs*)
   override def update(objs: Collection[org.jooq.demo.skala.db.tables.pojos.Address]): Unit = super.update(objs)
   override def merge(obj: org.jooq.demo.skala.db.tables.pojos.Address): Unit = super.merge(obj)
-  override def merge(objs: org.jooq.demo.skala.db.tables.pojos.Address*): Unit = super.merge(objs:_*)
+  override def merge(objs: org.jooq.demo.skala.db.tables.pojos.Address*): Unit = super.merge(objs*)
   override def merge(objs: Collection[org.jooq.demo.skala.db.tables.pojos.Address]): Unit = super.merge(objs)
   override def delete(obj: org.jooq.demo.skala.db.tables.pojos.Address): Unit = super.delete(obj)
-  override def delete(objs: org.jooq.demo.skala.db.tables.pojos.Address*): Unit = super.delete(objs:_*)
+  override def delete(objs: org.jooq.demo.skala.db.tables.pojos.Address*): Unit = super.delete(objs*)
   override def delete(objs: Collection[org.jooq.demo.skala.db.tables.pojos.Address]): Unit = super.delete(objs)
   override def deleteById(id: Long): Unit = super.deleteById(id)
-  override def deleteById(ids: Long*): Unit = super.deleteById(ids:_*)
+  override def deleteById(ids: Long*): Unit = super.deleteById(ids*)
   override def deleteById(ids: Collection[Long]): Unit = super.deleteById(ids)
 
   /**
@@ -52,7 +52,7 @@ class AddressDao(configuration: Configuration) extends DAOImpl[AddressRecord, or
   /**
    * Fetch records that have <code>address_id IN (values)</code>
    */
-  def fetchByAddressId(values: Long*): List[org.jooq.demo.skala.db.tables.pojos.Address] = fetch(Address.ADDRESS.ADDRESS_ID, values:_*)
+  def fetchByAddressId(values: Long*): List[org.jooq.demo.skala.db.tables.pojos.Address] = fetch(Address.ADDRESS.ADDRESS_ID, values*)
 
   /**
    * Fetch a unique record that has <code>address_id = value</code>
@@ -68,7 +68,7 @@ class AddressDao(configuration: Configuration) extends DAOImpl[AddressRecord, or
   /**
    * Fetch records that have <code>address IN (values)</code>
    */
-  def fetchByAddress(values: String*): List[org.jooq.demo.skala.db.tables.pojos.Address] = fetch(Address.ADDRESS.ADDRESS_, values:_*)
+  def fetchByAddress(values: String*): List[org.jooq.demo.skala.db.tables.pojos.Address] = fetch(Address.ADDRESS.ADDRESS_, values*)
 
   /**
    * Fetch records that have <code>address2 BETWEEN lowerInclusive AND
@@ -79,7 +79,7 @@ class AddressDao(configuration: Configuration) extends DAOImpl[AddressRecord, or
   /**
    * Fetch records that have <code>address2 IN (values)</code>
    */
-  def fetchByAddress2(values: String*): List[org.jooq.demo.skala.db.tables.pojos.Address] = fetch(Address.ADDRESS.ADDRESS2, values:_*)
+  def fetchByAddress2(values: String*): List[org.jooq.demo.skala.db.tables.pojos.Address] = fetch(Address.ADDRESS.ADDRESS2, values*)
 
   /**
    * Fetch records that have <code>district BETWEEN lowerInclusive AND
@@ -90,7 +90,7 @@ class AddressDao(configuration: Configuration) extends DAOImpl[AddressRecord, or
   /**
    * Fetch records that have <code>district IN (values)</code>
    */
-  def fetchByDistrict(values: String*): List[org.jooq.demo.skala.db.tables.pojos.Address] = fetch(Address.ADDRESS.DISTRICT, values:_*)
+  def fetchByDistrict(values: String*): List[org.jooq.demo.skala.db.tables.pojos.Address] = fetch(Address.ADDRESS.DISTRICT, values*)
 
   /**
    * Fetch records that have <code>city_id BETWEEN lowerInclusive AND
@@ -101,7 +101,7 @@ class AddressDao(configuration: Configuration) extends DAOImpl[AddressRecord, or
   /**
    * Fetch records that have <code>city_id IN (values)</code>
    */
-  def fetchByCityId(values: Long*): List[org.jooq.demo.skala.db.tables.pojos.Address] = fetch(Address.ADDRESS.CITY_ID, values:_*)
+  def fetchByCityId(values: Long*): List[org.jooq.demo.skala.db.tables.pojos.Address] = fetch(Address.ADDRESS.CITY_ID, values*)
 
   /**
    * Fetch records that have <code>postal_code BETWEEN lowerInclusive AND
@@ -112,7 +112,7 @@ class AddressDao(configuration: Configuration) extends DAOImpl[AddressRecord, or
   /**
    * Fetch records that have <code>postal_code IN (values)</code>
    */
-  def fetchByPostalCode(values: String*): List[org.jooq.demo.skala.db.tables.pojos.Address] = fetch(Address.ADDRESS.POSTAL_CODE, values:_*)
+  def fetchByPostalCode(values: String*): List[org.jooq.demo.skala.db.tables.pojos.Address] = fetch(Address.ADDRESS.POSTAL_CODE, values*)
 
   /**
    * Fetch records that have <code>phone BETWEEN lowerInclusive AND
@@ -123,7 +123,7 @@ class AddressDao(configuration: Configuration) extends DAOImpl[AddressRecord, or
   /**
    * Fetch records that have <code>phone IN (values)</code>
    */
-  def fetchByPhone(values: String*): List[org.jooq.demo.skala.db.tables.pojos.Address] = fetch(Address.ADDRESS.PHONE, values:_*)
+  def fetchByPhone(values: String*): List[org.jooq.demo.skala.db.tables.pojos.Address] = fetch(Address.ADDRESS.PHONE, values*)
 
   /**
    * Fetch records that have <code>last_update BETWEEN lowerInclusive AND
@@ -134,5 +134,5 @@ class AddressDao(configuration: Configuration) extends DAOImpl[AddressRecord, or
   /**
    * Fetch records that have <code>last_update IN (values)</code>
    */
-  def fetchByLastUpdate(values: LocalDateTime*): List[org.jooq.demo.skala.db.tables.pojos.Address] = fetch(Address.ADDRESS.LAST_UPDATE, values:_*)
+  def fetchByLastUpdate(values: LocalDateTime*): List[org.jooq.demo.skala.db.tables.pojos.Address] = fetch(Address.ADDRESS.LAST_UPDATE, values*)
 }

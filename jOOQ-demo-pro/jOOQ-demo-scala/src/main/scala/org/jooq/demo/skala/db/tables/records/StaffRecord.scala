@@ -203,7 +203,7 @@ class StaffRecord extends UpdatableRecordImpl[StaffRecord](Staff.STAFF) {
     this.setPicture(picture)
     this.setFullAddress(fullAddress)
     this.setFullName(fullName)
-    resetChangedOnNotNull()
+    resetTouchedOnNotNull()
   }
 
   /**
@@ -224,7 +224,7 @@ class StaffRecord extends UpdatableRecordImpl[StaffRecord](Staff.STAFF) {
     this.setPicture(picture)
     this.setFullAddress(fullAddress)
     this.setFullName(fullName)
-    resetChangedOnNotNull()
+    resetTouchedOnNotNull()
   }
 
   /**
@@ -247,7 +247,7 @@ class StaffRecord extends UpdatableRecordImpl[StaffRecord](Staff.STAFF) {
       this.setPicture(value.getPicture)
       this.setFullAddress(value.getFullAddress)
       this.setFullName(value.getFullName)
-      resetChangedOnNotNull()
+      resetTouchedOnNotNull()
     }
   }
 }

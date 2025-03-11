@@ -46,11 +46,11 @@ object SalesByFilmCategory {
  */
 class SalesByFilmCategory(
   alias: Name,
-  path: Table[_ <: Record],
-  childPath: ForeignKey[_ <: Record, SalesByFilmCategoryRecord],
-  parentPath: InverseForeignKey[_ <: Record, SalesByFilmCategoryRecord],
+  path: Table[? <: Record],
+  childPath: ForeignKey[? <: Record, SalesByFilmCategoryRecord],
+  parentPath: InverseForeignKey[? <: Record, SalesByFilmCategoryRecord],
   aliased: Table[SalesByFilmCategoryRecord],
-  parameters: Array[ Field[_] ],
+  parameters: Array[ Field[?] ],
   where: Condition
 )
 extends TableImpl[SalesByFilmCategoryRecord](
@@ -63,7 +63,7 @@ extends TableImpl[SalesByFilmCategoryRecord](
   parameters,
   DSL.comment(""),
   TableOptions.view("""
-  create view "sales_by_film_category" as  SELECT c.name AS category,
+  CREATE VIEW "sales_by_film_category" AS  SELECT c.name AS category,
     sum(p.amount) AS total_sales
    FROM (((((payment p
      JOIN rental r ON ((p.rental_id = r.rental_id)))
@@ -115,7 +115,7 @@ extends TableImpl[SalesByFilmCategoryRecord](
   override def getSchema: Schema = if (super.aliased()) null else Public.PUBLIC
   override def as(alias: String): SalesByFilmCategory = new SalesByFilmCategory(DSL.name(alias), this)
   override def as(alias: Name): SalesByFilmCategory = new SalesByFilmCategory(alias, this)
-  override def as(alias: Table[_]): SalesByFilmCategory = new SalesByFilmCategory(alias.getQualifiedName(), this)
+  override def as(alias: Table[?]): SalesByFilmCategory = new SalesByFilmCategory(alias.getQualifiedName(), this)
 
   /**
    * Rename this table
@@ -130,7 +130,7 @@ extends TableImpl[SalesByFilmCategoryRecord](
   /**
    * Rename this table
    */
-  override def rename(name: Table[_]): SalesByFilmCategory = new SalesByFilmCategory(name.getQualifiedName(), null)
+  override def rename(name: Table[?]): SalesByFilmCategory = new SalesByFilmCategory(name.getQualifiedName(), null)
 
   /**
    * Create an inline derived table from this table
@@ -140,12 +140,12 @@ extends TableImpl[SalesByFilmCategoryRecord](
   /**
    * Create an inline derived table from this table
    */
-  override def where(conditions: Collection[_ <: Condition]): SalesByFilmCategory = where(DSL.and(conditions))
+  override def where(conditions: Collection[? <: Condition]): SalesByFilmCategory = where(DSL.and(conditions))
 
   /**
    * Create an inline derived table from this table
    */
-  override def where(conditions: Condition*): SalesByFilmCategory = where(DSL.and(conditions:_*))
+  override def where(conditions: Condition*): SalesByFilmCategory = where(DSL.and(conditions*))
 
   /**
    * Create an inline derived table from this table
@@ -165,15 +165,15 @@ extends TableImpl[SalesByFilmCategoryRecord](
   /**
    * Create an inline derived table from this table
    */
-  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): SalesByFilmCategory = where(DSL.condition(condition, binds:_*))
+  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): SalesByFilmCategory = where(DSL.condition(condition, binds*))
 
   /**
    * Create an inline derived table from this table
    */
-  override def whereExists(select: Select[_]): SalesByFilmCategory = where(DSL.exists(select))
+  override def whereExists(select: Select[?]): SalesByFilmCategory = where(DSL.exists(select))
 
   /**
    * Create an inline derived table from this table
    */
-  override def whereNotExists(select: Select[_]): SalesByFilmCategory = where(DSL.notExists(select))
+  override def whereNotExists(select: Select[?]): SalesByFilmCategory = where(DSL.notExists(select))
 }

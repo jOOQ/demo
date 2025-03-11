@@ -82,7 +82,7 @@ class ActorRecord extends UpdatableRecordImpl[ActorRecord](Actor.ACTOR) {
     this.setFirstName(firstName)
     this.setLastName(lastName)
     this.setLastUpdate(lastUpdate)
-    resetChangedOnNotNull()
+    resetTouchedOnNotNull()
   }
 
   /**
@@ -94,7 +94,7 @@ class ActorRecord extends UpdatableRecordImpl[ActorRecord](Actor.ACTOR) {
     this.setActorId(actorId)
     this.setFirstName(firstName)
     this.setLastName(lastName)
-    resetChangedOnNotNull()
+    resetTouchedOnNotNull()
   }
 
   /**
@@ -108,7 +108,7 @@ class ActorRecord extends UpdatableRecordImpl[ActorRecord](Actor.ACTOR) {
       this.setFirstName(value.getFirstName)
       this.setLastName(value.getLastName)
       this.setLastUpdate(value.getLastUpdate)
-      resetChangedOnNotNull()
+      resetTouchedOnNotNull()
     }
   }
 }

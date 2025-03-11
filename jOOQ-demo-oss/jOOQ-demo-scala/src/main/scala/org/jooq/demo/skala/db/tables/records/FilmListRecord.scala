@@ -129,7 +129,7 @@ class FilmListRecord extends TableRecordImpl[FilmListRecord](FilmList.FILM_LIST)
     this.setLength(length)
     this.setRating(rating)
     this.setActors(actors)
-    resetChangedOnNotNull()
+    resetTouchedOnNotNull()
   }
 
   /**
@@ -147,7 +147,7 @@ class FilmListRecord extends TableRecordImpl[FilmListRecord](FilmList.FILM_LIST)
       this.setLength(value.getLength)
       this.setRating(value.getRating)
       this.setActors(value.getActors)
-      resetChangedOnNotNull()
+      resetTouchedOnNotNull()
     }
   }
 }

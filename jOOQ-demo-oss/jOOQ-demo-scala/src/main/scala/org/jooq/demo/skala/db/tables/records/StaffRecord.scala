@@ -177,7 +177,7 @@ class StaffRecord extends UpdatableRecordImpl[StaffRecord](Staff.STAFF) {
     this.setPassword(password)
     this.setLastUpdate(lastUpdate)
     this.setPicture(picture)
-    resetChangedOnNotNull()
+    resetTouchedOnNotNull()
   }
 
   /**
@@ -198,7 +198,7 @@ class StaffRecord extends UpdatableRecordImpl[StaffRecord](Staff.STAFF) {
       this.setPassword(value.getPassword)
       this.setLastUpdate(value.getLastUpdate)
       this.setPicture(value.getPicture)
-      resetChangedOnNotNull()
+      resetTouchedOnNotNull()
     }
   }
 }

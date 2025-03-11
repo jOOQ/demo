@@ -68,7 +68,7 @@ class FilmActorRecord extends UpdatableRecordImpl[FilmActorRecord](FilmActor.FIL
     this.setActorId(actorId)
     this.setFilmId(filmId)
     this.setLastUpdate(lastUpdate)
-    resetChangedOnNotNull()
+    resetTouchedOnNotNull()
   }
 
   /**
@@ -79,7 +79,7 @@ class FilmActorRecord extends UpdatableRecordImpl[FilmActorRecord](FilmActor.FIL
 
     this.setActorId(actorId)
     this.setFilmId(filmId)
-    resetChangedOnNotNull()
+    resetTouchedOnNotNull()
   }
 
   /**
@@ -92,7 +92,7 @@ class FilmActorRecord extends UpdatableRecordImpl[FilmActorRecord](FilmActor.FIL
       this.setActorId(value.getActorId)
       this.setFilmId(value.getFilmId)
       this.setLastUpdate(value.getLastUpdate)
-      resetChangedOnNotNull()
+      resetTouchedOnNotNull()
     }
   }
 }

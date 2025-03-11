@@ -63,7 +63,7 @@ object Rental {
   /**
    * A subtype implementing {@link Path} for simplified path-based joins.
    */
-  class RentalPath(path: Table[_ <: Record], childPath: ForeignKey[_ <: Record, RentalRecord], parentPath: InverseForeignKey[_ <: Record, RentalRecord]) extends Rental(path, childPath, parentPath) with Path[RentalRecord]
+  class RentalPath(path: Table[? <: Record], childPath: ForeignKey[? <: Record, RentalRecord], parentPath: InverseForeignKey[? <: Record, RentalRecord]) extends Rental(path, childPath, parentPath) with Path[RentalRecord]
 }
 
 /**
@@ -71,11 +71,11 @@ object Rental {
  */
 class Rental(
   alias: Name,
-  path: Table[_ <: Record],
-  childPath: ForeignKey[_ <: Record, RentalRecord],
-  parentPath: InverseForeignKey[_ <: Record, RentalRecord],
+  path: Table[? <: Record],
+  childPath: ForeignKey[? <: Record, RentalRecord],
+  parentPath: InverseForeignKey[? <: Record, RentalRecord],
   aliased: Table[RentalRecord],
-  parameters: Array[ Field[_] ],
+  parameters: Array[ Field[?] ],
   where: Condition
 )
 extends TableImpl[RentalRecord](
@@ -149,7 +149,7 @@ extends TableImpl[RentalRecord](
    */
   def this() = this(DSL.name("rental"), null)
 
-  def this(path: Table[_ <: Record], childPath: ForeignKey[_ <: Record, RentalRecord], parentPath: InverseForeignKey[_ <: Record, RentalRecord]) = this(Internal.createPathAlias(path, childPath, parentPath), path, childPath, parentPath, org.jooq.demo.skala.db.tables.Rental.RENTAL, null, null)
+  def this(path: Table[? <: Record], childPath: ForeignKey[? <: Record, RentalRecord], parentPath: InverseForeignKey[? <: Record, RentalRecord]) = this(Internal.createPathAlias(path, childPath, parentPath), path, childPath, parentPath, org.jooq.demo.skala.db.tables.Rental.RENTAL, null, null)
 
   override def getSchema: Schema = if (super.aliased()) null else Public.PUBLIC
 
@@ -159,12 +159,7 @@ extends TableImpl[RentalRecord](
 
   override def getPrimaryKey: UniqueKey[RentalRecord] = Keys.RENTAL_PKEY
 
-  override def getReferences: List[ ForeignKey[RentalRecord, _] ] = Arrays.asList[ ForeignKey[RentalRecord, _] ](Keys.RENTAL__RENTAL_INVENTORY_ID_FKEY, Keys.RENTAL__RENTAL_CUSTOMER_ID_FKEY, Keys.RENTAL__RENTAL_STAFF_ID_FKEY)
-
-  /**
-   * Get the implicit join path to the <code>public.inventory</code> table.
-   */
-  lazy val inventory: InventoryPath = { new InventoryPath(this, Keys.RENTAL__RENTAL_INVENTORY_ID_FKEY, null) }
+  override def getReferences: List[ ForeignKey[RentalRecord, ?] ] = Arrays.asList[ ForeignKey[RentalRecord, ?] ](Keys.RENTAL__RENTAL_CUSTOMER_ID_FKEY, Keys.RENTAL__RENTAL_INVENTORY_ID_FKEY, Keys.RENTAL__RENTAL_STAFF_ID_FKEY)
 
   /**
    * Get the implicit join path to the <code>public.customer</code> table.
@@ -172,14 +167,14 @@ extends TableImpl[RentalRecord](
   lazy val customer: CustomerPath = { new CustomerPath(this, Keys.RENTAL__RENTAL_CUSTOMER_ID_FKEY, null) }
 
   /**
+   * Get the implicit join path to the <code>public.inventory</code> table.
+   */
+  lazy val inventory: InventoryPath = { new InventoryPath(this, Keys.RENTAL__RENTAL_INVENTORY_ID_FKEY, null) }
+
+  /**
    * Get the implicit join path to the <code>public.staff</code> table.
    */
   lazy val staff: StaffPath = { new StaffPath(this, Keys.RENTAL__RENTAL_STAFF_ID_FKEY, null) }
-
-  /**
-   * Get the implicit to-many join path to the <code>public.payment</code> table
-   */
-  lazy val payment: PaymentPath = { new PaymentPath(this, null, Keys.PAYMENT__PAYMENT_RENTAL_ID_FKEY.getInverseKey()) }
 
   /**
    * Get the implicit to-many join path to the
@@ -216,9 +211,14 @@ extends TableImpl[RentalRecord](
    * <code>public.payment_p2007_06</code> table
    */
   lazy val paymentP2007_06: PaymentP2007_06Path = { new PaymentP2007_06Path(this, null, Keys.PAYMENT_P2007_06__PAYMENT_P2007_06_RENTAL_ID_FKEY.getInverseKey()) }
+
+  /**
+   * Get the implicit to-many join path to the <code>public.payment</code> table
+   */
+  lazy val payment: PaymentPath = { new PaymentPath(this, null, Keys.PAYMENT__PAYMENT_RENTAL_ID_FKEY.getInverseKey()) }
   override def as(alias: String): Rental = new Rental(DSL.name(alias), this)
   override def as(alias: Name): Rental = new Rental(alias, this)
-  override def as(alias: Table[_]): Rental = new Rental(alias.getQualifiedName(), this)
+  override def as(alias: Table[?]): Rental = new Rental(alias.getQualifiedName(), this)
 
   /**
    * Rename this table
@@ -233,7 +233,7 @@ extends TableImpl[RentalRecord](
   /**
    * Rename this table
    */
-  override def rename(name: Table[_]): Rental = new Rental(name.getQualifiedName(), null)
+  override def rename(name: Table[?]): Rental = new Rental(name.getQualifiedName(), null)
 
   /**
    * Create an inline derived table from this table
@@ -243,12 +243,12 @@ extends TableImpl[RentalRecord](
   /**
    * Create an inline derived table from this table
    */
-  override def where(conditions: Collection[_ <: Condition]): Rental = where(DSL.and(conditions))
+  override def where(conditions: Collection[? <: Condition]): Rental = where(DSL.and(conditions))
 
   /**
    * Create an inline derived table from this table
    */
-  override def where(conditions: Condition*): Rental = where(DSL.and(conditions:_*))
+  override def where(conditions: Condition*): Rental = where(DSL.and(conditions*))
 
   /**
    * Create an inline derived table from this table
@@ -268,15 +268,15 @@ extends TableImpl[RentalRecord](
   /**
    * Create an inline derived table from this table
    */
-  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): Rental = where(DSL.condition(condition, binds:_*))
+  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): Rental = where(DSL.condition(condition, binds*))
 
   /**
    * Create an inline derived table from this table
    */
-  override def whereExists(select: Select[_]): Rental = where(DSL.exists(select))
+  override def whereExists(select: Select[?]): Rental = where(DSL.exists(select))
 
   /**
    * Create an inline derived table from this table
    */
-  override def whereNotExists(select: Select[_]): Rental = where(DSL.notExists(select))
+  override def whereNotExists(select: Select[?]): Rental = where(DSL.notExists(select))
 }

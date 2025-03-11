@@ -21,4 +21,13 @@ public record City(
 
     private static final long serialVersionUID = 1L;
 
+
+    public City(City value) {
+        this(
+            value.cityId,
+            value.city,
+            value.countryId,
+            value.lastUpdate
+        );
+    }
 }

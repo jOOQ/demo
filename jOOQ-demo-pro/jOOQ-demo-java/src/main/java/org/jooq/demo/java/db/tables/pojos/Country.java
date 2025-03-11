@@ -20,4 +20,12 @@ public record Country(
 
     private static final long serialVersionUID = 1L;
 
+
+    public Country(Country value) {
+        this(
+            value.countryId,
+            value.country,
+            value.lastUpdate
+        );
+    }
 }

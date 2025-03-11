@@ -69,7 +69,7 @@ class CategoryRecord extends UpdatableRecordImpl[CategoryRecord](Category.CATEGO
     this.setCategoryId(categoryId)
     this.setName(name)
     this.setLastUpdate(lastUpdate)
-    resetChangedOnNotNull()
+    resetTouchedOnNotNull()
   }
 
   /**
@@ -82,7 +82,7 @@ class CategoryRecord extends UpdatableRecordImpl[CategoryRecord](Category.CATEGO
       this.setCategoryId(value.getCategoryId)
       this.setName(value.getName)
       this.setLastUpdate(value.getLastUpdate)
-      resetChangedOnNotNull()
+      resetTouchedOnNotNull()
     }
   }
 }

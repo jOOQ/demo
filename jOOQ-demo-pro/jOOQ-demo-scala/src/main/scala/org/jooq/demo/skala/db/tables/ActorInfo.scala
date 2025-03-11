@@ -46,11 +46,11 @@ object ActorInfo {
  */
 class ActorInfo(
   alias: Name,
-  path: Table[_ <: Record],
-  childPath: ForeignKey[_ <: Record, ActorInfoRecord],
-  parentPath: InverseForeignKey[_ <: Record, ActorInfoRecord],
+  path: Table[? <: Record],
+  childPath: ForeignKey[? <: Record, ActorInfoRecord],
+  parentPath: InverseForeignKey[? <: Record, ActorInfoRecord],
   aliased: Table[ActorInfoRecord],
-  parameters: Array[ Field[_] ],
+  parameters: Array[ Field[?] ],
   where: Condition
 )
 extends TableImpl[ActorInfoRecord](
@@ -63,7 +63,7 @@ extends TableImpl[ActorInfoRecord](
   parameters,
   DSL.comment(""),
   TableOptions.view("""
-  create view "actor_info" as  SELECT a.actor_id,
+  CREATE VIEW "actor_info" AS  SELECT a.actor_id,
     a.first_name,
     a.last_name,
     group_concat(DISTINCT (((c.name)::text || ': '::text) || ( SELECT group_concat((f.title)::text) AS group_concat
@@ -127,7 +127,7 @@ extends TableImpl[ActorInfoRecord](
   override def getSchema: Schema = if (super.aliased()) null else Public.PUBLIC
   override def as(alias: String): ActorInfo = new ActorInfo(DSL.name(alias), this)
   override def as(alias: Name): ActorInfo = new ActorInfo(alias, this)
-  override def as(alias: Table[_]): ActorInfo = new ActorInfo(alias.getQualifiedName(), this)
+  override def as(alias: Table[?]): ActorInfo = new ActorInfo(alias.getQualifiedName(), this)
 
   /**
    * Rename this table
@@ -142,7 +142,7 @@ extends TableImpl[ActorInfoRecord](
   /**
    * Rename this table
    */
-  override def rename(name: Table[_]): ActorInfo = new ActorInfo(name.getQualifiedName(), null)
+  override def rename(name: Table[?]): ActorInfo = new ActorInfo(name.getQualifiedName(), null)
 
   /**
    * Create an inline derived table from this table
@@ -152,12 +152,12 @@ extends TableImpl[ActorInfoRecord](
   /**
    * Create an inline derived table from this table
    */
-  override def where(conditions: Collection[_ <: Condition]): ActorInfo = where(DSL.and(conditions))
+  override def where(conditions: Collection[? <: Condition]): ActorInfo = where(DSL.and(conditions))
 
   /**
    * Create an inline derived table from this table
    */
-  override def where(conditions: Condition*): ActorInfo = where(DSL.and(conditions:_*))
+  override def where(conditions: Condition*): ActorInfo = where(DSL.and(conditions*))
 
   /**
    * Create an inline derived table from this table
@@ -177,15 +177,15 @@ extends TableImpl[ActorInfoRecord](
   /**
    * Create an inline derived table from this table
    */
-  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): ActorInfo = where(DSL.condition(condition, binds:_*))
+  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): ActorInfo = where(DSL.condition(condition, binds*))
 
   /**
    * Create an inline derived table from this table
    */
-  override def whereExists(select: Select[_]): ActorInfo = where(DSL.exists(select))
+  override def whereExists(select: Select[?]): ActorInfo = where(DSL.exists(select))
 
   /**
    * Create an inline derived table from this table
    */
-  override def whereNotExists(select: Select[_]): ActorInfo = where(DSL.notExists(select))
+  override def whereNotExists(select: Select[?]): ActorInfo = where(DSL.notExists(select))
 }

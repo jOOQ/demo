@@ -28,19 +28,19 @@ class LanguageDao(configuration: Configuration) extends DAOImpl[LanguageRecord, 
 
   override def getId(o: org.jooq.demo.skala.db.tables.pojos.Language): Long = o.getLanguageId
   override def insert(obj: org.jooq.demo.skala.db.tables.pojos.Language): Unit = super.insert(obj)
-  override def insert(objs: org.jooq.demo.skala.db.tables.pojos.Language*): Unit = super.insert(objs:_*)
+  override def insert(objs: org.jooq.demo.skala.db.tables.pojos.Language*): Unit = super.insert(objs*)
   override def insert(objs: Collection[org.jooq.demo.skala.db.tables.pojos.Language]): Unit = super.insert(objs)
   override def update(obj: org.jooq.demo.skala.db.tables.pojos.Language): Unit = super.update(obj)
-  override def update(objs: org.jooq.demo.skala.db.tables.pojos.Language*): Unit = super.update(objs:_*)
+  override def update(objs: org.jooq.demo.skala.db.tables.pojos.Language*): Unit = super.update(objs*)
   override def update(objs: Collection[org.jooq.demo.skala.db.tables.pojos.Language]): Unit = super.update(objs)
   override def merge(obj: org.jooq.demo.skala.db.tables.pojos.Language): Unit = super.merge(obj)
-  override def merge(objs: org.jooq.demo.skala.db.tables.pojos.Language*): Unit = super.merge(objs:_*)
+  override def merge(objs: org.jooq.demo.skala.db.tables.pojos.Language*): Unit = super.merge(objs*)
   override def merge(objs: Collection[org.jooq.demo.skala.db.tables.pojos.Language]): Unit = super.merge(objs)
   override def delete(obj: org.jooq.demo.skala.db.tables.pojos.Language): Unit = super.delete(obj)
-  override def delete(objs: org.jooq.demo.skala.db.tables.pojos.Language*): Unit = super.delete(objs:_*)
+  override def delete(objs: org.jooq.demo.skala.db.tables.pojos.Language*): Unit = super.delete(objs*)
   override def delete(objs: Collection[org.jooq.demo.skala.db.tables.pojos.Language]): Unit = super.delete(objs)
   override def deleteById(id: Long): Unit = super.deleteById(id)
-  override def deleteById(ids: Long*): Unit = super.deleteById(ids:_*)
+  override def deleteById(ids: Long*): Unit = super.deleteById(ids*)
   override def deleteById(ids: Collection[Long]): Unit = super.deleteById(ids)
 
   /**
@@ -52,7 +52,7 @@ class LanguageDao(configuration: Configuration) extends DAOImpl[LanguageRecord, 
   /**
    * Fetch records that have <code>language_id IN (values)</code>
    */
-  def fetchByLanguageId(values: Long*): List[org.jooq.demo.skala.db.tables.pojos.Language] = fetch(Language.LANGUAGE.LANGUAGE_ID, values:_*)
+  def fetchByLanguageId(values: Long*): List[org.jooq.demo.skala.db.tables.pojos.Language] = fetch(Language.LANGUAGE.LANGUAGE_ID, values*)
 
   /**
    * Fetch a unique record that has <code>language_id = value</code>
@@ -68,7 +68,7 @@ class LanguageDao(configuration: Configuration) extends DAOImpl[LanguageRecord, 
   /**
    * Fetch records that have <code>name IN (values)</code>
    */
-  def fetchByName(values: String*): List[org.jooq.demo.skala.db.tables.pojos.Language] = fetch(Language.LANGUAGE.NAME, values:_*)
+  def fetchByName(values: String*): List[org.jooq.demo.skala.db.tables.pojos.Language] = fetch(Language.LANGUAGE.NAME, values*)
 
   /**
    * Fetch records that have <code>last_update BETWEEN lowerInclusive AND
@@ -79,5 +79,5 @@ class LanguageDao(configuration: Configuration) extends DAOImpl[LanguageRecord, 
   /**
    * Fetch records that have <code>last_update IN (values)</code>
    */
-  def fetchByLastUpdate(values: LocalDateTime*): List[org.jooq.demo.skala.db.tables.pojos.Language] = fetch(Language.LANGUAGE.LAST_UPDATE, values:_*)
+  def fetchByLastUpdate(values: LocalDateTime*): List[org.jooq.demo.skala.db.tables.pojos.Language] = fetch(Language.LANGUAGE.LAST_UPDATE, values*)
 }

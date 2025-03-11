@@ -41,11 +41,11 @@ object FilmNotInStock {
  */
 class FilmNotInStock(
   alias: Name,
-  path: Table[_ <: Record],
-  childPath: ForeignKey[_ <: Record, FilmNotInStockRecord],
-  parentPath: InverseForeignKey[_ <: Record, FilmNotInStockRecord],
+  path: Table[? <: Record],
+  childPath: ForeignKey[? <: Record, FilmNotInStockRecord],
+  parentPath: InverseForeignKey[? <: Record, FilmNotInStockRecord],
   aliased: Table[FilmNotInStockRecord],
-  parameters: Array[ Field[_] ],
+  parameters: Array[ Field[?] ],
   where: Condition
 )
 extends TableImpl[FilmNotInStockRecord](
@@ -94,7 +94,7 @@ extends TableImpl[FilmNotInStockRecord](
   override def getSchema: Schema = if (super.aliased()) null else Public.PUBLIC
   override def as(alias: String): FilmNotInStock = new FilmNotInStock(DSL.name(alias), null, null, null, this, parameters, null)
   override def as(alias: Name): FilmNotInStock = new FilmNotInStock(alias, null, null, null, this, parameters, null)
-  override def as(alias: Table[_]): FilmNotInStock = new FilmNotInStock(alias.getQualifiedName(), null, null, null, this, parameters, null)
+  override def as(alias: Table[?]): FilmNotInStock = new FilmNotInStock(alias.getQualifiedName(), null, null, null, this, parameters, null)
 
   /**
    * Rename this table
@@ -109,7 +109,7 @@ extends TableImpl[FilmNotInStockRecord](
   /**
    * Rename this table
    */
-  override def rename(name: Table[_]): FilmNotInStock = new FilmNotInStock(name.getQualifiedName(), null, null, null, null, parameters, null)
+  override def rename(name: Table[?]): FilmNotInStock = new FilmNotInStock(name.getQualifiedName(), null, null, null, null, parameters, null)
 
   /**
    * Call this table-valued function

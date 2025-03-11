@@ -62,7 +62,7 @@ object Staff {
   /**
    * A subtype implementing {@link Path} for simplified path-based joins.
    */
-  class StaffPath(path: Table[_ <: Record], childPath: ForeignKey[_ <: Record, StaffRecord], parentPath: InverseForeignKey[_ <: Record, StaffRecord]) extends Staff(path, childPath, parentPath) with Path[StaffRecord]
+  class StaffPath(path: Table[? <: Record], childPath: ForeignKey[? <: Record, StaffRecord], parentPath: InverseForeignKey[? <: Record, StaffRecord]) extends Staff(path, childPath, parentPath) with Path[StaffRecord]
 }
 
 /**
@@ -70,11 +70,11 @@ object Staff {
  */
 class Staff(
   alias: Name,
-  path: Table[_ <: Record],
-  childPath: ForeignKey[_ <: Record, StaffRecord],
-  parentPath: InverseForeignKey[_ <: Record, StaffRecord],
+  path: Table[? <: Record],
+  childPath: ForeignKey[? <: Record, StaffRecord],
+  parentPath: InverseForeignKey[? <: Record, StaffRecord],
   aliased: Table[StaffRecord],
-  parameters: Array[ Field[_] ],
+  parameters: Array[ Field[?] ],
   where: Condition
 )
 extends TableImpl[StaffRecord](
@@ -178,7 +178,7 @@ extends TableImpl[StaffRecord](
    */
   def this() = this(DSL.name("staff"), null)
 
-  def this(path: Table[_ <: Record], childPath: ForeignKey[_ <: Record, StaffRecord], parentPath: InverseForeignKey[_ <: Record, StaffRecord]) = this(Internal.createPathAlias(path, childPath, parentPath), path, childPath, parentPath, org.jooq.demo.skala.db.tables.Staff.STAFF, null, null)
+  def this(path: Table[? <: Record], childPath: ForeignKey[? <: Record, StaffRecord], parentPath: InverseForeignKey[? <: Record, StaffRecord]) = this(Internal.createPathAlias(path, childPath, parentPath), path, childPath, parentPath, org.jooq.demo.skala.db.tables.Staff.STAFF, null, null)
 
   override def getSchema: Schema = if (super.aliased()) null else Public.PUBLIC
 
@@ -186,7 +186,7 @@ extends TableImpl[StaffRecord](
 
   override def getPrimaryKey: UniqueKey[StaffRecord] = Keys.STAFF_PKEY
 
-  override def getReferences: List[ ForeignKey[StaffRecord, _] ] = Arrays.asList[ ForeignKey[StaffRecord, _] ](Keys.STAFF__STAFF_ADDRESS_ID_FKEY, Keys.STAFF__STAFF_STORE_ID_FKEY)
+  override def getReferences: List[ ForeignKey[StaffRecord, ?] ] = Arrays.asList[ ForeignKey[StaffRecord, ?] ](Keys.STAFF__STAFF_ADDRESS_ID_FKEY, Keys.STAFF__STAFF_STORE_ID_FKEY)
 
   /**
    * Get the implicit join path to the <code>public.address</code> table.
@@ -197,11 +197,6 @@ extends TableImpl[StaffRecord](
    * Get the implicit join path to the <code>public.store</code> table.
    */
   lazy val store: StorePath = { new StorePath(this, Keys.STAFF__STAFF_STORE_ID_FKEY, null) }
-
-  /**
-   * Get the implicit to-many join path to the <code>public.payment</code> table
-   */
-  lazy val payment: PaymentPath = { new PaymentPath(this, null, Keys.PAYMENT__PAYMENT_STAFF_ID_FKEY.getInverseKey()) }
 
   /**
    * Get the implicit to-many join path to the
@@ -240,12 +235,17 @@ extends TableImpl[StaffRecord](
   lazy val paymentP2007_06: PaymentP2007_06Path = { new PaymentP2007_06Path(this, null, Keys.PAYMENT_P2007_06__PAYMENT_P2007_06_STAFF_ID_FKEY.getInverseKey()) }
 
   /**
+   * Get the implicit to-many join path to the <code>public.payment</code> table
+   */
+  lazy val payment: PaymentPath = { new PaymentPath(this, null, Keys.PAYMENT__PAYMENT_STAFF_ID_FKEY.getInverseKey()) }
+
+  /**
    * Get the implicit to-many join path to the <code>public.rental</code> table
    */
   lazy val rental: RentalPath = { new RentalPath(this, null, Keys.RENTAL__RENTAL_STAFF_ID_FKEY.getInverseKey()) }
   override def as(alias: String): Staff = new Staff(DSL.name(alias), this)
   override def as(alias: Name): Staff = new Staff(alias, this)
-  override def as(alias: Table[_]): Staff = new Staff(alias.getQualifiedName(), this)
+  override def as(alias: Table[?]): Staff = new Staff(alias.getQualifiedName(), this)
 
   /**
    * Rename this table
@@ -260,7 +260,7 @@ extends TableImpl[StaffRecord](
   /**
    * Rename this table
    */
-  override def rename(name: Table[_]): Staff = new Staff(name.getQualifiedName(), null)
+  override def rename(name: Table[?]): Staff = new Staff(name.getQualifiedName(), null)
 
   /**
    * Create an inline derived table from this table
@@ -270,12 +270,12 @@ extends TableImpl[StaffRecord](
   /**
    * Create an inline derived table from this table
    */
-  override def where(conditions: Collection[_ <: Condition]): Staff = where(DSL.and(conditions))
+  override def where(conditions: Collection[? <: Condition]): Staff = where(DSL.and(conditions))
 
   /**
    * Create an inline derived table from this table
    */
-  override def where(conditions: Condition*): Staff = where(DSL.and(conditions:_*))
+  override def where(conditions: Condition*): Staff = where(DSL.and(conditions*))
 
   /**
    * Create an inline derived table from this table
@@ -295,15 +295,15 @@ extends TableImpl[StaffRecord](
   /**
    * Create an inline derived table from this table
    */
-  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): Staff = where(DSL.condition(condition, binds:_*))
+  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): Staff = where(DSL.condition(condition, binds*))
 
   /**
    * Create an inline derived table from this table
    */
-  override def whereExists(select: Select[_]): Staff = where(DSL.exists(select))
+  override def whereExists(select: Select[?]): Staff = where(DSL.exists(select))
 
   /**
    * Create an inline derived table from this table
    */
-  override def whereNotExists(select: Select[_]): Staff = where(DSL.notExists(select))
+  override def whereNotExists(select: Select[?]): Staff = where(DSL.notExists(select))
 }

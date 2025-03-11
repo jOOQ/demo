@@ -230,7 +230,7 @@ class FilmRecord extends UpdatableRecordImpl[FilmRecord](Film.FILM) {
     this.setLastUpdate(lastUpdate)
     this.setSpecialFeatures(specialFeatures)
     this.setFulltext(fulltext)
-    resetChangedOnNotNull()
+    resetTouchedOnNotNull()
   }
 
   /**
@@ -252,7 +252,7 @@ class FilmRecord extends UpdatableRecordImpl[FilmRecord](Film.FILM) {
     this.setRating(rating)
     this.setSpecialFeatures(specialFeatures)
     this.setFulltext(fulltext)
-    resetChangedOnNotNull()
+    resetTouchedOnNotNull()
   }
 
   /**
@@ -276,7 +276,7 @@ class FilmRecord extends UpdatableRecordImpl[FilmRecord](Film.FILM) {
       this.setLastUpdate(value.getLastUpdate)
       this.setSpecialFeatures(value.getSpecialFeatures)
       this.setFulltext(value.getFulltext)
-      resetChangedOnNotNull()
+      resetTouchedOnNotNull()
     }
   }
 }

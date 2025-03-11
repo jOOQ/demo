@@ -28,19 +28,19 @@ class FilmCategoryDao(configuration: Configuration) extends DAOImpl[FilmCategory
 
   override def getId(o: org.jooq.demo.skala.db.tables.pojos.FilmCategory): Record2[Long, Long] = compositeKeyRecord(o.getFilmId, o.getCategoryId)
   override def insert(obj: org.jooq.demo.skala.db.tables.pojos.FilmCategory): Unit = super.insert(obj)
-  override def insert(objs: org.jooq.demo.skala.db.tables.pojos.FilmCategory*): Unit = super.insert(objs:_*)
+  override def insert(objs: org.jooq.demo.skala.db.tables.pojos.FilmCategory*): Unit = super.insert(objs*)
   override def insert(objs: Collection[org.jooq.demo.skala.db.tables.pojos.FilmCategory]): Unit = super.insert(objs)
   override def update(obj: org.jooq.demo.skala.db.tables.pojos.FilmCategory): Unit = super.update(obj)
-  override def update(objs: org.jooq.demo.skala.db.tables.pojos.FilmCategory*): Unit = super.update(objs:_*)
+  override def update(objs: org.jooq.demo.skala.db.tables.pojos.FilmCategory*): Unit = super.update(objs*)
   override def update(objs: Collection[org.jooq.demo.skala.db.tables.pojos.FilmCategory]): Unit = super.update(objs)
   override def merge(obj: org.jooq.demo.skala.db.tables.pojos.FilmCategory): Unit = super.merge(obj)
-  override def merge(objs: org.jooq.demo.skala.db.tables.pojos.FilmCategory*): Unit = super.merge(objs:_*)
+  override def merge(objs: org.jooq.demo.skala.db.tables.pojos.FilmCategory*): Unit = super.merge(objs*)
   override def merge(objs: Collection[org.jooq.demo.skala.db.tables.pojos.FilmCategory]): Unit = super.merge(objs)
   override def delete(obj: org.jooq.demo.skala.db.tables.pojos.FilmCategory): Unit = super.delete(obj)
-  override def delete(objs: org.jooq.demo.skala.db.tables.pojos.FilmCategory*): Unit = super.delete(objs:_*)
+  override def delete(objs: org.jooq.demo.skala.db.tables.pojos.FilmCategory*): Unit = super.delete(objs*)
   override def delete(objs: Collection[org.jooq.demo.skala.db.tables.pojos.FilmCategory]): Unit = super.delete(objs)
   override def deleteById(id: Record2[Long, Long]): Unit = super.deleteById(id)
-  override def deleteById(ids: Record2[Long, Long]*): Unit = super.deleteById(ids:_*)
+  override def deleteById(ids: Record2[Long, Long]*): Unit = super.deleteById(ids*)
   override def deleteById(ids: Collection[Record2[Long, Long]]): Unit = super.deleteById(ids)
 
   /**
@@ -52,7 +52,7 @@ class FilmCategoryDao(configuration: Configuration) extends DAOImpl[FilmCategory
   /**
    * Fetch records that have <code>film_id IN (values)</code>
    */
-  def fetchByFilmId(values: Long*): List[org.jooq.demo.skala.db.tables.pojos.FilmCategory] = fetch(FilmCategory.FILM_CATEGORY.FILM_ID, values:_*)
+  def fetchByFilmId(values: Long*): List[org.jooq.demo.skala.db.tables.pojos.FilmCategory] = fetch(FilmCategory.FILM_CATEGORY.FILM_ID, values*)
 
   /**
    * Fetch records that have <code>category_id BETWEEN lowerInclusive AND
@@ -63,7 +63,7 @@ class FilmCategoryDao(configuration: Configuration) extends DAOImpl[FilmCategory
   /**
    * Fetch records that have <code>category_id IN (values)</code>
    */
-  def fetchByCategoryId(values: Long*): List[org.jooq.demo.skala.db.tables.pojos.FilmCategory] = fetch(FilmCategory.FILM_CATEGORY.CATEGORY_ID, values:_*)
+  def fetchByCategoryId(values: Long*): List[org.jooq.demo.skala.db.tables.pojos.FilmCategory] = fetch(FilmCategory.FILM_CATEGORY.CATEGORY_ID, values*)
 
   /**
    * Fetch records that have <code>last_update BETWEEN lowerInclusive AND
@@ -74,5 +74,5 @@ class FilmCategoryDao(configuration: Configuration) extends DAOImpl[FilmCategory
   /**
    * Fetch records that have <code>last_update IN (values)</code>
    */
-  def fetchByLastUpdate(values: LocalDateTime*): List[org.jooq.demo.skala.db.tables.pojos.FilmCategory] = fetch(FilmCategory.FILM_CATEGORY.LAST_UPDATE, values:_*)
+  def fetchByLastUpdate(values: LocalDateTime*): List[org.jooq.demo.skala.db.tables.pojos.FilmCategory] = fetch(FilmCategory.FILM_CATEGORY.LAST_UPDATE, values*)
 }

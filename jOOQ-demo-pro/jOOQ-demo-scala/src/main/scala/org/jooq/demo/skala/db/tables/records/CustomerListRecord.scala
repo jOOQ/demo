@@ -139,7 +139,7 @@ class CustomerListRecord extends TableRecordImpl[CustomerListRecord](CustomerLis
     this.setCountry(country)
     this.setNotes(notes)
     this.setSid(sid)
-    resetChangedOnNotNull()
+    resetTouchedOnNotNull()
   }
 
   /**
@@ -158,7 +158,7 @@ class CustomerListRecord extends TableRecordImpl[CustomerListRecord](CustomerLis
       this.setCountry(value.getCountry)
       this.setNotes(value.getNotes)
       this.setSid(value.getSid)
-      resetChangedOnNotNull()
+      resetTouchedOnNotNull()
     }
   }
 }

@@ -92,7 +92,7 @@ public class StaffList extends TableImpl<StaffListRecord> {
 
     private StaffList(Name alias, Table<StaffListRecord> aliased, Field<?>[] parameters, Condition where) {
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("""
-        create view "staff_list" as  SELECT s.staff_id AS id,
+        CREATE VIEW "staff_list" AS  SELECT s.staff_id AS id,
          (((s.first_name)::text || ' '::text) || (s.last_name)::text) AS name,
          a.address,
          a.postal_code AS "zip code",

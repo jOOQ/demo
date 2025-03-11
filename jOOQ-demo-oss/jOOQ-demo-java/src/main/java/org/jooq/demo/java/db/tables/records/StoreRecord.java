@@ -105,7 +105,7 @@ public class StoreRecord extends UpdatableRecordImpl<StoreRecord> {
         setManagerStaffId(managerStaffId);
         setAddressId(addressId);
         setLastUpdate(lastUpdate);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 
     /**
@@ -119,7 +119,7 @@ public class StoreRecord extends UpdatableRecordImpl<StoreRecord> {
             setManagerStaffId(value.managerStaffId());
             setAddressId(value.addressId());
             setLastUpdate(value.lastUpdate());
-            resetChangedOnNotNull();
+            resetTouchedOnNotNull();
         }
     }
 }

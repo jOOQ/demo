@@ -90,7 +90,7 @@ public class FilmActorRecord extends UpdatableRecordImpl<FilmActorRecord> {
         setActorId(actorId);
         setFilmId(filmId);
         setLastUpdate(lastUpdate);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 
     /**
@@ -103,7 +103,7 @@ public class FilmActorRecord extends UpdatableRecordImpl<FilmActorRecord> {
             setActorId(value.actorId());
             setFilmId(value.filmId());
             setLastUpdate(value.lastUpdate());
-            resetChangedOnNotNull();
+            resetTouchedOnNotNull();
         }
     }
 }

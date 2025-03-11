@@ -156,7 +156,7 @@ public class FilmListRecord extends TableRecordImpl<FilmListRecord> {
         setLength(length);
         setRating(rating);
         setActors(actors);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 
     /**
@@ -174,7 +174,7 @@ public class FilmListRecord extends TableRecordImpl<FilmListRecord> {
             setLength(value.length());
             setRating(value.rating());
             setActors(value.actors());
-            resetChangedOnNotNull();
+            resetTouchedOnNotNull();
         }
     }
 }

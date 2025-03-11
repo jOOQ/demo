@@ -68,7 +68,7 @@ public class SalesByStore extends TableImpl<SalesByStoreRecord> {
 
     private SalesByStore(Name alias, Table<SalesByStoreRecord> aliased, Field<?>[] parameters, Condition where) {
         super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("""
-        create view "sales_by_store" as  SELECT (((c.city)::text || ','::text) || (cy.country)::text) AS store,
+        CREATE VIEW "sales_by_store" AS  SELECT (((c.city)::text || ','::text) || (cy.country)::text) AS store,
           (((m.first_name)::text || ' '::text) || (m.last_name)::text) AS manager,
           sum(p.amount) AS total_sales
          FROM (((((((payment p

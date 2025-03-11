@@ -10,6 +10,7 @@ import java.lang.Long
 import java.lang.String
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.util.Collection
 import java.util.List
 
 import org.jooq.Configuration
@@ -29,6 +30,21 @@ class CustomerDao(configuration: Configuration) extends DAOImpl[CustomerRecord, 
   def this() = this(null)
 
   override def getId(o: org.jooq.demo.skala.db.tables.pojos.Customer): Long = o.getCustomerId
+  override def insert(obj: org.jooq.demo.skala.db.tables.pojos.Customer): Unit = super.insert(obj)
+  override def insert(objs: org.jooq.demo.skala.db.tables.pojos.Customer*): Unit = super.insert(objs*)
+  override def insert(objs: Collection[org.jooq.demo.skala.db.tables.pojos.Customer]): Unit = super.insert(objs)
+  override def update(obj: org.jooq.demo.skala.db.tables.pojos.Customer): Unit = super.update(obj)
+  override def update(objs: org.jooq.demo.skala.db.tables.pojos.Customer*): Unit = super.update(objs*)
+  override def update(objs: Collection[org.jooq.demo.skala.db.tables.pojos.Customer]): Unit = super.update(objs)
+  override def merge(obj: org.jooq.demo.skala.db.tables.pojos.Customer): Unit = super.merge(obj)
+  override def merge(objs: org.jooq.demo.skala.db.tables.pojos.Customer*): Unit = super.merge(objs*)
+  override def merge(objs: Collection[org.jooq.demo.skala.db.tables.pojos.Customer]): Unit = super.merge(objs)
+  override def delete(obj: org.jooq.demo.skala.db.tables.pojos.Customer): Unit = super.delete(obj)
+  override def delete(objs: org.jooq.demo.skala.db.tables.pojos.Customer*): Unit = super.delete(objs*)
+  override def delete(objs: Collection[org.jooq.demo.skala.db.tables.pojos.Customer]): Unit = super.delete(objs)
+  override def deleteById(id: Long): Unit = super.deleteById(id)
+  override def deleteById(ids: Long*): Unit = super.deleteById(ids*)
+  override def deleteById(ids: Collection[Long]): Unit = super.deleteById(ids)
 
   /**
    * Fetch records that have <code>customer_id BETWEEN lowerInclusive AND
@@ -39,7 +55,7 @@ class CustomerDao(configuration: Configuration) extends DAOImpl[CustomerRecord, 
   /**
    * Fetch records that have <code>customer_id IN (values)</code>
    */
-  def fetchByCustomerId(values: Long*): List[org.jooq.demo.skala.db.tables.pojos.Customer] = fetch(Customer.CUSTOMER.CUSTOMER_ID, values:_*)
+  def fetchByCustomerId(values: Long*): List[org.jooq.demo.skala.db.tables.pojos.Customer] = fetch(Customer.CUSTOMER.CUSTOMER_ID, values*)
 
   /**
    * Fetch a unique record that has <code>customer_id = value</code>
@@ -55,7 +71,7 @@ class CustomerDao(configuration: Configuration) extends DAOImpl[CustomerRecord, 
   /**
    * Fetch records that have <code>store_id IN (values)</code>
    */
-  def fetchByStoreId(values: Long*): List[org.jooq.demo.skala.db.tables.pojos.Customer] = fetch(Customer.CUSTOMER.STORE_ID, values:_*)
+  def fetchByStoreId(values: Long*): List[org.jooq.demo.skala.db.tables.pojos.Customer] = fetch(Customer.CUSTOMER.STORE_ID, values*)
 
   /**
    * Fetch records that have <code>first_name BETWEEN lowerInclusive AND
@@ -66,7 +82,7 @@ class CustomerDao(configuration: Configuration) extends DAOImpl[CustomerRecord, 
   /**
    * Fetch records that have <code>first_name IN (values)</code>
    */
-  def fetchByFirstName(values: String*): List[org.jooq.demo.skala.db.tables.pojos.Customer] = fetch(Customer.CUSTOMER.FIRST_NAME, values:_*)
+  def fetchByFirstName(values: String*): List[org.jooq.demo.skala.db.tables.pojos.Customer] = fetch(Customer.CUSTOMER.FIRST_NAME, values*)
 
   /**
    * Fetch records that have <code>last_name BETWEEN lowerInclusive AND
@@ -77,7 +93,7 @@ class CustomerDao(configuration: Configuration) extends DAOImpl[CustomerRecord, 
   /**
    * Fetch records that have <code>last_name IN (values)</code>
    */
-  def fetchByLastName(values: String*): List[org.jooq.demo.skala.db.tables.pojos.Customer] = fetch(Customer.CUSTOMER.LAST_NAME, values:_*)
+  def fetchByLastName(values: String*): List[org.jooq.demo.skala.db.tables.pojos.Customer] = fetch(Customer.CUSTOMER.LAST_NAME, values*)
 
   /**
    * Fetch records that have <code>email BETWEEN lowerInclusive AND
@@ -88,7 +104,7 @@ class CustomerDao(configuration: Configuration) extends DAOImpl[CustomerRecord, 
   /**
    * Fetch records that have <code>email IN (values)</code>
    */
-  def fetchByEmail(values: String*): List[org.jooq.demo.skala.db.tables.pojos.Customer] = fetch(Customer.CUSTOMER.EMAIL, values:_*)
+  def fetchByEmail(values: String*): List[org.jooq.demo.skala.db.tables.pojos.Customer] = fetch(Customer.CUSTOMER.EMAIL, values*)
 
   /**
    * Fetch records that have <code>address_id BETWEEN lowerInclusive AND
@@ -99,7 +115,7 @@ class CustomerDao(configuration: Configuration) extends DAOImpl[CustomerRecord, 
   /**
    * Fetch records that have <code>address_id IN (values)</code>
    */
-  def fetchByAddressId(values: Long*): List[org.jooq.demo.skala.db.tables.pojos.Customer] = fetch(Customer.CUSTOMER.ADDRESS_ID, values:_*)
+  def fetchByAddressId(values: Long*): List[org.jooq.demo.skala.db.tables.pojos.Customer] = fetch(Customer.CUSTOMER.ADDRESS_ID, values*)
 
   /**
    * Fetch records that have <code>activebool BETWEEN lowerInclusive AND
@@ -110,7 +126,7 @@ class CustomerDao(configuration: Configuration) extends DAOImpl[CustomerRecord, 
   /**
    * Fetch records that have <code>activebool IN (values)</code>
    */
-  def fetchByActivebool(values: Boolean*): List[org.jooq.demo.skala.db.tables.pojos.Customer] = fetch(Customer.CUSTOMER.ACTIVEBOOL, values:_*)
+  def fetchByActivebool(values: Boolean*): List[org.jooq.demo.skala.db.tables.pojos.Customer] = fetch(Customer.CUSTOMER.ACTIVEBOOL, values*)
 
   /**
    * Fetch records that have <code>create_date BETWEEN lowerInclusive AND
@@ -121,7 +137,7 @@ class CustomerDao(configuration: Configuration) extends DAOImpl[CustomerRecord, 
   /**
    * Fetch records that have <code>create_date IN (values)</code>
    */
-  def fetchByCreateDate(values: LocalDate*): List[org.jooq.demo.skala.db.tables.pojos.Customer] = fetch(Customer.CUSTOMER.CREATE_DATE, values:_*)
+  def fetchByCreateDate(values: LocalDate*): List[org.jooq.demo.skala.db.tables.pojos.Customer] = fetch(Customer.CUSTOMER.CREATE_DATE, values*)
 
   /**
    * Fetch records that have <code>last_update BETWEEN lowerInclusive AND
@@ -132,7 +148,7 @@ class CustomerDao(configuration: Configuration) extends DAOImpl[CustomerRecord, 
   /**
    * Fetch records that have <code>last_update IN (values)</code>
    */
-  def fetchByLastUpdate(values: LocalDateTime*): List[org.jooq.demo.skala.db.tables.pojos.Customer] = fetch(Customer.CUSTOMER.LAST_UPDATE, values:_*)
+  def fetchByLastUpdate(values: LocalDateTime*): List[org.jooq.demo.skala.db.tables.pojos.Customer] = fetch(Customer.CUSTOMER.LAST_UPDATE, values*)
 
   /**
    * Fetch records that have <code>active BETWEEN lowerInclusive AND
@@ -143,5 +159,5 @@ class CustomerDao(configuration: Configuration) extends DAOImpl[CustomerRecord, 
   /**
    * Fetch records that have <code>active IN (values)</code>
    */
-  def fetchByActive(values: Integer*): List[org.jooq.demo.skala.db.tables.pojos.Customer] = fetch(Customer.CUSTOMER.ACTIVE, values:_*)
+  def fetchByActive(values: Integer*): List[org.jooq.demo.skala.db.tables.pojos.Customer] = fetch(Customer.CUSTOMER.ACTIVE, values*)
 }

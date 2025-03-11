@@ -7,6 +7,7 @@ package org.jooq.demo.skala.db.tables.daos
 import java.lang.Long
 import java.lang.String
 import java.time.LocalDateTime
+import java.util.Collection
 import java.util.List
 
 import org.jooq.Configuration
@@ -26,6 +27,21 @@ class StoreDao(configuration: Configuration) extends DAOImpl[StoreRecord, org.jo
   def this() = this(null)
 
   override def getId(o: org.jooq.demo.skala.db.tables.pojos.Store): Long = o.getStoreId
+  override def insert(obj: org.jooq.demo.skala.db.tables.pojos.Store): Unit = super.insert(obj)
+  override def insert(objs: org.jooq.demo.skala.db.tables.pojos.Store*): Unit = super.insert(objs*)
+  override def insert(objs: Collection[org.jooq.demo.skala.db.tables.pojos.Store]): Unit = super.insert(objs)
+  override def update(obj: org.jooq.demo.skala.db.tables.pojos.Store): Unit = super.update(obj)
+  override def update(objs: org.jooq.demo.skala.db.tables.pojos.Store*): Unit = super.update(objs*)
+  override def update(objs: Collection[org.jooq.demo.skala.db.tables.pojos.Store]): Unit = super.update(objs)
+  override def merge(obj: org.jooq.demo.skala.db.tables.pojos.Store): Unit = super.merge(obj)
+  override def merge(objs: org.jooq.demo.skala.db.tables.pojos.Store*): Unit = super.merge(objs*)
+  override def merge(objs: Collection[org.jooq.demo.skala.db.tables.pojos.Store]): Unit = super.merge(objs)
+  override def delete(obj: org.jooq.demo.skala.db.tables.pojos.Store): Unit = super.delete(obj)
+  override def delete(objs: org.jooq.demo.skala.db.tables.pojos.Store*): Unit = super.delete(objs*)
+  override def delete(objs: Collection[org.jooq.demo.skala.db.tables.pojos.Store]): Unit = super.delete(objs)
+  override def deleteById(id: Long): Unit = super.deleteById(id)
+  override def deleteById(ids: Long*): Unit = super.deleteById(ids*)
+  override def deleteById(ids: Collection[Long]): Unit = super.deleteById(ids)
 
   /**
    * Fetch records that have <code>store_id BETWEEN lowerInclusive AND
@@ -36,7 +52,7 @@ class StoreDao(configuration: Configuration) extends DAOImpl[StoreRecord, org.jo
   /**
    * Fetch records that have <code>store_id IN (values)</code>
    */
-  def fetchByStoreId(values: Long*): List[org.jooq.demo.skala.db.tables.pojos.Store] = fetch(Store.STORE.STORE_ID, values:_*)
+  def fetchByStoreId(values: Long*): List[org.jooq.demo.skala.db.tables.pojos.Store] = fetch(Store.STORE.STORE_ID, values*)
 
   /**
    * Fetch a unique record that has <code>store_id = value</code>
@@ -52,7 +68,7 @@ class StoreDao(configuration: Configuration) extends DAOImpl[StoreRecord, org.jo
   /**
    * Fetch records that have <code>manager_staff_id IN (values)</code>
    */
-  def fetchByManagerStaffId(values: Long*): List[org.jooq.demo.skala.db.tables.pojos.Store] = fetch(Store.STORE.MANAGER_STAFF_ID, values:_*)
+  def fetchByManagerStaffId(values: Long*): List[org.jooq.demo.skala.db.tables.pojos.Store] = fetch(Store.STORE.MANAGER_STAFF_ID, values*)
 
   /**
    * Fetch records that have <code>address_id BETWEEN lowerInclusive AND
@@ -63,7 +79,7 @@ class StoreDao(configuration: Configuration) extends DAOImpl[StoreRecord, org.jo
   /**
    * Fetch records that have <code>address_id IN (values)</code>
    */
-  def fetchByAddressId(values: Long*): List[org.jooq.demo.skala.db.tables.pojos.Store] = fetch(Store.STORE.ADDRESS_ID, values:_*)
+  def fetchByAddressId(values: Long*): List[org.jooq.demo.skala.db.tables.pojos.Store] = fetch(Store.STORE.ADDRESS_ID, values*)
 
   /**
    * Fetch records that have <code>last_update BETWEEN lowerInclusive AND
@@ -74,7 +90,7 @@ class StoreDao(configuration: Configuration) extends DAOImpl[StoreRecord, org.jo
   /**
    * Fetch records that have <code>last_update IN (values)</code>
    */
-  def fetchByLastUpdate(values: LocalDateTime*): List[org.jooq.demo.skala.db.tables.pojos.Store] = fetch(Store.STORE.LAST_UPDATE, values:_*)
+  def fetchByLastUpdate(values: LocalDateTime*): List[org.jooq.demo.skala.db.tables.pojos.Store] = fetch(Store.STORE.LAST_UPDATE, values*)
 
   /**
    * Fetch records that have <code>full_address BETWEEN lowerInclusive AND
@@ -85,5 +101,5 @@ class StoreDao(configuration: Configuration) extends DAOImpl[StoreRecord, org.jo
   /**
    * Fetch records that have <code>full_address IN (values)</code>
    */
-  def fetchByFullAddress(values: String*): List[org.jooq.demo.skala.db.tables.pojos.Store] = fetch(Store.STORE.FULL_ADDRESS, values:_*)
+  def fetchByFullAddress(values: String*): List[org.jooq.demo.skala.db.tables.pojos.Store] = fetch(Store.STORE.FULL_ADDRESS, values*)
 }

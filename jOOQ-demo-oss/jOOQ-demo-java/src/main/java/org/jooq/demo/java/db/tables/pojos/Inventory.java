@@ -21,4 +21,13 @@ public record Inventory(
 
     private static final long serialVersionUID = 1L;
 
+
+    public Inventory(Inventory value) {
+        this(
+            value.inventoryId,
+            value.filmId,
+            value.storeId,
+            value.lastUpdate
+        );
+    }
 }

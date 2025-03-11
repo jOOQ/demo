@@ -27,4 +27,17 @@ public record FilmList(
 
     private static final long serialVersionUID = 1L;
 
+
+    public FilmList(FilmList value) {
+        this(
+            value.fid,
+            value.title,
+            value.description,
+            value.category,
+            value.price,
+            value.length,
+            value.rating,
+            value.actors
+        );
+    }
 }

@@ -9,7 +9,7 @@ import org.junit.Test
 class Demo15ComputedColumns extends AbstractDemo {
 
   @Test
-  def fetchVirtualClientSideComputedColumns() {
+  def fetchVirtualClientSideComputedColumns() = {
     title("Client side computed columns emulate their server side equivalents by inlining the computation expression")
 
     // Computed columns are a commercial only feature

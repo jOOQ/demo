@@ -5,7 +5,7 @@
 
     <groupId>org.jooq</groupId>
     <artifactId>jooq-demo</artifactId>
-    <version>3.19.18</version>
+    <version>3.20.1</version>
     <name>jOOQ Demo (Open Source Edition)</name>
     <packaging>pom</packaging>
 
@@ -19,14 +19,14 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- We're using the JDK 17 version which you can download from https://www.jooq.org/download/versions -->
-        <jooq.version>3.19.18</jooq.version>
+        <!-- We're using the JDK 21 version which you can download from https://www.jooq.org/download/versions -->
+        <jooq.version>3.20.1</jooq.version>
         <flyway.version>8.5.11</flyway.version>
         <postgres.version>42.7.2</postgres.version>
         <log4j.version>2.17.1</log4j.version>
         <junit.version>4.13.2</junit.version>
         <kotlin.version>1.6.21</kotlin.version>
-        <scala.version>2.13.12</scala.version>
+        <scala.version>3.5.0</scala.version>
         <testcontainers.version>1.16.3</testcontainers.version>
         <jetbrains.annotations.version>23.0.0</jetbrains.annotations.version>
 
@@ -130,27 +130,22 @@
                 <version>${kotlin.version}</version>
                 <scope>test</scope>
             </dependency>
-            <dependency>
-                <groupId>org.jetbrains.kotlin</groupId>
-                <artifactId>kotlin-stdlib-jdk8</artifactId>
-                <version>${kotlin.version}</version>
-            </dependency>
 
             <!-- Scala -->
             <dependency>
                 <groupId>org.jooq</groupId>
-                <artifactId>jooq-scala_2.13</artifactId>
+                <artifactId>jooq-scala_3.5</artifactId>
                 <version>${jooq.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.scala-lang</groupId>
-                <artifactId>scala-library</artifactId>
+                <artifactId>scala3-library_3</artifactId>
                 <version>${scala.version}</version>
                 <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>org.scala-lang</groupId>
-                <artifactId>scala-compiler</artifactId>
+                <artifactId>scala3-compiler_3</artifactId>
                 <version>${scala.version}</version>
             </dependency>
         </dependencies>

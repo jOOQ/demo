@@ -81,7 +81,7 @@ class InventoryRecord extends UpdatableRecordImpl[InventoryRecord](Inventory.INV
     this.setFilmId(filmId)
     this.setStoreId(storeId)
     this.setLastUpdate(lastUpdate)
-    resetChangedOnNotNull()
+    resetTouchedOnNotNull()
   }
 
   /**
@@ -93,7 +93,7 @@ class InventoryRecord extends UpdatableRecordImpl[InventoryRecord](Inventory.INV
     this.setInventoryId(inventoryId)
     this.setFilmId(filmId)
     this.setStoreId(storeId)
-    resetChangedOnNotNull()
+    resetTouchedOnNotNull()
   }
 
   /**
@@ -107,7 +107,7 @@ class InventoryRecord extends UpdatableRecordImpl[InventoryRecord](Inventory.INV
       this.setFilmId(value.getFilmId)
       this.setStoreId(value.getStoreId)
       this.setLastUpdate(value.getLastUpdate)
-      resetChangedOnNotNull()
+      resetTouchedOnNotNull()
     }
   }
 }

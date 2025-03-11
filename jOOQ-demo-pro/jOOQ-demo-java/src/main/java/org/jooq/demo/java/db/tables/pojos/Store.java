@@ -22,4 +22,14 @@ public record Store(
 
     private static final long serialVersionUID = 1L;
 
+
+    public Store(Store value) {
+        this(
+            value.storeId,
+            value.managerStaffId,
+            value.addressId,
+            value.lastUpdate,
+            value.fullAddress
+        );
+    }
 }

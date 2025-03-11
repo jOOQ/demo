@@ -46,11 +46,11 @@ object SalesByStore {
  */
 class SalesByStore(
   alias: Name,
-  path: Table[_ <: Record],
-  childPath: ForeignKey[_ <: Record, SalesByStoreRecord],
-  parentPath: InverseForeignKey[_ <: Record, SalesByStoreRecord],
+  path: Table[? <: Record],
+  childPath: ForeignKey[? <: Record, SalesByStoreRecord],
+  parentPath: InverseForeignKey[? <: Record, SalesByStoreRecord],
   aliased: Table[SalesByStoreRecord],
-  parameters: Array[ Field[_] ],
+  parameters: Array[ Field[?] ],
   where: Condition
 )
 extends TableImpl[SalesByStoreRecord](
@@ -63,7 +63,7 @@ extends TableImpl[SalesByStoreRecord](
   parameters,
   DSL.comment(""),
   TableOptions.view("""
-  create view "sales_by_store" as  SELECT (((c.city)::text || ','::text) || (cy.country)::text) AS store,
+  CREATE VIEW "sales_by_store" AS  SELECT (((c.city)::text || ','::text) || (cy.country)::text) AS store,
     (((m.first_name)::text || ' '::text) || (m.last_name)::text) AS manager,
     sum(p.amount) AS total_sales
    FROM (((((((payment p
@@ -121,7 +121,7 @@ extends TableImpl[SalesByStoreRecord](
   override def getSchema: Schema = if (super.aliased()) null else Public.PUBLIC
   override def as(alias: String): SalesByStore = new SalesByStore(DSL.name(alias), this)
   override def as(alias: Name): SalesByStore = new SalesByStore(alias, this)
-  override def as(alias: Table[_]): SalesByStore = new SalesByStore(alias.getQualifiedName(), this)
+  override def as(alias: Table[?]): SalesByStore = new SalesByStore(alias.getQualifiedName(), this)
 
   /**
    * Rename this table
@@ -136,7 +136,7 @@ extends TableImpl[SalesByStoreRecord](
   /**
    * Rename this table
    */
-  override def rename(name: Table[_]): SalesByStore = new SalesByStore(name.getQualifiedName(), null)
+  override def rename(name: Table[?]): SalesByStore = new SalesByStore(name.getQualifiedName(), null)
 
   /**
    * Create an inline derived table from this table
@@ -146,12 +146,12 @@ extends TableImpl[SalesByStoreRecord](
   /**
    * Create an inline derived table from this table
    */
-  override def where(conditions: Collection[_ <: Condition]): SalesByStore = where(DSL.and(conditions))
+  override def where(conditions: Collection[? <: Condition]): SalesByStore = where(DSL.and(conditions))
 
   /**
    * Create an inline derived table from this table
    */
-  override def where(conditions: Condition*): SalesByStore = where(DSL.and(conditions:_*))
+  override def where(conditions: Condition*): SalesByStore = where(DSL.and(conditions*))
 
   /**
    * Create an inline derived table from this table
@@ -171,15 +171,15 @@ extends TableImpl[SalesByStoreRecord](
   /**
    * Create an inline derived table from this table
    */
-  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): SalesByStore = where(DSL.condition(condition, binds:_*))
+  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): SalesByStore = where(DSL.condition(condition, binds*))
 
   /**
    * Create an inline derived table from this table
    */
-  override def whereExists(select: Select[_]): SalesByStore = where(DSL.exists(select))
+  override def whereExists(select: Select[?]): SalesByStore = where(DSL.exists(select))
 
   /**
    * Create an inline derived table from this table
    */
-  override def whereNotExists(select: Select[_]): SalesByStore = where(DSL.notExists(select))
+  override def whereNotExists(select: Select[?]): SalesByStore = where(DSL.notExists(select))
 }

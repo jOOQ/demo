@@ -65,7 +65,7 @@ object Customer {
   /**
    * A subtype implementing {@link Path} for simplified path-based joins.
    */
-  class CustomerPath(path: Table[_ <: Record], childPath: ForeignKey[_ <: Record, CustomerRecord], parentPath: InverseForeignKey[_ <: Record, CustomerRecord]) extends Customer(path, childPath, parentPath) with Path[CustomerRecord]
+  class CustomerPath(path: Table[? <: Record], childPath: ForeignKey[? <: Record, CustomerRecord], parentPath: InverseForeignKey[? <: Record, CustomerRecord]) extends Customer(path, childPath, parentPath) with Path[CustomerRecord]
 }
 
 /**
@@ -73,11 +73,11 @@ object Customer {
  */
 class Customer(
   alias: Name,
-  path: Table[_ <: Record],
-  childPath: ForeignKey[_ <: Record, CustomerRecord],
-  parentPath: InverseForeignKey[_ <: Record, CustomerRecord],
+  path: Table[? <: Record],
+  childPath: ForeignKey[? <: Record, CustomerRecord],
+  parentPath: InverseForeignKey[? <: Record, CustomerRecord],
   aliased: Table[CustomerRecord],
-  parameters: Array[ Field[_] ],
+  parameters: Array[ Field[?] ],
   where: Condition
 )
 extends TableImpl[CustomerRecord](
@@ -166,7 +166,7 @@ extends TableImpl[CustomerRecord](
    */
   def this() = this(DSL.name("customer"), null)
 
-  def this(path: Table[_ <: Record], childPath: ForeignKey[_ <: Record, CustomerRecord], parentPath: InverseForeignKey[_ <: Record, CustomerRecord]) = this(Internal.createPathAlias(path, childPath, parentPath), path, childPath, parentPath, org.jooq.demo.skala.db.tables.Customer.CUSTOMER, null, null)
+  def this(path: Table[? <: Record], childPath: ForeignKey[? <: Record, CustomerRecord], parentPath: InverseForeignKey[? <: Record, CustomerRecord]) = this(Internal.createPathAlias(path, childPath, parentPath), path, childPath, parentPath, org.jooq.demo.skala.db.tables.Customer.CUSTOMER, null, null)
 
   override def getSchema: Schema = if (super.aliased()) null else Public.PUBLIC
 
@@ -176,7 +176,7 @@ extends TableImpl[CustomerRecord](
 
   override def getPrimaryKey: UniqueKey[CustomerRecord] = Keys.CUSTOMER_PKEY
 
-  override def getReferences: List[ ForeignKey[CustomerRecord, _] ] = Arrays.asList[ ForeignKey[CustomerRecord, _] ](Keys.CUSTOMER__CUSTOMER_ADDRESS_ID_FKEY, Keys.CUSTOMER__CUSTOMER_STORE_ID_FKEY)
+  override def getReferences: List[ ForeignKey[CustomerRecord, ?] ] = Arrays.asList[ ForeignKey[CustomerRecord, ?] ](Keys.CUSTOMER__CUSTOMER_ADDRESS_ID_FKEY, Keys.CUSTOMER__CUSTOMER_STORE_ID_FKEY)
 
   /**
    * Get the implicit join path to the <code>public.address</code> table.
@@ -235,7 +235,7 @@ extends TableImpl[CustomerRecord](
   lazy val rental: RentalPath = { new RentalPath(this, null, Keys.RENTAL__RENTAL_CUSTOMER_ID_FKEY.getInverseKey()) }
   override def as(alias: String): Customer = new Customer(DSL.name(alias), this)
   override def as(alias: Name): Customer = new Customer(alias, this)
-  override def as(alias: Table[_]): Customer = new Customer(alias.getQualifiedName(), this)
+  override def as(alias: Table[?]): Customer = new Customer(alias.getQualifiedName(), this)
 
   /**
    * Rename this table
@@ -250,7 +250,7 @@ extends TableImpl[CustomerRecord](
   /**
    * Rename this table
    */
-  override def rename(name: Table[_]): Customer = new Customer(name.getQualifiedName(), null)
+  override def rename(name: Table[?]): Customer = new Customer(name.getQualifiedName(), null)
 
   /**
    * Create an inline derived table from this table
@@ -260,12 +260,12 @@ extends TableImpl[CustomerRecord](
   /**
    * Create an inline derived table from this table
    */
-  override def where(conditions: Collection[_ <: Condition]): Customer = where(DSL.and(conditions))
+  override def where(conditions: Collection[? <: Condition]): Customer = where(DSL.and(conditions))
 
   /**
    * Create an inline derived table from this table
    */
-  override def where(conditions: Condition*): Customer = where(DSL.and(conditions:_*))
+  override def where(conditions: Condition*): Customer = where(DSL.and(conditions*))
 
   /**
    * Create an inline derived table from this table
@@ -285,15 +285,15 @@ extends TableImpl[CustomerRecord](
   /**
    * Create an inline derived table from this table
    */
-  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): Customer = where(DSL.condition(condition, binds:_*))
+  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): Customer = where(DSL.condition(condition, binds*))
 
   /**
    * Create an inline derived table from this table
    */
-  override def whereExists(select: Select[_]): Customer = where(DSL.exists(select))
+  override def whereExists(select: Select[?]): Customer = where(DSL.exists(select))
 
   /**
    * Create an inline derived table from this table
    */
-  override def whereNotExists(select: Select[_]): Customer = where(DSL.notExists(select))
+  override def whereNotExists(select: Select[?]): Customer = where(DSL.notExists(select))
 }

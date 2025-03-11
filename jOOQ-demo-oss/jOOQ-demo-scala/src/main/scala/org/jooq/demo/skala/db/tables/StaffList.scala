@@ -46,11 +46,11 @@ object StaffList {
  */
 class StaffList(
   alias: Name,
-  path: Table[_ <: Record],
-  childPath: ForeignKey[_ <: Record, StaffListRecord],
-  parentPath: InverseForeignKey[_ <: Record, StaffListRecord],
+  path: Table[? <: Record],
+  childPath: ForeignKey[? <: Record, StaffListRecord],
+  parentPath: InverseForeignKey[? <: Record, StaffListRecord],
   aliased: Table[StaffListRecord],
-  parameters: Array[ Field[_] ],
+  parameters: Array[ Field[?] ],
   where: Condition
 )
 extends TableImpl[StaffListRecord](
@@ -63,7 +63,7 @@ extends TableImpl[StaffListRecord](
   parameters,
   DSL.comment(""),
   TableOptions.view("""
-  create view "staff_list" as  SELECT s.staff_id AS id,
+  CREATE VIEW "staff_list" AS  SELECT s.staff_id AS id,
    (((s.first_name)::text || ' '::text) || (s.last_name)::text) AS name,
    a.address,
    a.postal_code AS "zip code",
@@ -145,7 +145,7 @@ extends TableImpl[StaffListRecord](
   override def getSchema: Schema = if (super.aliased()) null else Public.PUBLIC
   override def as(alias: String): StaffList = new StaffList(DSL.name(alias), this)
   override def as(alias: Name): StaffList = new StaffList(alias, this)
-  override def as(alias: Table[_]): StaffList = new StaffList(alias.getQualifiedName(), this)
+  override def as(alias: Table[?]): StaffList = new StaffList(alias.getQualifiedName(), this)
 
   /**
    * Rename this table
@@ -160,7 +160,7 @@ extends TableImpl[StaffListRecord](
   /**
    * Rename this table
    */
-  override def rename(name: Table[_]): StaffList = new StaffList(name.getQualifiedName(), null)
+  override def rename(name: Table[?]): StaffList = new StaffList(name.getQualifiedName(), null)
 
   /**
    * Create an inline derived table from this table
@@ -170,12 +170,12 @@ extends TableImpl[StaffListRecord](
   /**
    * Create an inline derived table from this table
    */
-  override def where(conditions: Collection[_ <: Condition]): StaffList = where(DSL.and(conditions))
+  override def where(conditions: Collection[? <: Condition]): StaffList = where(DSL.and(conditions))
 
   /**
    * Create an inline derived table from this table
    */
-  override def where(conditions: Condition*): StaffList = where(DSL.and(conditions:_*))
+  override def where(conditions: Condition*): StaffList = where(DSL.and(conditions*))
 
   /**
    * Create an inline derived table from this table
@@ -195,15 +195,15 @@ extends TableImpl[StaffListRecord](
   /**
    * Create an inline derived table from this table
    */
-  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): StaffList = where(DSL.condition(condition, binds:_*))
+  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): StaffList = where(DSL.condition(condition, binds*))
 
   /**
    * Create an inline derived table from this table
    */
-  override def whereExists(select: Select[_]): StaffList = where(DSL.exists(select))
+  override def whereExists(select: Select[?]): StaffList = where(DSL.exists(select))
 
   /**
    * Create an inline derived table from this table
    */
-  override def whereNotExists(select: Select[_]): StaffList = where(DSL.notExists(select))
+  override def whereNotExists(select: Select[?]): StaffList = where(DSL.notExists(select))
 }

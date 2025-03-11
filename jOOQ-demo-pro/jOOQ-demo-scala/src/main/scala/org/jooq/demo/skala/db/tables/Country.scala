@@ -50,7 +50,7 @@ object Country {
   /**
    * A subtype implementing {@link Path} for simplified path-based joins.
    */
-  class CountryPath(path: Table[_ <: Record], childPath: ForeignKey[_ <: Record, CountryRecord], parentPath: InverseForeignKey[_ <: Record, CountryRecord]) extends Country(path, childPath, parentPath) with Path[CountryRecord]
+  class CountryPath(path: Table[? <: Record], childPath: ForeignKey[? <: Record, CountryRecord], parentPath: InverseForeignKey[? <: Record, CountryRecord]) extends Country(path, childPath, parentPath) with Path[CountryRecord]
 }
 
 /**
@@ -58,11 +58,11 @@ object Country {
  */
 class Country(
   alias: Name,
-  path: Table[_ <: Record],
-  childPath: ForeignKey[_ <: Record, CountryRecord],
-  parentPath: InverseForeignKey[_ <: Record, CountryRecord],
+  path: Table[? <: Record],
+  childPath: ForeignKey[? <: Record, CountryRecord],
+  parentPath: InverseForeignKey[? <: Record, CountryRecord],
   aliased: Table[CountryRecord],
-  parameters: Array[ Field[_] ],
+  parameters: Array[ Field[?] ],
   where: Condition
 )
 extends TableImpl[CountryRecord](
@@ -116,7 +116,7 @@ extends TableImpl[CountryRecord](
    */
   def this() = this(DSL.name("country"), null)
 
-  def this(path: Table[_ <: Record], childPath: ForeignKey[_ <: Record, CountryRecord], parentPath: InverseForeignKey[_ <: Record, CountryRecord]) = this(Internal.createPathAlias(path, childPath, parentPath), path, childPath, parentPath, org.jooq.demo.skala.db.tables.Country.COUNTRY, null, null)
+  def this(path: Table[? <: Record], childPath: ForeignKey[? <: Record, CountryRecord], parentPath: InverseForeignKey[? <: Record, CountryRecord]) = this(Internal.createPathAlias(path, childPath, parentPath), path, childPath, parentPath, org.jooq.demo.skala.db.tables.Country.COUNTRY, null, null)
 
   override def getSchema: Schema = if (super.aliased()) null else Public.PUBLIC
 
@@ -130,7 +130,7 @@ extends TableImpl[CountryRecord](
   lazy val city: CityPath = { new CityPath(this, null, Keys.CITY__CITY_COUNTRY_ID_FKEY.getInverseKey()) }
   override def as(alias: String): Country = new Country(DSL.name(alias), this)
   override def as(alias: Name): Country = new Country(alias, this)
-  override def as(alias: Table[_]): Country = new Country(alias.getQualifiedName(), this)
+  override def as(alias: Table[?]): Country = new Country(alias.getQualifiedName(), this)
 
   /**
    * Rename this table
@@ -145,7 +145,7 @@ extends TableImpl[CountryRecord](
   /**
    * Rename this table
    */
-  override def rename(name: Table[_]): Country = new Country(name.getQualifiedName(), null)
+  override def rename(name: Table[?]): Country = new Country(name.getQualifiedName(), null)
 
   /**
    * Create an inline derived table from this table
@@ -155,12 +155,12 @@ extends TableImpl[CountryRecord](
   /**
    * Create an inline derived table from this table
    */
-  override def where(conditions: Collection[_ <: Condition]): Country = where(DSL.and(conditions))
+  override def where(conditions: Collection[? <: Condition]): Country = where(DSL.and(conditions))
 
   /**
    * Create an inline derived table from this table
    */
-  override def where(conditions: Condition*): Country = where(DSL.and(conditions:_*))
+  override def where(conditions: Condition*): Country = where(DSL.and(conditions*))
 
   /**
    * Create an inline derived table from this table
@@ -180,15 +180,15 @@ extends TableImpl[CountryRecord](
   /**
    * Create an inline derived table from this table
    */
-  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): Country = where(DSL.condition(condition, binds:_*))
+  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): Country = where(DSL.condition(condition, binds*))
 
   /**
    * Create an inline derived table from this table
    */
-  override def whereExists(select: Select[_]): Country = where(DSL.exists(select))
+  override def whereExists(select: Select[?]): Country = where(DSL.exists(select))
 
   /**
    * Create an inline derived table from this table
    */
-  override def whereNotExists(select: Select[_]): Country = where(DSL.notExists(select))
+  override def whereNotExists(select: Select[?]): Country = where(DSL.notExists(select))
 }

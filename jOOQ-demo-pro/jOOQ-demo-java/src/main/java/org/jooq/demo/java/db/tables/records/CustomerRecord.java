@@ -196,7 +196,7 @@ public class CustomerRecord extends UpdatableRecordImpl<CustomerRecord> {
         setCreateDate(createDate);
         setLastUpdate(lastUpdate);
         setActive(active);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 
     /**
@@ -214,7 +214,7 @@ public class CustomerRecord extends UpdatableRecordImpl<CustomerRecord> {
         setActivebool(activebool);
         setCreateDate(createDate);
         setActive(active);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 
     /**
@@ -234,7 +234,7 @@ public class CustomerRecord extends UpdatableRecordImpl<CustomerRecord> {
             setCreateDate(value.createDate());
             setLastUpdate(value.lastUpdate());
             setActive(value.active());
-            resetChangedOnNotNull();
+            resetTouchedOnNotNull();
         }
     }
 }

@@ -105,7 +105,7 @@ public class InventoryRecord extends UpdatableRecordImpl<InventoryRecord> {
         setFilmId(filmId);
         setStoreId(storeId);
         setLastUpdate(lastUpdate);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 
     /**
@@ -119,7 +119,7 @@ public class InventoryRecord extends UpdatableRecordImpl<InventoryRecord> {
             setFilmId(value.filmId());
             setStoreId(value.storeId());
             setLastUpdate(value.lastUpdate());
-            resetChangedOnNotNull();
+            resetTouchedOnNotNull();
         }
     }
 }

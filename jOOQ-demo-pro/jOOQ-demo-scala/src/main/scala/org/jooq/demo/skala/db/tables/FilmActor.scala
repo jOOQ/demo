@@ -54,7 +54,7 @@ object FilmActor {
   /**
    * A subtype implementing {@link Path} for simplified path-based joins.
    */
-  class FilmActorPath(path: Table[_ <: Record], childPath: ForeignKey[_ <: Record, FilmActorRecord], parentPath: InverseForeignKey[_ <: Record, FilmActorRecord]) extends FilmActor(path, childPath, parentPath) with Path[FilmActorRecord]
+  class FilmActorPath(path: Table[? <: Record], childPath: ForeignKey[? <: Record, FilmActorRecord], parentPath: InverseForeignKey[? <: Record, FilmActorRecord]) extends FilmActor(path, childPath, parentPath) with Path[FilmActorRecord]
 }
 
 /**
@@ -62,11 +62,11 @@ object FilmActor {
  */
 class FilmActor(
   alias: Name,
-  path: Table[_ <: Record],
-  childPath: ForeignKey[_ <: Record, FilmActorRecord],
-  parentPath: InverseForeignKey[_ <: Record, FilmActorRecord],
+  path: Table[? <: Record],
+  childPath: ForeignKey[? <: Record, FilmActorRecord],
+  parentPath: InverseForeignKey[? <: Record, FilmActorRecord],
   aliased: Table[FilmActorRecord],
-  parameters: Array[ Field[_] ],
+  parameters: Array[ Field[?] ],
   where: Condition
 )
 extends TableImpl[FilmActorRecord](
@@ -120,7 +120,7 @@ extends TableImpl[FilmActorRecord](
    */
   def this() = this(DSL.name("film_actor"), null)
 
-  def this(path: Table[_ <: Record], childPath: ForeignKey[_ <: Record, FilmActorRecord], parentPath: InverseForeignKey[_ <: Record, FilmActorRecord]) = this(Internal.createPathAlias(path, childPath, parentPath), path, childPath, parentPath, org.jooq.demo.skala.db.tables.FilmActor.FILM_ACTOR, null, null)
+  def this(path: Table[? <: Record], childPath: ForeignKey[? <: Record, FilmActorRecord], parentPath: InverseForeignKey[? <: Record, FilmActorRecord]) = this(Internal.createPathAlias(path, childPath, parentPath), path, childPath, parentPath, org.jooq.demo.skala.db.tables.FilmActor.FILM_ACTOR, null, null)
 
   override def getSchema: Schema = if (super.aliased()) null else Public.PUBLIC
 
@@ -128,7 +128,7 @@ extends TableImpl[FilmActorRecord](
 
   override def getPrimaryKey: UniqueKey[FilmActorRecord] = Keys.FILM_ACTOR_PKEY
 
-  override def getReferences: List[ ForeignKey[FilmActorRecord, _] ] = Arrays.asList[ ForeignKey[FilmActorRecord, _] ](Keys.FILM_ACTOR__FILM_ACTOR_ACTOR_ID_FKEY, Keys.FILM_ACTOR__FILM_ACTOR_FILM_ID_FKEY)
+  override def getReferences: List[ ForeignKey[FilmActorRecord, ?] ] = Arrays.asList[ ForeignKey[FilmActorRecord, ?] ](Keys.FILM_ACTOR__FILM_ACTOR_ACTOR_ID_FKEY, Keys.FILM_ACTOR__FILM_ACTOR_FILM_ID_FKEY)
 
   /**
    * Get the implicit join path to the <code>public.actor</code> table.
@@ -141,7 +141,7 @@ extends TableImpl[FilmActorRecord](
   lazy val film: FilmPath = { new FilmPath(this, Keys.FILM_ACTOR__FILM_ACTOR_FILM_ID_FKEY, null) }
   override def as(alias: String): FilmActor = new FilmActor(DSL.name(alias), this)
   override def as(alias: Name): FilmActor = new FilmActor(alias, this)
-  override def as(alias: Table[_]): FilmActor = new FilmActor(alias.getQualifiedName(), this)
+  override def as(alias: Table[?]): FilmActor = new FilmActor(alias.getQualifiedName(), this)
 
   /**
    * Rename this table
@@ -156,7 +156,7 @@ extends TableImpl[FilmActorRecord](
   /**
    * Rename this table
    */
-  override def rename(name: Table[_]): FilmActor = new FilmActor(name.getQualifiedName(), null)
+  override def rename(name: Table[?]): FilmActor = new FilmActor(name.getQualifiedName(), null)
 
   /**
    * Create an inline derived table from this table
@@ -166,12 +166,12 @@ extends TableImpl[FilmActorRecord](
   /**
    * Create an inline derived table from this table
    */
-  override def where(conditions: Collection[_ <: Condition]): FilmActor = where(DSL.and(conditions))
+  override def where(conditions: Collection[? <: Condition]): FilmActor = where(DSL.and(conditions))
 
   /**
    * Create an inline derived table from this table
    */
-  override def where(conditions: Condition*): FilmActor = where(DSL.and(conditions:_*))
+  override def where(conditions: Condition*): FilmActor = where(DSL.and(conditions*))
 
   /**
    * Create an inline derived table from this table
@@ -191,15 +191,15 @@ extends TableImpl[FilmActorRecord](
   /**
    * Create an inline derived table from this table
    */
-  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): FilmActor = where(DSL.condition(condition, binds:_*))
+  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): FilmActor = where(DSL.condition(condition, binds*))
 
   /**
    * Create an inline derived table from this table
    */
-  override def whereExists(select: Select[_]): FilmActor = where(DSL.exists(select))
+  override def whereExists(select: Select[?]): FilmActor = where(DSL.exists(select))
 
   /**
    * Create an inline derived table from this table
    */
-  override def whereNotExists(select: Select[_]): FilmActor = where(DSL.notExists(select))
+  override def whereNotExists(select: Select[?]): FilmActor = where(DSL.notExists(select))
 }

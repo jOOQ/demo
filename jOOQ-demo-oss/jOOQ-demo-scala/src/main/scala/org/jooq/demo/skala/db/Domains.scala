@@ -25,6 +25,7 @@ object Domains {
   val YEAR: Domain[Integer] = Internal.createDomain(
       schema
     , DSL.name("year")
+    , DSL.comment("")
     , SQLDataType.INTEGER
     , Internal.createCheck(null, null, "CHECK (((VALUE >= 1901) AND (VALUE <= 2155)))")
   )

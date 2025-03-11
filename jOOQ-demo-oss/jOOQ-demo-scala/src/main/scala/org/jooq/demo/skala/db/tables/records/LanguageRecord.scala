@@ -69,7 +69,7 @@ class LanguageRecord extends UpdatableRecordImpl[LanguageRecord](Language.LANGUA
     this.setLanguageId(languageId)
     this.setName(name)
     this.setLastUpdate(lastUpdate)
-    resetChangedOnNotNull()
+    resetTouchedOnNotNull()
   }
 
   /**
@@ -82,7 +82,7 @@ class LanguageRecord extends UpdatableRecordImpl[LanguageRecord](Language.LANGUA
       this.setLanguageId(value.getLanguageId)
       this.setName(value.getName)
       this.setLastUpdate(value.getLastUpdate)
-      resetChangedOnNotNull()
+      resetTouchedOnNotNull()
     }
   }
 }

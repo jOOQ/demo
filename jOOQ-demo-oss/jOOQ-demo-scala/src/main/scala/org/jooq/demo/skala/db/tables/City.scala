@@ -55,7 +55,7 @@ object City {
   /**
    * A subtype implementing {@link Path} for simplified path-based joins.
    */
-  class CityPath(path: Table[_ <: Record], childPath: ForeignKey[_ <: Record, CityRecord], parentPath: InverseForeignKey[_ <: Record, CityRecord]) extends City(path, childPath, parentPath) with Path[CityRecord]
+  class CityPath(path: Table[? <: Record], childPath: ForeignKey[? <: Record, CityRecord], parentPath: InverseForeignKey[? <: Record, CityRecord]) extends City(path, childPath, parentPath) with Path[CityRecord]
 }
 
 /**
@@ -63,11 +63,11 @@ object City {
  */
 class City(
   alias: Name,
-  path: Table[_ <: Record],
-  childPath: ForeignKey[_ <: Record, CityRecord],
-  parentPath: InverseForeignKey[_ <: Record, CityRecord],
+  path: Table[? <: Record],
+  childPath: ForeignKey[? <: Record, CityRecord],
+  parentPath: InverseForeignKey[? <: Record, CityRecord],
   aliased: Table[CityRecord],
-  parameters: Array[ Field[_] ],
+  parameters: Array[ Field[?] ],
   where: Condition
 )
 extends TableImpl[CityRecord](
@@ -126,7 +126,7 @@ extends TableImpl[CityRecord](
    */
   def this() = this(DSL.name("city"), null)
 
-  def this(path: Table[_ <: Record], childPath: ForeignKey[_ <: Record, CityRecord], parentPath: InverseForeignKey[_ <: Record, CityRecord]) = this(Internal.createPathAlias(path, childPath, parentPath), path, childPath, parentPath, org.jooq.demo.skala.db.tables.City.CITY, null, null)
+  def this(path: Table[? <: Record], childPath: ForeignKey[? <: Record, CityRecord], parentPath: InverseForeignKey[? <: Record, CityRecord]) = this(Internal.createPathAlias(path, childPath, parentPath), path, childPath, parentPath, org.jooq.demo.skala.db.tables.City.CITY, null, null)
 
   override def getSchema: Schema = if (super.aliased()) null else Public.PUBLIC
 
@@ -136,7 +136,7 @@ extends TableImpl[CityRecord](
 
   override def getPrimaryKey: UniqueKey[CityRecord] = Keys.CITY_PKEY
 
-  override def getReferences: List[ ForeignKey[CityRecord, _] ] = Arrays.asList[ ForeignKey[CityRecord, _] ](Keys.CITY__CITY_COUNTRY_ID_FKEY)
+  override def getReferences: List[ ForeignKey[CityRecord, ?] ] = Arrays.asList[ ForeignKey[CityRecord, ?] ](Keys.CITY__CITY_COUNTRY_ID_FKEY)
 
   /**
    * Get the implicit join path to the <code>public.country</code> table.
@@ -149,7 +149,7 @@ extends TableImpl[CityRecord](
   lazy val address: AddressPath = { new AddressPath(this, null, Keys.ADDRESS__ADDRESS_CITY_ID_FKEY.getInverseKey()) }
   override def as(alias: String): City = new City(DSL.name(alias), this)
   override def as(alias: Name): City = new City(alias, this)
-  override def as(alias: Table[_]): City = new City(alias.getQualifiedName(), this)
+  override def as(alias: Table[?]): City = new City(alias.getQualifiedName(), this)
 
   /**
    * Rename this table
@@ -164,7 +164,7 @@ extends TableImpl[CityRecord](
   /**
    * Rename this table
    */
-  override def rename(name: Table[_]): City = new City(name.getQualifiedName(), null)
+  override def rename(name: Table[?]): City = new City(name.getQualifiedName(), null)
 
   /**
    * Create an inline derived table from this table
@@ -174,12 +174,12 @@ extends TableImpl[CityRecord](
   /**
    * Create an inline derived table from this table
    */
-  override def where(conditions: Collection[_ <: Condition]): City = where(DSL.and(conditions))
+  override def where(conditions: Collection[? <: Condition]): City = where(DSL.and(conditions))
 
   /**
    * Create an inline derived table from this table
    */
-  override def where(conditions: Condition*): City = where(DSL.and(conditions:_*))
+  override def where(conditions: Condition*): City = where(DSL.and(conditions*))
 
   /**
    * Create an inline derived table from this table
@@ -199,15 +199,15 @@ extends TableImpl[CityRecord](
   /**
    * Create an inline derived table from this table
    */
-  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): City = where(DSL.condition(condition, binds:_*))
+  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): City = where(DSL.condition(condition, binds*))
 
   /**
    * Create an inline derived table from this table
    */
-  override def whereExists(select: Select[_]): City = where(DSL.exists(select))
+  override def whereExists(select: Select[?]): City = where(DSL.exists(select))
 
   /**
    * Create an inline derived table from this table
    */
-  override def whereNotExists(select: Select[_]): City = where(DSL.notExists(select))
+  override def whereNotExists(select: Select[?]): City = where(DSL.notExists(select))
 }

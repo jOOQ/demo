@@ -69,7 +69,7 @@ object Film {
   /**
    * A subtype implementing {@link Path} for simplified path-based joins.
    */
-  class FilmPath(path: Table[_ <: Record], childPath: ForeignKey[_ <: Record, FilmRecord], parentPath: InverseForeignKey[_ <: Record, FilmRecord]) extends Film(path, childPath, parentPath) with Path[FilmRecord]
+  class FilmPath(path: Table[? <: Record], childPath: ForeignKey[? <: Record, FilmRecord], parentPath: InverseForeignKey[? <: Record, FilmRecord]) extends Film(path, childPath, parentPath) with Path[FilmRecord]
 }
 
 /**
@@ -77,11 +77,11 @@ object Film {
  */
 class Film(
   alias: Name,
-  path: Table[_ <: Record],
-  childPath: ForeignKey[_ <: Record, FilmRecord],
-  parentPath: InverseForeignKey[_ <: Record, FilmRecord],
+  path: Table[? <: Record],
+  childPath: ForeignKey[? <: Record, FilmRecord],
+  parentPath: InverseForeignKey[? <: Record, FilmRecord],
   aliased: Table[FilmRecord],
-  parameters: Array[ Field[_] ],
+  parameters: Array[ Field[?] ],
   where: Condition
 )
 extends TableImpl[FilmRecord](
@@ -195,7 +195,7 @@ extends TableImpl[FilmRecord](
    */
   def this() = this(DSL.name("film"), null)
 
-  def this(path: Table[_ <: Record], childPath: ForeignKey[_ <: Record, FilmRecord], parentPath: InverseForeignKey[_ <: Record, FilmRecord]) = this(Internal.createPathAlias(path, childPath, parentPath), path, childPath, parentPath, org.jooq.demo.skala.db.tables.Film.FILM, null, null)
+  def this(path: Table[? <: Record], childPath: ForeignKey[? <: Record, FilmRecord], parentPath: InverseForeignKey[? <: Record, FilmRecord]) = this(Internal.createPathAlias(path, childPath, parentPath), path, childPath, parentPath, org.jooq.demo.skala.db.tables.Film.FILM, null, null)
 
   override def getSchema: Schema = if (super.aliased()) null else Public.PUBLIC
 
@@ -205,7 +205,7 @@ extends TableImpl[FilmRecord](
 
   override def getPrimaryKey: UniqueKey[FilmRecord] = Keys.FILM_PKEY
 
-  override def getReferences: List[ ForeignKey[FilmRecord, _] ] = Arrays.asList[ ForeignKey[FilmRecord, _] ](Keys.FILM__FILM_LANGUAGE_ID_FKEY, Keys.FILM__FILM_ORIGINAL_LANGUAGE_ID_FKEY)
+  override def getReferences: List[ ForeignKey[FilmRecord, ?] ] = Arrays.asList[ ForeignKey[FilmRecord, ?] ](Keys.FILM__FILM_LANGUAGE_ID_FKEY, Keys.FILM__FILM_ORIGINAL_LANGUAGE_ID_FKEY)
 
   /**
    * Get the implicit join path to the <code>public.language</code> table, via
@@ -251,7 +251,7 @@ extends TableImpl[FilmRecord](
   override def getTriggers: List[Trigger] = Arrays.asList[Trigger](Triggers.FILM_FULLTEXT_TRIGGER)
   override def as(alias: String): Film = new Film(DSL.name(alias), this)
   override def as(alias: Name): Film = new Film(alias, this)
-  override def as(alias: Table[_]): Film = new Film(alias.getQualifiedName(), this)
+  override def as(alias: Table[?]): Film = new Film(alias.getQualifiedName(), this)
 
   /**
    * Rename this table
@@ -266,7 +266,7 @@ extends TableImpl[FilmRecord](
   /**
    * Rename this table
    */
-  override def rename(name: Table[_]): Film = new Film(name.getQualifiedName(), null)
+  override def rename(name: Table[?]): Film = new Film(name.getQualifiedName(), null)
 
   /**
    * Create an inline derived table from this table
@@ -276,12 +276,12 @@ extends TableImpl[FilmRecord](
   /**
    * Create an inline derived table from this table
    */
-  override def where(conditions: Collection[_ <: Condition]): Film = where(DSL.and(conditions))
+  override def where(conditions: Collection[? <: Condition]): Film = where(DSL.and(conditions))
 
   /**
    * Create an inline derived table from this table
    */
-  override def where(conditions: Condition*): Film = where(DSL.and(conditions:_*))
+  override def where(conditions: Condition*): Film = where(DSL.and(conditions*))
 
   /**
    * Create an inline derived table from this table
@@ -301,15 +301,15 @@ extends TableImpl[FilmRecord](
   /**
    * Create an inline derived table from this table
    */
-  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): Film = where(DSL.condition(condition, binds:_*))
+  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): Film = where(DSL.condition(condition, binds*))
 
   /**
    * Create an inline derived table from this table
    */
-  override def whereExists(select: Select[_]): Film = where(DSL.exists(select))
+  override def whereExists(select: Select[?]): Film = where(DSL.exists(select))
 
   /**
    * Create an inline derived table from this table
    */
-  override def whereNotExists(select: Select[_]): Film = where(DSL.notExists(select))
+  override def whereNotExists(select: Select[?]): Film = where(DSL.notExists(select))
 }

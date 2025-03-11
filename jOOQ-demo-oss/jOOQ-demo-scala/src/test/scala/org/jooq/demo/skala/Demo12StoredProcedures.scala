@@ -5,6 +5,7 @@ import org.jooq.demo.AbstractDemo._
 import org.jooq.demo.skala.db.Routines
 import org.jooq.demo.skala.db.Routines.inventoryInStock
 import org.jooq.demo.skala.db.Tables._
+import org.jooq.impl.DSL
 import org.jooq.impl.DSL._
 import org.jooq.impl.SQLDataType.BIGINT
 import org.jooq.scalaextensions.Conversions._
@@ -67,7 +68,7 @@ class Demo12StoredProcedures extends AbstractDemo {
 //      for_(i).in(201L, 210L).loop(
 //        insertInto(ACTOR)
 //          .columns(ACTOR.ACTOR_ID, ACTOR.FIRST_NAME, ACTOR.LAST_NAME)
-//          .values(i, inline("F") || i, inline("L") || i)))
+//          .values(i, DSL.inline("F") || i, DSL.inline("L") || i)))
 //      .execute
 //    ctx.selectFrom(ACTOR).where(ACTOR.ACTOR_ID.gt(200L)).fetch
 //

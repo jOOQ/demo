@@ -93,7 +93,7 @@ public class ActorInfoRecord extends TableRecordImpl<ActorInfoRecord> {
         setFirstName(firstName);
         setLastName(lastName);
         setFilmInfo(filmInfo);
-        resetChangedOnNotNull();
+        resetTouchedOnNotNull();
     }
 
     /**
@@ -107,7 +107,7 @@ public class ActorInfoRecord extends TableRecordImpl<ActorInfoRecord> {
             setFirstName(value.firstName());
             setLastName(value.lastName());
             setFilmInfo(value.filmInfo());
-            resetChangedOnNotNull();
+            resetTouchedOnNotNull();
         }
     }
 }

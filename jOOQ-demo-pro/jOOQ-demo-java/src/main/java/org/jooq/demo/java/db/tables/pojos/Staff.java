@@ -30,4 +30,22 @@ public record Staff(
 
     private static final long serialVersionUID = 1L;
 
+
+    public Staff(Staff value) {
+        this(
+            value.staffId,
+            value.firstName,
+            value.lastName,
+            value.addressId,
+            value.email,
+            value.storeId,
+            value.active,
+            value.username,
+            value.password,
+            value.lastUpdate,
+            value.picture,
+            value.fullAddress,
+            value.fullName
+        );
+    }
 }

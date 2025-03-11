@@ -25,4 +25,17 @@ public record Address(
 
     private static final long serialVersionUID = 1L;
 
+
+    public Address(Address value) {
+        this(
+            value.addressId,
+            value.address,
+            value.address2,
+            value.district,
+            value.cityId,
+            value.postalCode,
+            value.phone,
+            value.lastUpdate
+        );
+    }
 }

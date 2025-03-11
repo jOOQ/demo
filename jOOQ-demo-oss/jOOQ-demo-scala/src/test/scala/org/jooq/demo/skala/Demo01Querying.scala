@@ -1,21 +1,22 @@
 package org.jooq.demo.skala
 
-import org.jooq.Records.intoMap
+import org.jooq.Records.{intoMap, mapping}
 import org.jooq.conf.RenderImplicitJoinType
 import org.jooq.demo.AbstractDemo
-import org.jooq.demo.AbstractDemo._
-import org.jooq.demo.skala.db.Tables._
+import org.jooq.demo.AbstractDemo.*
+import org.jooq.demo.skala.db.Tables.*
 import org.jooq.demo.skala.db.tables.Actor
-import org.jooq.impl.DSL._
+import org.jooq.impl.DSL
+import org.jooq.impl.DSL.*
 import org.jooq.impl.SQLDataType.LOCALDATE
-import org.jooq.scalaextensions.Conversions._
-import org.jooq.{Field, JSONFormat, Record1, Record2, Record3, Result, XMLFormat}
+import org.jooq.scalaextensions.Conversions.*
+import org.jooq.{Field, JSONFormat, Record1, Record2, Record3, Records, Result, XMLFormat}
 import org.junit.Test
 
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.util
-import scala.collection.convert.ImplicitConversions._
+import scala.collection.convert.ImplicitConversions.*
 import scala.util.Using
 
 
@@ -252,7 +253,7 @@ class Demo01Querying extends AbstractDemo {
       .from(CUSTOMER)
       .leftJoin(CUSTOMER.rental.inventory)
       .groupBy(CUSTOMER.CUSTOMER_ID)
-      .orderBy(inline(3).desc)
+      .orderBy(DSL.inline(3).desc)
       .limit(5)
       .fetch
 
@@ -273,7 +274,7 @@ class Demo01Querying extends AbstractDemo {
         countDistinct(CUSTOMER.rental.inventory.FILM_ID).as("distinct film rentals"))
       .from(CUSTOMER)
       .groupBy(CUSTOMER.CUSTOMER_ID)
-      .orderBy(inline(3).desc)
+      .orderBy(DSL.inline(3).desc)
       .limit(5)
       .fetch
 
@@ -356,7 +357,7 @@ class Demo01Querying extends AbstractDemo {
       .from(CUSTOMER)
       .orderBy(1, 2)
       .limit(5)
-      .fetch(Customer)
+      .fetch(mapping(Customer(_, _, _)))
 
     r.forEach(println(_))
 
@@ -375,8 +376,8 @@ class Demo01Querying extends AbstractDemo {
     //
     // There's no limit to the amount of type safe nesting and mapping you can achieve with jOOQ.
 
-    case class Country(val name: String)
-    case class Customer(val firstName: String, val lastName: String, val country: Country)
+    case class Country(name: String)
+    case class Customer(firstName: String, lastName: String, country: Country)
 
     title("Nesting is particularly useful when using ad-hoc converters")
     val r = ctx
@@ -458,7 +459,7 @@ class Demo01Querying extends AbstractDemo {
       .from(FILM)
       .orderBy(FILM.TITLE)
       .limit(5)
-      .fetch(Film)
+      .fetch(mapping(Film(_, _, _)))
 
     result.forEach { film =>
       println("Film %s with categories %s and actors %s ".formatted(film.title, film.categories, film.actors))
@@ -492,9 +493,9 @@ class Demo01Querying extends AbstractDemo {
             .orderBy(PAYMENT.PAYMENT_DATE.cast(LOCALDATE))).intoMap())
       .from(FILM)
       .orderBy(FILM.TITLE)
-      .fetch(Film)
+      .fetch(mapping(Film(_, _)))
 
-    result.forEach { film: Film =>
+    result.forEach { (film: Film) =>
       println("")
       println("Film %s with revenue: ".formatted(film.title))
       film.revenue.forEach((d: LocalDate, r: BigDecimal) => println("  %s: %s".formatted(d, r)))

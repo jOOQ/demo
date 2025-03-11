@@ -24,4 +24,15 @@ public record PaymentP2007_03(
 
     private static final long serialVersionUID = 1L;
 
+
+    public PaymentP2007_03(PaymentP2007_03 value) {
+        this(
+            value.paymentId,
+            value.customerId,
+            value.staffId,
+            value.rentalId,
+            value.amount,
+            value.paymentDate
+        );
+    }
 }

@@ -57,7 +57,7 @@ object Actor {
   /**
    * A subtype implementing {@link Path} for simplified path-based joins.
    */
-  class ActorPath(path: Table[_ <: Record], childPath: ForeignKey[_ <: Record, ActorRecord], parentPath: InverseForeignKey[_ <: Record, ActorRecord]) extends Actor(path, childPath, parentPath) with Path[ActorRecord]
+  class ActorPath(path: Table[? <: Record], childPath: ForeignKey[? <: Record, ActorRecord], parentPath: InverseForeignKey[? <: Record, ActorRecord]) extends Actor(path, childPath, parentPath) with Path[ActorRecord]
 }
 
 /**
@@ -65,11 +65,11 @@ object Actor {
  */
 class Actor(
   alias: Name,
-  path: Table[_ <: Record],
-  childPath: ForeignKey[_ <: Record, ActorRecord],
-  parentPath: InverseForeignKey[_ <: Record, ActorRecord],
+  path: Table[? <: Record],
+  childPath: ForeignKey[? <: Record, ActorRecord],
+  parentPath: InverseForeignKey[? <: Record, ActorRecord],
   aliased: Table[ActorRecord],
-  parameters: Array[ Field[_] ],
+  parameters: Array[ Field[?] ],
   where: Condition
 )
 extends TableImpl[ActorRecord](
@@ -128,7 +128,7 @@ extends TableImpl[ActorRecord](
    */
   def this() = this(DSL.name("actor"), null)
 
-  def this(path: Table[_ <: Record], childPath: ForeignKey[_ <: Record, ActorRecord], parentPath: InverseForeignKey[_ <: Record, ActorRecord]) = this(Internal.createPathAlias(path, childPath, parentPath), path, childPath, parentPath, org.jooq.demo.skala.db.tables.Actor.ACTOR, null, null)
+  def this(path: Table[? <: Record], childPath: ForeignKey[? <: Record, ActorRecord], parentPath: InverseForeignKey[? <: Record, ActorRecord]) = this(Internal.createPathAlias(path, childPath, parentPath), path, childPath, parentPath, org.jooq.demo.skala.db.tables.Actor.ACTOR, null, null)
 
   override def getSchema: Schema = if (super.aliased()) null else Public.PUBLIC
 
@@ -152,7 +152,7 @@ extends TableImpl[ActorRecord](
   override def getTriggers: List[Trigger] = Arrays.asList[Trigger](Triggers.LAST_UPDATED)
   override def as(alias: String): Actor = new Actor(DSL.name(alias), this)
   override def as(alias: Name): Actor = new Actor(alias, this)
-  override def as(alias: Table[_]): Actor = new Actor(alias.getQualifiedName(), this)
+  override def as(alias: Table[?]): Actor = new Actor(alias.getQualifiedName(), this)
 
   /**
    * Rename this table
@@ -167,7 +167,7 @@ extends TableImpl[ActorRecord](
   /**
    * Rename this table
    */
-  override def rename(name: Table[_]): Actor = new Actor(name.getQualifiedName(), null)
+  override def rename(name: Table[?]): Actor = new Actor(name.getQualifiedName(), null)
 
   /**
    * Create an inline derived table from this table
@@ -177,12 +177,12 @@ extends TableImpl[ActorRecord](
   /**
    * Create an inline derived table from this table
    */
-  override def where(conditions: Collection[_ <: Condition]): Actor = where(DSL.and(conditions))
+  override def where(conditions: Collection[? <: Condition]): Actor = where(DSL.and(conditions))
 
   /**
    * Create an inline derived table from this table
    */
-  override def where(conditions: Condition*): Actor = where(DSL.and(conditions:_*))
+  override def where(conditions: Condition*): Actor = where(DSL.and(conditions*))
 
   /**
    * Create an inline derived table from this table
@@ -202,15 +202,15 @@ extends TableImpl[ActorRecord](
   /**
    * Create an inline derived table from this table
    */
-  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): Actor = where(DSL.condition(condition, binds:_*))
+  @PlainSQL override def where(@Stringly.SQL condition: String, binds: AnyRef*): Actor = where(DSL.condition(condition, binds*))
 
   /**
    * Create an inline derived table from this table
    */
-  override def whereExists(select: Select[_]): Actor = where(DSL.exists(select))
+  override def whereExists(select: Select[?]): Actor = where(DSL.exists(select))
 
   /**
    * Create an inline derived table from this table
    */
-  override def whereNotExists(select: Select[_]): Actor = where(DSL.notExists(select))
+  override def whereNotExists(select: Select[?]): Actor = where(DSL.notExists(select))
 }
