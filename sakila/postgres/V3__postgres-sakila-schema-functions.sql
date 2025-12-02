@@ -1,3 +1,5 @@
+SET check_function_bodies = false;
+
 CREATE FUNCTION film_in_stock(p_film_id bigint, p_store_id bigint, OUT p_film_count integer) RETURNS SETOF integer
     AS $_$
      SELECT inventory_id
