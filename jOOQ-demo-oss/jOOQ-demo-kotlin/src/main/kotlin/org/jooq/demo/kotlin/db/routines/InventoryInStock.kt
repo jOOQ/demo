@@ -39,7 +39,9 @@ open class InventoryInStock : AbstractRoutine<Boolean>("inventory_in_stock", Pub
     /**
      * Set the <code>p_inventory_id</code> parameter IN value to the routine
      */
-    fun setPInventoryId(value: Long?): Unit = setValue(InventoryInStock.P_INVENTORY_ID, value)
+    fun setPInventoryId(value: Long?): Unit {
+        setValue(InventoryInStock.P_INVENTORY_ID, value)
+    }
 
     /**
      * Set the <code>p_inventory_id</code> parameter to the function to be used

@@ -48,7 +48,9 @@ class GetCustomerBalance extends AbstractRoutine[BigDecimal]("get_customer_balan
   /**
    * Set the <code>p_customer_id</code> parameter IN value to the routine
    */
-  def setPCustomerId(value: Long) : Unit = setValue(GetCustomerBalance.P_CUSTOMER_ID, value)
+  def setPCustomerId(value: Long) : Unit = {
+    setValue(GetCustomerBalance.P_CUSTOMER_ID, value)
+  }
 
   /**
    * Set the <code>p_customer_id</code> parameter to the function to be used
@@ -61,7 +63,9 @@ class GetCustomerBalance extends AbstractRoutine[BigDecimal]("get_customer_balan
   /**
    * Set the <code>p_effective_date</code> parameter IN value to the routine
    */
-  def setPEffectiveDate(value: LocalDateTime) : Unit = setValue(GetCustomerBalance.P_EFFECTIVE_DATE, value)
+  def setPEffectiveDate(value: LocalDateTime) : Unit = {
+    setValue(GetCustomerBalance.P_EFFECTIVE_DATE, value)
+  }
 
   /**
    * Set the <code>p_effective_date</code> parameter to the function to be used

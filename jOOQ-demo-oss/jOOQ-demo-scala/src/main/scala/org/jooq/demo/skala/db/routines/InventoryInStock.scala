@@ -41,7 +41,9 @@ class InventoryInStock extends AbstractRoutine[Boolean]("inventory_in_stock", Pu
   /**
    * Set the <code>p_inventory_id</code> parameter IN value to the routine
    */
-  def setPInventoryId(value: Long) : Unit = setValue(InventoryInStock.P_INVENTORY_ID, value)
+  def setPInventoryId(value: Long) : Unit = {
+    setValue(InventoryInStock.P_INVENTORY_ID, value)
+  }
 
   /**
    * Set the <code>p_inventory_id</code> parameter to the function to be used

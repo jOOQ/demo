@@ -46,7 +46,9 @@ class _GroupConcat extends AbstractRoutine[String]("_group_concat", Public.PUBLI
   /**
    * Set the <code>_1</code> parameter IN value to the routine
    */
-  def set__1(value: String) : Unit = setValue(_GroupConcat._1, value)
+  def set__1(value: String) : Unit = {
+    setValue(_GroupConcat._1, value)
+  }
 
   /**
    * Set the <code>_1</code> parameter to the function to be used with a {@link
@@ -59,7 +61,9 @@ class _GroupConcat extends AbstractRoutine[String]("_group_concat", Public.PUBLI
   /**
    * Set the <code>_2</code> parameter IN value to the routine
    */
-  def set__2(value: String) : Unit = setValue(_GroupConcat._2, value)
+  def set__2(value: String) : Unit = {
+    setValue(_GroupConcat._2, value)
+  }
 
   /**
    * Set the <code>_2</code> parameter to the function to be used with a {@link

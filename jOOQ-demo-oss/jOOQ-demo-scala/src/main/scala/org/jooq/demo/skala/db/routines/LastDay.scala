@@ -41,7 +41,9 @@ class LastDay extends AbstractRoutine[LocalDate]("last_day", Public.PUBLIC, DSL.
   /**
    * Set the <code>_1</code> parameter IN value to the routine
    */
-  def set__1(value: LocalDateTime) : Unit = setValue(LastDay._1, value)
+  def set__1(value: LocalDateTime) : Unit = {
+    setValue(LastDay._1, value)
+  }
 
   /**
    * Set the <code>_1</code> parameter to the function to be used with a {@link

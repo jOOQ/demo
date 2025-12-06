@@ -42,7 +42,9 @@ class InventoryHeldByCustomer extends AbstractRoutine[Integer]("inventory_held_b
   /**
    * Set the <code>p_inventory_id</code> parameter IN value to the routine
    */
-  def setPInventoryId(value: Long) : Unit = setValue(InventoryHeldByCustomer.P_INVENTORY_ID, value)
+  def setPInventoryId(value: Long) : Unit = {
+    setValue(InventoryHeldByCustomer.P_INVENTORY_ID, value)
+  }
 
   /**
    * Set the <code>p_inventory_id</code> parameter to the function to be used
