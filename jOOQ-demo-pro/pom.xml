@@ -22,7 +22,7 @@
         <!-- We're using the JDK 21 version which you can download from https://www.jooq.org/download/versions -->
         <jooq.version>3.20.11</jooq.version>
         <flyway.version>8.5.11</flyway.version>
-        <postgres.version>42.7.2</postgres.version>
+        <postgres.version>42.7.11</postgres.version>
         <log4j.version>2.17.1</log4j.version>
         <junit.version>4.13.2</junit.version>
         <kotlin.version>1.6.21</kotlin.version>
