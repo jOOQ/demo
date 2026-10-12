@@ -27,7 +27,7 @@
         <junit.version>4.13.2</junit.version>
         <kotlin.version>1.6.21</kotlin.version>
         <scala.version>3.5.0</scala.version>
-        <testcontainers.version>1.16.3</testcontainers.version>
+        <testcontainers.version>2.0.5</testcontainers.version>
         <jetbrains.annotations.version>23.0.0</jetbrains.annotations.version>
 
         <db.username>postgres</db.username>
@@ -104,7 +104,7 @@
             </dependency>
             <dependency>
                 <groupId>org.testcontainers</groupId>
-                <artifactId>postgresql</artifactId>
+                <artifactId>testcontainers-postgresql</artifactId>
                 <version>${testcontainers.version}</version>
             </dependency>
 
@@ -218,7 +218,7 @@
                     <dependencies>
                         <dependency>
                             <groupId>org.testcontainers</groupId>
-                            <artifactId>postgresql</artifactId>
+                            <artifactId>testcontainers-postgresql</artifactId>
                             <version>${testcontainers.version}</version>
                         </dependency>
                     </dependencies>
